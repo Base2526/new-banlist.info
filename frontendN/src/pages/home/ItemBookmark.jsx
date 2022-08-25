@@ -19,9 +19,9 @@ const ItemBookmark = (props) => {
 
   useEffect(()=>{
     if(!_.isEmpty(user)){
-      bmValus.refetch({userId: user.id, postId: item.id});
+      bmValus.refetch({userId: user.id, postId: item._id});
     }else{
-      bmValus.refetch({userId: "", postId: item.id});
+      bmValus.refetch({userId: "", postId: item._id});
     }
   }, [user])
 
@@ -34,7 +34,7 @@ const ItemBookmark = (props) => {
       let {subscribeToMore} = bmValus
       unsubscribe =  subscribeToMore({
         document: subBookmark,
-        variables: { userId: user.id, postId: item.id },
+        variables: { userId: user.id, postId: item._id },
         updateQuery: (prev, {subscriptionData}) => {
           if (!subscriptionData.data) return prev;
   
@@ -49,7 +49,7 @@ const ItemBookmark = (props) => {
       let isBookmark = bmValus.data.isBookmark.data
       if(isBookmark == null){
         return  <IconButton onClick={(e) =>{
-                  _.isEmpty(user) ?  onDialogLogin(true) :  onBookmark( item.id, user.id, true )
+                  _.isEmpty(user) ?  onDialogLogin(true) :  onBookmark( item._id, user.id, true )
                 }}>
                   <BookmarkIcon style={{ color:"" }} /> 
                 </IconButton>
@@ -58,14 +58,14 @@ const ItemBookmark = (props) => {
       let color = isBookmark.status == null ? "" : isBookmark.status ? "blue" : ""
   
       return  <IconButton onClick={(e) =>{
-                _.isEmpty(user) ?  onDialogLogin(true) : onBookmark( item.id, user.id, !isBookmark.status)
+                _.isEmpty(user) ?  onDialogLogin(true) : onBookmark( item._id, user.id, !isBookmark.status)
               }}>
                 <BookmarkIcon style={{ color }} /> 
               </IconButton>
     }       
   }
   return  <IconButton onClick={(e) =>{
-              _.isEmpty(user) ?  onDialogLogin(true) : onBookmark( item.id, user.id,true)
+              _.isEmpty(user) ?  onDialogLogin(true) : onBookmark( item._id, user.id,true)
             }}> 
             <BookmarkIcon style={{ color:"" }} />
           </IconButton>

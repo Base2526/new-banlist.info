@@ -15,43 +15,7 @@ export const gqlPosts = gql`query Posts( $userId: ID, $page: Int, $perPage: Int 
 
 export const gqlPost = gql`query Post($id: ID!) { post(_id: $id) }`;
 
-export const gqlPostsByUser =  gql`
-    query PostsByUser($userId: ID!) {
-        postsByUser(
-            userId: $userId
-        ){
-            status
-            total
-            executionTime
-            data {
-                id: _id
-                title
-                nameSubname
-                idCard
-                amount
-                dateTranfer
-                description
-                tels
-                follows
-                isPublish
-                createdAt
-                updatedAt
-                banks{
-                    bankAccountName
-                    bankId
-                }
-                files {
-                    id:_id
-                    base64
-                    fileName
-                    lastModified
-                    size
-                    type
-                }
-                ownerId
-            }
-        }
-    }`;
+export const gqlPostsByUser =  gql`query PostsByUser($userId: ID!) { postsByUser( userId: $userId ) }`;
 
 export const gqlUsers = gql`
     query users($page: Int, $perPage: Int){
@@ -671,35 +635,7 @@ export const gqlUpdateUser = gql`
     }`;
 
 export const gqlUpdatePost = gql`
-  mutation UpdatePost($id: ID!, $input: PostInput) {
-        updatePost(_id: $id, input: $input) {
-            id: _id
-            title
-            nameSubname
-            idCard
-            amount
-            dateTranfer
-            description
-            tels
-            follows
-            isPublish
-            createdAt
-            updatedAt
-            banks{
-                bankAccountName
-                bankId
-            }
-            files {
-                id:_id
-                base64
-                fileName
-                lastModified
-                size
-                type
-            }
-            ownerId
-        }
-    }`;
+  mutation UpdatePost($id: ID!, $input: JSON) { updatePost(_id: $id, input: $input) }`;
  
 export const gqlUpdateRole = gql`
     mutation UpdateRole($id: ID!, $input: RoleInput) {

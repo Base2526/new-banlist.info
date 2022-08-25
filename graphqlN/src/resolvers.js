@@ -34,6 +34,7 @@ import {emailValidate} from './utils'
 import pubsub from './pubsub'
 
 import {fileRenamer} from "./utils"
+import { __TypeKind } from 'graphql';
 
 const path = require('path');
 
@@ -1133,6 +1134,8 @@ export default {
           // console.log("createPost :", input.files)
           
           for (let i = 0; i < input.files.length; i++) {
+
+            console.log("updatePost #1234:", await input.files[i])
             const { createReadStream, filename, encoding, mimetype } = (await input.files[i]).file //await input.files[i];
 
             const stream = createReadStream();
@@ -1181,30 +1184,87 @@ export default {
       }
     },
 
-    async updatePost(root, {
-      _id,
-      input
-    }) {
+    async updatePost(parent, args, context, info) {
       
+      try{
+        let { _id, input } = args
+        let newFiles = [];
+        if(!_.isEmpty(input.files)){
 
-      let post = await Post.findOneAndUpdate({
-                    _id
-                  }, input, {
-                    new: true
+          for (let i = 0; i < input.files.length; i++) {
+            try{
+              let fileObject = (await input.files[i]).file
+
+              if(!_.isEmpty(fileObject)){
+                const { createReadStream, filename, encoding, mimetype } = fileObject //await input.files[i];
+                const stream = createReadStream();
+                const assetUniqName = fileRenamer(filename);
+                const pathName = path.join(__dirname,   `../uploads/${assetUniqName}`);
+                
+      
+                const output = fs.createWriteStream(pathName)
+                stream.pipe(output);
+      
+                await new Promise(function (resolve, reject) {
+                  output.on('close', () => {
+                    resolve();
                   });
+            
+                  output.on('error', (err) => {
+                    logger.error(err.toString());
+      
+                    reject(err);
+                  });
+                });
+      
+                const urlForArray = `http://localhost:4000/${assetUniqName}`;
+                newFiles.push({ url: urlForArray, filename, encoding, mimetype });
+              }else{
+                if(input.files[i].delete){
+                  let pathUnlink = './uploads/' + input.files[i].url.split('/').pop()
+                  fs.unlink(pathUnlink, (err)=>{
+                      if (err) {
+                        logger.error(err);
+                      }else{
+                        // if no error, file has been deleted successfully
+                        console.log('File has been deleted successfully ', pathUnlink);
+                      }
+                  });
+                }else{
+                  newFiles = [...newFiles, input.files[i]]
+                }
+              }
+              // console.log("updatePost #6:", newFiles)
+            } catch(err) {
+              logger.error(err.toString());
+            }
+          }
+        }
 
-      console.log("updatePost :", _id , post)
+        let newInput = {...input, files:newFiles}
 
-      pubsub.publish("POST", {
-        post: {
-          mutation: "UPDATED",
-          data: post,
-        },
-      });
+        let post = await Post.findOneAndUpdate({
+          _id
+        }, newInput, {
+          new: true
+        });
 
-      // pubsub.publish("NUMBER_INCREMENTED", { numberIncrementedx: currentNumber });
+        // console.log("updatePost :", _id , post)
 
-      return post;
+        pubsub.publish("POST", {
+          post: {
+            mutation: "UPDATED",
+            data: post,
+          },
+        });
+
+        return post;
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
+
+    
     },
 
     async deletePost(root, {

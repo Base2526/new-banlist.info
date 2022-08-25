@@ -211,6 +211,8 @@ const UserPostList = (props) => {
                         <List sx={{ width: "100%", bgcolor: "background.paper" }}>
                             {
                                 _.map(postsByUser.data.postsByUser.data, (item, index)=>{
+
+                                    console.log("item >>> ", item)
                                     return  <div key={item.id}>
                                                 <CardHeader
                                                     action={
@@ -233,7 +235,7 @@ const UserPostList = (props) => {
                                                                 sx={{ width: 100, height: 100 }}
                                                                 variant="rounded"
                                                                 alt="Remy Sharp"
-                                                                src={item.files.length < 1 ? "" : item.files[0].base64}
+                                                                src={item.files.length < 1 ? "" : item.files[0].url}
                                                             
                                                             />
                                                         </IconButton>
@@ -335,10 +337,10 @@ const UserPostList = (props) => {
 
             {lightbox.isOpen && (
                 <Lightbox
-                mainSrc={lightbox.images[lightbox.photoIndex].base64}
-                nextSrc={lightbox.images[(lightbox.photoIndex + 1) % lightbox.images.length].base64}
+                mainSrc={lightbox.images[lightbox.photoIndex].url}
+                nextSrc={lightbox.images[(lightbox.photoIndex + 1) % lightbox.images.length].url}
                 prevSrc={
-                    lightbox.images[(lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length].base64
+                    lightbox.images[(lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length].url
                 }
                 onCloseRequest={() => {
                     setLightbox({ ...lightbox, isOpen: false });

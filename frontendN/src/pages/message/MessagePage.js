@@ -117,7 +117,7 @@ const MessagePage =(props)=> {
         }
     },  
   );
-  // console.log("resultAddMessageValues :", resultAddMessageValues)
+  console.log("resultAddMessageValues :", resultAddMessageValues)
 
   // 
   const [onUpdateMessageRead, resultUpdateMessageRead] = useMutation(gqlUpdateMessageRead
@@ -170,7 +170,6 @@ const MessagePage =(props)=> {
 
   useEffect(()=>{
     setConversationList(conversations)
-
     setPreConversationList(conversations)
 
     // console.log("conversations :", currentConversation)

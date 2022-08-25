@@ -215,7 +215,7 @@ const Detail = (props) => {
                             setDialogLoginOpen(true)
                         }else{
                             onCreateShare({ variables: { input: {
-                                    postId: item.id,
+                                    postId: item._id,
                                     userId: user.id,
                                     destination: "facebook"
                                 }
@@ -245,7 +245,7 @@ const Detail = (props) => {
                             setDialogLoginOpen(true)
                         }else{
                             onCreateShare({ variables: { input: {
-                                    postId: item.id,
+                                    postId: item._id,
                                     userId: user.id,
                                     destination: "twitter"
                                 }
@@ -282,7 +282,7 @@ const Detail = (props) => {
                 >
                   {/* <MenuItem onClick={(e)=>{
                     handleAnchorElSettingClose()
-                    history.push("/post/"+item.id+ "/edit");
+                    history.push("/post/"+item._id+ "/edit");
                   }}>
                     Edit
                   </MenuItem> */}
@@ -292,7 +292,7 @@ const Detail = (props) => {
 
                     _.isEmpty(user)
                     ? setDialogLoginOpen(true)    
-                    : setReport({open: true, postId:item.id})
+                    : setReport({open: true, postId:item._id})
                     
                   }}>
                     Report

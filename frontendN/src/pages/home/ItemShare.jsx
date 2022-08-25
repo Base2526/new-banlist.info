@@ -23,7 +23,7 @@ const ItemShare = (props) => {
   }
 
   let shareValues = useQuery(gqlShareByPostId, {
-    variables: {postId: item.id},
+    variables: {postId: item._id},
     notifyOnNetworkStatusChange: true,
   });
 
@@ -34,7 +34,7 @@ const ItemShare = (props) => {
     let {subscribeToMore} = shareValues
     unsubscribe =  subscribeToMore({
       document: subShare,
-      variables: { postId: item.id },
+      variables: { postId: item._id },
       updateQuery: (prev, {subscriptionData}) => {
         if (!subscriptionData.data) return prev;
 

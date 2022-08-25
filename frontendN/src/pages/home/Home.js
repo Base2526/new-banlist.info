@@ -353,6 +353,8 @@ const Home = (props) => {
                                 setDialogLoginOpen(status)
                               }}
                               onBookmark={(postId, userId, status)=>{
+
+                                console.log("onCreateAndUpdateBookmark :", postId, userId, status)
                                 onCreateAndUpdateBookmark({ variables: { input: {
                                       postId,
                                       userId,

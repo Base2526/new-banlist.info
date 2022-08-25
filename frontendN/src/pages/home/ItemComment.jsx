@@ -18,7 +18,7 @@ const ItemComment = (props) => {
 
     const iconComment = () =>{
         let commentValues = useQuery(gqlComment, {
-          variables: {postId: item.id},
+          variables: {postId: item._id},
           notifyOnNetworkStatusChange: true,
         });
     
@@ -27,7 +27,7 @@ const ItemComment = (props) => {
           let {subscribeToMore} = commentValues
           unsubscribe =  subscribeToMore({
             document: subComment,
-            variables: { commentID: item.id },
+            variables: { commentID: item._id },
             updateQuery: (prev, {subscriptionData}) => {
               console.log("ItemComment updateQuery #1 >> ", prev, subscriptionData);
               if (!subscriptionData.data) return prev;
@@ -72,7 +72,7 @@ const ItemComment = (props) => {
 
     return (
         <IconButton onClick={(e) => {
-            onPanelComment({ isOpen: true, commentId: item.id })
+            onPanelComment({ isOpen: true, commentId: item._id })
         }}>
             {iconComment()}
         </IconButton>

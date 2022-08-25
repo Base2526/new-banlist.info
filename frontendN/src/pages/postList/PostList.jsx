@@ -124,7 +124,7 @@ const PostList = (props) => {
             Header: 'Title',
             accessor: 'title',
             Cell: props =>{
-              return <Link to={`/detail/${props.row.original.id}`}>{props.value}</Link>
+              return <Link to={`/detail/${props.row.original._id}`}>{props.value}</Link>
             }
           }, 
           {
@@ -164,7 +164,7 @@ const PostList = (props) => {
             Header: 'Comments',
             Cell: props =>{
               let commentValues = useQuery(gqlComment, {
-                variables: {postId: props.row.original.id},
+                variables: {postId: props.row.original._id},
                 notifyOnNetworkStatusChange: true,
               });
               if(!commentValues.loading){
@@ -192,7 +192,7 @@ const PostList = (props) => {
             Header: 'Bookmark',
             Cell: props =>{
               const bmValus = useQuery(gqlBookmarksByPostId, {
-                variables: { postId: props.row.original.id},
+                variables: { postId: props.row.original._id},
                 notifyOnNetworkStatusChange: true, 
               });
       
@@ -213,7 +213,7 @@ const PostList = (props) => {
             Header: 'Share',
             Cell: props =>{
               const shareValus = useQuery(gqlShareByPostId, {
-                variables: {postId: props.row.original.id},
+                variables: {postId: props.row.original._id},
                 notifyOnNetworkStatusChange: true,
               });
 
@@ -335,10 +335,10 @@ const PostList = (props) => {
 
       {lightbox.isOpen && (
         <Lightbox
-          mainSrc={lightbox.images[lightbox.photoIndex].base64}
-          nextSrc={lightbox.images[(lightbox.photoIndex + 1) % lightbox.images.length].base64}
+          mainSrc={lightbox.images[lightbox.photoIndex].url}
+          nextSrc={lightbox.images[(lightbox.photoIndex + 1) % lightbox.images.length].url}
           prevSrc={
-            lightbox.images[(lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length].base64
+            lightbox.images[(lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length].url
           }
           onCloseRequest={() => {
             setLightbox({ ...lightbox, isOpen: false });

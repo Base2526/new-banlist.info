@@ -97,7 +97,7 @@ services:
     ports:
       - "4000:4000"
     volumes:
-      - ./graphqlN/uploads:/usr/app/uploads  
+      - ./graphqlN/uploads:/app/uploads  
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true

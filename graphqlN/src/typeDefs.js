@@ -452,7 +452,7 @@ export default gql`
     _allPostsMeta(page: Int, perPage: Int, sortField: String, sortOrder: String, filter: PostFilter): ListMetadata
     getManyPosts(_ids: [ID!]!): PostsPayLoad
 
-    postsByUser(userId: ID!): PostsPayLoad
+    postsByUser(userId: ID!): JSON
   
     
     comment(postId: ID!): CommentPayLoad
@@ -659,7 +659,7 @@ export default gql`
     deleteUser(_id: ID!): User
 
     createPost(input: JSON): JSON
-    updatePost(_id: ID!, input: PostInput): Post
+    updatePost(_id: ID!, input: JSON): JSON
     deletePost(_id: ID!): Post
     deletePosts(_ids: [ID!]!): deleteType
 

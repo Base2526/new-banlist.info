@@ -1,6 +1,6 @@
 #stage1  https://cloudnweb.dev/2020/05/nodejs-graphql-typescript-starter-part-3/
 FROM node as builder
-WORKDIR /usr/app
+WORKDIR /app
 COPY package*.json ./
 # RUN npm install
 RUN npm i --save --legacy-peer-deps
@@ -9,11 +9,11 @@ RUN npm run build
 
 #stage 2
 FROM node
-WORKDIR /usr/app
+WORKDIR /app
 COPY package*.json ./
 # RUN npm install --production
 RUN npm i --save --legacy-peer-deps --production
-COPY --from=builder /usr/app/dist ./dist
+COPY --from=builder /app/dist ./dist
 COPY .env .
 
 # COPY uploads uploads

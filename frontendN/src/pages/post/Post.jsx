@@ -112,7 +112,7 @@ const bmColumns = [
           <DeleteOutline
             className="deleteBtn"
             onClick={() => {
-              setOpenDialogDelete({ isOpen: true, id: params.row.id });
+              setOpenDialogDelete({ isOpen: true, id: params.row._id });
             }}
           />
         </ButtonWrapper>
@@ -178,7 +178,7 @@ const shcolumns = [
           <DeleteOutline
             className="deleteBtn"
             onClick={() => {
-              setOpenDialogDelete({ isOpen: true, id: params.row.id });
+              setOpenDialogDelete({ isOpen: true, id: params.row._id });
             }}
           />
         </ButtonWrapper>
@@ -265,25 +265,25 @@ const Post = (props) => {
   const [onUpdatePost, resultUpdatePost] = useMutation(gqlUpdatePost, 
     {
       update: (cache, {data: {updatePost}}) => {
-        let {state} = history.location
+        // let {state} = history.location
         const data1 = cache.readQuery({
           query: gqlPost,
           variables: {id}
         });
 
-        console.log("onUpdatePost :", updatePost, data1, state)
-
         let newPost = {...data1.post}
-        let newData = {...newPost.data, updatePost}
-        newPost = {...newPost, data: newData}
+        newPost = {...newPost, data: updatePost}
 
         cache.writeQuery({
           query: gqlPost,
-          data: {
-            post: newPost
-          },
+          data: { post: newPost },
           variables: {id}
         });
+      },
+      context: {
+        headers: {
+          'apollo-require-preflight': true,
+        },
       },
       onCompleted({ data }) {
         history.push("/posts");
@@ -324,27 +324,27 @@ const Post = (props) => {
           let {loading}  = editValues
           
           if(!loading){
-            // let {status, data} = editValues.data.post
+            let {status, data} = editValues.data.post
 
             console.log("edit editValues : ", editValues.data)
-            // if(status){
+            if(status){
 
             //   if( data.ownerId != user.id){
             //     history.push("/")
             //   }
 
-            //   setInput({
-            //     title: data.title, 
-            //     nameSubname: data.nameSubname, 
-            //     idCard: data.idCard, 
-            //     amount: data.amount,
-            //     tels: data.tels,
-            //     banks: data.banks,
-            //     description: data.description,
-            //     dateTranfer: data.dateTranfer,
-            //     attackFiles: data.files
-            //   })
-            // }
+              setInput({
+                title: data.title, 
+                nameSubname: data.nameSubname, 
+                idCard: data.idCard, 
+                amount: data.amount,
+                tels: data.tels,
+                banks: data.banks,
+                description: data.description,
+                dateTranfer: data.dateTranfer,
+                attackFiles: data.files
+              })
+            }
           }
         }
       }
@@ -407,26 +407,27 @@ const Post = (props) => {
   const submitForm = async(event) => {
     event.preventDefault();
 
-    let oldAttackFiles = _.filter( input.attackFiles,  p => p.base64 )
-    let newAttackFiles = _.filter( input.attackFiles,  p => !p.base64 )
+    // let oldAttackFiles = _.filter( input.attackFiles,  p => p.base64 )
+    // let newAttackFiles = _.filter( input.attackFiles,  p => !p.base64 )
 
-    let newAttackFilesBase64 =  await Promise.all(newAttackFiles.map(convertFileToBase64)).then(base64Pictures =>{return base64Pictures});
+    // let newAttackFilesBase64 =  await Promise.all(newAttackFiles.map(convertFileToBase64)).then(base64Pictures =>{return base64Pictures});
 
     switch(mode){
       case "new":{
-        onCreatePost({ variables: { input: {
-            title: input.title,
-            nameSubname: input.nameSubname,
-            idCard: input.idCard,
-            amount: input.amount,
-            tels: input.tels,
-            banks: input.banks, // _.omitDeep(input.banks, ['__typename']),
-            description: input.description,
-            dateTranfer: input.dateTranfer,
-            files: input.attackFiles,//[...newAttackFilesBase64, ...oldAttackFiles],
-            ownerId: user.id
-          }
-        }});
+        let newInput =  {
+                          title: input.title,
+                          nameSubname: input.nameSubname,
+                          idCard: input.idCard,
+                          amount: input.amount,
+                          tels: input.tels,
+                          banks: input.banks, // _.omitDeep(input.banks, ['__typename']),
+                          description: input.description,
+                          dateTranfer: input.dateTranfer,
+                          files: input.attackFiles,//[...newAttackFilesBase64, ...oldAttackFiles],
+                          ownerId: user.id
+                      }
+
+        onCreatePost({ variables: { input: newInput } });
         break;
       }
       case "edit":{
@@ -440,15 +441,15 @@ const Post = (props) => {
                       banks: input.banks, //_.omitDeep(input.banks, ['__typename']),
                       description: input.description,
                       dateTranfer: input.dateTranfer,
-                      files:  _.omitDeep(_.filter([...newAttackFilesBase64, ...oldAttackFiles], (v, key) => !v.delete), ['__typename', 'id']),
+                      files:  input.attackFiles, //_.omitDeep(_.filter([...newAttackFilesBase64, ...oldAttackFiles], (v, key) => !v.delete), ['__typename', 'id']),
                       ownerId: user.id
                     }
 
-        console.log("newInput : ", editValues.data.post.data.id, _.omitDeep(newInput, ['__typename']))
+        console.log("newInput : ", editValues.data.post.data._id, _.omitDeep(newInput, ['__typename']), input.attackFiles)
 
         onUpdatePost({ variables: { 
-          id: editValues.data.post.data.id,
-          input: _.omitDeep(newInput, ['__typename'])
+          id: editValues.data.post.data._id,
+          input: newInput//_.omitDeep(newInput, ['__typename'])
         }});
       }
     }
@@ -675,7 +676,7 @@ const Post = (props) => {
                             <AttackFileField
                               values={input.attackFiles}
                               onChange={(values) => {
-                                console.log("attackFiles :", attackFiles)
+                                // console.log("attackFiles :", attackFiles)
                                 setInput({...input, attackFiles: values})
                               }}
                               onSnackbar={(data) => {
@@ -719,7 +720,7 @@ const Post = (props) => {
                         ? <div><CircularProgress /></div> 
                         : <div style={{ height: 700, width: "1000px" }}>
                             <DataGrid 
-                              rows={shareValues.data.ShareByPostId.data} 
+                              rows={shareValues.data.shareByPostId.data} 
                               columns={shcolumns} 
                               rowHeight={80}
 

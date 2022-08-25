@@ -138,9 +138,9 @@ const AttackFileField = ({ values, onChange, onSnackbar }) => {
                     onClick={() => {
                       let newInputList = [...inputList];
                       
-                      // console.log("Delete image : ", inputList, file.id)
+                      console.log("Delete image : ", inputList, file._id)
 
-                      let i = _.findIndex(newInputList, (v)=>v.id == file.id)
+                      let i = _.findIndex(newInputList, (v)=>v._id == file._id)
                       newInputList[i] = {
                         ...newInputList[i],
                         delete: true
