@@ -70,8 +70,8 @@ services:
   #   Setup React-admin container
   ################################
   frontend:
-    build: #./fn
-      context: ./fn
+    build: 
+      context: ./frontendN
       dockerfile: Dockerfile.dev
     environment:
       - CHOKIDAR_USEPOLLING=true
@@ -81,7 +81,7 @@ services:
     ports:
       - "80:4049"
     volumes:
-      - ./fn/src:/app/src
+      - ./frontendN/src:/app/src
     #  - ./fn/package.json:/app/package.json
     networks:
       - nodejs
@@ -91,14 +91,14 @@ services:
   #   Setup Api Graphql container
   ################################
   graphql:
-    # build: ./graphql
     build: 
-      context: ./graphql
-      dockerfile: Dockerfile.prod
+      context: ./graphqlN
+      dockerfile: Dockerfile.prod                # dev or prod
     ports:
       - "4000:4000"
     volumes:
-      - ./graphql:/app
+      # - ./graphqlN:/usr/app                    # dev
+      - ./graphqlN/uploads:/usr/app/uploads      # prod
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
