@@ -1,0 +1,82 @@
+version: "3"
+
+services:
+  mongo1:
+    image: "mongo"
+    container_name: mongo1
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs"]
+    networks:
+      - bot
+    expose:
+      - 27017
+    volumes:
+      - ./data1:/data/db
+
+  mongo2:
+    image: "mongo"
+    container_name: mongo2
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs"]
+    networks:
+      - bot
+    expose:
+      - 27017
+    volumes:
+      - ./data2:/data/db
+
+  mongo3:
+    image: "mongo"
+    container_name: mongo3
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs"]
+    networks:
+      - bot
+    expose:
+      - 27017
+    volumes:
+      - ./data3:/data/db
+
+  mongoclient:
+    image: mongo
+    networks:
+      - bot
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    volumes:
+      - ./rs-setup.sh:/rs-setup.sh
+    entrypoint:
+      - /rs-setup.sh
+
+  mongo-express:
+    image: mongo-express
+    volumes:
+      - ./config.default.js:/node_modules/mongo-express/config.js
+    environment:
+      # - ME_CONFIG_MONGODB_SERVER="url.mongo1,url.mongo2,url.mongo3"
+      # - ME_CONFIG_MONGODB_URL='mongodb://mongo1:27017,mongo2:27017,mongo3:27017/bl?replicaSet=my-mongo-set'
+      # - ME_CONFIG_MONGODB_SERVER="mongo1:27017,mongo2:27017,mongo3:27017"
+      # - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_SERVER=mongo1:27017,mongo2:27017,mongo3:27017
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+      - ME_CONFIG_MONGODB_AUTH_DATABASE=test
+      # - ME_CONFIG_MONGODB_AUTH_USERNAME=root
+      # - ME_CONFIG_MONGODB_AUTH_PASSWORD=example
+      - ME_CONFIG_BASICAUTH_USERNAME=dev
+      - ME_CONFIG_BASICAUTH_PASSWORD=dev
+      # - ME_CONFIG_MONGODB_ADMINUSERNAME="admin"
+      # - ME_CONFIG_MONGODB_ADMINPASSWORD="admin"
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    ports:
+      - "8081:8081"
+    networks:
+      - bot
+
+networks:
+  bot:
+    external:
+      name: banlist-network
+      
