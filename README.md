@@ -18,3 +18,8 @@ https://iuxnw.sse.codesandbox.io/
 
 apollow upload file
 https://medium.com/geekculture/multiple-file-upload-with-apollo-server-3-react-graphql-da87880bc01d
+
+
+docker-compose 
+docker-compose -f docker-compose.dev.yml build
+docker-compose -f docker-compose.prod.yml build

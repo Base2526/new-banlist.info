@@ -93,12 +93,11 @@ services:
   graphql:
     build: 
       context: ./graphqlN
-      dockerfile: Dockerfile.prod                # dev or prod
+      dockerfile: Dockerfile.dev                
     ports:
       - "4000:4000"
     volumes:
-      # - ./graphqlN:/usr/app                    # dev
-      - ./graphqlN/uploads:/usr/app/uploads      # prod
+      - ./graphqlN:/usr/app                 
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
