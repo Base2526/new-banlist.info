@@ -459,7 +459,7 @@ const Message2 = (props) => {
 
   const chatItemView =(item) =>{
     let members = item.members
-    let member = _.filter(members, (vv)=>vv != user.id)
+    let member = _.filter(members, (vv)=>vv != user._id)
 
     if(!_.isEmpty(member)){
       // let userValue = useQuery(gqlUser, {

@@ -34,7 +34,7 @@ const Devel = (props) => {
   console.log("valueBanks :", valueBanks)
 
   const valuePosts = useQuery(gqlPosts, {
-    variables: {userId: _.isEmpty(user) ? "" : user.id, page: 0, perPage: 100},
+    variables: {userId: _.isEmpty(user) ? "" : user._id, page: 0, perPage: 100},
     notifyOnNetworkStatusChange: true,
   });
 

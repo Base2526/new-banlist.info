@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo, useRef } from "react";
+import React, { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import {
   NewUserContainer,
   NewUserForm,
@@ -20,6 +20,12 @@ import Table from "../../TableContainer"
 
 const UserEditPanelPosts = ({posts}) => {
 
+  console.log("posts :", posts)
+
+  const [pageOptions, setPageOptions] = useState([30, 50, 100]);  
+  const [pageIndex, setPageIndex] = useState(0);  
+  const [pageSize, setPageSize] = useState(pageOptions[0])
+
   ///////////////////////
   const columns = useMemo(
     () => [
@@ -30,7 +36,7 @@ const UserEditPanelPosts = ({posts}) => {
             Header: 'Image',
             accessor: 'files',
             Cell: props =>{
-
+            
               if(props.row.original.files.length < 1){
                 return <div />
               }
@@ -43,7 +49,7 @@ const UserEditPanelPosts = ({posts}) => {
                     }}
                     variant="rounded"
                     alt="Example Alt"
-                    src={props.row.original.files[0].base64}
+                    src={props.row.original.files[0].url}
                   />
                   <div
                       style={{
@@ -57,13 +63,14 @@ const UserEditPanelPosts = ({posts}) => {
                       >{props.row.original.files.length}</div>
                 </div>
               );
+              
             }
           },
           {
             Header: 'Title',
             accessor: 'title',
             Cell: props => {
-              return <Link to={`/detail/${props.row.original.id}`}>{props.row.original.title}</Link>
+              return <Link to={`/detail/${props.row.original._id}`}>{props.row.original.title}</Link>
             }
           },
           {
@@ -132,11 +139,24 @@ const UserEditPanelPosts = ({posts}) => {
   //   console.log("data :", data)
   // }, [data])
   //////////////////////
+
+  ///////////////
+  const fetchData = useCallback(
+    ({ pageSize, pageIndex }) => {
+    console.log("fetchData is being called #1")
+
+    setPageSize(pageSize)
+    setPageIndex(pageIndex)
+  })
+  ///////////////
+
   
   return (  <div style={{ height: 700, width: "1000px" }}>
                 <Table
                     columns={columns}
                     data={posts}
+                    fetchData={fetchData}
+                    rowsPerPage={pageOptions}
                     updateMyData={updateMyData}
                     skipReset={skipResetRef.current}
                     isDebug={false}

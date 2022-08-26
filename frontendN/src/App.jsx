@@ -155,7 +155,7 @@ const App = (props) => {
     let {subscribeToMore} = conversationValues
     unsubscribeConversation = subscribeToMore({
       document: subConversation,
-      variables: { userId: user.id },
+      variables: { userId: user._id },
       updateQuery: (prev, {subscriptionData}) => {
         if (!subscriptionData.data) return prev;
 
@@ -182,7 +182,7 @@ const App = (props) => {
     let {subscribeToMore} = notificationValues
     unsubscribeNotification = subscribeToMore({
       document: subNotification,
-      variables: { userId: user.id },
+      variables: { userId: user._id },
       updateQuery: (prev, {subscriptionData}) => {
 
            
@@ -219,9 +219,9 @@ const App = (props) => {
   }, [])
 
   useEffect(()=>{
-    conversationValues.refetch({userId: _.isEmpty(user) ? "" : user.id})
+    conversationValues.refetch({userId: _.isEmpty(user) ? "" : user._id})
 
-    notificationValues.refetch({userId: _.isEmpty(user) ? "" : user.id})
+    notificationValues.refetch({userId: _.isEmpty(user) ? "" : user._id})
   }, [user])
 
   const handleDrawerOpen = () => {

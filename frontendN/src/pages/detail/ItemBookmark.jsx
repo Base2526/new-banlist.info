@@ -20,7 +20,7 @@ const ItemBookmark = (props) => {
       if( _.isEmpty(user) ){
         onDialogLogin(true)
       }else{
-        onBookmark({ postId: postId, userId: user.id, status })
+        onBookmark({ postId: postId, userId: user._id, status })
       }
     }
 
@@ -30,7 +30,7 @@ const ItemBookmark = (props) => {
                 </IconButton>
     }
     const bmValus = useQuery(gqlIsBookmark, {
-        variables: {userId: user.id, postId: postId},
+        variables: {userId: user._id, postId: postId},
         notifyOnNetworkStatusChange: true,
     });
     

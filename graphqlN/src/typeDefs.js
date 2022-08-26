@@ -427,8 +427,8 @@ export default gql`
   type Query {
     homes( userId: ID, page: Long, perPage: Long, keywordSearch: String, category: String ): JSON
 
-    user(_id: ID): UserPayLoad
-    users(page: Int, perPage: Int): UsersPayLoad
+    user(_id: ID): JSON
+    users(page: Int, perPage: Int): JSON
     getManyUsers(_ids: [ID!]!): UsersPayLoad
 
     role(_id: ID!): RolePayLoad
@@ -471,7 +471,7 @@ export default gql`
     getManyTContactUsList(_ids: [ID!]!): TContactUsListPayLoad
 
 
-    Shares(page: Int, perPage: Int): SharesPayLoad
+    shares(page: Int, perPage: Int): JSON
     shareByPostId(postId: ID!): SharesPayLoad
 
 
@@ -480,8 +480,8 @@ export default gql`
     conversations(userId: ID): JSON
     notifications(userId: ID): JSON
     
-    basicContent(_id: ID!): BasicContentPayLoad
-    basicContents(page: Int, perPage: Int): BasicContentsPayLoad
+    basicContent(_id: ID!): JSON
+    basicContents(page: Int, perPage: Int): JSON
 
     isFollow(userId: ID!, friendId: ID!): FollowPayLoad
     follower(userId: ID!): UsersPayLoad
@@ -651,11 +651,11 @@ export default gql`
   }
 
   type Mutation {
-    login(input: LoginInput): UserPayLoad
+    login(input: LoginInput): JSON
     loginWithSocial(input: LoginWithSocialInput): LoginWithSocial
 
     createUser(input: UserInput): User
-    updateUser(_id: ID!, input: UserInput): User
+    updateUser(_id: ID!, input: JSON): JSON
     deleteUser(_id: ID!): User
 
     createPost(input: JSON): JSON
@@ -701,7 +701,7 @@ export default gql`
     updateMessageRead( userId: ID!, conversationId: ID! ): JSON
 
     createBasicContent(input: BasicContentInput): BasicContent
-    updateBasicContent(_id: ID!, input: BasicContentInput): BasicContent
+    updateBasicContent(_id: ID!, input: BasicContentInput): JSON
 
     createAndUpdateFollow(input: FollowInput): Follow
     currentNumber: Int

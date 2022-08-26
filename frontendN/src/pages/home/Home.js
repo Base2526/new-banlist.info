@@ -156,7 +156,7 @@ const Home = (props) => {
 
   useEffect(()=>{
     if(is_connnecting){
-      homesValues && homesValues.refetch({userId: _.isEmpty(user) ? "" : user.id, page, perPage: rowsPerPage, keywordSearch: keywordSearch, category: category.join()})
+      homesValues && homesValues.refetch({userId: _.isEmpty(user) ? "" : user._id, page, perPage: rowsPerPage, keywordSearch: keywordSearch, category: category.join()})
     }
   }, [user, is_connnecting])
 
@@ -214,7 +214,7 @@ const Home = (props) => {
                     }else{
                       onCreateShare({ variables: { input: {
                             postId: item.id,
-                            userId: user.id,
+                            userId: user._id,
                             destination: "facebook"
                           }
                         }
@@ -239,7 +239,7 @@ const Home = (props) => {
                     }else{
                       onCreateShare({ variables: { input: {
                             postId: item.id,
-                            userId: user.id,
+                            userId: user._id,
                             destination: "twitter"
                           }
                         }
@@ -277,7 +277,7 @@ const Home = (props) => {
               }}
             >
               {
-                !_.isEmpty(user) && user.id == item.ownerId
+                !_.isEmpty(user) && user._id == item.ownerId
                 ? <MenuItem onClick={(e)=>{
                     handleAnchorElSettingClose()
                     history.push("/post/"+item.id+ "/edit");
@@ -479,7 +479,7 @@ const Home = (props) => {
                         postId={report.postId} 
                         onReport={(e)=>{
                           onCreateContactUs({ variables: { input: {
-                                  userId: user.id,
+                                  userId: user._id,
                                   postId: e.postId,     
                                   categoryId: e.categoryId,
                                   description: e.description

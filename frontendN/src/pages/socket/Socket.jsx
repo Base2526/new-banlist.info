@@ -24,7 +24,7 @@ import { useContext } from "react";
 function Socket() {
   const [userData, setUserData] = useContext(UserContext);
   const { id } = useParams();
-  const [user] = userData.filter((user) => user.id === parseInt(id));
+  const [user] = userData.filter((user) => user._id === parseInt(id));
 
   return (
     <UserContainer>

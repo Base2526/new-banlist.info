@@ -218,7 +218,7 @@ const Post = (props) => {
           const data1 = cache.readQuery({
             query: gqlPosts,
             variables: {
-              userId: _.isEmpty(user) ? "" : user.id,
+              userId: _.isEmpty(user) ? "" : user._id,
               page: 0, 
               perPage: 30
             }
@@ -234,7 +234,7 @@ const Post = (props) => {
               query: gqlPosts,
               data: { posts: {...newPosts, data: newData} },
               variables: {
-                userId: _.isEmpty(user) ? "" : user.id,
+                userId: _.isEmpty(user) ? "" : user._id,
                 page: 0, 
                 perPage: 30
               }
@@ -381,12 +381,12 @@ const Post = (props) => {
           break;
         }
 
-        case "idCard": {
-          if (!value) {
-            stateObj[name] = "Please enter id card.";
-          } 
-          break;
-        }
+        // case "idCard": {
+        //   if (!value) {
+        //     stateObj[name] = "Please enter id card.";
+        //   } 
+        //   break;
+        // }
 
         case "amount": {
           if (!value) {
@@ -424,7 +424,7 @@ const Post = (props) => {
                           description: input.description,
                           dateTranfer: input.dateTranfer,
                           files: input.attackFiles,//[...newAttackFilesBase64, ...oldAttackFiles],
-                          ownerId: user.id
+                          ownerId: user._id
                       }
 
         onCreatePost({ variables: { input: newInput } });
@@ -442,7 +442,7 @@ const Post = (props) => {
                       description: input.description,
                       dateTranfer: input.dateTranfer,
                       files:  input.attackFiles, //_.omitDeep(_.filter([...newAttackFilesBase64, ...oldAttackFiles], (v, key) => !v.delete), ['__typename', 'id']),
-                      ownerId: user.id
+                      ownerId: user._id
                     }
 
         console.log("newInput : ", editValues.data.post.data._id, _.omitDeep(newInput, ['__typename']), input.attackFiles)
@@ -498,12 +498,12 @@ const Post = (props) => {
                         name="idCard"
                         label="ID Card"
                         variant="filled"
-                        required
+                        // required
                         value={input.idCard}
                         onChange={onInputChange}
                         onBlur={validateInput}
                         helperText={error.idCard}
-                        error={_.isEmpty(error.idCard) ? false : true}
+                        // error={_.isEmpty(error.idCard) ? false : true}
                       />
 
                       <TextField
@@ -617,12 +617,12 @@ const Post = (props) => {
                               name="idCard"
                               label="ID Card"
                               variant="filled"
-                              required
+                              // required
                               value={input.idCard}
                               onChange={onInputChange}
                               onBlur={validateInput}
                               helperText={error.idCard}
-                              error={_.isEmpty(error.idCard) ? false : true}
+                              // error={_.isEmpty(error.idCard) ? false : true}
                             />
 
                             <TextField

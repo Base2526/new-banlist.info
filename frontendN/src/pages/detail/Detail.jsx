@@ -80,7 +80,7 @@ const Detail = (props) => {
               const data1 = cache.readQuery({
                 query: gqlIsBookmark,
                 variables: {
-                  userId: user.id,
+                  userId: user._id,
                   postId: id
                 }
               });
@@ -94,7 +94,7 @@ const Detail = (props) => {
                   isBookmark: newData
                 },
                 variables: {
-                  userId: user.id,
+                  userId: user._id,
                   postId: id
                 }
               });
@@ -216,7 +216,7 @@ const Detail = (props) => {
                         }else{
                             onCreateShare({ variables: { input: {
                                     postId: item._id,
-                                    userId: user.id,
+                                    userId: user._id,
                                     destination: "facebook"
                                 }
                                 }
@@ -246,7 +246,7 @@ const Detail = (props) => {
                         }else{
                             onCreateShare({ variables: { input: {
                                     postId: item._id,
-                                    userId: user.id,
+                                    userId: user._id,
                                     destination: "twitter"
                                 }
                                 }
@@ -365,7 +365,7 @@ const Detail = (props) => {
                                         {  
                                             shareValues.loading 
                                             ? <div /> 
-                                            : <div style={{
+                                            : shareValues.data.shareByPostId.data.length == 0 ? <></> : <div style={{
                                                 position: "absolute",
                                                 right: "5px",
                                                 borderRadius: "5px",

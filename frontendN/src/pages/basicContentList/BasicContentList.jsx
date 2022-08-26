@@ -39,10 +39,7 @@ const BasicContentList = (props) => {
 
   //////////////////////
 
-  const [openDialogDelete, setOpenDialogDelete] = useState({
-    isOpen: false,
-    id: ""
-  });
+  const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "" });
 
   const basicContentsValues = useQuery(gqlBasicContents, {
     variables: {page: pageIndex, perPage: pageSize},
@@ -94,7 +91,7 @@ const BasicContentList = (props) => {
           },
           {
             Header: 'Action',
-            accessor: 'id',
+            accessor: '_id',
             // Use our custom `fuzzyText` filter on this column
             // filter: 'fuzzyText',
             // // Use another two-stage aggregator here to
@@ -167,7 +164,7 @@ const BasicContentList = (props) => {
   };
 
   const handleDelete = (id) => {
-    setUserData(userData.filter((user) => user.id !== id));
+    setUserData(userData.filter((user) => user._id !== id));
   };
 
   // const columns = [

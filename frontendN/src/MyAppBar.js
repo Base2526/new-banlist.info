@@ -58,7 +58,7 @@ const MyAppBar = (props) =>{
 
     let countBadge = 0;
     _.map(conversations, conversation=>{
-      let member = _.find( conversation.members, member => member.userId === user.id );
+      let member = _.find( conversation.members, member => member.userId === user._id );
       if(!_.isEmpty(member)) countBadge += member.unreadCnt
     })
     setConversationsBadge(countBadge)
@@ -94,7 +94,7 @@ const MyAppBar = (props) =>{
                 color="inherit"
                 className={classes.grow}
                 onClick={(e)=>history.push("/")}>
-                BANLIST.INFO
+                BANLIST.INFO (alpha)
               </Typography>
               {
                 !_.isEmpty(user)

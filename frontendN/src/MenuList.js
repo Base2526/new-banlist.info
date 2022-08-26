@@ -42,6 +42,12 @@ const MenuAdministrator = [
     Path: "/posts"
   },
   {
+    Id: 355,
+    Name: "Phones",
+    Icon: <LocalPhoneIcon className="icon" />,
+    Path: "/phones"
+  },
+  {
     Id: 3,
     Name: "Bookmarks",
     Icon: <BookmarksIcon className="icon" />,
@@ -78,12 +84,12 @@ const MenuAdministrator = [
         // Icon: <AccountBalanceWalletIcon className="icon" />,
         Path: "/banks"
       },
-      {
-        Id: 4,
-        Title: "Socket",
-        // Icon: <PowerIcon className="icon" />,
-        Path: "/sockets"
-      },
+      // {
+      //   Id: 4,
+      //   Title: "Socket",
+      //   // Icon: <PowerIcon className="icon" />,
+      //   Path: "/sockets"
+      // },
       {
         Id: 5,
         Title: "Theme mail",
@@ -102,6 +108,11 @@ const MenuAdministrator = [
         Title: "Shares",
         // Icon: <MailIcon className="icon" />,
         Path: "/shares"
+      },
+      {
+        Id: 64,
+        Title: "Basic contents",
+        Path : "/basic-contents"
       }
     ]
   },

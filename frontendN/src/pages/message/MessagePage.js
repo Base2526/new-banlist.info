@@ -179,7 +179,7 @@ const MessagePage =(props)=> {
     if(!_.isEmpty(currentConversation)){
       fetchMessageValues.refetch({conversationId: currentConversation._id});
 
-      onUpdateMessageRead({ variables: {userId: user.id, conversationId: currentConversation._id} });
+      onUpdateMessageRead({ variables: {userId: user._id, conversationId: currentConversation._id} });
     }else{
       fetchMessageValues.refetch({conversationId: ""});
     }
@@ -196,7 +196,7 @@ const MessagePage =(props)=> {
                 onChange={(e)=>{
                   if(!_.isEmpty(e)){
                     let newConversationList = _.filter(conversationList, conversation =>{ 
-                      let mfriend = _.find(conversation.members, (member)=>member.userId !== user.id)
+                      let mfriend = _.find(conversation.members, (member)=>member.userId !== user._id)
                       return conversation.lastSenderName.toLowerCase().includes(e.toLowerCase()) || conversation.info.toLowerCase().includes(e.toLowerCase()) || mfriend.name.toLowerCase().includes(e.toLowerCase())
                     })
                     setConversationList(newConversationList)
@@ -207,10 +207,8 @@ const MessagePage =(props)=> {
               <ConversationList>
                 {
                   _.map(conversationList, (conversation)=>{
-                    let muser = _.find(conversation.members, (member)=>member.userId === user.id)
-                    let mfriend = _.find(conversation.members, (member)=>member.userId !== user.id)
-
-                    // console.log("muser :", muser, mfriend, conversation, user.id)
+                    let muser = _.find(conversation.members, (member)=>member.userId === user._id)
+                    let mfriend = _.find(conversation.members, (member)=>member.userId !== user._id)
 
                     return  <Conversation
                               name={mfriend.name}
@@ -236,7 +234,7 @@ const MessagePage =(props)=> {
       return <div />
     }
 
-    let friend = _.find(currentConversation.members, (member)=>member.userId !== user.id)
+    let friend = _.find(currentConversation.members, (member)=>member.userId !== user._id)
     return  <ConversationHeader>
               <ConversationHeader.Back />
               <Avatar src={friend.avatarSrc} name={friend.name} />
@@ -292,10 +290,10 @@ const MessagePage =(props)=> {
       let {executionTime, status, data}= fetchMessageValues.data.fetchMessage
       let {subscribeToMore} = fetchMessageValues
 
-      console.log("unsubscribeSubMessage :",  user.id, currentConversation._id)
+      console.log("unsubscribeSubMessage :",  user._id, currentConversation._id)
       unsubscribeSubMessage =  subscribeToMore({
         document: subMessage,
-        variables: { userId: user.id, conversationId: currentConversation._id },
+        variables: { userId: user._id, conversationId: currentConversation._id },
         updateQuery: (prev, {subscriptionData, variables}) => {
 
           if (!subscriptionData.data) return prev;
@@ -477,8 +475,8 @@ const MessagePage =(props)=> {
 
                 input = {...input, _id: makeid(20) , conversationId: currentConversation._id, status: "waiting" }
 
-                console.log("input ", input, user.id)
-                onAddMessage({ variables: {userId: user.id, conversationId: currentConversation._id, input } });
+                console.log("input ", input, user._id)
+                onAddMessage({ variables: {userId: user._id, conversationId: currentConversation._id, input } });
                 setMessageInputValue("")
               }}
             />
@@ -543,7 +541,7 @@ const MessagePage =(props)=> {
     input = {...input, _id: makeid(20) , conversationId: currentConversation._id, status: "waiting" }
 
 
-    onAddMessage({ variables: {userId: user.id, conversationId: currentConversation._id, input } });
+    onAddMessage({ variables: {userId: user._id, conversationId: currentConversation._id, input } });
     
     // image
   }

@@ -55,7 +55,7 @@ const UserList = (props) => {
   ///////////////
 
   const handleDelete = (id) => {
-    setUserData(userData.filter((user) => user.id !== id));
+    setUserData(userData.filter((user) => user._id !== id));
   };
 
   const handleClose = () => {
@@ -89,7 +89,7 @@ const UserList = (props) => {
                     }}
                     variant="rounded"
                     alt="Example Alt"
-                    src={props.row.original.image[0].base64}
+                    src={props.row.original.image[0].url}
                   />
                 </div>
               );
@@ -99,7 +99,7 @@ const UserList = (props) => {
             Header: 'Display name',
             accessor: 'displayName',
             Cell: props => {
-              return  <Link to={`/user/${props.row.original.id}/view`}>
+              return  <Link to={`/user/${props.row.original._id}/view`}>
                         {props.row.original.displayName}
                       </Link>
             }
@@ -117,6 +117,12 @@ const UserList = (props) => {
                 notifyOnNetworkStatusChange: true,
               });
 
+              console.log("postsByUser :", postsByUser.data)
+
+              if(postsByUser.data == null || postsByUser.data.postsByUser.data == null){
+                return <></>
+              }
+
               return postsByUser.loading
                     ? <LinearProgress sx={{width:"100px"}} />
                     : <>{postsByUser.data.postsByUser.data.length }</>  
@@ -131,7 +137,7 @@ const UserList = (props) => {
             Cell: props => {
               console.log("Cell :", props)
               return  <div>
-                        <Link to={`/user/${props.row.original.id}/edit`}>
+                        <Link to={`/user/${props.row.original._id}/edit`}>
                           <button>Edit</button>
                         </Link>
                         <button>Delete</button>

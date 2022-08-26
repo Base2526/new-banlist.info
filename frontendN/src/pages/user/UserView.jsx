@@ -61,7 +61,7 @@ const UserView = (props) => {
           const data = cache.readQuery({
             query: gqlConversations,
             variables: {
-              userId: user.id
+              userId: user._id
             }
           });
 
@@ -78,7 +78,7 @@ const UserView = (props) => {
                   conversations: new_conversations
                 },
                 variables: {
-                  userId: user.id
+                  userId: user._id
                 }
               });
             }
@@ -99,7 +99,7 @@ const UserView = (props) => {
           const data = cache.readQuery({
             query: gqlIsFollow,
             variables: {
-              userId: user.id, friendId: id
+              userId: user._id, friendId: id
             }
           });
 
@@ -112,7 +112,7 @@ const UserView = (props) => {
               isFollow: newData
             },
             variables: {
-              userId: user.id, friendId: id
+              userId: user._id, friendId: id
             }
           });
 
@@ -126,7 +126,7 @@ const UserView = (props) => {
           });
 
           let newFollowerData  = followerValues.follower.data
-          newFollowerData = _.filter(newFollowerData, (f)=>f._id != user.id)
+          newFollowerData = _.filter(newFollowerData, (f)=>f._id != user._id)
           if(createAndUpdateFollow.status){
             newFollowerData = [...newFollowerData, user]
           }
@@ -152,14 +152,14 @@ const UserView = (props) => {
 
   const onButtonChat = () =>{
 
-    if(!(!_.isEmpty(user) && user.id === id)){
+    if(!(!_.isEmpty(user) && user._id === id)){
       return  <Button 
                 variant="contained" 
                 color="primary"
                 onClick={(e)=>{
                   !_.isEmpty(props.user)
                   ? onCreateConversation({ variables: { input: {
-                          userId: user.id,
+                          userId: user._id,
                           friendId: id
                         }
                       }
@@ -173,7 +173,7 @@ const UserView = (props) => {
   
   const mainView = () =>{
     let userValue = userValues.data.user.data
-    let imageSrc =  _.isEmpty(userValue.image) ? "" : userValue.image[0].base64
+    let imageSrc =  _.isEmpty(userValue.image) ? "" : userValue.image[0].url
 
     console.log("userValue :", userValue, user)
 
@@ -261,7 +261,7 @@ const UserView = (props) => {
           onFollow={()=>{
             !_.isEmpty(user)
             ? onCreateConversation({ variables: { input: {
-                    userId: user.id,
+                    userId: user._id,
                     friendId: id
                   }
                 }
@@ -280,7 +280,7 @@ const UserView = (props) => {
           postId={report.postId} 
           onReport={(e)=>{
           onCreateContactUs({ variables: { input: {
-                  userId: user.id,
+                  userId: user._id,
                   postId: e.postId,     
                   categoryId: e.categoryId,
                   description: e.description

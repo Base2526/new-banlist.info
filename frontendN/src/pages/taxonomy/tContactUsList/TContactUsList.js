@@ -71,7 +71,7 @@ const TContactUsList = (props) => {
     };
 
     const handleDelete = (id) => {
-        setUserData(userData.filter((user) => user.id !== id));
+        setUserData(userData.filter((user) => user._id !== id));
     };
 
 

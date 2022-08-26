@@ -57,7 +57,7 @@ const ShareList = (props) => {
   ///////////////
 
   const handleDelete = (id) => {
-    setUserData(userData.filter((user) => user.id !== id));
+    setUserData(userData.filter((user) => user._id !== id));
   };
 
   const handleClose = () => {
@@ -98,7 +98,7 @@ const ShareList = (props) => {
               return  postValue.loading 
                       ? <LinearProgress sx={{width:"100px"}} />
                       : <Typography variant="overline" display="block" gutterBottom>
-                          {postValue.data.post.data.title}
+                          {_.isEmpty(postValue.data.post.data) ? "" : postValue.data.post.data.title}
                         </Typography>
               
             }
@@ -180,7 +180,7 @@ const ShareList = (props) => {
         ? <div><CircularProgress /></div> 
         : <Table
             columns={columns}
-            data={ shareValues.data.Shares.data }
+            data={ shareValues.data.shares.data }
             fetchData={fetchData}
             rowsPerPage={pageOptions}
             updateMyData={updateMyData}

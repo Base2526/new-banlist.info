@@ -39,7 +39,7 @@ const MessageListView = (props) => {
 
     let userValue = null
     if(!_.isEmpty(currentChat)){
-      let member = _.filter(currentChat.members, (vv)=>vv != user.id)
+      let member = _.filter(currentChat.members, (vv)=>vv != user._id)
       userValue = useQuery(gqlUser, {
         variables: {id: member[0]},
         notifyOnNetworkStatusChange: true,

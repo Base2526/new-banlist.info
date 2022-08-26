@@ -29,15 +29,9 @@ const DialogLogin = (props) => {
   const [onLogin, resultLogin] = useMutation(gqlLogin, {
     refetchQueries: [  {query: gqlConversations}, {query: gqlPosts}, {query : gqlHomes} ],
     onCompleted(data) {
-      // window.location.reload();
-
       localStorage.setItem('token', data.login.token)
       login(data.login.data)
       onComplete()
-
-      // window.location.reload();
-
-      // history.push("/")
     },
     onError(err){
       console.log("onError :", err)
@@ -48,14 +42,14 @@ const DialogLogin = (props) => {
   if(resultLogin.called && !resultLogin.loading){
     console.log("resultLogin :", resultLogin)
 
-    if(resultLogin.data.login.status){
+    // if(resultLogin.data.login.status){
 
-      // localStorage.setItem('token', resultLogin.data.login.token)
+    //   // localStorage.setItem('token', resultLogin.data.login.token)
       
-      // onComplete(resultLogin.data.login.data)
-    }else{
-      // messages
-    }
+    //   // onComplete(resultLogin.data.login.data)
+    // }else{
+    //   // messages
+    // }
   }
 
   useEffect(()=>{

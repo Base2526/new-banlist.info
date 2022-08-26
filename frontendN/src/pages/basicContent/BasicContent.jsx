@@ -24,8 +24,8 @@ let initValues =  { name : "",  description: "" }
 
 const BasicContent = (props) => {
   let history = useHistory();
-
-  const [input, setInput] = useState(initValues)
+  let { id, mode } = useParams();
+  let [input, setInput] = useState(initValues)
 
   const [onCreateBasicContent, resultCreateBasicContent] = useMutation(gqlCreateBasicContent
     , {
@@ -39,6 +39,23 @@ const BasicContent = (props) => {
 
   const [onUpdateBasicContent, resultUpdateBasicContent] = useMutation(gqlUpdateBasicContent, 
     {
+      update: (cache, {data: {updateBasicContent}}) => {
+
+        const data1 = cache.readQuery({
+          query: gqlBasicContent,
+          variables: {id}
+        });
+
+        let newData = {...data1.basicContent, data: updateBasicContent}
+ 
+        cache.writeQuery({
+          query: gqlBasicContent,
+          data: {
+            basicContent: newData
+          },
+          variables: {id}
+        });
+      },
       onCompleted({ data }) {
         history.push("/basic-contents");
       }
@@ -47,7 +64,7 @@ const BasicContent = (props) => {
 
   console.log("resultUpdateBasicContent : ", resultUpdateBasicContent)
 
-  let { id, mode } = useParams();
+  
 
   switch(mode){
     case "new":{
@@ -56,11 +73,7 @@ const BasicContent = (props) => {
     }
 
     case "edit":{
-
-      editValues = useQuery(gqlBasicContent, {
-        variables: {id},
-        notifyOnNetworkStatusChange: true,
-      });
+      editValues = useQuery(gqlBasicContent, { variables: {id}, notifyOnNetworkStatusChange: true });
      
       console.log("editValues : ", editValues, input)
 
@@ -88,28 +101,17 @@ const BasicContent = (props) => {
   const submitForm = (event) => {
     event.preventDefault();
 
-    console.log("submitForm : ", input);
-
     switch(mode){
       case "new":{
-        onCreateBasicContent({ variables: { input: {
-              name: input.name,
-              description: input.description
-            }
-          } 
-        });
+        onCreateBasicContent({ variables: { input: { name: input.name, description: input.description } } });
         break;
       }
 
       case "edit":{
-        let newInput =  {
-                          name: input.name,
-                          description: input.description
-                        }
+        let newInput =  {name: input.name, description: input.description }
 
-        console.log("newInput :", newInput, editValues.data.basicContent.data.id)
         onUpdateBasicContent({ variables: { 
-          id: editValues.data.basicContent.data.id,
+          id: editValues.data.basicContent.data._id,
           input: newInput
         }});
 
@@ -173,7 +175,7 @@ const BasicContent = (props) => {
                     }}/>
 
                   <Button type="submit" variant="contained" color="primary">
-                    CREATE
+                    UPDATE
                   </Button>
                 </div>
       }

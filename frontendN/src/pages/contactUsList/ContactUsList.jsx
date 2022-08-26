@@ -55,7 +55,7 @@ const ContactUsList = (props) => {
     ///////////////
     
     const handleDelete = (id) => {
-      setUserData(userData.filter((user) => user.id !== id));
+      setUserData(userData.filter((user) => user._id !== id));
     };
   
     const handleClose = () => {
@@ -116,7 +116,7 @@ const ContactUsList = (props) => {
                   return  value.loading 
                           ? <LinearProgress sx={{width:"100px"}} />
                           : <Typography variant="overline" display="block" gutterBottom>
-                              {value.data.post.data.title}
+                              { _.isEmpty(value.data.post.data) ? "" : value.data.post.data.title }
                             </Typography>
               }
             },

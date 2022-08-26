@@ -115,7 +115,7 @@ const UserPostList = (props) => {
                         }else{
                             onCreateShare({ variables: { input: {
                                     postId: item.id,
-                                    userId: user.id,
+                                    userId: user._id,
                                     destination: "facebook"
                                 }
                                 }
@@ -142,7 +142,7 @@ const UserPostList = (props) => {
                             }else{
                                 onCreateShare({ variables: { input: {
                                         postId: item.id,
-                                        userId: user.id,
+                                        userId: user._id,
                                         destination: "twitter"
                                     }
                                     }

@@ -17,59 +17,9 @@ export const gqlPost = gql`query Post($id: ID!) { post(_id: $id) }`;
 
 export const gqlPostsByUser =  gql`query PostsByUser($userId: ID!) { postsByUser( userId: $userId ) }`;
 
-export const gqlUsers = gql`
-    query users($page: Int, $perPage: Int){
-        users(
-            page: $page
-            perPage: $perPage
-        ){
-            status 
-            total
-            executionTime
-            data{
-                id: _id
-                username 
-                password
-                email
-                displayName
-                roles
-                isActive
-                image{
-                _id
-                size
-                type
-                lastModified
-                base64
-                }
-                lastAccess
-            }
-        }
-    }`;
+export const gqlUsers = gql`query users($page: Int, $perPage: Int){ users( page: $page perPage: $perPage ) }`;
 
-export const gqlUser = gql`
-    query User($id: ID) {
-        user(_id: $id) {
-            status 
-            executionTime
-            data {
-                id: _id
-                username 
-                password
-                email
-                displayName
-                roles
-                isActive
-                image{
-                    id: _id
-                    size
-                    type
-                    lastModified
-                    base64
-                }
-                lastAccess
-            }
-        }
-    }`;
+export const gqlUser = gql`query User($id: ID){ user(_id: $id) }`;
 
 export const gqlRoles = gql`
     query roles{
@@ -325,22 +275,7 @@ export const gqlComment = gql`
         }
     }`;
 
-export const gqlShares = gql`
-    query Shares($page: Int, $perPage: Int){
-        Shares(
-            page: $page
-            perPage: $perPage
-        ){
-            status
-            executionTime
-            data{
-                id: _id
-                userId
-                postId
-                destination
-            }
-        }
-    }`;
+export const gqlShares = gql`query Shares($page: Int, $perPage: Int){ shares( page: $page perPage: $perPage ) }`;
 
 export const gqlShareByPostId = gql`
     query ShareByPostId($postId: ID!){
@@ -379,36 +314,10 @@ export const gqlConversations = gql`query conversations($userId: ID){ conversati
 
 export const gqlNotifications = gql`query notifications($userId: ID){ notifications(userId: $userId) }`;
 
-export const gqlBasicContent =  gql`
-    query BasicContent($id: ID!){
-        basicContent(_id: $id){
-            status
-            executionTime
-            data{
-                id: _id
-                name
-                description
-            }
-        }
-    }`;
+export const gqlBasicContent =  gql`query BasicContent($id: ID!){ basicContent(_id: $id) }`;
 
-export const gqlBasicContents  = gql`
-    query BasicContents($page: Int, $perPage: Int){
-        basicContents(
-            page: $page
-            perPage: $perPage
-        ){
-            status
-            executionTime
-            data{
-                id: _id
-                name
-                description
-            }
-        }
-    }`;
+export const gqlBasicContents  = gql`query BasicContents($page: Int, $perPage: Int){ basicContents( page: $page perPage: $perPage ) }`;
     
-
 export const gqlIsFollow = gql`
     query IsFollow($userId: ID!, $friendId: ID!){
         isFollow(
@@ -481,39 +390,7 @@ export const gqlPhone = gql`query phone($id: ID!){ phone(_id: $id) }`;
 
 //////////////////  mutation  ///////////////////
 
-export const gqlLogin = gql`
-    mutation Login($input: LoginInput) {
-        login(input: $input) {
-            status
-            messages
-            executionTime
-            token
-            data {
-                id: _id
-                username
-                password
-                email
-                displayName
-                isActive
-                roles
-                bookmarks{
-                    _id
-                    userId
-                    postId
-                    status
-                }
-                image {
-                    _id
-                    base64
-                    fileName
-                    lastModified
-                    size
-                    type
-                }
-                lastAccess
-            }
-        }
-    }`;
+export const gqlLogin = gql`mutation Login($input: LoginInput) { login(input: $input) }`;
 
 export const gqlLoginWithSocial = gql`
     mutation LoginWithSocial($input: LoginWithSocialInput) {
@@ -523,10 +400,8 @@ export const gqlLoginWithSocial = gql`
     }`;
 
 export const gqlCreateUser = gql`
-  mutation CreateUser($input: UserInput) {
-    createUser(input: $input) {
-      id: _id
-    }
+    mutation CreateUser($input: UserInput) {
+        createUser(input: $input) { id: _id }
     }`;
 
 export const gqlCreatePost = gql`mutation CreatePost($input: JSON) { createPost(input: $input) }`;
@@ -627,12 +502,7 @@ export const gqlAddMessage = gql`
         addMessage( userId: $userId, conversationId: $conversationId, input: $input )
     }`;
 
-export const gqlUpdateUser = gql`
-  mutation UpdateUser($id: ID!, $input: UserInput) {
-    updateUser(_id: $id, input: $input) {
-      id: _id
-    }
-    }`;
+export const gqlUpdateUser = gql`mutation UpdateUser($id: ID!, $input: JSON) { updateUser(_id: $id, input: $input) }`;
 
 export const gqlUpdatePost = gql`
   mutation UpdatePost($id: ID!, $input: JSON) { updatePost(_id: $id, input: $input) }`;
@@ -651,12 +521,7 @@ export const gqlUpdateBank = gql`
         }
     }`;
 
-export const gqlUpdateBasicContent = gql`
-    mutation UpdateBasicContent($id: ID!, $input: BasicContentInput) {
-        updateBasicContent(_id: $id, input: $input) {
-            id: _id
-        }
-    }`;
+export const gqlUpdateBasicContent = gql`mutation UpdateBasicContent($id: ID!, $input: BasicContentInput) { updateBasicContent(_id: $id, input: $input) }`;
 
 export const gqlUpdateTContactUs = gql`
     mutation UpdateTContactUs($id: ID!, $input: TContactUsInput) {

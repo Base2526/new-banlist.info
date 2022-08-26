@@ -73,10 +73,10 @@ const HomeItem =(props) => {
   const [expand, setExpand] = useState(false);
 
   const onItemBookmark = () =>{
-    let bookmark = _.find(bookmarks, (bookmark)=>bookmark.userId === user.id && bookmark.postId === item._id)
+    let bookmark = _.find(bookmarks, (bookmark)=>bookmark.userId === user._id && bookmark.postId === item._id)
     if(_.isEmpty(bookmark)){
       return  <IconButton onClick={(e) =>{
-                  _.isEmpty(user) ?  onDialogLogin(true) : onBookmark( item._id, user.id, true)
+                  _.isEmpty(user) ?  onDialogLogin(true) : onBookmark( item._id, user._id, true)
                 }}> 
                 <BookmarkIcon style={{ color:"" }} />
               </IconButton>
@@ -84,7 +84,7 @@ const HomeItem =(props) => {
       let color = bookmark.status == null ? "" : bookmark.status ? "blue" : ""
   
       return  <IconButton onClick={(e) =>{
-                _.isEmpty(user) ?  onDialogLogin(true) : onBookmark( item._id, user.id, !bookmark.status)
+                _.isEmpty(user) ?  onDialogLogin(true) : onBookmark( item._id, user._id, !bookmark.status)
               }}>
                 <BookmarkIcon style={{ color }} /> 
               </IconButton>

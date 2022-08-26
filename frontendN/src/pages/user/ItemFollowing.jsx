@@ -10,7 +10,7 @@ const ItemFollowing = (props) => {
 
     if(!_.isEmpty(user)){
         let isFollowValues = useQuery(gqlIsFollow, {
-            variables: {userId: user.id, friendId: id},
+            variables: {userId: user._id, friendId: id},
             notifyOnNetworkStatusChange: true,
         });
 
@@ -20,7 +20,7 @@ const ItemFollowing = (props) => {
                         color="primary"
                         onClick={(e)=>{
                             !_.isEmpty(user)
-                            ? onFollowing({ userId: user.id, friendId: id, status: false })
+                            ? onFollowing({ userId: user._id, friendId: id, status: false })
                             : onDialogLogin(true)
                         }}>
                         Following
@@ -33,7 +33,7 @@ const ItemFollowing = (props) => {
                 color="primary"
                 onClick={(e)=>{
                     !_.isEmpty(user)
-                    ? onFollowing({ userId: user.id, friendId: id, status: true })
+                    ? onFollowing({ userId: user._id, friendId: id, status: true })
                     : onDialogLogin(true)
                 }}>
                 Follow

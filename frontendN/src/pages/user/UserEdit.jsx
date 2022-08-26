@@ -77,6 +77,8 @@ const UserEdit = (props) => {
   const [perPage, setPerPage] = useState(pageOptions[0])
   const { pathname } = useLocation();
 
+  const [fileProfile, setFileProfile] = useState(null);
+
   let userId= "62a2f65dcf7946010d3c7547";
 
   useEffect(() => {
@@ -97,6 +99,8 @@ const UserEdit = (props) => {
     variables: {page: 0, perPage: 20},
     notifyOnNetworkStatusChange: true,
   });
+
+  console.log("rolesValue :", rolesValue)
 
   let { id } = useParams();
 
@@ -130,6 +134,11 @@ const UserEdit = (props) => {
  
   const [onUpdateUser, resultUpdateUser] = useMutation(gqlUpdateUser, 
     {
+      context: {
+        headers: {
+          'apollo-require-preflight': true,
+        },
+      },
       onCompleted({ data }) {
         history.push("/users");
       }
@@ -195,28 +204,28 @@ const UserEdit = (props) => {
           break;
         }
 
-        case "password": {
-          if (!value) {
-            stateObj[name] = "Please enter Password.";
-          } else if (input.confirmPassword && value !== input.confirmPassword) {
-            stateObj["confirmPassword"] =
-              "Password and Confirm Password does not match.";
-          } else {
-            stateObj["confirmPassword"] = input.confirmPassword
-              ? ""
-              : error.confirmPassword;
-          }
-          break;
-        }
+        // case "password": {
+        //   if (!value) {
+        //     stateObj[name] = "Please enter Password.";
+        //   } else if (input.confirmPassword && value !== input.confirmPassword) {
+        //     stateObj["confirmPassword"] =
+        //       "Password and Confirm Password does not match.";
+        //   } else {
+        //     stateObj["confirmPassword"] = input.confirmPassword
+        //       ? ""
+        //       : error.confirmPassword;
+        //   }
+        //   break;
+        // }
 
-        case "confirmPassword": {
-          if (!value) {
-            stateObj[name] = "Please enter Confirm Password.";
-          } else if (input.password && value !== input.password) {
-            stateObj[name] = "Password and Confirm Password does not match.";
-          }
-          break;
-        }
+        // case "confirmPassword": {
+        //   if (!value) {
+        //     stateObj[name] = "Please enter Confirm Password.";
+        //   } else if (input.password && value !== input.password) {
+        //     stateObj[name] = "Password and Confirm Password does not match.";
+        //   }
+        //   break;
+        // }
 
         default:
           break;
@@ -227,13 +236,14 @@ const UserEdit = (props) => {
   };
 
   const rolesView = () =>{
-    let value = _.filter(rolesValue.data.Roles.data, v => input.roles.includes(v.id))
+
+    let value = _.filter(rolesValue.data.roles.data, v => input.roles.includes(v.id))
     
     return  <Autocomplete
               multiple
               id="user-roles"
               name="userRoles"
-              options={ rolesValue.data.Roles.data }
+              options={ rolesValue.data.roles.data }
               getOptionLabel={(option) => option.name}
               value={ value }
               renderInput={(params) => (
@@ -288,16 +298,16 @@ const UserEdit = (props) => {
   const submitForm = async(event) => {
     event.preventDefault();
 
-    console.log("submitForm : onSubmitForm ", input);
+    console.log("submitForm : onSubmitForm ", editValues.data.user.data);
 
-    let image = []
-    if(input.profile !== undefined){
-      if( input.profile.base64 ){
-        image = [_.omitDeep(input.profile, ['__typename', 'id'])]
-      }else{
-        image = [await convertFileToBase64(input.profile)]
-      }
-    }
+    // let image = []
+    // if(input.profile !== undefined){
+    //   if( input.profile.base64 ){
+    //     image = [_.omitDeep(input.profile, ['__typename', 'id'])]
+    //   }else{
+    //     image = [await convertFileToBase64(input.profile)]
+    //   }
+    // }
 
     let newInput = {
       username: input.username,
@@ -305,11 +315,15 @@ const UserEdit = (props) => {
       password: input.password,
       roles: input.roles,
       isActive: input.isActive,
-      image
+      // image
+    }
+
+    if(fileProfile !== null){
+      newInput = {...newInput, files: fileProfile}
     }
 
     onUpdateUser({ variables: { 
-      id: editValues.data.user.data.id,
+      id: editValues.data.user.data._id,
       input: newInput
     }});
   };
@@ -337,7 +351,9 @@ const UserEdit = (props) => {
                           }}
                           variant="rounded"
                           alt="Example Alt"
-                          src={input.profile == undefined ? "" : input.profile.base64 ? input.profile.base64: URL.createObjectURL(input.profile)}
+                          // src={input.profile == undefined ? "" : input.profile.url ? input.profile.url: URL.createObjectURL(input.profile)}
+                        
+                          src={ fileProfile != null ? URL.createObjectURL(fileProfile) :  input.profile?.url ? input.profile.url : "" }
                         />
                       </Stack>
                       <label htmlFor="profile">
@@ -347,8 +363,8 @@ const UserEdit = (props) => {
                           name="file"
                           // multiple
                           type="file"
-                          onChange={(e) => {
-                            setInput({...input, profile:e.target.files[0]})
+                          onChange={(event) => {
+                            setFileProfile(event.target.files[0])
                           }}
                         />
                         <IconButton
@@ -395,7 +411,7 @@ const UserEdit = (props) => {
                       label="Password"
                       variant="filled"
                       type={showPassword ? "text" : "password"} // <-- This is where the magic happens
-                      required
+                      // required
                       value={input.password}
                       onChange={(e)=>{
                         setInput({...input, password:e.target.value})
@@ -424,7 +440,7 @@ const UserEdit = (props) => {
                       label="Confirm password"
                       variant="filled"
                       type={showCofirmPassword ? "text" : "password"}
-                      required
+                      // required
                       value={input.confirmPassword}
                       onChange={(e)=>{
                         setInput({...input, confirmPassword:e.target.value})

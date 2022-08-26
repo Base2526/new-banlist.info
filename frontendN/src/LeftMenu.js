@@ -14,11 +14,13 @@ const LeftMenu = (props) => {
   const menuL = () =>{
     let permissions = _.isEmpty(props.user) ? [] : props.user.roles;
 
+    // console.log("LeftMenu :", permissions)
+
     let listMenu = MenuAnonymous
-    if( permissions && permissions.includes("authenticated")){
+    if( permissions && permissions.includes("62a2ccfbcf7946010d3c74a6")){
       listMenu = MenuAuthenticated
     }
-    if( permissions && permissions.includes("administrator")){
+    if( permissions && permissions.includes("62a2ccfbcf7946010d3c74a2")){
       listMenu = MenuAdministrator
     }
     return  _.map(listMenu, (item)=> { 

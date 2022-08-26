@@ -42,7 +42,7 @@ const PhoneList = (props) => {
   const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "" });
 
   const phonesValue = useQuery(gqlPhones, {
-    variables: {userId: _.isEmpty(user) ? "" : user.id, page: pageIndex, perPage: pageSize},
+    variables: {userId: _.isEmpty(user) ? "" : user._id, page: pageIndex, perPage: pageSize},
     notifyOnNetworkStatusChange: true,
   });
 

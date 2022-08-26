@@ -50,7 +50,7 @@ const PanelComment = ({ user, commentId, isOpen, onRequestClose, onSignin }) => 
   const classes = useStyles();
 
   const [comment, setComment] = useState([]);
-  const userId =  user == null ? "" : user.id;
+  const userId =  user == null ? "" : user._id;
   const avatarUrl = user == null ? "" : _.isEmpty(user.image) ? "" : user.image[0].base64 ;
   const name = user == null ? "" : user.displayName;
   const signinUrl = "/signin";

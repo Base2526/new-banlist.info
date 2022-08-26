@@ -10,13 +10,10 @@ const userSchema = new Schema({
   roles: [{ type: String }],
   isActive: { type: String },
   image :[{
-    base64: { type: String },
-    fileName: { type: String },
-    size: { type: Number },
-    type: { type: String },
-    
-    lastModified: { type: Date },
-    
+    url: { type: String },
+    filename: { type: String },
+    mimetype: { type: String },
+    encoding: { type: String },
   }],
   lastAccess : { type : Date, default: Date.now },
   isOnline: {type: Boolean, default: false}

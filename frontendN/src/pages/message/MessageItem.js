@@ -71,7 +71,7 @@ const MessageItem = (props) => {
 
     // console.log("userValues :", userValues)
 
-    let direction = senderId == user.id  ? "outgoing" : "incoming"
+    let direction = senderId == user._id  ? "outgoing" : "incoming"
     
     switch(type){
         case "text":{

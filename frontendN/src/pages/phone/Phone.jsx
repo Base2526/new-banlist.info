@@ -37,7 +37,7 @@ const Phone = (props) => {
                 cache.writeQuery({
                     query: gqlPhones,
                     data: { phones: newPhones },
-                    variables: { userId: _.isEmpty(user) ? "" : user.id, page: 0, perPage: 30 }
+                    variables: { userId: _.isEmpty(user) ? "" : user._id, page: 0, perPage: 30 }
                 });
             }
         },
@@ -78,7 +78,7 @@ const Phone = (props) => {
                 cache.writeQuery({
                     query: gqlPhones,
                     data: { phones: newPhones },
-                    variables: { userId: _.isEmpty(user) ? "" : user.id, page: 0, perPage: 30 }
+                    variables: { userId: _.isEmpty(user) ? "" : user._id, page: 0, perPage: 30 }
                 });
             }
         },
@@ -88,8 +88,6 @@ const Phone = (props) => {
     });
     console.log("updatePhone :", resultUpdatePhone)
 
-    
-    
     switch(mode){
         case "new":{
             editValues = undefined
@@ -170,7 +168,7 @@ const Phone = (props) => {
                                     setInput({...input, description: newDescription})
                                 }}/>
                             <Button type="submit" variant="contained" color="primary">
-                                Create
+                              {mode === 'new' ? 'CREATE' : 'UPDATE'}  
                             </Button>
                         </Box>
                     </LocalizationProvider>

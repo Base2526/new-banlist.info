@@ -173,7 +173,7 @@ const RoleList = (props) => {
          ?  <div><CircularProgress /></div> 
          :  <Table
               columns={columns}
-              data={rolesValues.data.Roles.data}
+              data={rolesValues.data.roles.data}
               fetchData={fetchData}
               rowsPerPage={pageOptions}
               updateMyData={updateMyData}

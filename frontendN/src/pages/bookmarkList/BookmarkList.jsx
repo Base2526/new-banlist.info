@@ -54,7 +54,7 @@ const BookmarkList = (props) => {
   ///////////////
 
   const handleDelete = (id) => {
-    setUserData(userData.filter((user) => user.id !== id));
+    setUserData(userData.filter((user) => user._id !== id));
   };
 
   const handleClose = () => {
@@ -108,12 +108,20 @@ const BookmarkList = (props) => {
                 variables: {id: props.row.original.postId},
                 notifyOnNetworkStatusChange: true,
               });
-      
+
+              console.log("postValue :", postValue, props.row.original.postId)
+
               return  postValue.loading 
                       ? <LinearProgress sx={{width:"100px"}} />
-                      : <Typography variant="overline" display="block" gutterBottom>
-                          {postValue.data.post.data.title}
-                        </Typography>
+                      : <Link to={`/detail/${props.row.original.postId}`}>
+                        { _.isEmpty(postValue.data.post.data) ? "" : postValue.data.post.data.title}
+                      </Link>
+      
+              // return  postValue.loading 
+              //         ? <LinearProgress sx={{width:"100px"}} />
+              //         : <Typography variant="overline" display="block" gutterBottom>
+              //             { _.isEmpty(postValue.data.post.data) ? "" : postValue.data.post.data.title}
+              //           </Typography>
             }
           },
           {
@@ -130,9 +138,9 @@ const BookmarkList = (props) => {
             Cell: props => {
               console.log("Cell :", props)
               return  <div>
-                        <Link to={`/bookmark/${props.row.original.id}/edit`}>
+                        {/* <Link to={`/bookmark/${props.row.original.id}/edit`}>
                           <button>Edit</button>
-                        </Link>
+                        </Link> */}
                         <button>Delete</button>
                       </div>
             }

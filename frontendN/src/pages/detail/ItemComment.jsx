@@ -48,7 +48,7 @@ const ItemComment = (props) => {
             currentUser={
                 _.isEmpty(user)  
                 ? null
-                : { userId: user == null ? "" : user.id, 
+                : { userId: user == null ? "" : user._id, 
                     avatarUrl: user == null ? "" : _.isEmpty(user.image) ? "" : user.image[0].base64, 
                     name: user == null ? "" : user.displayName }
             }

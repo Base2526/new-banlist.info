@@ -85,9 +85,7 @@ export default {
           status:true,
           data,
           total,
-          executionTime: `Time to execute = ${
-            (Date.now() - start) / 1000
-          } seconds`
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
         }
 
       } catch(err) {
@@ -414,31 +412,35 @@ export default {
     // Bank
 
     // BasicContent
-    async basicContent(root, {
-      _id
-    }) {
+    async basicContent(parent, args, context, info) {
+      try{
+        let start = Date.now()
 
-      let data = await BasicContent.findById(_id);
-      return {
-        status:true,
-        data
+        let { _id } = args
+        let data = await BasicContent.findById(_id);
+
+        return { 
+          status:true, 
+          data,
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds` }
+      } catch(err) {
+        logger.error(err.toString());
+        return;
       }
     },
-    async basicContents(root, {
-      page,
-      perPage
-    }) {
-
-      let start = Date.now()
-
-      let data = await BasicContent.find();
-      
-      return {
-        status:true,
-        data,
-        executionTime: `Time to execute = ${
-          (Date.now() - start) / 1000
-        } seconds`
+    async basicContents(parent, args, context, info) {
+      try{
+        let start = Date.now()
+        let data = await BasicContent.find();
+        
+        return {
+          status:true,
+          data,
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
+      } catch(err) {
+        logger.error(err.toString());
+        return;
       }
     },
     // BasicContent
@@ -803,7 +805,7 @@ export default {
 
 
     /////
-    async Shares(root, {
+    async shares(root, {
       page,
       perPage
     }) {
@@ -952,14 +954,22 @@ export default {
 
     async phones(parent, args, context, info) {
       try{
-        let start = Date.now()
-
-        // let {currentUser} = context
-        
+        let start = Date.now()        
         let { userId, page, perPage } = args
+
+        let roles = (await User.findById(userId)).roles
 
         let data = await  Phone.find({ownerId: userId}).limit(perPage).skip(page); 
         let total = (await Phone.find({ownerId: userId}).lean().exec()).length;
+
+        //  62a2ccfbcf7946010d3c74a2 :: administrator
+        //  62a2ccfbcf7946010d3c74a6 :: authenticated
+
+        // administrator
+        if(roles.includes('62a2ccfbcf7946010d3c74a2')){
+          data = await  Phone.find().limit(perPage).skip(page); 
+          total = (await Phone.find().lean().exec()).length;
+        }
 
         return {
           status:true,
@@ -1002,60 +1012,67 @@ export default {
 
     // Login & Logout
     async login(parent, args, context, info) {
+      try{
+        let {input} = args
 
-      let {input} = args
+        let start = Date.now()
+        let user = emailValidate().test(input.username) ?  await User.findOne({email: input.username}) : await User.findOne({username: input.username})
 
-      let start = Date.now()
-      let user = emailValidate().test(input.username) ?  await User.findOne({email: input.username}) : await User.findOne({username: input.username})
-
-      if(user === null){
-        return {
-          status: false,
-          messages: "xxx", 
-          data:{
-            _id: "",
-            username: "",
-            password: "",
-            email: "",
-            displayName: "",
-            roles:[]
-          },
-          executionTime: `Time to execute = ${
-            (Date.now() - start) / 1000
-          } seconds`
+        if(user === null){
+          return {
+            status: false,
+            messages: "xxx", 
+            data:{
+              _id: "",
+              username: "",
+              password: "",
+              email: "",
+              displayName: "",
+              roles:[]
+            },
+            executionTime: `Time to execute = ${
+              (Date.now() - start) / 1000
+            } seconds`
+          }
         }
-      }
 
-      // update lastAccess
-      await User.findOneAndUpdate({
-        _id: user._doc._id
-      }, {
-        lastAccess : Date.now()
-      }, {
-        new: true
-      })
+        // update lastAccess
+        await User.findOneAndUpdate({
+          _id: user._doc._id
+        }, {
+          lastAccess : Date.now()
+        }, {
+          new: true
+        })
 
-      let roles = await Promise.all(_.map(user.roles, async(_id)=>{
-        let role = await Role.findById(_id)
-        return role.name
-      }))
+        // let roles = await Promise.all(_.map(user.roles, async(_id)=>{
+        //   let role = await Role.findById(_id)
+        //   return role.name
+        // }))
 
-      user = { ...user._doc,  roles }
-      // console.log("Login : ", user )
+        // console.log("Login #1: ", user.roles )
 
-      let token = jwt.sign(user._id.toString(), process.env.JWT_SECRET)
+        // user = { ...user._doc,  roles }
+        // console.log("Login #2: ", user )
 
-      input = {...input, token}
-      await Session.create(input);
+        let token = jwt.sign(user._id.toString(), process.env.JWT_SECRET)
 
-      return {
-        status: true,
-        messages: "", 
-        token,
-        data: user,
-        executionTime: `Time to execute = ${
-          (Date.now() - start) / 1000
-        } seconds`
+        input = {...input, token}
+        await Session.create(input);
+
+        return {
+          status: true,
+          messages: "", 
+          token,
+          data: user,
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
+
+      } catch(err) {
+        logger.error(err.toString());
+
+        console.log("login : ", err.toString())
+        return;
       }
     },
     // loginWithSocial
@@ -1081,16 +1098,46 @@ export default {
       input = {...input, displayName: input.username}
       return await User.create(input);
     },
-    async updateUser(root, {
-      _id,
-      input
-    }) {
-      console.log("updateUser :", _id)
-      return await User.findOneAndUpdate({
-        _id
-      }, input, {
-        new: true
-      })
+    async updateUser(parent, args, context, info) {
+
+      try{
+        let { _id,  input} = args
+
+        let newFiles = [];
+        if(!_.isEmpty(input.files)){
+          const { createReadStream, filename, encoding, mimetype } = (await input.files).file
+
+          const stream = createReadStream();
+          const assetUniqName = fileRenamer(filename);
+          const pathName = path.join(__dirname,   `../uploads/${assetUniqName}`);
+          
+          const output = fs.createWriteStream(pathName)
+          stream.pipe(output);
+
+          await new Promise(function (resolve, reject) {
+            output.on('close', () => {
+              resolve();
+            });
+      
+            output.on('error', (err) => {
+              logger.error(err.toString());
+
+              reject(err);
+            });
+          });
+
+          newFiles.push({ url: `http://localhost:4000/${assetUniqName}`, filename, encoding, mimetype });
+        }
+
+        let newInput = {...input, image: newFiles}
+
+        console.log("updateUser : ", newInput)
+
+        return await User.findOneAndUpdate({ _id }, newInput, { new: true })
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
     },
     async deleteUser(root, {
       _id
@@ -1387,17 +1434,15 @@ export default {
 
       return await BasicContent.create(JSON.parse(JSON.stringify(input)));
     },
-    async updateBasicContent(root, {
-      _id,
-      input
-    }) {
-      console.log("UpdateBasicContent :", _id, JSON.parse(JSON.stringify(input)))
-      
-      return await BasicContent.findOneAndUpdate({
-        _id
-      }, input, {
-        new: true
-      })
+    async updateBasicContent(parent, args, context, info) {
+      try{
+        let { _id, input } = args
+
+        return await BasicContent.findOneAndUpdate({ _id }, input, { new: true })
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
     },
 
    // basic content

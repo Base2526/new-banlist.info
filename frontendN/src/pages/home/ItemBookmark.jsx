@@ -19,7 +19,7 @@ const ItemBookmark = (props) => {
 
   useEffect(()=>{
     if(!_.isEmpty(user)){
-      bmValus.refetch({userId: user.id, postId: item._id});
+      bmValus.refetch({userId: user._id, postId: item._id});
     }else{
       bmValus.refetch({userId: "", postId: item._id});
     }
@@ -34,7 +34,7 @@ const ItemBookmark = (props) => {
       let {subscribeToMore} = bmValus
       unsubscribe =  subscribeToMore({
         document: subBookmark,
-        variables: { userId: user.id, postId: item._id },
+        variables: { userId: user._id, postId: item._id },
         updateQuery: (prev, {subscriptionData}) => {
           if (!subscriptionData.data) return prev;
   
@@ -46,26 +46,27 @@ const ItemBookmark = (props) => {
         }
       });
       
-      let isBookmark = bmValus.data.isBookmark.data
-      if(isBookmark == null){
+      
+      if(bmValus.data.isBookmark == null || bmValus.data.isBookmark.data ==null ){
         return  <IconButton onClick={(e) =>{
-                  _.isEmpty(user) ?  onDialogLogin(true) :  onBookmark( item._id, user.id, true )
+                  _.isEmpty(user) ?  onDialogLogin(true) :  onBookmark( item._id, user._id, true )
                 }}>
                   <BookmarkIcon style={{ color:"" }} /> 
                 </IconButton>
       }
-  
+
+      let isBookmark = bmValus.data.isBookmark.data  
       let color = isBookmark.status == null ? "" : isBookmark.status ? "blue" : ""
   
       return  <IconButton onClick={(e) =>{
-                _.isEmpty(user) ?  onDialogLogin(true) : onBookmark( item._id, user.id, !isBookmark.status)
+                _.isEmpty(user) ?  onDialogLogin(true) : onBookmark( item._id, user._id, !isBookmark.status)
               }}>
                 <BookmarkIcon style={{ color }} /> 
               </IconButton>
     }       
   }
   return  <IconButton onClick={(e) =>{
-              _.isEmpty(user) ?  onDialogLogin(true) : onBookmark( item._id, user.id,true)
+              _.isEmpty(user) ?  onDialogLogin(true) : onBookmark( item._id, user._id, true)
             }}> 
             <BookmarkIcon style={{ color:"" }} />
           </IconButton>
