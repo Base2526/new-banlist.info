@@ -20,9 +20,9 @@ import Avatar from "@mui/material/Avatar";
 import _ from "lodash"
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 
-import {gqlBanks} from "../../gqlQuery"
+import {gqlBanks, gqlDeleteBank} from "../../gqlQuery"
 import Footer from "../footer";
 
 import Table from "../../TableContainer"
@@ -34,14 +34,34 @@ const BankList = (props) => {
   const [pageIndex, setPageIndex] = useState(0);  
   const [pageSize, setPageSize] = useState(pageOptions[0])
 
-  const [openDialogDelete, setOpenDialogDelete] = useState({
-    isOpen: false,
-    id: ""
-  });
+  const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "", description: "" });
 
   const bankValues = useQuery(gqlBanks, { notifyOnNetworkStatusChange: true });
 
   console.log("bankValues :", bankValues)
+
+  const [onDeleteBank, resultDeleteBank] = useMutation(gqlDeleteBank, 
+    {
+      update: (cache, {data: {deleteBank}}) => {
+        const data1 = cache.readQuery({
+          query: gqlBanks,
+        });
+
+        let newBanks = {...data1.banks}
+        let newData   = _.filter(data1.banks.data, bank => bank._id !== deleteBank._id)
+        newBanks = {...newBanks, total: newData.length, data:newData }
+
+        cache.writeQuery({
+          query: gqlBanks,
+          data: { banks: newBanks },
+        });
+      },
+      onCompleted({ data }) {
+        history.push("/banks");
+      }
+    }
+  );
+  console.log("resultDeleteBank :", resultDeleteBank)
 
   ///////////////
   const fetchData = useCallback(
@@ -53,22 +73,15 @@ const BankList = (props) => {
   })
   ///////////////
 
-  const handleClickOpen = () => {
-    // setOpen(true);
-
-    setOpenDialogDelete({ ...openDialogDelete, isOpen: true });
-  };
-
   const handleClose = () => {
     // setOpen(false);
     setOpenDialogDelete({ ...openDialogDelete, isOpen: false });
   };
 
   const handleDelete = (id) => {
-    setUserData(userData.filter((user) => user._id !== id));
+    onDeleteBank({ variables: { id } });
   };
 
-  
   ///////////////////////
   const columns = useMemo(
     () => [
@@ -108,11 +121,15 @@ const BankList = (props) => {
             Header: 'Action',
             Cell: props => {
               console.log("Cell :", props)
+
+              let {_id, name} = props.row.original
               return  <div>
-                        <Link to={`/bank/${props.row.original.id}/edit`}>
+                        <Link to={`/bank/${_id}/edit`}>
                           <button>Edit</button>
                         </Link>
-                        <button>Delete</button>
+                        <button onClick={(e)=>{
+                          setOpenDialogDelete({ isOpen: true, id: _id, description: name })
+                        }}>Delete</button>
                       </div>
             }
           },
@@ -187,7 +204,7 @@ const BankList = (props) => {
           <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Delete
+              {openDialogDelete.description}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -196,7 +213,7 @@ const BankList = (props) => {
               onClick={() => {
                 handleDelete(openDialogDelete.id);
 
-                setOpenDialogDelete({ isOpen: false, id: "" });
+                setOpenDialogDelete({ isOpen: false, id: "", description: "" });
               }}
             >
               Delete

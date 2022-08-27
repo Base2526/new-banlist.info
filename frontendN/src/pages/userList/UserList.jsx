@@ -18,10 +18,10 @@ import Avatar from "@mui/material/Avatar";
 import _ from "lodash"
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import LinearProgress from '@mui/material/LinearProgress';
 
-import {gqlUsers, gqlPostsByUser} from "../../gqlQuery"
+import {gqlUsers, gqlPostsByUser, gqlDeleteUser} from "../../gqlQuery"
 import Footer from "../footer";
 import Table from "../../TableContainer"
 
@@ -32,10 +32,7 @@ const UserList = (props) => {
   const [pageIndex, setPageIndex] = useState(0);  
   const [pageSize, setPageSize] = useState(pageOptions[0])
 
-  const [openDialogDelete, setOpenDialogDelete] = useState({
-    isOpen: false,
-    id: ""
-  });
+  const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "", description: "" });
 
   const usersValue = useQuery(gqlUsers, {
     variables: {page: pageIndex, perPage: pageSize},
@@ -43,6 +40,31 @@ const UserList = (props) => {
   });
 
   console.log("usersValue :", usersValue)
+
+  const [onDeleteUser, resultDeleteUser] = useMutation(gqlDeleteUser, 
+    {
+      update: (cache, {data: {deleteUser}}) => {
+        const data1 = cache.readQuery({
+          query: gqlUsers,
+          variables: {page: pageIndex, perPage: pageSize},
+        });
+
+        let newUsers = {...data1.users}
+        let newData   = _.filter(data1.users.data, user => user._id !== deleteUser._id)
+        newUsers = {...newUsers, total: newData.length, data:newData }
+
+        cache.writeQuery({
+          query: gqlUsers,
+          data: { users: newUsers },
+          variables: {page: pageIndex, perPage: pageSize},
+        });
+      },
+      onCompleted({ data }) {
+        history.push("/users");
+      }
+    }
+  );
+  console.log("resultDeleteUser :", resultDeleteUser)
 
   ///////////////
   const fetchData = useCallback(
@@ -55,12 +77,14 @@ const UserList = (props) => {
   ///////////////
 
   const handleDelete = (id) => {
-    setUserData(userData.filter((user) => user._id !== id));
+    // setUserData(userData.filter((user) => user._id !== id));
+
+    onDeleteUser({ variables: { id } });
   };
 
   const handleClose = () => {
     // setOpen(false);
-    setOpenDialogDelete({ ...openDialogDelete, isOpen: false });
+    setOpenDialogDelete({ ...openDialogDelete, isOpen: false, description: "" });
   };
 
   ///////////////////////
@@ -136,11 +160,15 @@ const UserList = (props) => {
             Header: 'Action',
             Cell: props => {
               console.log("Cell :", props)
+
+              let {_id, displayName} = props.row.original
               return  <div>
-                        <Link to={`/user/${props.row.original._id}/edit`}>
+                        <Link to={`/user/${_id}/edit`}>
                           <button>Edit</button>
                         </Link>
-                        <button>Delete</button>
+                        <button onClick={(e)=>{
+                          setOpenDialogDelete({ isOpen: true, id: _id, description: displayName });
+                        }}>Delete</button>
                       </div>
             }
           },
@@ -214,7 +242,7 @@ const UserList = (props) => {
           <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Delete
+              {openDialogDelete.description}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -223,7 +251,7 @@ const UserList = (props) => {
               onClick={() => {
                 handleDelete(openDialogDelete.id);
 
-                setOpenDialogDelete({ isOpen: false, id: "" });
+                setOpenDialogDelete({ isOpen: false, id: "", description: "" });
               }}
             >
               Delete

@@ -63,31 +63,9 @@ export const gqlManyRoles = gql`
         }
     }`;
  
-export const gqlBanks = gql`
-    query banks{
-        banks{
-            status
-            executionTime
-            data{
-                id: _id
-                name
-                description
-            }
-        }
-    }`;
+export const gqlBanks = gql`query banks{ banks }`;
 
-export const gqlBank = gql`
-    query bank($id: ID!){
-        bank(_id: $id){
-            status
-            executionTime
-            data{
-                id: _id
-                name
-                description
-            }
-        }
-    }`;
+export const gqlBank = gql`query bank($id: ID!){ bank(_id: $id) }`;
 
 export const gqlTContactUsList = gql`
     query TContactUsList($page: Int, $perPage: Int){
@@ -504,8 +482,7 @@ export const gqlAddMessage = gql`
 
 export const gqlUpdateUser = gql`mutation UpdateUser($id: ID!, $input: JSON) { updateUser(_id: $id, input: $input) }`;
 
-export const gqlUpdatePost = gql`
-  mutation UpdatePost($id: ID!, $input: JSON) { updatePost(_id: $id, input: $input) }`;
+export const gqlUpdatePost = gql`mutation UpdatePost($id: ID!, $input: JSON) { updatePost(_id: $id, input: $input) }`;
  
 export const gqlUpdateRole = gql`
     mutation UpdateRole($id: ID!, $input: RoleInput) {
@@ -514,12 +491,7 @@ export const gqlUpdateRole = gql`
         }
     }`;
 
-export const gqlUpdateBank = gql`
-    mutation UpdateBank($id: ID!, $input: BankInput) {
-        updateBank(_id: $id, input: $input) {
-            id: _id
-        }
-    }`;
+export const gqlUpdateBank = gql`mutation UpdateBank($id: ID!, $input: BankInput){ updateBank(_id: $id, input: $input) }`;
 
 export const gqlUpdateBasicContent = gql`mutation UpdateBasicContent($id: ID!, $input: BasicContentInput) { updateBasicContent(_id: $id, input: $input) }`;
 
@@ -530,7 +502,6 @@ export const gqlUpdateTContactUs = gql`
         }
     }`;
 
-// createComment
 export const gqlCurrentNumber = gql`
     mutation Query {
         currentNumber
@@ -549,6 +520,14 @@ export const gqlFileUpload = gql`
                 encoding
             }
         }`
+
+export const gqlDeletePost = gql`mutation DeletePost($id: ID!) { deletePost(_id: $id) }`;
+ 
+export const gqlDeletePhone = gql`mutation DeletePhone($id: ID!) { deletePhone(_id: $id) }`;
+
+export const gqlDeleteBank  = gql`mutation DeleteBank($id: ID!) { deleteBank(_id: $id) }`;
+
+export const gqlDeleteUser  = gql`mutation DeleteUser($id: ID!) { deleteUser(_id: $id) }`;
 
 //////////////////  mutation  ///////////////////
 

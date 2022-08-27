@@ -435,8 +435,8 @@ export default gql`
     roles: RolesPayLoad
     getManyRoles(_ids: [ID!]!): RolesPayLoad
 
-    bank(_id: ID!): BankPayLoad
-    banks(page: Int, perPage: Int): BanksPayLoad
+    bank(_id: ID!): JSON
+    banks(page: Int, perPage: Int): JSON
     getManyBanks(_ids: [ID!]!): BanksPayLoad
 
     Mail(_id: ID!): MailPayLoad
@@ -656,11 +656,11 @@ export default gql`
 
     createUser(input: UserInput): User
     updateUser(_id: ID!, input: JSON): JSON
-    deleteUser(_id: ID!): User
+    deleteUser(_id: ID!): JSON
 
     createPost(input: JSON): JSON
     updatePost(_id: ID!, input: JSON): JSON
-    deletePost(_id: ID!): Post
+    deletePost(_id: ID!): JSON
     deletePosts(_ids: [ID!]!): deleteType
 
     createRole(input: RoleInput): Role
@@ -669,9 +669,9 @@ export default gql`
     deleteRoles(_ids: [ID!]!): deleteType
 
     createBank(input: BankInput): Bank
-    updateBank(_id: ID!, input: BankInput): Bank
-    deleteBank(_id: ID!): Bank
-    deleteBanks(_ids: [ID!]!): deleteType
+    updateBank(_id: ID!, input: BankInput): JSON
+    deleteBank(_id: ID!): JSON
+    deleteBanks(_ids: [ID!]!): JSON
 
     createMail(input: MailInput): Mail
     updateMail(_id: ID!, input: MailInput): Mail
@@ -708,6 +708,7 @@ export default gql`
 
     createPhone(input: PhoneInput): JSON
     updatePhone(_id: ID!, input: PhoneInput): JSON
+    deletePhone(_id: ID!): JSON
 
     fileUpload(text: String!, file: [Upload]!): [FileX]!
   }

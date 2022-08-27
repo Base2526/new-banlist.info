@@ -2,7 +2,7 @@ import { ButtonWrapper } from "./PhoneList.styled";
 import { Link } from "react-router-dom";
 import { useState, useCallback, useEffect, useMemo, useRef  } from "react";
 import Box from "@mui/material/Box";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { useHistory } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -26,7 +26,7 @@ import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import { connect } from "react-redux";
 
 import Footer from "../footer";
-import { gqlPhones } from "../../gqlQuery"
+import { gqlPhones, gqlDeletePhone } from "../../gqlQuery"
 import ReadMoreMaster from "../../utils/ReadMoreMaster"
 import Table from "../../TableContainer"
 
@@ -39,7 +39,32 @@ const PhoneList = (props) => {
   const [pageIndex, setPageIndex]     = useState(0);  
   const [pageSize, setPageSize]       = useState(pageOptions[0])
   const [lightbox, setLightbox]       = useState({ isOpen: false, photoIndex: 0, images: [] });
-  const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "" });
+  const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "", description: "" });
+
+  const [onDeletePhone, resultDeletePhone] = useMutation(gqlDeletePhone, 
+    {
+      update: (cache, {data: {deletePhone}}) => {
+        const data1 = cache.readQuery({
+          query: gqlPhones,
+          variables: {userId: _.isEmpty(user) ? "" : user._id, page: pageIndex, perPage: pageSize},
+        });
+
+        let newPhones = {...data1.phones}
+        let newData   = _.filter(data1.phones.data, phone => phone._id !== deletePhone._id)
+        newPhones = {...newPhones, total: newData.length, data:newData }
+
+        cache.writeQuery({
+          query: gqlPhones,
+          data: { phones: newPhones },
+          variables: {userId: _.isEmpty(user) ? "" : user._id, page: pageIndex, perPage: pageSize},
+        });
+      },
+      onCompleted({ data }) {
+        history.push("/phones");
+      }
+    }
+  );
+  console.log("resultDeletePhone :", resultDeletePhone)
 
   const phonesValue = useQuery(gqlPhones, {
     variables: {userId: _.isEmpty(user) ? "" : user._id, page: pageIndex, perPage: pageSize},
@@ -57,18 +82,12 @@ const PhoneList = (props) => {
   })
   ///////////////
 
-
-  const handleClickOpen = () => {
-    setOpenDialogDelete({ ...openDialogDelete, isOpen: true });
-  };
-
   const handleClose = () => {
-    // setOpen(false);
-    setOpenDialogDelete({ ...openDialogDelete, isOpen: false });
+    setOpenDialogDelete({ ...openDialogDelete, isOpen: false, description: "" });
   };
 
   const handleDelete = (id) => {
-    // setUserData(userData.filter((user) => user.id !== id));
+    onDeletePhone({ variables: { id } });
   };
 
   ///////////////////////
@@ -109,9 +128,12 @@ const PhoneList = (props) => {
           {
             Header: 'Action',
             Cell: props => {
+                let {_id, description} = props.row.original
                 return  <div>
-                            <Link to={`/phone/${props.row.original._id}/edit`}><button>Edit</button></Link>
-                            <button>Delete</button>
+                            <Link to={`/phone/${_id}/edit`}><button>Edit</button></Link>
+                            <button onClick={(e)=>{
+                              setOpenDialogDelete({ isOpen: true, id: _id, description });
+                            }}>Delete</button>
                         </div>
             }
           },
@@ -184,7 +206,7 @@ const PhoneList = (props) => {
           <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Delete
+              {openDialogDelete.description}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -193,7 +215,7 @@ const PhoneList = (props) => {
               onClick={() => {
                 handleDelete(openDialogDelete.id);
 
-                setOpenDialogDelete({ isOpen: false, id: "" });
+                setOpenDialogDelete({ isOpen: false, id: "", description: "" });
               }}
             >
               Delete

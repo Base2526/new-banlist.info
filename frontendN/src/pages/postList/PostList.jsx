@@ -2,7 +2,7 @@ import { ButtonWrapper } from "./PostList.styled";
 import { Link } from "react-router-dom";
 import { useState, useCallback, useEffect, useMemo, useRef  } from "react";
 import Box from "@mui/material/Box";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation} from "@apollo/client";
 import { useHistory } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -25,8 +25,9 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import { connect } from "react-redux";
 
+
 import Footer from "../footer";
-import {gqlPosts, gqlBookmarksByPostId, gqlShareByPostId, gqlComment, gqlUser} from "../../gqlQuery"
+import {gqlPosts, gqlBookmarksByPostId, gqlShareByPostId, gqlComment, gqlDeletePost} from "../../gqlQuery"
 import ReadMoreMaster from "../../utils/ReadMoreMaster"
 import Table from "../../TableContainer"
 
@@ -39,14 +40,39 @@ const PostList = (props) => {
   const [pageIndex, setPageIndex] = useState(0);  
   const [pageSize, setPageSize] = useState(pageOptions[0])
   const [lightbox, setLightbox] = useState({ isOpen: false, photoIndex: 0, images: [] });
-  const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "" });
+  const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "", description: "" });
 
   const postsValue = useQuery(gqlPosts, {
     variables: {userId: _.isEmpty(user) ? "" : user._id, page: pageIndex, perPage: pageSize},
     notifyOnNetworkStatusChange: true,
   });
-
   console.log("postsValue :", postsValue)
+
+  const [onDeletePost, resultDeletePost] = useMutation(gqlDeletePost, 
+    {
+      update: (cache, {data: {deletePost}}) => {
+
+        const data1 = cache.readQuery({
+          query: gqlPosts,
+          variables:  {userId: _.isEmpty(user) ? "" : user._id, page: pageIndex, perPage: pageSize},
+        });
+
+        let newPosts = {...data1.posts}
+        let newData   = _.filter(data1.posts.data, post => post._id !== deletePost._id)
+        newPosts = {...newPosts, total: newData.length, data:newData }
+
+        cache.writeQuery({
+          query: gqlPosts,
+          data: { posts: newPosts },
+          variables:  {userId: _.isEmpty(user) ? "" : user._id, page: pageIndex, perPage: pageSize},
+        });
+      },
+      onCompleted({ data }) {
+        history.push("/posts");
+      }
+    }
+  );
+  console.log("resultDeletePost :", resultDeletePost)
 
   ///////////////
   const fetchData = useCallback(
@@ -63,13 +89,15 @@ const PostList = (props) => {
     setOpenDialogDelete({ ...openDialogDelete, isOpen: true });
   };
 
-  const handleClose = () => {
-    // setOpen(false);
+  const handleClose = (event, reason) => {
+    if (reason && reason == "backdropClick") 
+        return;
+
     setOpenDialogDelete({ ...openDialogDelete, isOpen: false });
   };
 
   const handleDelete = (id) => {
-    // setUserData(userData.filter((user) => user.id !== id));
+    onDeletePost({ variables: { id } });
   };
 
   ///////////////////////
@@ -235,11 +263,15 @@ const PostList = (props) => {
             Cell: props => {
 
               console.log("action :", props.row.original)
+
+              let {_id, title}  = props.row.original
               return  <div>
-                        <Link to={`/post/${props.row.original._id}/edit`}>
+                        <Link to={`/post/${_id}/edit`}>
                           <button>Edit</button>
                         </Link>
-                        <button>Delete</button>
+                        <button onClick={(e)=>{
+                          setOpenDialogDelete({ isOpen: true, id: _id, description: title });
+                        }}>Delete</button>
                       </div>
             }
           },
@@ -312,7 +344,7 @@ const PostList = (props) => {
           <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Delete
+              {openDialogDelete.description}
             </DialogContentText>
           </DialogContent>
           <DialogActions>

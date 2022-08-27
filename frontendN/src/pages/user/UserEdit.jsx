@@ -104,10 +104,7 @@ const UserEdit = (props) => {
 
   let { id } = useParams();
 
-  editValues = useQuery(gqlUser, {
-    variables: {id},
-    notifyOnNetworkStatusChange: true,
-  });
+  editValues = useQuery(gqlUser, { variables: {id}, notifyOnNetworkStatusChange: true });
 
   console.log("editValues : ", editValues, input)
 
@@ -134,6 +131,18 @@ const UserEdit = (props) => {
  
   const [onUpdateUser, resultUpdateUser] = useMutation(gqlUpdateUser, 
     {
+      update: (cache, {data: {updateUser}}) => {
+        const data1 = cache.readQuery({ query: gqlUser, variables: {id} });
+
+        let newUser = {...data1.user}
+        newUser = {...newUser, data: updateUser}
+
+        cache.writeQuery({
+          query: gqlUser,
+          data: { user: newUser },
+          variables: {id}
+        });
+      },
       context: {
         headers: {
           'apollo-require-preflight': true,

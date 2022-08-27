@@ -4,12 +4,11 @@ import { useQuery, useMutation } from "@apollo/client";
 import { ChatItem } from "react-chat-elements";
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { gqlUser, } from "../../gqlQuery"
-
 const ChatItemView = (props) => {
     let { item, onCurrentChat } = props
 
     let { avatar, title, subtitle, unread, muted, updatedAt } = item
+    
     return (
             <ChatItem
                 avatar={avatar}

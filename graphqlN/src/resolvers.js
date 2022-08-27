@@ -1139,11 +1139,25 @@ export default {
         return;
       }
     },
-    async deleteUser(root, {
-      _id
-    }) {
-      console.log("deleteUser :", _id)
-      return await User.findByIdAndRemove(_id)
+    async deleteUser(parent, args, context, info){
+      try{
+        let { _id } = args
+        console.log("deleteUser :", _id)
+
+        let user = await User.findByIdAndRemove({_id})
+
+        // pubsub.publish('POST', {
+        //   post:{
+        //       mutation: 'DELETED',
+        //       data: post
+        //   }
+        // });
+        
+        return user;
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
     },
     // user
 
@@ -1314,21 +1328,25 @@ export default {
     
     },
 
-    async deletePost(root, {
-      _id
-    }) {
-      console.log("deletePost :", _id)
+    async deletePost(parent, args, context, info) {
+      try{
+        let { _id } = args
+        console.log("deletePost :", _id)
 
-      let post = await Post.findByIdAndRemove({_id})
+        let post = await Post.findByIdAndRemove({_id})
 
-      pubsub.publish('POST', {
-        post:{
-            mutation: 'DELETED',
-            data: post
-        }
-      });
-      
-      return post;
+        pubsub.publish('POST', {
+          post:{
+              mutation: 'DELETED',
+              data: post
+          }
+        });
+        
+        return post;
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
     },
 
     // deletePosts
@@ -1393,24 +1411,36 @@ export default {
 
       return await Bank.create(JSON.parse(JSON.stringify(input)));
     },
-    async updateBank(root, {
-      _id,
-      input
-    }) {
-      console.log("updateBank :", _id, JSON.parse(JSON.stringify(input)))
-      
-      return await Bank.findOneAndUpdate({
-        _id
-      }, input, {
-        new: true
-      })
+    async updateBank(parent, args, context, info) {
+      try{
+        let {_id, input } = args
+        console.log("updateBank :", _id, JSON.parse(JSON.stringify(input)))
+        
+        return await Bank.findOneAndUpdate({ _id }, input, { new: true })
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
     },
-    async deleteBank(root, {
-      _id
-    }) {
-      console.log("deleteBank :", _id)
+    async deleteBank(parent, args, context, info) {
+      try{
+        let { _id } = args
+        console.log("deleteBank :", _id)
 
-      return await Bank.findByIdAndRemove({_id})
+        let bank = await Bank.findByIdAndRemove({_id})
+
+        // pubsub.publish('POST', {
+        //   post:{
+        //       mutation: 'DELETED',
+        //       data: post
+        //   }
+        // });
+        
+        return bank;
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
     },
     async deleteBanks(root, {
       _ids
@@ -2141,7 +2171,27 @@ export default {
         logger.error(err.toString());
         return;
       }
-    }
+    },
+    async deletePhone(parent, args, context, info) {
+      try{
+        let { _id } = args
+        console.log("deletePhone :", _id)
+
+        let phone = await Phone.findByIdAndRemove({_id})
+
+        // pubsub.publish('PHONE', {
+        //   phone:{
+        //       mutation: 'DELETED',
+        //       data: phone
+        //   }
+        // });
+        
+        return phone;
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
+    },
   },
   Subscription:{
     numberIncremented: {

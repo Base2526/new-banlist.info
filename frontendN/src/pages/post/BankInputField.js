@@ -49,7 +49,7 @@ const BankInputField = ({ values, onChange }) => {
     console.log("onBankIdChange ", bank)
     let newInputList = [...inputList];
     if(bank !== null){
-      newInputList[index].bankId = bank.id;
+      newInputList[index].bankId = bank._id;
     }else{
       newInputList[index].bankId = "";
     }
@@ -57,7 +57,7 @@ const BankInputField = ({ values, onChange }) => {
   };
 
   const bankView = (item, i) =>{
-    let value =  _.find(valueBanks.data.banks.data, (v)=>item.bankId === v.id)
+    let value =  _.find(valueBanks.data.banks.data, (v)=>item.bankId === v._id)
     return  <Autocomplete
               disablePortal
               id="input-bank-id"
