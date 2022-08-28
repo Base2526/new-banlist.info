@@ -1126,7 +1126,7 @@ export default {
             });
           });
 
-          newFiles.push({ url: `http://localhost:4000/${assetUniqName}`, filename, encoding, mimetype });
+          newFiles.push({ url: `${process.env.URL_HOST}${assetUniqName}`, filename, encoding, mimetype });
         }
 
         let newInput = {...input, image: newFiles}
@@ -1219,7 +1219,7 @@ export default {
               });
             });
   
-            const urlForArray = `http://localhost:4000/${assetUniqName}`;
+            const urlForArray = `${process.env.URL_HOST}${assetUniqName}`;
             newFiles.push({ url: urlForArray, filename, encoding, mimetype });
           }
 
@@ -1278,7 +1278,7 @@ export default {
                   });
                 });
       
-                const urlForArray = `http://localhost:4000/${assetUniqName}`;
+                const urlForArray = `${process.env.URL_HOST}${assetUniqName}`;
                 newFiles.push({ url: urlForArray, filename, encoding, mimetype });
               }else{
                 if(input.files[i].delete){
@@ -1984,7 +1984,7 @@ export default {
             });
           });
 
-          const urlForArray = `http://localhost:4000/${assetUniqName}`;
+          const urlForArray = `${process.env.URL_HOST}${assetUniqName}`;
           url.push({ url: urlForArray });
         }
 
@@ -2131,7 +2131,7 @@ export default {
             });
           });
 
-          const urlForArray = `http://localhost:4000/${assetUniqName}`;
+          const urlForArray = `${process.env.URL_HOST}${assetUniqName}`;
           url.push({ url: urlForArray });
         }
 
