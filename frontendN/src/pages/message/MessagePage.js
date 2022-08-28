@@ -28,14 +28,14 @@ import {
   action,
   ExpansionPanel
 } from "@chatscope/chat-ui-kit-react";
-
+import LinearProgress from '@mui/material/LinearProgress';
 import { useParams, useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 import _ from "lodash"
 import { useQuery, useMutation, useSubscription } from "@apollo/client";
 import moment from "moment";
 
-import { gqlFetchMessage, gqlAddMessage, subMessage, gqlUpdateMessageRead} from "../../gqlQuery"
+import { gqlUser, gqlFetchMessage, gqlAddMessage, subMessage, gqlUpdateMessageRead} from "../../gqlQuery"
 
 import { addedConversation } from "../../redux/actions/auth"
 
@@ -78,13 +78,8 @@ const MessagePage =(props)=> {
   const [counter, setCounter] = useState(0);
 
   const [messageInputValue, setMessageInputValue] = useState("");
-  const avatarIco =
-    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAZlBMVEUOHCyclYufmI0AECZvbGkAACCjm5AIGCoxOUIAEycAFSgLGisNHCwEFykDFyljY2N9enUlLjkACCKWkIc+Q0lmZmWIhH0bJjN/e3YVIjGSjYRAREpbXF0tND54dXGEgHpKTVFTVVcfARIMAAADVklEQVR4nO3ciXaiMABA0ZA4lhBEcV+r/v9PTtA6FUVGLXOyzLtf4DtktVghAAAAAAAAAAAAAAAAAAAAAABAuIwej9XAuP4Y/4xR5XY+6U11pI1GL4ZrmSQyGaXZIHf9cTqXa7Gt+ipSfqZ64PoTdcuoYjj56js3jtJxRM/RqMUwueo7Ny6nqohjPtr1Zbi+6Ts1JqNpFsGak2eLxr5z4zItAp+PRtfn313jaT66/pTvM2p1N//uGvv7YOdjNf/ant/VWJ3qABsv+/szzmtOWHtHrldP950a7XwM6QxglJk9Mz7rjcvpOJCxWs2/v60vzY37qc78b7R9s1fGZ60xWW58PwMYu7+/Oj5vGr0+A9yer99qrM4AheuSZnZ/n8kf9p0a7RnAyzVHly+vnw8bq/no3faYbd5dX5obe749xNy8s0G0NW6166a6bNttYJJMxq6b6lSv68L+L9dNdRRSSKF7FFJIoXsUUkihexRSSKF7FFJIoXsUUkihexRSSKF7FFJIoXsUUkihexRSSKF7FL5Oxl4oR8p1U13XhXJdevb6ZbeFUo5K396E7rJQyvlBfLguutVdoUyWB+PfO9BdFUopZztV+NfXUaHs749KebbCXHTwFrScfKbGs5e7r5iy/7M8uR7ulNe/0Bt//uTHQNXq6evwvMjz+buJMumlYw9Xz1sfi7cS7ePbikB+XJntXk+Uk9FmpT0fnt+K3frFxzeZpdrLze+RbPdKX39+XKmPkPqsLJ0825d82tUlmOH5LZs+k2gf37DMwlhd7mSbJx7f/mBXl8CG5x+5PvzlcCP3UxXi8Pymju17xjys1bOJaj2Ey6O/h+tnGT1s+38taaArzLU8m7Ukpt59P/GGvO0+HEWhMC13qTgKRV48TIykUBgxepAYS6Ew+b45MZpCu2k0XxfjKRRm1ZgYUaEoyqbEmArtjbjhv4FEVdh46Y+rsCkxskKhN7eX/tgKhTrEXmgTZeSFuap/rxFf4e33GjEW1i/9MRbWL/1RFopc9/pxF15/rxFpoR2ol0t/rIX2Rvx16Y+20F4Xz5f+eAvtUzxdFyMuFKaw10Xp2zuHnRqU8/5chf53mVaDxSHqRyiqgRp5IAAAAAAAAAAAAAAAAAAAAAAA/4Hf0gU2cK/EibwAAAAASUVORK5CYII=";
 
-  const fetchMessageValues =useQuery(gqlFetchMessage, {
-    variables: {conversationId: ""},
-    notifyOnNetworkStatusChange: true,
-  });  
+  const fetchMessageValues =useQuery(gqlFetchMessage, { variables: {conversationId: ""}, notifyOnNetworkStatusChange: true });  
 
   const [onAddMessage, resultAddMessageValues] = useMutation(gqlAddMessage
     , {
@@ -168,7 +163,20 @@ const MessagePage =(props)=> {
     }
   }, [state])
 
-  useEffect(()=>{
+  useEffect(async()=>{
+
+    // let mfriend = _.find(conversation.members, (member)=>member.userId !== user._id)
+
+    // console.log("mfriend :", mfriend)
+
+    // _.map(conversationList, (conversation)=>{
+
+    // })
+
+    
+
+    // console.log("new_data :", new_data)
+
     setConversationList(conversations)
     setPreConversationList(conversations)
 
@@ -217,7 +225,6 @@ const MessagePage =(props)=> {
                               unreadCnt={muser.unreadCnt}
                               active={ conversation._id === currentConversation._id ? true: false}
                               onClick={(e)=>{
-                               
                                 setCurrentConversation(conversation)
                               }}
                               lastActivityTime={moment(conversation.sentTime).format('M/D/YY, hh:mm A')}>
@@ -327,109 +334,7 @@ const MessagePage =(props)=> {
                 // loadingMore={loadingMore} 
                 // onYReachStart={onYReachStart()}
                 >
-                {
-                  _.map( data, item=>{
-                    return <MessageItem {...props} item={item} />
-                    /*
-                    let {type, message, sentTime, senderId, senderName, position, payload} = item
-                    let direction = senderId == user.id  ? "outgoing" : "incoming"
-                  
-                    switch(type){
-                      case "text":{
-                        switch(direction){
-                          case "incoming":{
-                              return  <Message
-                                        type={type}
-                                        model={{
-                                          message,
-                                          sentTime,
-                                          sender: senderName,
-                                          direction,
-                                          position
-                                        }}>
-                                        <Avatar src={avatarIco} name="Zoe" size="sm" />
-                                        <Message.Footer sentTime={moment.unix(sentTime/1000).format('MMMM Do YYYY, hh:mm A')} />
-                                      </Message>
-                          }
-
-                          case "outgoing":{
-                            return  <Message
-                                      type={type}
-                                      model={{
-                                        message,
-                                        sentTime,
-                                        sender: senderName,
-                                        direction,
-                                        position
-                                      }}
-                                    >
-                                      <Message.Footer sentTime={moment.unix(sentTime/1000).format('MMMM Do YYYY, hh:mm A')} />
-                                    </Message>
-                          }
-                        }
-
-                        break;
-                      }
-
-                      case "html":{
-                        switch(direction){
-                          case "incoming":{
-                            return <Message model={{
-                                      type,
-                                      direction,
-                                      position
-                                    }}>
-                                        
-                                        <Message.HtmlContent html={message} />
-                                        <Avatar src={avatarIco} name="Akane" size="sm" />
-                                        <Message.Footer sentTime={moment.unix(sentTime/1000).format('MMMM Do YYYY, hh:mm A')} />
-                                    </Message>
-
-                          }
-
-                          case "outgoing":{
-                            return  <Message model={{
-                                      type,
-                                      direction,
-                                      position
-                                    }}>
-                                        <Message.HtmlContent html={message} />
-                                        <Message.Footer sentTime={moment.unix(sentTime/1000).format('MMMM Do YYYY, hh:mm A')} />
-                                    </Message>
-                          }
-                        }
-
-                        break;
-                      }
-
-                      case "image":{
-
-                        let { src } = payload[0]
-
-                        switch(direction){
-                          case "incoming":{
-                            return <Message model={{direction, position}}>
-                                      <Avatar src={avatarIco} name="Akane" />
-                                      <Message.ImageContent src={src} alt={"alt"} width={150} onClick={(event)=>{ console.log("event")}} />
-                                      <Message.Footer sentTime={moment.unix(sentTime/1000).format('hh:mm A')} />   
-                                    </Message>
-                          }
-
-                          case "outgoing":{
-                            return <Message model={{direction, position}}>
-                                    <Message.ImageContent src={src} alt={"alt"} width={150} />
-                                    <Message.Footer sentTime={moment.unix(sentTime/1000).format('hh:mm A')} />  
-                                  </Message>
-                          }
-                        }
-
-                        break;
-                      }
-                    } 
-                    */
-                    
-                  })
-                }  
+                { _.map( data, item=>{ return <MessageItem {...props} item={item} /> }) }  
               </MessageList>  
     }
     return <div />
@@ -534,16 +439,11 @@ const MessagePage =(props)=> {
 
       files:event.target.files
     }
-
-      
-
     
     input = {...input, _id: makeid(20) , conversationId: currentConversation._id, status: "waiting" }
 
-
     onAddMessage({ variables: {userId: user._id, conversationId: currentConversation._id, input } });
     
-    // image
   }
 
   return (
@@ -564,10 +464,13 @@ const MessagePage =(props)=> {
 }
 
 const mapStateToProps = (state, ownProps) => {
+  let user = state.auth.user;
   let conversations = _.orderBy(state.auth.conversations, (dateObj) => new Date(dateObj.sentTime) , 'desc')
   
+  console.log("conversations :", conversations)
+
   return {
-    user: state.auth.user,
+    user,
     conversations
   }
 };

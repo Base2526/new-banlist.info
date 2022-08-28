@@ -115,7 +115,7 @@ const UserEdit = (props) => {
       if(!loading){
         let {status, data} = editValues.data.user
 
-        console.log("edit editValues : ", data)
+        console.log("edit editValues : ", editValues.data.user)
         if(status){
           setInput({
             username: data.username,

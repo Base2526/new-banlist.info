@@ -702,6 +702,7 @@ export default gql`
 
     createBasicContent(input: BasicContentInput): BasicContent
     updateBasicContent(_id: ID!, input: BasicContentInput): JSON
+    deleteBasicContent(_id: ID!): JSON
 
     createAndUpdateFollow(input: FollowInput): Follow
     currentNumber: Int

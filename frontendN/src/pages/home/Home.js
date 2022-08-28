@@ -55,10 +55,7 @@ const Home = (props) => {
     images: []
   });
 
-  const [panelComment, setPanelComment] = useState({
-    isOpen: false,
-    commentId: ""
-  });
+  const [panelComment, setPanelComment] = useState({ isOpen: false, commentId: "" });
 
   const [anchorElSetting, setAnchorElSetting] = useState(null);
   const [anchorElShare, setAnchorElShare] = useState(null);
@@ -328,7 +325,7 @@ const Home = (props) => {
                           <div key={item.id}>
                             <HomeItem 
                               {...props}
-                              user={props.user}
+                              user={user}
                               item={item} 
                               index={index} 
                               onPanelComment={(data)=>{
@@ -379,8 +376,6 @@ const Home = (props) => {
                     page={page}
                     onPageChange={(event, newPage) => {
                       setPage(newPage);
-
-
                       history.push({
                         pathname: "/",
                         search: "?page=" + newPage + "&perPage=" + rowsPerPage
@@ -417,7 +412,8 @@ const Home = (props) => {
 
       {panelComment.isOpen && (
         <PanelComment
-          user={props.user}
+          {...props}
+          // user={user}
           commentId={panelComment.commentId}
           isOpen={panelComment.isOpen}
           onRequestClose={() => {
@@ -501,7 +497,7 @@ const Home = (props) => {
       }
 
       {
-        !_.isEmpty(props.user)
+        !_.isEmpty(user)
         ? <SpeedDial
             ariaLabel="SpeedDial basic example"
             sx={{ position: 'absolute', bottom: 16, right: 16 }}

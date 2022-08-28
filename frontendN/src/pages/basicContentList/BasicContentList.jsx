@@ -23,10 +23,9 @@ import Avatar from "@mui/material/Avatar";
 import _ from "lodash"
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 
-
-import {gqlBasicContents} from "../../gqlQuery"
+import {gqlBasicContents, gqlDeleteBasicContent} from "../../gqlQuery"
 import Footer from "../footer";
 import Table from "../../TableContainer"
 
@@ -39,7 +38,7 @@ const BasicContentList = (props) => {
 
   //////////////////////
 
-  const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "" });
+  const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "", description: "" });
 
   const basicContentsValues = useQuery(gqlBasicContents, {
     variables: {page: pageIndex, perPage: pageSize},
@@ -47,6 +46,31 @@ const BasicContentList = (props) => {
   });
 
   console.log("basicContentsValues :", basicContentsValues)
+
+  const [onDeleteBasicContent, resultDeleteBasicContent] = useMutation(gqlDeleteBasicContent, 
+    {
+      update: (cache, {data: {deleteBasicContent}}) => {
+        const data1 = cache.readQuery({
+          query: gqlBasicContents,
+          variables: {page: pageIndex, perPage: pageSize},
+        });
+
+        let newBasicContents = {...data1.basicContents}
+        let newData   = _.filter(data1.basicContents.data, basicContent => basicContent._id !== deleteBasicContent._id)
+        newBasicContents = {...newBasicContents, total: newData.length, data:newData }
+
+        cache.writeQuery({
+          query: gqlBasicContents,
+          data: { basicContents: newBasicContents },
+          variables: {page: pageIndex, perPage: pageSize},
+        });
+      },
+      onCompleted({ data }) {
+        history.push("/basic-contents");
+      }
+    }
+  );
+  console.log("resultDeleteBasicContent :", resultDeleteBasicContent)
 
   ///////////////
   const fetchData = useCallback(
@@ -91,7 +115,7 @@ const BasicContentList = (props) => {
           },
           {
             Header: 'Action',
-            accessor: '_id',
+            // accessor: '_id',
             // Use our custom `fuzzyText` filter on this column
             // filter: 'fuzzyText',
             // // Use another two-stage aggregator here to
@@ -101,12 +125,14 @@ const BasicContentList = (props) => {
             // aggregate: 'uniqueCount',
             // Aggregated: ({ value }) => `${value} Unique Names`,
             Cell: props => {
-              console.log("Cell :", props)
+              let {_id, name} = props.row.original
               return  <div>
-                        <Link to={`/basic-content/${props.value}/edit`}>
+                        <Link to={`/basic-content/${_id}/edit`}>
                           <button>Edit</button>
                         </Link>
-                        <button>Delete</button>
+                        <button onClick={(e)=>{
+                          setOpenDialogDelete({ isOpen: true, id: _id, description: name })
+                        }}>Delete</button>
                       </div>
             }
           },
@@ -155,16 +181,18 @@ const BasicContentList = (props) => {
   const handleClickOpen = () => {
     // setOpen(true);
 
-    setOpenDialogDelete({ ...openDialogDelete, isOpen: true });
+    setOpenDialogDelete({ ...openDialogDelete, isOpen: true, description: "" });
   };
 
   const handleClose = () => {
     // setOpen(false);
-    setOpenDialogDelete({ ...openDialogDelete, isOpen: false });
+
+    // 
+    setOpenDialogDelete({ ...openDialogDelete, isOpen: false, description: "" });
   };
 
   const handleDelete = (id) => {
-    setUserData(userData.filter((user) => user._id !== id));
+    onDeleteBasicContent({ variables: { id } });
   };
 
   // const columns = [
@@ -284,7 +312,7 @@ const BasicContentList = (props) => {
           <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Delete
+              {openDialogDelete.description}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -293,7 +321,7 @@ const BasicContentList = (props) => {
               onClick={() => {
                 handleDelete(openDialogDelete.id);
 
-                setOpenDialogDelete({ isOpen: false, id: "" });
+                setOpenDialogDelete({ isOpen: false, id: "", description: "" });
               }}
             >
               Delete

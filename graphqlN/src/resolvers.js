@@ -1474,6 +1474,26 @@ export default {
         return;
       }
     },
+    async deleteBasicContent(parent, args, context, info) {
+      try{
+        let { _id } = args
+        console.log("deleteBasicContent :", _id)
+
+        let basicContent = await BasicContent.findByIdAndRemove({_id})
+
+        // pubsub.publish('POST', {
+        //   post:{
+        //       mutation: 'DELETED',
+        //       data: post
+        //   }
+        // });
+        
+        return basicContent;
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
+    },
 
    // basic content
 
@@ -1832,22 +1852,13 @@ export default {
     },
     async createConversation(parent, args, context, info) {
       try{
-        // let { currentUser } = context
-
-        // if(_.isEmpty(currentUser)){
-        //   return;
-        // }
-
         let {input} = args
         
         let currentUser = await User.findById(input.userId);
-
-        let result =  await  Conversation.findOne({
-                              "members.userId": { $all: [ currentUser._id.toString(), input.friendId ] }
-                            });
-                        
         let friend = await User.findById(input.friendId);
 
+        let result =  await Conversation.findOne({ "members.userId": { $all: [ currentUser._id.toString(), input.friendId ] } });
+                        
         if(result === null){
           result = await Conversation.create({
             // name: friend.displayName,
@@ -1875,13 +1886,13 @@ export default {
               { 
                 userId: currentUser._id.toString(),
                 name: currentUser.displayName, 
-                avatarSrc: _.isEmpty(currentUser.image) ? "" :  currentUser.image[0].base64,
+                avatarSrc: _.isEmpty(currentUser.image) ? "" :  currentUser.image[0].url,
                 unreadCnt: 0 
               },
               {
                 userId: input.friendId,
                 name: friend.displayName, 
-                avatarSrc: _.isEmpty(friend.image) ? "" :  friend.image[0].base64,
+                avatarSrc: _.isEmpty(friend.image) ? "" :  friend.image[0].url,
                 unreadCnt: 0 
               }
             ]

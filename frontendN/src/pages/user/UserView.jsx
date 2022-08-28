@@ -47,10 +47,7 @@ const UserView = (props) => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  let userValues = useQuery(gqlUser, {
-    variables: {id},
-    notifyOnNetworkStatusChange: true,
-  });
+  let userValues = useQuery(gqlUser, { variables: {id}, notifyOnNetworkStatusChange: true });
   
   const [onCreateConversation, resultCreateConversation] = useMutation(gqlCreateConversation
     , {

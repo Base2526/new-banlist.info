@@ -458,10 +458,7 @@ export const gqlCreateShare = gql`
         }
     }`;
 
-export const gqlCreateConversation = gql`
-    mutation CreateConversation($input: ConversationInput!) {
-        createConversation(input: $input)
-    }`;
+export const gqlCreateConversation = gql`mutation CreateConversation($input: ConversationInput!) { createConversation(input: $input) }`;
 
 export const gqlCreateAndUpdateFollow = gql`
     mutation CreateAndUpdateFollow($input: FollowInput) {
@@ -528,6 +525,8 @@ export const gqlDeletePhone = gql`mutation DeletePhone($id: ID!) { deletePhone(_
 export const gqlDeleteBank  = gql`mutation DeleteBank($id: ID!) { deleteBank(_id: $id) }`;
 
 export const gqlDeleteUser  = gql`mutation DeleteUser($id: ID!) { deleteUser(_id: $id) }`;
+
+export const gqlDeleteBasicContent = gql`mutation DeleteBasicContent($id: ID!) { deleteBasicContent(_id: $id) }`;
 
 //////////////////  mutation  ///////////////////
 

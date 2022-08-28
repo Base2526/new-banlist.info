@@ -12,9 +12,7 @@ import _ from "lodash";
 import deepdash from "deepdash";
 deepdash(_);
 
-import {gqlComment, gqlCreateAndUpdateComment, subComment} from "../../gqlQuery"
-
-import data from "./data.json";
+import {gqlUser, gqlComment, gqlCreateAndUpdateComment, subComment} from "../../gqlQuery"
 
 const styles = {
   largeIcon: {
@@ -46,12 +44,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const PanelComment = ({ user, commentId, isOpen, onRequestClose, onSignin }) => {
+const PanelComment = (props) => {
   const classes = useStyles();
 
-  const [comment, setComment] = useState([]);
+  let { user, commentId, isOpen, onRequestClose, onSignin } = props
+
+  console.log("props :", props)
+
+  // const [comment, setComment] = useState([]);
   const userId =  user == null ? "" : user._id;
-  const avatarUrl = user == null ? "" : _.isEmpty(user.image) ? "" : user.image[0].base64 ;
+  const avatarUrl = user == null ? "" : _.isEmpty(user.image) ? "" : user.image[0].url ;
   const name = user == null ? "" : user.displayName;
   const signinUrl = "/signin";
   const signupUrl = "/signup";
@@ -120,18 +122,6 @@ const PanelComment = ({ user, commentId, isOpen, onRequestClose, onSignin }) => 
   //   setComment(commentValues.data.Comment.data)
   // }
 
-  /* loading
-  commentValues.data.Comment.data
-  */
-
-  useEffect(()=>{
-
-  }, [])
-
-  useEffect(() => {
-    console.log("comment :", comment, commentId);
-  }, [comment]);
-
   return (
     <SwipeableDrawer
       anchor={"right"}
@@ -176,7 +166,6 @@ const PanelComment = ({ user, commentId, isOpen, onRequestClose, onSignin }) => 
                   signinUrl={signinUrl}
                   signupUrl={signupUrl}
                   onSignin={(e)=>{
-                    // setDialogLoginOpen(true)
                     onSignin(e)
                   }}
                 />
