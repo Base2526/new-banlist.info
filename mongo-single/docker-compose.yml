@@ -1,29 +1,27 @@
-version: '3'
+version: '3.3'
 
 services:
   mongo:
     image: mongo
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
-      - MONGO_INITDB_DATABASE=project
+    expose:
+      - 27017
+    volumes:
+      - ./data:/data/db
     networks:
       - bot
-  mongo-express:
+  mongoexpress:
     image: mongo-express
-    environment:
+    ports:
+      - "8089:8081"
+    links:
+      - mongo
+    environment: 
+      - ME_CONFIG_MONGODB_URL=mongodb://mongo:27017
       - ME_CONFIG_MONGODB_SERVER=mongo
-      - ME_CONFIG_MONGODB_PORT=27017
-      - ME_CONFIG_MONGODB_ENABLE_ADMIN=false
-      - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
-      - ME_CONFIG_MONGODB_AUTH_USERNAME=${MONGO_ROOT_USER}
-      - ME_CONFIG_MONGODB_AUTH_PASSWORD=${MONGO_ROOT_PASSWORD}
-      - ME_CONFIG_BASICAUTH_USERNAME=${MONGOEXPRESS_LOGIN}
-      - ME_CONFIG_BASICAUTH_PASSWORD=${MONGOEXPRESS_PASSWORD}
+      - ME_CONFIG_BASICAUTH_USERNAME=dev
+      - ME_CONFIG_BASICAUTH_PASSWORD=dev
     depends_on:
       - mongo
-    ports:
-      - "8888:8081"
     networks:
       - bot
 

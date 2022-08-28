@@ -107,7 +107,8 @@ services:
       - ELASTIC_PASSWORD=changeme
       - ELASTIC_INDEX=banlist_dev
       - PORT=4000
-      - MONGO_URI=mongodb://mongo1:27017,mongo2:27017,mongo3:27017/bl?replicaSet=rs
+      # - MONGO_URI=mongodb://mongo1:27017,mongo2:27017,mongo3:27017/bl?replicaSet=rs
+      - MONGO_URI=mongodb://mongo:27017/bl
 
       - JWT_SECRET=banlistinfo
     networks:
