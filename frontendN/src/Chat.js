@@ -5,6 +5,8 @@ import "react-chat-elements/dist/main.css";
 import { MessageList } from "react-chat-elements";
 import { useEffect, useState } from "react";
 
+
+
 const generateData = (number) =>
   Array.from({ length: 20 }).map(() => {
     return {
