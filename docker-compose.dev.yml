@@ -80,7 +80,7 @@ services:
       # - HOST_GRAPHAL=http://localhost:4000 # graphql
       - REACT_APP_HOST_GRAPHAL=157.245.51.177:4000 # graphql
     ports:
-      - "80:4049"
+      - "8011:4049"
     volumes:
       - ./frontendN/src:/app/src
     #  - ./fn/package.json:/app/package.json
