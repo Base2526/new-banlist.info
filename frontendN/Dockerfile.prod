@@ -4,7 +4,7 @@ ENV REACT_APP_DEBUG TRUE
 ENV REACT_APP_URL https://bgcd-retail-audit-backend.bigc.co.th
 ENV REACT_APP_AUTHORIZATION YWRtaW46MTIzNA==
 
-ENV REACT_APP_HOST_GRAPHAL localhost:4000
+ENV REACT_APP_HOST_GRAPHAL 157.245.51.177:4000
 
 RUN apk add --update --no-cache \
     make \

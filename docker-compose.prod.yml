@@ -12,7 +12,7 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - PORT=4049
       - WATCHPACK_POLLING=true
-      - REACT_APP_HOST_GRAPHAL=localhost:4000
+      - REACT_APP_HOST_GRAPHAL=157.245.51.177:4000
     ports:
       - "80:3000"
     volumes:
