@@ -71,7 +71,7 @@ services:
   mongoexpress:
     image: mongo-express
     ports:
-      - "8089:8081"
+      - "8081:8081"
     # links:
     #   - mongo
     environment: 
