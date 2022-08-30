@@ -1,5 +1,4 @@
 version: "3"
-
 services:
   ################################
   #   Setup React-admin container
@@ -44,6 +43,7 @@ services:
       - PORT=4000
       # - MONGO_URI=mongodb://mongo1:27017,mongo2:27017,mongo3:27017/bl?replicaSet=rs
       - MONGO_URI=mongodb://mongo:27017/bl
+      - URL_HOST=http://localhost:4000/
 
       - JWT_SECRET=banlistinfo
     networks:
