@@ -69,22 +69,22 @@ services:
   ################################
   #   Setup React-admin container
   ################################
-  # frontend:
-  #   build: 
-  #     context: ./frontendN
-  #     dockerfile: Dockerfile.dev
-  #   environment:
-  #     - CHOKIDAR_USEPOLLING=true
-  #     - PORT=4049
-  #     - WATCHPACK_POLLING=true
-  #     - HOST_GRAPHAL=http://localhost:4000 # graphql
-  #   ports:
-  #     - "80:4049"
-  #   volumes:
-  #     - ./frontendN/src:/app/src
-  #   #  - ./fn/package.json:/app/package.json
-  #   networks:
-  #     - nodejs
+  frontend:
+    build: 
+      context: ./frontendN
+      dockerfile: Dockerfile.prod
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - PORT=4049
+      - WATCHPACK_POLLING=true
+      - REACT_APP_HOST_GRAPHAL=157.245.51.177:4000
+    ports:
+      - "8099:3000"
+    volumes:
+      - ./frontendN/src:/app/src
+    #  - ./fn/package.json:/app/package.json
+    networks:
+      - nodejs
   ################################
   
   ################################
