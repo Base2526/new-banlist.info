@@ -6,6 +6,8 @@ ENV REACT_APP_AUTHORIZATION YWRtaW46MTIzNA==
 
 ENV REACT_APP_HOST_GRAPHAL 157.245.51.177:4000
 
+ENV NODE_ENV development
+
 RUN apk add --update --no-cache \
     make \
     g++ \

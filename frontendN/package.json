@@ -1,6 +1,6 @@
 {
-  "name": "fn",
-  "version": "1.0.0",
+  "name": "banlist.info",
+  "version": "1.0.0-alpha",
   "description": "",
   "keywords": [],
   "main": "src/index.js",

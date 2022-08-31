@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import ReactDOM from "react-dom";
 
 //////////////// redux /////////////////
-import { applyMiddleware, legacy_createStore as createStore, combineReducers  } from "redux";
+import { applyMiddleware, legacy_createStore as createStore, combineReducers, compose  } from "redux";
 import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
@@ -30,8 +30,15 @@ const logger = createLogger({
   // predicate: () => process.env.NODE_ENV !== 'production'
 });
 
+let middleware = [];
+if (process.env.NODE_ENV === 'development') {
+  middleware = [...middleware, thunk, logger];
+} else {
+  middleware = [...middleware, thunk];
+}
+
 // thunk
-const store = createStore(reducer, applyMiddleware(thunk, logger));
+const store = createStore(reducer, compose(applyMiddleware(...middleware)) /*applyMiddleware(thunk, logger)*/);
 const persistor = persistStore(store);
 //////////////// redux /////////////////
 
@@ -258,6 +265,12 @@ import App from "./App";
 
 /////////////////////////////////
 
+// replace console.* for disable log on production
+if (process.env.NODE_ENV === 'production') {
+  console.log = () => {}
+  console.error = () => {}
+  console.debug = () => {}
+}
 
 ReactDOM.render(
   <Provider store={store}>

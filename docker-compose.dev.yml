@@ -1,71 +1,5 @@
 version: "3"
-
 services:
-  ################################
-  #   Setup frontend react app container
-  ################################
-  # frontend:
-  #   build: ./frontend
-  #   # build:
-  #   #   context: ./frontend
-  #   #   dockerfile: Dockerfile
-  #   environment:
-  #     - CHOKIDAR_USEPOLLING=true
-  #   ports:
-  #     - "80:3000"
-  #   volumes:
-  #     - ./frontend:/app
-  #   networks:
-  #     - nodejs-network
-
-  ################################
-  #   Setup REDIS Server
-  ################################
-  # redis:
-  #   image: redis:3.2-alpine
-  #   expose:
-  #     - 6379
-  #   volumes:
-  #     - redis_data:/data
-  ################################
-  #   Setup Socket Server container
-  ################################
-  # server:
-  #   build: ./server
-  #   # command: npm run dev:watch
-  #   expose:
-  #     - 3001
-  #   ports:
-  #     - "3001:3001"
-
-  #   # depends_on:
-  #   #   - redis
-  #   volumes:
-  #     - ./server:/app
-  #   environment:
-  #     - MONGO_HOSTNAME_ENV=mongo
-  #     - MONGO_PORT_ENV=27017
-  #     - MONGO_DATABASE_NAME_ENV=bl
-  #     - MONGO_USERNAME_ENV=root
-  #     - MONGO_PASSWORD_ENV=example
-
-  #     - MONGO_URI=mongodb://mongo1:27017,mongo2:27017,mongo3:27017/bl?replicaSet=rs
-
-  #     - PORT=3000
-  #     # - ELASTIC_URL=http://elasticsearch.banlist.info:9200
-  #     - ELASTIC_URL=http://192.168.1.80:9200
-  #     - ELASTIC_USERNAME=elastic
-  #     - ELASTIC_PASSWORD=changeme
-  #     - ELASTIC_INDEX=banlist_dev
-
-  #     # Backend Drapal 9
-  #     - DRUPAL_API_ENV=http://backend_nginx
-  #     - DRUPAL_AUTHORIZATION_ENV=c3dpZGVzd29kOjEyMzQ= # Authorization
-
-  #   networks:
-  #     - nodejs-network
-  
-  
   ################################
   #   Setup React-admin container
   ################################
@@ -75,12 +9,11 @@ services:
       dockerfile: Dockerfile.dev
     environment:
       - CHOKIDAR_USEPOLLING=true
-      - PORT=4049
+      - PORT=3000
       - WATCHPACK_POLLING=true
-      # - HOST_GRAPHAL=http://localhost:4000 # graphql
-      - REACT_APP_HOST_GRAPHAL=157.245.51.177:4000 # graphql
+      - REACT_APP_HOST_GRAPHAL=localhost:4000
     ports:
-      - "8011:4049"
+      - "8099:3000"
     volumes:
       - ./frontendN/src:/app/src
     #  - ./fn/package.json:/app/package.json
@@ -91,41 +24,66 @@ services:
   ################################
   #   Setup Api Graphql container
   ################################
-  # graphql:
-  #   build: 
-  #     context: ./graphqlN
-  #     dockerfile: Dockerfile.dev                
-  #   ports:
-  #     - "4000:4000"
-  #   volumes:
-  #     - ./graphqlN:/app          
-  #   environment:
-  #     - CHOKIDAR_USEPOLLING=true
-  #     - WATCHPACK_POLLING=true
+  graphql:
+    build: 
+      context: ./graphqlN
+      dockerfile: Dockerfile.dev                
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./graphqlN:/app          
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
 
-  #     - ELASTIC_URL=http://elasticsearch:9200
-  #     - ELASTIC_USERNAME=elastic
-  #     - ELASTIC_PASSWORD=changeme
-  #     - ELASTIC_INDEX=banlist_dev
-  #     - PORT=4000
-  #     # - MONGO_URI=mongodb://mongo1:27017,mongo2:27017,mongo3:27017/bl?replicaSet=rs
-  #     - MONGO_URI=mongodb://mongo:27017/bl
+      - ELASTIC_URL=http://elasticsearch:9200
+      - ELASTIC_USERNAME=elastic
+      - ELASTIC_PASSWORD=changeme
+      - ELASTIC_INDEX=banlist_dev
+      - PORT=4000
+      # - MONGO_URI=mongodb://mongo1:27017,mongo2:27017,mongo3:27017/bl?replicaSet=rs
+      - MONGO_URI=mongodb://mongo:27017/bl
+      - URL_HOST=http://localhost:4000/
 
-  #     - JWT_SECRET=banlistinfo
-  #   networks:
-  #     - nodejs
+      - JWT_SECRET=banlistinfo
+    networks:
+      - nodejs
   ################################
-  
-# networks:
-#   nodejs:
-#     name: banlist-network
+
+  ################################
+  #   Setup Api Mongo and mongo-express container
+  ################################
+  mongo:
+    image: mongo
+    expose:
+      - 27017
+    volumes:
+      - ./mongo-single/data:/data/db
+      - ./mongo-single/restore:/mongo-single/restore
+    # command:
+    #   - ./mongo-single/restore/import.sh
+    restart: always
+    networks:
+      - nodejs
+
+  mongoexpress:
+    image: mongo-express
+    ports:
+      - "8089:8081"
+    # links:
+    #   - mongo
+    environment: 
+      - ME_CONFIG_MONGODB_URL=mongodb://mongo:27017
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_BASICAUTH_USERNAME=dev
+      - ME_CONFIG_BASICAUTH_PASSWORD=dev
+    depends_on:
+      - mongo
+    networks:
+      - nodejs
+  ################################
 
 networks:
   nodejs:
     external: true 
     name: banlist-network
-
-# networks:
-#   default:
-#     name: banlist-network
-#     external: true
