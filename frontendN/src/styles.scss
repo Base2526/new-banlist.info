@@ -1,0 +1,59 @@
+//Variable Example
+$main-color : red;
+
+h1{
+    color:$main-color;
+    font-size: 20px;
+}
+
+// Nested Rules
+$bgcolor : #c1c1c1;
+
+#nested {
+    background-color: $bgcolor;
+    h3{
+        color: green;
+
+    }
+}
+
+ //Interpolation Example
+@mixin text-style($name, $bold-or-normal, $size, $color) {
+    #{$name} {
+      font-size: #{$size}px;
+      font-weight: #{$bold-or-normal};
+      color: #{$color};
+    }
+  }
+
+@include text-style(".interpolation", bold, 25, blue);
+
+//Function Example
+
+@function invert($color, $amount: 100%) {
+    $inverse: change-color($color, $hue: hue($color) + 180);
+    @return mix($inverse, $color, $amount);
+  }
+  
+  $primary-color:green;
+  #function {
+    background-color: invert($primary-color, 80%);
+    h3{
+        color: white;
+    }
+  }
+
+  //Mixin Example
+
+  @mixin default-text-style {  
+    padding: 20px;  
+    font-size: 16px;  
+    font-weight:bold;
+  }
+  
+  #mixin{
+      p{
+          @include default-text-style
+      }
+  }
+

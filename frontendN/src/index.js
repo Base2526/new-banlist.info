@@ -1,3 +1,5 @@
+import './styles.scss';
+
 import { StrictMode } from "react";
 import ReactDOM from "react-dom";
 
@@ -65,6 +67,8 @@ import { createUploadLink } from 'apollo-upload-client' // v15.0.0
 // import { SubscriptionClient } from "subscriptions-transport-ws";
 
 import {ls_connecting} from "./redux/actions/ws"
+
+
 
 
 // const httpLink = createHttpLink({

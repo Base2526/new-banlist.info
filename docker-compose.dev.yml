@@ -13,7 +13,7 @@ services:
       - WATCHPACK_POLLING=true
       - REACT_APP_HOST_GRAPHAL=localhost:4000
     ports:
-      - "8099:3000"
+      - "80:3000"
     volumes:
       - ./frontendN/src:/app/src
     #  - ./fn/package.json:/app/package.json
