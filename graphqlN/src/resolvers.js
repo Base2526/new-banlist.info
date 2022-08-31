@@ -1187,48 +1187,54 @@ export default {
       try{
         let { input } = args
 
+        let post = null;
+        if(!input?.fake){
+          let newFiles = [];
 
-        let newFiles = [];
-
-        // console.log("input.files :", input.files, _.isEmpty(input.files) ? "Y" : "N")
-        if(!_.isEmpty(input.files)){
-          // console.log("createPost :", input.files)
-          
-          for (let i = 0; i < input.files.length; i++) {
-
-            console.log("updatePost #1234:", await input.files[i])
-            const { createReadStream, filename, encoding, mimetype } = (await input.files[i]).file //await input.files[i];
-
-            const stream = createReadStream();
-            const assetUniqName = fileRenamer(filename);
-            const pathName = path.join(__dirname,   `../uploads/${assetUniqName}`);
+          // console.log("input.files :", input.files, _.isEmpty(input.files) ? "Y" : "N")
+          if(!_.isEmpty(input.files)){
+            // console.log("createPost :", input.files)
             
+            for (let i = 0; i < input.files.length; i++) {
   
-            const output = fs.createWriteStream(pathName)
-            stream.pipe(output);
+              console.log("updatePost #1234:", await input.files[i])
+              const { createReadStream, filename, encoding, mimetype } = (await input.files[i]).file //await input.files[i];
   
-            await new Promise(function (resolve, reject) {
-              output.on('close', () => {
-                resolve();
+              const stream = createReadStream();
+              const assetUniqName = fileRenamer(filename);
+              const pathName = path.join(__dirname,   `../uploads/${assetUniqName}`);
+              
+    
+              const output = fs.createWriteStream(pathName)
+              stream.pipe(output);
+    
+              await new Promise(function (resolve, reject) {
+                output.on('close', () => {
+                  resolve();
+                });
+          
+                output.on('error', (err) => {
+                  logger.error(err.toString());
+    
+                  reject(err);
+                });
               });
-        
-              output.on('error', (err) => {
-                logger.error(err.toString());
+    
+              const urlForArray = `${process.env.URL_HOST}${assetUniqName}`;
+              newFiles.push({ url: urlForArray, filename, encoding, mimetype });
+            }
   
-                reject(err);
-              });
-            });
+            console.log("newFiles :", newFiles)
   
-            const urlForArray = `${process.env.URL_HOST}${assetUniqName}`;
-            newFiles.push({ url: urlForArray, filename, encoding, mimetype });
           }
-
-          console.log("newFiles :", newFiles)
-
+  
+          post = await Post.create({...input, files:newFiles});
+        }else{
+          post = await Post.create(input);
         }
 
-        let post = await Post.create({...input, files:newFiles});
 
+        console.log("createPost #1 :", input)
         pubsub.publish('POST', {
           post:{
             mutation: 'CREATED',
@@ -1240,7 +1246,7 @@ export default {
       } catch(err) {
         logger.error(err.toString());
 
-
+        console.log("createPost #2 :", err.toString())
         return;
       }
     },
