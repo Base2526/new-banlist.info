@@ -132,15 +132,21 @@ const Devel = (props) => {
       let files = []
       for ( var i = 0; i < length; i++ ) {
           files.push({
-                          base64: faker.image.avatar(),
-                          fileName: faker.name.firstName(),
-                          lastModified: '1651919605486',
-                          size: 45901,
-                          type: 'image/png'
+                        url: faker.image.avatar(),
+                        filename: faker.name.firstName(),
+                        encoding: '7bit',
+                        mimetype: 'image/png'
                       })
       }
       return files
   }
+
+  /*
+  url: { type: String },
+    filename: { type: String },
+    mimetype: { type: String },
+    encoding: { type: String },
+  */
   
   const makeBank = (length) =>{
       let banks = []
@@ -192,18 +198,16 @@ const Devel = (props) => {
       const randPost = minPost + Math.random() * (maxPost - minPost);
 
       let Post = valuePosts.data.posts.data[Math.floor(randPost)]
-      return Post.id
+      return Post._id
   }
 
   // makeUserId
   const makeUserId = () =>{
     const minUser = 1;
-    const maxUser = valueUsers.data.Users.data.length;
+    const maxUser = valueUsers.data.users.data.length;
     const randUser = minUser + Math.random() * (maxUser - minUser);
 
-    let User = valueUsers.data.Users.data[Math.floor(randUser)]
-
-    return User.id
+    return valueUsers.data.users.data[Math.floor(randUser)]._id
   }
   
   const makeRole = () =>{
@@ -220,7 +224,7 @@ const Devel = (props) => {
 
           let rols = valueRoles.data.Roles.data[Math.floor(randRole)]
 
-          roles.push(rols.id)
+          roles.push(rols._id)
       }
 
       return  Array.from(new Set(roles))
@@ -245,28 +249,31 @@ const Devel = (props) => {
           let start = Date.now();
 
           {
-            
-            for (var i = 0; i < 2000; i++) {
+            for (var i = 0; i < 300; i++) {
 
                     //////////// bank
                     const min = 0;
                     const max = total;
                     const rand = min + Math.random() * (max - min);
 
-                    onCreatePost({ variables: { input: {
-                          title: faker.lorem.lines(1),
-                          nameSubname: faker.name.firstName() +" "+ faker.name.firstName(),
-                          idCard: makeNumber(6),
-                          amount: makeNumber(6),
-                          tels: makeTels(rand),
-                          banks: makeBank(rand),
-                          description: faker.lorem.paragraph(),
-                          dateTranfer:  faker.date.past(),
-                          files:makeFile(rand),
-                          ownerId: makeUserId(),
-                        }
-                      }
-                    });     
+                    let input = {
+                                  title: faker.lorem.lines(1),
+                                  nameSubname: faker.name.firstName() +" "+ faker.name.firstName(),
+                                  idCard: makeNumber(6),
+                                  amount: makeNumber(6),
+                                  tels: makeTels(rand),
+                                  banks: makeBank(rand),
+                                  description: faker.lorem.paragraph(),
+                                  dateTranfer:  faker.date.past(),
+                                  files:makeFile(rand),
+                                  ownerId: makeUserId(),
+
+                                  fake: true,
+                                }
+
+                    console.log("input :", input)
+
+                    onCreatePost({ variables: { input } });     
                 }
           }
 
