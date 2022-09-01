@@ -27,9 +27,10 @@ const Editor = ({label, initData, onEditorChange}) => {
             ) : (
               ""
             )}
-            <CKEditor label="Descrition" initData={text} onChange={(event)=>{
-              setText( event.editor.getData() )
-            }} />
+            <CKEditor 
+              label="Descrition" 
+              initData={text} 
+              onChange={(event)=>{ setText( event.editor.getData() )}} />
           </Box>
       }
     </div>

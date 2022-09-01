@@ -1,29 +1,21 @@
 import React, { useContext, useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-
 import { CKEditor } from "ckeditor4-react";
 
 import { ActionContext } from "./ActionContext";
 
-const InputField = ({ cancellor, parentId, child, value, edit, main }) => {
+let cke = null;
 
-  console.log("InputField :", value)
+const InputField = ({ cancellor, parentId, child, value, edit, main }) => {
   const [text, setText] = useState(value);
 
   const handleChange = (e) => {
-    // setText(e.target.value);
-
     setText(e.editor.getData())
   };
 
-  useEffect(() => {
-
-    console.log("InputField :", value)
-    setText(value);
-  }, [value]);
-
   const actions = useContext(ActionContext);
+
   return (
     <form
       className={"form"}
@@ -56,7 +48,11 @@ const InputField = ({ cancellor, parentId, child, value, edit, main }) => {
 
         <CKEditor
           onBeforeLoad={(CKEDITOR) =>
-            CKEDITOR.addCss(".cke_editable, .cke_editable p {margin: 5;}")
+            {
+              cke = CKEDITOR;
+
+              CKEDITOR.addCss(".cke_editable, .cke_editable p {margin: 5;}")
+            }
           }
           config={{
             removePlugins: "elementspath",
@@ -73,14 +69,16 @@ const InputField = ({ cancellor, parentId, child, value, edit, main }) => {
                 "Undo",
                 "Redo"
               ],
-              ["List", /*"Indent",*/ "Blocks", "Align", "Bidi", "Paragraph"],
+              ["List", "Blocks", "Align", "Bidi", "Paragraph"],
               ["Find", "Selection", "Spellchecker", "Editing"]
             ],
             extraPlugins: "editorplaceholder",
             editorplaceholder: "Start typing here..."
           }}
+          onInstanceReady={ editor => {
+            console.log("onInstanceReady", editor)
+          }}
           onChange={handleChange}
-          // label="Descrition"
           initData={text}
         />
       </div>
@@ -98,6 +96,9 @@ const InputField = ({ cancellor, parentId, child, value, edit, main }) => {
             edit === true
               ? actions.submit(cancellor, text, parentId, true, setText)
               : actions.submit(cancellor, text, parentId, false, setText);
+
+
+            cke ? cke.instances.editor1.setData("") : ""
           }}
         >
           Post
@@ -106,11 +107,13 @@ const InputField = ({ cancellor, parentId, child, value, edit, main }) => {
           <Button
             className={"cancelBtn"}
             variant="outlined"
-            onClick={() =>
+            onClick={() =>{
               edit
-                ? actions.handleCancel(cancellor, edit)
-                : actions.handleCancel(cancellor)
-            }
+              ? actions.handleCancel(cancellor, edit)
+              : actions.handleCancel(cancellor)
+
+              cke ? cke.instances.editor1.setData("") : ""
+            }}
           >
             Cancel
           </Button>
