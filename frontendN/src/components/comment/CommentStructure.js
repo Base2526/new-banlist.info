@@ -121,15 +121,19 @@ const CommentStructure = ({ i, reply, parentId }) => {
             ? <IconButton aria-label="reply" className={"replyBtn"}
                 onClick={() => actions.handleAction(i.comId)}
                 disabled={!actions.user}>
-                <ReplyIcon
-                  
-                />Reply
+                <ReplyIcon/>Reply
               </IconButton>
             : <div />
           }
           
         </div>
-        <Typography variant="subtitle1" gutterBottom component="div">{i.text} </Typography>
+        {/* <Typography variant="subtitle1" gutterBottom component="div">{i.text} </Typography> */}
+
+        <Typography 
+          variant="subtitle1" 
+          gutterBottom 
+          component="div"
+          dangerouslySetInnerHTML={{ __html: i.text }}/>
       </div>
       <div className={"userActions"}>
         {actions.userId === i.userId && actions.user && (

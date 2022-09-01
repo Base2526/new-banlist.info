@@ -2,16 +2,24 @@ import React, { useContext, useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
+import { CKEditor } from "ckeditor4-react";
+
 import { ActionContext } from "./ActionContext";
 
 const InputField = ({ cancellor, parentId, child, value, edit, main }) => {
-  const [text, setText] = useState("");
+
+  console.log("InputField :", value)
+  const [text, setText] = useState(value);
 
   const handleChange = (e) => {
-    setText(e.target.value);
+    // setText(e.target.value);
+
+    setText(e.editor.getData())
   };
 
   useEffect(() => {
+
+    console.log("InputField :", value)
     setText(value);
   }, [value]);
 
@@ -35,6 +43,7 @@ const InputField = ({ cancellor, parentId, child, value, edit, main }) => {
       </div> 
       */}
       <div>
+        {/* 
         <TextField
           id="outlined-textarea"
           label="Type your reply here."
@@ -42,6 +51,37 @@ const InputField = ({ cancellor, parentId, child, value, edit, main }) => {
           onChange={handleChange}
           multiline
           fullWidth
+        /> 
+        */}
+
+        <CKEditor
+          onBeforeLoad={(CKEDITOR) =>
+            CKEDITOR.addCss(".cke_editable, .cke_editable p {margin: 5;}")
+          }
+          config={{
+            removePlugins: "elementspath",
+            resize_enabled: false,
+            height: 80,
+            toolbar: [
+              ["Bold", "Italic", "Strike"],
+              [
+                "Cut",
+                "Copy",
+                "Paste",
+                "Pasteasplaintext",
+                "FormattingStyles",
+                "Undo",
+                "Redo"
+              ],
+              ["List", /*"Indent",*/ "Blocks", "Align", "Bidi", "Paragraph"],
+              ["Find", "Selection", "Spellchecker", "Editing"]
+            ],
+            extraPlugins: "editorplaceholder",
+            editorplaceholder: "Start typing here..."
+          }}
+          onChange={handleChange}
+          // label="Descrition"
+          initData={text}
         />
       </div>
       <div className={"inputActions"}>
