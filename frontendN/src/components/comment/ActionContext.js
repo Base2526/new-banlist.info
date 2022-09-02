@@ -47,8 +47,8 @@ export const ActionProvider = ({
           {
             userId: currentUser.userId,
             comId: uuid(),
-            avatarUrl: currentUser.avatarUrl,
-            fullName: currentUser.name,
+            // avatarUrl: currentUser.avatarUrl,
+            // fullName: currentUser.name,
             text: text,
             notify: true
           }
@@ -59,8 +59,8 @@ export const ActionProvider = ({
         newList[index].replies.push({
           userId: currentUser.userId,
           comId: uuid(),
-          avatarUrl: currentUser.avatarUrl,
-          fullName: currentUser.name,
+          // avatarUrl: currentUser.avatarUrl,
+          // fullName: currentUser.name,
           text: text,
           notify: true
         })
@@ -75,8 +75,8 @@ export const ActionProvider = ({
         newReplies.push({
           userId: currentUser.userId,
           comId: uuid(),
-          avatarUrl: currentUser.avatarUrl,
-          fullName: currentUser.name,
+          // avatarUrl: currentUser.avatarUrl,
+          // fullName: currentUser.name,
           text: text,
           notify: true
         })
@@ -141,7 +141,7 @@ export const ActionProvider = ({
     <ActionContext.Provider
       value={{
         onSubmit: onSubmit,
-        userImg: currentUser && currentUser.avatarUrl,
+        // userImg: currentUser && currentUser.avatarUrl,
         userId: currentUser && currentUser.userId,
         handleAction: handleAction,
         handleCancel: handleCancel,

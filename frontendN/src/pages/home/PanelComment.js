@@ -53,8 +53,8 @@ const PanelComment = (props) => {
 
   // const [comment, setComment] = useState([]);
   const userId =  user == null ? "" : user._id;
-  const avatarUrl = user == null ? "" : _.isEmpty(user.image) ? "" : user.image[0].url ;
-  const name = user == null ? "" : user.displayName;
+  // const avatarUrl = user == null ? "" : _.isEmpty(user.image) ? "" : user.image[0].url ;
+  // const name = user == null ? "" : user.displayName;
   const signinUrl = "/signin";
   const signupUrl = "/signup";
   let count = 0;
@@ -96,7 +96,7 @@ const PanelComment = (props) => {
     variables: {postId: commentId},
     notifyOnNetworkStatusChange: true,
   });
-  console.log("commentValues : ", commentValues)
+  console.log("commentValues : ", commentValues, commentId)
   if(!commentValues.loading){
     let {subscribeToMore} = commentValues
     const unsubscribe =  subscribeToMore({
@@ -152,7 +152,7 @@ const PanelComment = (props) => {
             : <div>
                 <CommentSection
                   currentUser={
-                    userId && { userId: userId, avatarUrl: avatarUrl, name: name }
+                    userId && { userId: userId /*, avatarUrl: avatarUrl, name: name */ }
                   }
                   commentsArray={commentValues.data.comment.data}
                   setComment={(data) => {
@@ -161,7 +161,6 @@ const PanelComment = (props) => {
                     console.log("onComment input :", input);
 
                     onCreateAndUpdateComment({ variables: { input: input }});
-
                   }}
                   signinUrl={signinUrl}
                   signupUrl={signupUrl}

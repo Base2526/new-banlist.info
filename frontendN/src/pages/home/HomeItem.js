@@ -94,7 +94,7 @@ const HomeItem =(props) => {
   const renderMedia = (m) =>{
     if( !_.isEmpty(m.files) ){
 
-        console.log("renderMedia : ", m.files)
+        // console.log("renderMedia : ", m.files)
         return <CardActionArea
           style={{ position: "relative", paddingBottom: "10px" }}
         >

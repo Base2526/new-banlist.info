@@ -229,29 +229,7 @@ export const gqlContactUs = gql`
         }
     }`;
 
-export const gqlComment = gql`
-    query Comment($postId: ID!) {
-        comment(
-            postId: $postId
-        ){
-            status
-            executionTime
-            data {
-                userId
-                comId
-                fullName
-                avatarUrl
-                text
-                replies {
-                    userId
-                    comId
-                    fullName
-                    avatarUrl
-                    text
-                }
-            }
-        }
-    }`;
+export const gqlComment = gql`query Comment($postId: ID!) { comment( postId: $postId ) }`;
 
 export const gqlShares = gql`query Shares($page: Int, $perPage: Int){ shares( page: $page perPage: $perPage ) }`;
 
@@ -429,27 +407,7 @@ export const gqlCreateTContactUs = gql`
         }
     }`;
 
-export const gqlCreateAndUpdateComment = gql`
-    mutation CreateAndUpdateComment($input: CommentInput) {
-        createAndUpdateComment(input: $input) {
-            status
-            executionTime
-            data {
-                userId
-                comId
-                fullName
-                avatarUrl
-                text
-                replies {
-                  userId
-                  comId
-                  fullName
-                  avatarUrl
-                  text
-                }
-            }
-        }
-    }`;
+export const gqlCreateAndUpdateComment = gql`mutation CreateAndUpdateComment($input: JSON) { createAndUpdateComment(input: $input) }`;
 
 export const gqlCreateShare = gql`
     mutation CreateShare($input: ShareInput) {
@@ -546,97 +504,13 @@ export const subPostCreated = gql`
 `;
 
 // subPost
-export const subPost = gql`
-    subscription subPost($postIDs: String) {
-        subPost(postIDs: $postIDs) {
-            mutation
-            data {
-              id: _id
-              title
-              nameSubname
-              idCard
-              amount
-              dateTranfer
-              description
-              tels
-              banks {
-                _id
-                bankAccountName
-                bankId
-              }
-              follows
-              shares {
-                _id
-                userId
-                postId
-                destination
-              }
-              files {
-                _id
-                base64
-                fileName
-                lastModified
-                size
-                type
-              }
-              isPublish
-              ownerId
-              createdAt
-              updatedAt
-            }
-        }
-    }
-`;
+export const subPost = gql`subscription subPost($postIDs: String) { subPost(postIDs: $postIDs) }`;
 
-export const subComment = gql`
-    subscription subComment($commentID: String) {
-        subComment(commentID: $commentID) {
-            mutation
-            commentID
-            data {
-              userId
-              comId
-              fullName
-              avatarUrl
-              text
-              replies {
-                userId
-                comId
-                fullName
-                avatarUrl
-                text
-              }
-            }
-        }
-    }
-`;
+export const subComment = gql`subscription subComment($commentID: String) { subComment(commentID: $commentID) } `;
 
-export const subBookmark = gql`
-    subscription subBookmark($userId: ID!, $postId: ID!) {
-        subBookmark(userId: $userId, postId: $postId) {
-        mutation
-        data {
-            id: _id
-            userId
-            postId
-            status
-        }
-        }
-    }
-`;
+export const subBookmark = gql`subscription subBookmark($userId: ID!, $postId: ID!){ subBookmark(userId: $userId, postId: $postId) }`;
 
-export const subShare = gql`
-    subscription subShare( $postId: ID! ) {
-        subShare( postId: $postId ) {
-            mutation
-            data {
-                id: _id
-                userId
-                postId
-                destination
-            }
-        }
-    }`;
+export const subShare = gql`subscription subShare( $postId: ID! ) { subShare( postId: $postId ) }`;
 
 export const subConversation = gql`subscription subConversation($userId: ID) { subConversation( userId: $userId ) }`;
 
