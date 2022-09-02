@@ -455,7 +455,7 @@ export default gql`
     postsByUser(userId: ID!): JSON
   
     
-    comment(postId: ID!): CommentPayLoad
+    comment(postId: ID!): JSON
     getManyReferenceComment(postId: String, page: Int, perPage: Int, sortField: String, sortOrder: String, filter: PostFilter): CommentsPayLoad
   
 
