@@ -7,12 +7,18 @@ import { ActionContext } from "./ActionContext";
 
 let cke = null;
 
-const InputField = ({ cancellor, parentId, child, value, edit, main }) => {
+const InputField = (props) => {
+  let { cancellor, parentId, child, value, edit, main } = props
+  
   const [text, setText] = useState(value);
 
   const handleChange = (e) => {
     setText(e.editor.getData())
   };
+
+  const CKEDITORClearData = () =>{
+    if(cke) cke.instances.editor1.setData("")
+  }
 
   const actions = useContext(ActionContext);
 
@@ -50,7 +56,6 @@ const InputField = ({ cancellor, parentId, child, value, edit, main }) => {
           onBeforeLoad={(CKEDITOR) =>
             {
               cke = CKEDITOR;
-
               CKEDITOR.addCss(".cke_editable, .cke_editable p {margin: 5;}")
             }
           }
@@ -98,7 +103,7 @@ const InputField = ({ cancellor, parentId, child, value, edit, main }) => {
               : actions.submit(cancellor, text, parentId, false, setText);
 
 
-            cke ? cke.instances.editor1.setData("") : ""
+            CKEDITORClearData()
           }}
         >
           Post
@@ -112,7 +117,7 @@ const InputField = ({ cancellor, parentId, child, value, edit, main }) => {
               ? actions.handleCancel(cancellor, edit)
               : actions.handleCancel(cancellor)
 
-              cke ? cke.instances.editor1.setData("") : ""
+              CKEDITORClearData()
             }}
           >
             Cancel

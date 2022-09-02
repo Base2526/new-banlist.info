@@ -64,9 +64,17 @@ const index = (props) => {
   let user = props.user;//checkAuth()
 
   let useUser = useQuery(gqlUser, { variables: {id: user._id}, notifyOnNetworkStatusChange: true });
-  if(useUser.loading){
+  if(useUser.loading || useUser.data.user == null){
     return <div><CircularProgress /></div> 
   }
+
+  // console.log("useUser.data :", useUser.data, user)
+
+  // if( useUser.data.user == null){
+  //   return <div><CircularProgress /></div> 
+  // }
+
+  //  if(useUser.data.user.data == null){
 
   let currentUser = useUser.data.user.data;
 

@@ -455,7 +455,7 @@ export default gql`
     postsByUser(userId: ID!): JSON
   
     
-    comment(postId: ID!): CommentPayLoad
+    comment(postId: ID!): JSON
     getManyReferenceComment(postId: String, page: Int, perPage: Int, sortField: String, sortOrder: String, filter: PostFilter): CommentsPayLoad
   
 
@@ -678,7 +678,7 @@ export default gql`
     deleteMail(_id: ID!): Mail
     deleteMails(_ids: [ID!]!): deleteType
 
-    createAndUpdateComment(input: CommentInput): Comment
+    createAndUpdateComment(input: JSON): JSON
     updateComment(_id: ID!, input: CommentInput): Comment
     deleteComment(_id: ID!): Comment
     deleteComments(_ids: [ID!]!): deleteType
@@ -718,10 +718,10 @@ export default gql`
     numberIncremented(postIDs: String): Int
     postCreated: Int
 
-    subPost(postIDs: String): PostSubscriptionPayload!
-    subComment(commentID: String): CommentSubscriptionPayload!
-    subBookmark(userId: ID!, postId: ID!): BookmarkSubscriptionPayload!
-    subShare(postId: ID!): ShareSubscriptionPayload!
+    subPost(postIDs: String): JSON!
+    subComment(commentID: String): JSON!
+    subBookmark(userId: ID!, postId: ID!): JSON!
+    subShare(postId: ID!): JSON!
 
     subConversation(userId: ID): JSON
     subNotification(userId: ID): JSON

@@ -14,8 +14,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar'
 import { makeStyles } from '@material-ui/core/styles';
+import { useQuery, useMutation } from "@apollo/client";
 
 import { ActionContext } from './ActionContext'
+
+import { gqlUser } from "../../gqlQuery"
+import _ from 'lodash';
 
 const useStyles = makeStyles({
   link: {
@@ -45,7 +49,10 @@ const useStyles = makeStyles({
   },
 });
 
-const CommentStructure = ({ i, reply, parentId }) => {
+const CommentStructure = (props) => {
+  let { i, reply, parentId } = props
+
+  
 
   const classes = useStyles();
 
@@ -106,16 +113,40 @@ const CommentStructure = ({ i, reply, parentId }) => {
             </Dialog>
   }
 
+  const onProfile = () =>{
+    let userValue = useQuery(gqlUser, {
+      variables: {id: i.userId},
+      notifyOnNetworkStatusChange: true,
+    });
+  
+    console.log("CommentStructure > userValue :", userValue)
+
+    if(!userValue.loading){
+      if(userValue.data.user.data == null){
+        return  <div>
+                  <Avatar className={classes.link} src={""} sx={{ width: 24, height: 24 }} alt="userIcon" />
+                  <Typography className={classes.link} variant="subtitle2" gutterBottom component="div"></Typography>
+                </div>
+      }
+
+      let {displayName, image}  = userValue.data.user.data
+
+      return  <div>
+                <Avatar className={classes.link} src={_.isEmpty(image[0]) ? "" : image[0].url} sx={{ width: 24, height: 24 }} alt="userIcon" />
+                <Typography className={classes.link} variant="subtitle2" gutterBottom component="div">{displayName}</Typography>
+              </div>
+    }
+    return  <div>
+              <Avatar className={classes.link} src={""} sx={{ width: 24, height: 24 }} alt="userIcon" />
+              <Typography className={classes.link} variant="subtitle2" gutterBottom component="div"></Typography>
+            </div>
+  }
+
   return (
     <div className={"halfDiv"}>
-      <div
-        className={"userInfo"}
-        style={reply && { marginLeft: 15, marginTop: '6px' }}
-      >
+      <div className={"userInfo"} style={reply && { marginLeft: 15, marginTop: '6px' }} >
         <div className={"commentsTwo"}>
-          <Avatar className={classes.link} src={i.avatarUrl} sx={{ width: 24, height: 24 }} alt="userIcon" />
-          <Typography className={classes.link} variant="subtitle2" gutterBottom component="div">{i.fullName}</Typography>
-          
+          {onProfile()}
           {
             actions.user 
             ? <IconButton aria-label="reply" className={"replyBtn"}
