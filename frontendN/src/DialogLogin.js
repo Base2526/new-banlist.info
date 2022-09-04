@@ -29,6 +29,9 @@ const DialogLogin = (props) => {
   const [onLogin, resultLogin] = useMutation(gqlLogin, {
     refetchQueries: [  {query: gqlConversations}, {query: gqlPosts}, {query : gqlHomes} ],
     onCompleted(data) {
+
+      console.log("onCompleted :", data)
+
       localStorage.setItem('token', data.login.token)
       login(data.login.data)
       onComplete()
