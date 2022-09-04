@@ -185,10 +185,11 @@ export default {
           if(category.includes("4")){
             regex = [...regex, {tels: { $in: [keywordSearch] } }]
           }
-
-          console.log("regex :", regex)
-
+          
           data = await Post.find({ $or: regex }).limit(perPage).skip(skip);
+
+          console.log("regex :", data, regex)
+
 
           total = (await Post.find().lean().exec()).length; 
         }else{

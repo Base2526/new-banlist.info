@@ -30,13 +30,11 @@ const ItemHeader = (props) => {
         notifyOnNetworkStatusChange: true,
     });
 
-    if( ! userValue.loading){
-        if(userValue.data.user.data == null){
+    if(!userValue.loading){
+        if(userValue.data.user == null || userValue.data.user.data ==null ){
             return <div />
         }
-
         let user = userValue.data.user.data
-
         return  <CardHeader
                     avatar={<Avatar 
                             className={"card-header-title"} 
