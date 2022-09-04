@@ -17,7 +17,7 @@ const LeftMenu = (props) => {
     // console.log("LeftMenu :", permissions)
 
     let listMenu = MenuAnonymous
-    if( permissions && permissions.includes("62a2ccfbcf7946010d3c74a6")){
+    if( permissions && ( permissions.includes("62a2ccfbcf7946010d3c74a6") || permissions.includes("62a2ccfbcf7946010d3c74a4") ) ){
       listMenu = MenuAuthenticated
     }
     if( permissions && permissions.includes("62a2ccfbcf7946010d3c74a2")){
