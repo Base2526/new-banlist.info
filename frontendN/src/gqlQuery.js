@@ -2,13 +2,7 @@ import { gql } from "@apollo/client";
 
 export const gqlHomes = gql`
     query Homes( $userId: ID,  $page: Long, $perPage: Long, $keywordSearch: String, $category: String) {
-        homes(
-            userId: $userId
-            page: $page
-            perPage: $perPage
-            keywordSearch: $keywordSearch
-            category: $category
-        )
+        homes( userId: $userId page: $page perPage: $perPage keywordSearch: $keywordSearch category: $category )
     }`;
 
 export const gqlPosts = gql`query Posts( $userId: ID, $page: Int, $perPage: Int ) { posts( userId: $userId page: $page perPage: $perPage ) }`;

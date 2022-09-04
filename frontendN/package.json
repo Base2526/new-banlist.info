@@ -40,6 +40,7 @@
     "match-sorter": "^4.2.1",
     "moment": "^2.29.3",
     "namor": "^2.0.3",
+    "query-string": "^7.1.1",
     "react": "17.0.2",
     "react-chat-elements": "^11.0.1",
     "react-device-detect": "^2.2.2",

@@ -116,101 +116,104 @@ export default {
 
     // homes
     async homes(parent, args, context, info) {
-      let {
-        userId,
-        page,
-        perPage, 
-        keywordSearch, 
-        category
-      } = args
+      try{
 
-      let start = Date.now()
+        let { userId, page, perPage, keywordSearch, category } = args
+        let start = Date.now()
 
-      // if(_.isEmpty(userId)){
+        // if(_.isEmpty(userId)){
+          
+        // }
+
+        // let {currentUser} = context 
+        // currentUser._id.toString()
+        // console.log("homes :", currentUser)
+
+        // console.log("Homes: page : ", page,
+        //             ", perPage : ", perPage, 
+        //             ", keywordSearch : ", keywordSearch,
+        //             ", category : ", category , 
+        //             `Time to execute = ${
+        //               (Date.now() - start) / 1000
+        //             } seconds` )
+
         
-      // }
 
-      // let {currentUser} = context 
-      // currentUser._id.toString()
-      // console.log("homes :", currentUser)
+        /*
+        0 : ชื่อเรื่อง | title
+        1 : ชื่อ-นามสกุล บัญชีผู้รับเงินโอน | nameSubname
+        2 : เลขบัตรประชาชนคนขาย | idCard
+        3 : บัญชีธนาคาร | banks[]
+        4 : เบอร์โทรศัพท์ | tels[]
+        */
 
-      // console.log("Homes: page : ", page,
-      //             ", perPage : ", perPage, 
-      //             ", keywordSearch : ", keywordSearch,
-      //             ", category : ", category , 
-      //             `Time to execute = ${
-      //               (Date.now() - start) / 1000
-      //             } seconds` )
+        if(!context.status){
+          // foce logout
+        }
 
+        let data = null;
+        let total = 0;
+
+        page    = parseInt(page)
+        perPage = parseInt(perPage)
+
+        let skip =  page == 0 ? page : (perPage * page) + 1;
       
+        // console.log("keywordSearch ::", !!keywordSearch, keywordSearch)
+        if(!!keywordSearch){
+          keywordSearch = keywordSearch.trim()
+          
+          category = category.split(',');
 
-      /*
-      0 : ชื่อเรื่อง | title
-      1 : ชื่อ-นามสกุล บัญชีผู้รับเงินโอน | nameSubname
-      2 : เลขบัตรประชาชนคนขาย | idCard
-      3 : บัญชีธนาคาร | banks[]
-      4 : เบอร์โทรศัพท์ | tels[]
-      */
+          let regex = [];
+          if(category.includes("0")){
+            regex = [...regex, {title: { $regex: '.*' + keywordSearch + '.*', $options: 'i' } }]
+          }
 
-      if(!context.status){
-        // foce logout
-      }
+          if(category.includes("1")){
+            regex = [...regex, {nameSubname: { $regex: '.*' + keywordSearch + '.*', $options: 'i' } }]
+          }
 
-      let data = null;
-      let total = 0;
+          if(category.includes("2")){
+            regex = [...regex, {idCard: { $regex: '.*' + keywordSearch + '.*', $options: 'i' } }]
+          }
 
-      let skip =  page == 0 ? page : (perPage * page) + 1;
-     
-      // console.log("keywordSearch ::", !!keywordSearch, keywordSearch)
-      if(!!keywordSearch){
-        keywordSearch = keywordSearch.trim()
-        
-        category = category.split(',');
+          if(category.includes("3")){
+            regex = [...regex, {"banks.bankAccountName": { $in: [keywordSearch] } }]
+          }
 
-        let regex = [];
-        if(category.includes("0")){
-          regex = [...regex, {title: { $regex: '.*' + keywordSearch + '.*', $options: 'i' } }]
+          if(category.includes("4")){
+            regex = [...regex, {tels: { $in: [keywordSearch] } }]
+          }
+
+          console.log("regex :", regex)
+
+          data = await Post.find({ $or: regex }).limit(perPage).skip(skip);
+
+          total = (await Post.find().lean().exec()).length; 
+        }else{
+          data = await Post.find().limit(perPage).skip(skip); 
+
+          total = (await Post.find().lean().exec()).length;
         }
+        // console.log("homes total , skip :", total, skip, context.currentUser)
 
-        if(category.includes("1")){
-          regex = [...regex, {nameSubname: { $regex: '.*' + keywordSearch + '.*', $options: 'i' } }]
+        let new_data = await Promise.all( _.map(data, async(v)=>{
+                          return {...v._doc, shares: await Share.find({postId: v._id})}
+                        }))
+
+        return {
+          status:true,
+          data: new_data,
+          total,
+          executionTime: `Time to execute = ${
+            (Date.now() - start) / 1000
+          }`,
         }
-
-        if(category.includes("2")){
-          regex = [...regex, {idCard: { $regex: '.*' + keywordSearch + '.*', $options: 'i' } }]
-        }
-
-        if(category.includes("3")){
-          regex = [...regex, {"banks.bankAccountName": { $in: [keywordSearch] } }]
-        }
-
-        if(category.includes("4")){
-          regex = [...regex, {tels: { $in: [keywordSearch] } }]
-        }
-
-        console.log("regex :", regex)
-
-        data = await Post.find({ $or: regex }).limit(perPage).skip(skip);
-
-        total = (await Post.find().lean().exec()).length; 
-      }else{
-        data = await Post.find().limit(perPage).skip(skip); 
-
-        total = (await Post.find().lean().exec()).length;
-      }
-      // console.log("homes total , skip :", total, skip, context.currentUser)
-
-      let new_data = await Promise.all( _.map(data, async(v)=>{
-                        return {...v._doc, shares: await Share.find({postId: v._id})}
-                      }))
-
-      return {
-        status:true,
-        data: new_data,
-        total,
-        executionTime: `Time to execute = ${
-          (Date.now() - start) / 1000
-        }`,
+      } catch(err) {
+        logger.error(err.toString());
+        console.log("homes err :", args, err.toString())
+        return;
       }
     },
     // homes

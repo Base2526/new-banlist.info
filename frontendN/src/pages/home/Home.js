@@ -21,6 +21,8 @@ import SpeedDialAction from '@mui/material/SpeedDialAction';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 
+import queryString from 'query-string';
+
 import PanelComment from "./PanelComment";
 import PopupSnackbar from "./PopupSnackbar";
 import Footer from "../footer";
@@ -38,37 +40,31 @@ import { login, addedBookmark } from "../../redux/actions/auth"
 
 let unsubscribePost = null;
 
-
 const Home = (props) => {
   let history = useHistory();
+
+  let params = queryString.parse(history.location.search)
+
+  console.log("Home :", params)
+
+  // page=2&perPage=30
 
   let { is_connnecting, user, addedBookmark } = props
 
   const [keywordSearch, setKeywordSearch] = useState("");
   const [category, setCategory] = useState([0,1]);
-  const [page, setPage] = useState(0);                             // Page number
-  const [rowsPerPage, setRowsPerPage] = useState(30);              // Number per page
+  const [page, setPage] = useState( _.isEmpty(params) ? 0 : params?.page ? params.page : 0 );                             // Page number
+  const [rowsPerPage, setRowsPerPage] = useState( _.isEmpty(params) ? 30 : params?.perPage ? params.perPage : 30 );              // Number per page
   const [dialogLoginOpen, setDialogLoginOpen] = useState(false);
-
-  const [lightbox, setLightbox] = useState({
-    isOpen: false,
-    photoIndex: 0,
-    images: []
-  });
-
+  const [lightbox, setLightbox] = useState({ isOpen: false, photoIndex: 0, images: [] });
   const [panelComment, setPanelComment] = useState({ isOpen: false, commentId: "" });
-
   const [anchorElSetting, setAnchorElSetting] = useState(null);
   const [anchorElShare, setAnchorElShare] = useState(null);
   const [snackbar, setSnackbar] = useState({open: false, message:""});
   const [report, setReport] = useState({open: false, postId:""});
 
   const [dialogProfile, setDialogProfile] = useState({open: false, id:""});
-  const breakpoints = {
-    default: 3,
-    1100: 2,
-    700: 1
-  };
+  const breakpoints = { default: 3, 1100: 2, 700: 1 };
 
   const [onCreateContactUs, resultCreateContactUsValues] = useMutation(gqlCreateContactUs
     , {
@@ -78,14 +74,6 @@ const Home = (props) => {
       }
   );
   // console.log("resultCreateContactUsValues :", resultCreateContactUsValues)
-
-  const [onCurrentNumber, resultCurrentNumberValues] = useMutation(gqlCurrentNumber
-    , {
-        onCompleted({ data }) {
-          // history.push("/");
-        }
-      }
-  );
 
   const [onCreateShare, resultCreateShare] = useMutation(gqlCreateShare, {
     onCompleted({ data }) {
@@ -126,7 +114,7 @@ const Home = (props) => {
 
   if( is_connnecting && !homesValues.loading){
 
-    // console.log("homesValues.data.homes.data :", homesValues)
+    console.log("homesValues.data.homes.data :", homesValues, page, rowsPerPage)
 
     var keys = _.map(homesValues.data.homes.data, _.property("id"));
 
@@ -334,9 +322,6 @@ const Home = (props) => {
                               }}
                               onLightbox={(data)=>{
                                 setLightbox(data)
-
-                                onCurrentNumber()
-                                console.log("+++")
                               }}
                               onAnchorElShareOpen={(index, e)=>{
                                 handleAnchorElShareOpen(index, e)
@@ -450,6 +435,8 @@ const Home = (props) => {
               photoIndex: (lightbox.photoIndex + 1) % lightbox.images.length
             });
           }}
+          // imageCaption={"imageCaption"}
+          // imageTitle={"imageTitle"}
         />
       )}
 
