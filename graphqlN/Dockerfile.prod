@@ -1,5 +1,5 @@
 #stage1  https://cloudnweb.dev/2020/05/nodejs-graphql-typescript-starter-part-3/
-FROM node as builder
+FROM node:12-alpine as builder
 WORKDIR /app
 COPY package*.json ./
 # RUN npm install
@@ -8,7 +8,7 @@ COPY . .
 RUN npm run build
 
 #stage 2
-FROM node
+FROM node:12-alpine
 WORKDIR /app
 COPY package*.json ./
 # RUN npm install --production
