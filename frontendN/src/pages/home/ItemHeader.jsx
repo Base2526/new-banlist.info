@@ -38,7 +38,7 @@ const ItemHeader = (props) => {
         return  <CardHeader
                     avatar={<Avatar 
                             className={"card-header-title"} 
-                            src={user.image[0].url}
+                            src={user.image[0]?.url}
                             onClick={(e)=> history.push("/user/" + user._id +"/view") }
                             // status="available" 
                             />}

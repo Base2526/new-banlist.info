@@ -117,7 +117,7 @@ let gracefullyRestart = () => {
 };
 
 const wsLink = new GraphQLWsLink(createClient({
-  url: 'ws://'+ process.env.REACT_APP_HOST_GRAPHAL +'/graphql',
+  url: 'wss://'+ process.env.REACT_APP_HOST_GRAPHAL +'/subscription',
   // reconnect: true,
   disablePong: false,
   connectionAckWaitTimeout: 0,
