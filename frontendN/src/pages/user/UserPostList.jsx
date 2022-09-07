@@ -114,7 +114,7 @@ const UserPostList = (props) => {
                             setDialogLoginOpen(true)
                         }else{
                             onCreateShare({ variables: { input: {
-                                    postId: item.id,
+                                    postId: item._id,
                                     userId: user._id,
                                     destination: "facebook"
                                 }
@@ -141,7 +141,7 @@ const UserPostList = (props) => {
                                 setDialogLoginOpen(true)
                             }else{
                                 onCreateShare({ variables: { input: {
-                                        postId: item.id,
+                                        postId: item._id,
                                         userId: user._id,
                                         destination: "twitter"
                                     }
@@ -194,7 +194,7 @@ const UserPostList = (props) => {
                     // }else{
                     //   setReport({open: true, postId:item.id})
                     // }
-                    onReport(item.id)
+                    onReport(item._id)
                   }}>
                     Report
                   </MenuItem>
@@ -213,7 +213,7 @@ const UserPostList = (props) => {
                                 _.map(postsByUser.data.postsByUser.data, (item, index)=>{
 
                                     console.log("item >>> ", item)
-                                    return  <div key={item.id}>
+                                    return  <div key={item._id}>
                                                 <CardHeader
                                                     action={
                                                     <IconButton aria-label="settings" onClick={(e)=>{
@@ -305,7 +305,7 @@ const UserPostList = (props) => {
                                                             setPanelComment(data)
                                                         }}/>
                                                     <IconButton onClick={(e) => {
-                                                        history.push("/detail/" + item.id);
+                                                        history.push("/detail/" + item._id);
                                                     }}>
                                                         <OpenInNewIcon /> 
                                                     </IconButton>

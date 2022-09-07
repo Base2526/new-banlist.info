@@ -35,7 +35,8 @@ const ItemBookmark = (props) => {
     });
     
     if(!bmValus.loading){
-        if(bmValus.data.isBookmark.data === null){
+        // if(bmValus.data.isBookmark.data === null){
+        if(bmValus.data.isBookmark == null || bmValus.data.isBookmark.data ==null ){
             return  <IconButton onClick={(e) => {
                         handleCreateBookmark(true)
                     }}>
