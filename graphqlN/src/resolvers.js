@@ -1114,7 +1114,7 @@ export default {
 
           const stream = createReadStream();
           const assetUniqName = fileRenamer(filename);
-          const pathName = path.join(__dirname,   `../uploads/${assetUniqName}`);
+          const pathName = path.join(__dirname,   `/app/uploads/${assetUniqName}`);
           
           const output = fs.createWriteStream(pathName)
           stream.pipe(output);
@@ -1210,7 +1210,7 @@ export default {
   
               const stream = createReadStream();
               const assetUniqName = fileRenamer(filename);
-              const pathName = path.join(__dirname,   `../uploads/${assetUniqName}`);
+              const pathName = path.join(__dirname,   `/app/uploads/${assetUniqName}`);
               
     
               const output = fs.createWriteStream(pathName)
@@ -1274,7 +1274,7 @@ export default {
                 const { createReadStream, filename, encoding, mimetype } = fileObject //await input.files[i];
                 const stream = createReadStream();
                 const assetUniqName = fileRenamer(filename);
-                const pathName = path.join(__dirname,   `../uploads/${assetUniqName}`);
+                const pathName = path.join(__dirname,   `/app/uploads/${assetUniqName}`);
                 
       
                 const output = fs.createWriteStream(pathName)
@@ -1296,7 +1296,7 @@ export default {
                 newFiles.push({ url: urlForArray, filename, encoding, mimetype });
               }else{
                 if(input.files[i].delete){
-                  let pathUnlink = './uploads/' + input.files[i].url.split('/').pop()
+                  let pathUnlink = '/app/uploads/' + input.files[i].url.split('/').pop()
                   fs.unlink(pathUnlink, (err)=>{
                       if (err) {
                         logger.error(err);
@@ -1980,7 +1980,7 @@ export default {
           const { createReadStream, filename, encoding, mimetype } = await files[i];
           const stream = createReadStream();
           const assetUniqName = fileRenamer(filename);
-          const pathName = path.join(__dirname,   `../uploads/${assetUniqName}`);
+          const pathName = path.join(__dirname,   `/app/uploads/${assetUniqName}`);
           
 
           const output = fs.createWriteStream(pathName)
@@ -2128,7 +2128,7 @@ export default {
           const { createReadStream, filename, encoding, mimetype } = await file[i];
           const stream = createReadStream();
           const assetUniqName = fileRenamer(filename);
-          const pathName = path.join(__dirname,   `../uploads/${assetUniqName}`);
+          const pathName = path.join(__dirname,   `/app/uploads/${assetUniqName}`);
 
           const output = fs.createWriteStream(pathName)
           stream.pipe(output);

@@ -19,6 +19,7 @@ services:
     volumes:
       - ./frontendN/src:/app/src
     #  - ./fn/package.json:/app/package.json
+      - ./uploads:/var/storage
     networks:
       - nodejs
   ################################
@@ -33,7 +34,7 @@ services:
     ports:
       - "4000:4000"
     volumes:
-      - ./graphqlN/uploads:/app/uploads  
+      - ./uploads:/app/uploads  
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
@@ -45,7 +46,7 @@ services:
       - PORT=4000
       # - MONGO_URI=mongodb://mongo1:27017,mongo2:27017,mongo3:27017/bl?replicaSet=rs
       - MONGO_URI=mongodb://mongo:27017/bl
-      - URL_HOST=http://157.245.51.177:4000/
+      - URL_HOST=https://banlist.info/images/
 
       - JWT_SECRET=banlistinfo
     networks:
