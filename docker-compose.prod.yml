@@ -10,11 +10,12 @@ services:
       dockerfile: Dockerfile.prod
     environment:
       - CHOKIDAR_USEPOLLING=true
-      - PORT=4049
+      - PORT=80
       - WATCHPACK_POLLING=true
-      - REACT_APP_HOST_GRAPHAL=157.245.51.177:4000
+      - REACT_APP_HOST_GRAPHAL=/graphql
     ports:
-      - "80:3000"
+      - "80:80"
+      - "443:443"
     volumes:
       - ./frontendN/src:/app/src
     #  - ./fn/package.json:/app/package.json

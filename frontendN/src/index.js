@@ -97,7 +97,7 @@ const authLink = setContext((_, { headers }) => {
 
 /////////////////////////
 const httpLink = new HttpLink({
-  uri: 'http://'+ process.env.REACT_APP_HOST_GRAPHAL +'/graphql'
+  uri: 'https://'+ process.env.REACT_APP_HOST_GRAPHAL +'/graphql'
 });
 
 // authLink.concat(httpLink)
@@ -221,7 +221,7 @@ const splitLink = split(
   wsLink,
   // httpLink,
   // authLink.concat(httpLink),
-  createUploadLink({ uri: 'http://'+ process.env.REACT_APP_HOST_GRAPHAL +'/graphql', headers:{ authorization: localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : "", } })
+  createUploadLink({ uri: 'https://'+ process.env.REACT_APP_HOST_GRAPHAL +'/graphql', headers:{ authorization: localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : "", } })
 );
 
 // const link = createUploadLink({ uri: "http://localhost:4000/graphql" });

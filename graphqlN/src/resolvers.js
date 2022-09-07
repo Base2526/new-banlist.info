@@ -1106,9 +1106,10 @@ export default {
 
       try{
         let { _id,  input} = args
-
-        let newFiles = [];
+        
         if(!_.isEmpty(input.files)){
+          let newFiles = [];
+
           const { createReadStream, filename, encoding, mimetype } = (await input.files).file
 
           const stream = createReadStream();
@@ -1131,15 +1132,18 @@ export default {
           });
 
           newFiles.push({ url: `${process.env.URL_HOST}${assetUniqName}`, filename, encoding, mimetype });
+        
+        
+          input = {...input, image: newFiles}
         }
 
-        let newInput = {...input, image: newFiles}
+        delete input.files;
 
-        console.log("updateUser : ", newInput)
-
-        return await User.findOneAndUpdate({ _id }, newInput, { new: true })
+        return await User.findOneAndUpdate({ _id }, input, { new: true })
       } catch(err) {
         logger.error(err.toString());
+
+        console.log("UpdateUser err :", err.toString())
         return;
       }
     },

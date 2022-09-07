@@ -10,6 +10,10 @@ import IconButton from "@mui/material/IconButton";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import CircularProgress from '@mui/material/CircularProgress';
 import { useQuery, useMutation, useApolloClient } from '@apollo/client';
+import TextField from "@mui/material/TextField";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import Box from "@mui/material/Box";
 
 import _ from "lodash";
 import deepdash from "deepdash";
@@ -19,11 +23,23 @@ import { logout } from "../../redux/actions/auth"
 
 import { gqlUser ,gqlUpdateUser } from "../../gqlQuery"
 
+let initValues = { displayName: "",  files: null }
+
 const index = (props) => {
   let history = useHistory();
   let inputFile = useRef(null) 
 
+  let myForm = useRef();
+
+  let {logout} = props
+
+  let user = props.user;//checkAuth()
+
   const [fileProfile, setFileProfile] = useState(null);
+
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [input, setInput]       = useState(initValues);
+  const [error, setError]       = useState(initValues);
 
   const client = useApolloClient();
 
@@ -32,7 +48,7 @@ const index = (props) => {
       update: (cache, {data: {updateUser}}) => {
         // let {state} = history.location
 
-        console.log("onUpdateUser :", updateUser )
+        console.log("onUpdateUser :", updateUser, props)
         /*
         const data1 = cache.readQuery({
           query: gqlPost,
@@ -59,9 +75,47 @@ const index = (props) => {
   );
   console.log("resultUpdateUser :", resultUpdateUser)
 
-  let {logout} = props
+  useEffect(()=>{
+    setInput({...input, displayName: user.displayName })
+  }, [])
 
-  let user = props.user;//checkAuth()
+  const onInputChange = (e) => {
+    const { name, value } = e.target;
+    setInput((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+    validateInput(e);
+  };
+
+  const validateInput = (e) => {
+    let { name, value } = e.target;
+    setError((prev) => {
+      const stateObj = { ...prev, [name]: "" };
+
+      switch (name) {
+        case "displayName": {
+          if (!value) {
+            stateObj[name] = "Please enter display name.";
+          }
+
+          if(user.displayName != value){
+            setIsUpdate(true)
+          }else{
+            setIsUpdate(false)
+          }
+          
+          break;
+        }
+
+        default:
+          break;
+      }
+
+      return stateObj;
+    });
+  };
+
 
   let useUser = useQuery(gqlUser, { variables: {id: user._id}, notifyOnNetworkStatusChange: true });
   if(useUser.loading || useUser.data.user == null){
@@ -87,85 +141,104 @@ const index = (props) => {
     event.preventDefault();
 
     setFileProfile(event.target.files[0])
+
+    setInput({...input, files: event.target.files[0] })
+
+    setIsUpdate(true)
+  }
+
+  const submitForm = async(event) => {
+    event.preventDefault();
+  
+    console.log("myForm.current.buttonId > :", myForm.current.buttonId )
+
+    // console.log(myForm.current);
+
+    switch(myForm.current.buttonId){
+      case "update":{
+        onUpdateUser({ variables: { id: currentUser._id, input }});
+        break;
+      }
+
+      case "logout":{
+          logout()
+          await client.refetchQueries({ include: "all" });
+          window.location.reload();
+          history.push("/")
+        break;
+      }
+    }
   }
 
   return (
     <div>
-      <div>Profiles</div>
-
-      <Stack direction="row" spacing={2}>
-        <input type='file' id='file' ref={inputFile} style={{display: 'none'}}  onChange={onChangeFile} />
-        <div style={{ position: "relative" }} >
-          <Avatar
-            className={"user-profile"}
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <Box
+            component="form"
             sx={{
-              height: 80,
-              width: 80
+              "& .MuiTextField-root": { m: 1, width: "50ch" }
             }}
-            variant="rounded"
-            alt="Example Alt"
-            src={ fileProfile === null ? imageSrc : URL.createObjectURL(fileProfile)}
+            ref={myForm}
+            onSubmit={submitForm}>
+
+          <div>Profiles</div>
+
+          <Stack direction="row" spacing={2}>
+            <input type='file' id='file' ref={inputFile} style={{display: 'none'}}  onChange={onChangeFile} />
+            <div style={{ position: "relative" }} >
+              <Avatar
+                className={"user-profile"}
+                sx={{
+                  height: 80,
+                  width: 80
+                }}
+                variant="rounded"
+                alt="Example Alt"
+                src={ fileProfile === null ? imageSrc : URL.createObjectURL(fileProfile)}
+              />
+              <IconButton
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  bottom: 0
+                }}
+                color="primary"
+                aria-label="upload picture"
+                component="span"
+                onClick={() => {
+                  // let newInputList = [
+                  //   ...inputList.slice(0, index),
+                  //   ...inputList.slice(index + 1, inputList.length)
+                  // ];
+
+                  // setInputList(newInputList);
+                  // onSnackbar({open:true, message:"Delete image"});
+
+                  inputFile.current.click();
+                }}
+              ><PhotoCamera /></IconButton>
+            </div>
+          </Stack>
+
+          <TextField
+            id="post-name-subname"
+            name="displayName"
+            label="Display name"
+            variant="filled"
+            required
+            value={input.displayName}
+            onChange={onInputChange}
+            onBlur={validateInput}
+            helperText={error.displayName}
+            error={_.isEmpty(error.displayName) ? false : true}
           />
-          <IconButton
-            style={{
-              position: "absolute",
-              right: 0,
-              bottom: 0
-            }}
-            color="primary"
-            aria-label="upload picture"
-            component="span"
-            onClick={() => {
-              // let newInputList = [
-              //   ...inputList.slice(0, index),
-              //   ...inputList.slice(index + 1, inputList.length)
-              // ];
-
-              // setInputList(newInputList);
-              // onSnackbar({open:true, message:"Delete image"});
-
-              inputFile.current.click();
-            }}
-          ><PhotoCamera /></IconButton>
-        </div>
-      </Stack>
-
-      <Typography variant="overline" display="block" gutterBottom>
-        Name : {currentUser.displayName}
-      </Typography>
-      <Typography variant="overline" display="block" gutterBottom>
-        Email : {currentUser.email}
-      </Typography>
-
-      <Button type="submit" variant="contained" color="primary" onClick={async() => { 
-        console.log("UPDATE :", user)
-        
-        let newInput = currentUser
-        if(fileProfile !== null){
-          newInput = {...newInput, files: fileProfile}
-        }
-
-        console.log("onUpdateUser :", newInput)
-
-        onUpdateUser({ variables: { id: newInput._id, input: newInput }});
-        
-      }}> UPDATE </Button>
-
-
-      <Button onClick={async() => { 
-        logout()
-        // logout(); 
-        // window.location.reload(false)
-
-        await client.refetchQueries({
-          include: "all", // Consider using "active" instead!
-        });
-
-        // history.push("/")
-        window.location.reload();
-
-        history.push("/")
-      }}>Logout</Button>
+          <Typography variant="overline" display="block" gutterBottom>
+            Email : {currentUser.email}
+          </Typography>
+          <Button disabled={!isUpdate} type="submit" variant="contained" color="primary" id="update"  onClick={ e => myForm.current.buttonId=e.target.id }>UPDATE</Button>
+          <Button type="submit" variant="contained" color="primary" id="logout"  onClick={ e => myForm.current.buttonId=e.target.id }>Logout</Button>
+        </Box>
+      </LocalizationProvider>
     </div>
   );
 };
