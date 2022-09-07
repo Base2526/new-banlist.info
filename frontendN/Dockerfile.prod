@@ -1,8 +1,8 @@
 FROM node:12-alpine as builder
 
-ENV REACT_APP_DEBUG TRUE
-ENV REACT_APP_URL https://bgcd-retail-audit-backend.bigc.co.th
-ENV REACT_APP_AUTHORIZATION YWRtaW46MTIzNA==
+# ENV REACT_APP_DEBUG TRUE
+# ENV REACT_APP_URL https://bgcd-retail-audit-backend.bigc.co.th
+# ENV REACT_APP_AUTHORIZATION YWRtaW46MTIzNA==
 
 ENV REACT_APP_HOST_GRAPHAL banlist.info
 
@@ -37,7 +37,8 @@ RUN npm run build
 
 
 # nginx state for serving content
-FROM nginx:1.18.0-alpine
+# FROM nginx:1.18.0-alpine
+FROM nginx:1.9.15-alpine
 # Set working directory to nginx asset directory
 WORKDIR /usr/share/nginx/html
 
