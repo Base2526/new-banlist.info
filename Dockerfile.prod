@@ -4,7 +4,7 @@ ENV REACT_APP_DEBUG TRUE
 ENV REACT_APP_URL https://bgcd-retail-audit-backend.bigc.co.th
 ENV REACT_APP_AUTHORIZATION YWRtaW46MTIzNA==
 
-ENV REACT_APP_HOST_GRAPHAL banlist.info
+ENV REACT_APP_HOST_GRAPHAL 157.245.51.177:4000
 
 ENV NODE_ENV development
 
@@ -50,12 +50,9 @@ COPY --from=builder /app/build .
 #COPY /etc/conf.d/nginx.conf /etc/nginx/conf.d/default.conf
 
 
-# SSL
-COPY ./ssl/FCAD0CB87FF0A54807D4335D436A2719.txt .well-known/pki-validation/FCAD0CB87FF0A54807D4335D436A2719.txt
-COPY ./ssl /etc/nginx-sp/ssl
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-# SSL
 
+COPY ./ssl/FCAD0CB87FF0A54807D4335D436A2719.txt .well-known/pki-validation/FCAD0CB87FF0A54807D4335D436A2719.txt
 
 # Containers run nginx with global directives and daemon off
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
