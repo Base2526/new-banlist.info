@@ -1,287 +1,239 @@
-import './styles.scss';
+import { createServer } from "http";
+import express from "express";
+import { ApolloServer, gql } from "apollo-server-express";
+import { ApolloServerPluginDrainHttpServer, ApolloServerPluginLandingPageLocalDefault } from "apollo-server-core";
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import { WebSocketServer } from "ws";
+import { useServer } from "graphql-ws/lib/use/ws";
+import jwt from 'jsonwebtoken';
+import * as fs from "fs";
 
-import { StrictMode } from "react";
-import ReactDOM from "react-dom";
+import {User} from './model'
+import connection from './mongo' 
+import typeDefs from "./typeDefs";
+import resolvers from "./resolvers";
+import pubsub from './pubsub'
 
-//////////////// redux /////////////////
-import { applyMiddleware, legacy_createStore as createStore, combineReducers, compose  } from "redux";
-import { configureStore } from '@reduxjs/toolkit'
-import { Provider } from "react-redux";
-import thunk from "redux-thunk";
-import { createLogger } from "redux-logger";    // Logger with default options
+const path = require('path');
 
-// persist
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import { PersistGate } from "redux-persist/integration/react";
-import { BrowserRouter, Switch } from "react-router-dom";
+const {
+    GraphQLUpload,
+    graphqlUploadExpress, // A Koa implementation is also exported.
+  } = require('graphql-upload');
 
-import reducers from "./redux/reducers";
+// const graphqlUploadExpress = require('graphql-upload/graphqlUploadExpress.js');
 
-const persistConfig = {
-  key: "root",
-  storage,
-};
+let logger = require("./utils/logger");
+let PORT = process.env.PORT || 4000;
 
-const reducer = persistReducer(persistConfig, reducers);
-// persist
+async function startApolloServer(typeDefs, resolvers) {
 
-// https://github.com/LogRocket/redux-logger/issues/6
-const logger = createLogger({
-  predicate: () => process.env.NODE_ENV !== "development",
-  // predicate: () => process.env.NODE_ENV !== 'production'
-});
+    // Create schema, which will be used separately by ApolloServer and
+    // the WebSocket server.
+    const schema = makeExecutableSchema({ typeDefs, resolvers });
 
-let middleware = [];
-if (process.env.NODE_ENV === 'development') {
-  middleware = [...middleware, thunk, logger];
-} else {
-  middleware = [...middleware, thunk];
-}
+    // Create an Express app and HTTP server; we will attach the WebSocket
+    // server and the ApolloServer to this HTTP server.
+    const app = express();
+    const httpServer = createServer(app);
 
-// thunk
-const store = createStore(reducer, compose(applyMiddleware(...middleware)) /*applyMiddleware(thunk, logger)*/);
-const persistor = persistStore(store);
-//////////////// redux /////////////////
+    // Set up WebSocket server.
+    const wsServer = new WebSocketServer({
+        server: httpServer,
+        path: "/graphql",
+    });
 
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  createHttpLink,
+    const getDynamicContext = async (ctx, msg, args) => {
+        // ctx is the graphql-ws Context where connectionParams live
+       if (ctx.connectionParams.authToken) {
+            //   const currentUser = await findUser(connectionParams.authentication);
+            //   return { currentUser };
 
-  split, HttpLink
-} from "@apollo/client";
-import { relayStylePagination, getMainDefinition } from "@apollo/client/utilities"
-import { setContext } from '@apollo/client/link/context';
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+            try {
+                let userId  = jwt.verify(ctx.connectionParams.authToken, process.env.JWT_SECRET);
 
-// import { WebSocketLink } from "@apollo/client/link/ws";
+                // code
+                // -1 : foce logout
+                //  0 : anonymums
+                //  1 : OK
 
-import { createClient } from 'graphql-ws';
+                // {status: true, code: 1, data}
 
-import { createUploadLink } from 'apollo-upload-client' // v15.0.0
+                let currentUser = await User.findById(userId)
+                
+                // console.log("currentUser >> " , currentUser._id)
+                return {...ctx, currentUser} 
+            } catch(err) {
+                // logger.error(err.toString());
+                console.log(">> ", err.toString())
+            }
+        }
+        // Otherwise let our resolvers know we don't have a current user
 
+        // console.log("getDynamicContext :", ctx.connectionParams.authToken)
 
-// import { WebSocketLink } from "@apollo/client/link/ws";
-// import { SubscriptionClient } from "subscriptions-transport-ws";
+        return { ...ctx, currentUser: null };
+    };
 
-import {ls_connecting} from "./redux/actions/ws"
+    const serverCleanup = useServer({ 
+            schema,
+            context: (ctx, msg, args) => {
+                // Returning an object will add that information to our
+                // GraphQL context, which all of our resolvers have access to.
 
+                return getDynamicContext(ctx, msg, args);
+            },
+            onConnect: async (ctx) => {
+                // Check authentication every time a client connects.
+                // if (tokenIsNotValid(ctx.connectionParams)) {
+                //   // You can return false to close the connection  or throw an explicit error
+                //   throw new Error('Auth token missing!');
+                // }
+                // 
+                logger.info(ctx.connectionParams);
 
+                if (ctx.connectionParams.authToken) {
+                    try {
+                        let userId  = jwt.verify(ctx.connectionParams.authToken, process.env.JWT_SECRET);
+        
+                        let result = await User.updateOne({ _id: userId }, { $set: { isOnline: true }})
 
+                        if(result.ok){
+                            pubsub.publish("CONVERSATION", {
+                                conversation:{
+                                  mutation: 'CONNECTED',
+                                  data: userId
+                                }
+                            });
+                        }
+                        
+                    } catch(err) {
+                        logger.error(err.toString());
+                    } 
+                }
+            },
+            onDisconnect: async (ctx, code, reason) =>{
+                logger.info(ctx.connectionParams);
+                if (ctx.connectionParams.authToken) {
+                    try {
+                        let userId  = jwt.verify(ctx.connectionParams.authToken, process.env.JWT_SECRET);
+        
+                        let result =  await User.updateOne({ _id: userId }, { $set: { isOnline: false } })
 
-// const httpLink = createHttpLink({
-//   uri: 'http://localhost:4000/graphql'
-// });
+                        if(result.ok){
+                            pubsub.publish("CONVERSATION", {
+                                conversation:{
+                                mutation: 'DISCONNECTED',
+                                data: ""
+                                }
+                            });
+                        }
+                    } catch(err) {
+                        logger.error(err.toString());
+                    }
+                }
+            }
+        }, 
+        wsServer);
 
+    // Set up ApolloServer.
+    const server = new ApolloServer({
+        schema,
+        csrfPrevention: true,
+        cache: "bounded",
+        uploads: false, // add this
+        plugins: [
+            // Proper shutdown for the HTTP server.
+            ApolloServerPluginDrainHttpServer({ httpServer }),
+        
+            // Proper shutdown for the WebSocket server.
+            {
+                async serverWillStart() {
+                return {
+                    async drainServer() {
+                    await serverCleanup.dispose();
+                    },
+                };
+                },
+            },
 
-console.log("process.env: ", process.env)
+            ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+        ],
 
+        // subscriptions: {
+        //     // path: "/subscriptions",
+        //     onConnect: () => {
+        //       console.log("Client connected for subscriptions");
+        //     },
+        //     onDisconnect: () => {
+        //       console.log("Client disconnected from subscriptions");
+        //     },
+        // },
 
-const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
+        context: async ({ req }) => {
+            // console.log("ApolloServer context ", req.headers)
 
-  let token = localStorage.getItem('token');
+            // https://daily.dev/blog/authentication-and-authorization-in-graphql
+            // throw Error("throw Error(user.msg);");
 
-  // return the headers to the context so httpLink can read them
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : "",
-      textHeaders: "axxxx1"
-    }
-  }
-});
+            // const decode = jwt.verify(token, 'secret');
 
+            if (req.headers && req.headers.authorization) {
+                var auth    = req.headers.authorization;
+                var parts   = auth.split(" ");
+                var bearer  = parts[0];
+                var token   = parts[1];
 
-/////////////////////////
-const httpLink = new HttpLink({
-  uri: 'http://'+ process.env.REACT_APP_HOST_GRAPHAL +'/graphql'
-});
+                if (bearer == "Bearer") {
+                    // let decode = jwt.verify(token, process.env.JWT_SECRET);
 
-// authLink.concat(httpLink)
+                    try {
+                        let userId  = jwt.verify(token, process.env.JWT_SECRET);
 
-const connecting = (status) =>{
-  let {ws} = store.getState()
-  if(ws){
-    ws.is_connnecting === status ? "" : store.dispatch(ls_connecting(status));
-  }
-}
+                        // code
+                        // -1 : foce logout
+                        //  0 : anonymums
+                        //  1 : OK
 
-let activeSocket, timedOut;
+                        // {status: true, code: 1, data}
 
-let restartRequestedBeforeConnected = false;
-let gracefullyRestart = () => {
-  restartRequestedBeforeConnected = true;
-};
+                        let currentUser = await User.findById(userId)
+                        
+                        // console.log("context >> " , data._id)
+                        return {...req, currentUser} 
+                    } catch(err) {
+                        logger.error( err.toString() );
+                    }
+                }
+            }
+            return {...req, currentUser: null}
+        }
+    });
+  
+    await server.start();
+    
+    // This middleware should be added before calling `applyMiddleware`.
+    app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 
-const wsLink = new GraphQLWsLink(createClient({
-  url: 'wss://'+ process.env.REACT_APP_HOST_GRAPHAL +'/subscription',
-  // reconnect: true,
-  disablePong: false,
-  connectionAckWaitTimeout: 0,
-  retryAttempts: 5,
-  keepAlive: 10_000,
-  retryWait: async function randomisedExponentialBackoff(retries) {
-
-    console.log("wsLink retryWait")
-    let retryDelay = 1000; // start with 1s delay
-    for (let i = 0; i < retries; i++) {
-      retryDelay *= 2;
-    }
-    await new Promise((resolve) =>
-      setTimeout(
-        resolve,
-        retryDelay +
-          // add random timeout from 300ms to 3s
-          Math.floor(Math.random() * (3000 - 300) + 300),
-      ),
-    );
-  },
-  shouldRetry: (errOrCloseEvent) => {
-    console.log("wsLink shouldRetry :")
-    return true;
-  },
-  connectionParams: {
-    authToken: localStorage.getItem('token'),
-    textHeaders: "axxxx2"
-  },
-  on: {
-    // connected: () => console.log("connected client"),
-    connecting: () => {
-      // this.setState({ socketStatus: 'connecting' });
-      // console.log("wsLink connecting");
-
-      connecting(true)
-    },
-    closed: () =>{
-      // console.log("wsLink closed");
-      activeSocket =null
-      connecting(false)
-    } ,
-    connected: (socket) =>{
-      activeSocket = socket
-
-      // console.log("wsLink connected client", socket);
-
-      // gracefullyRestart = () => {
-      //   if (socket.readyState === WebSocket.OPEN) {
-      //     socket.close(4205, 'Client Restart');
-
-      //     console.log("gracefullyRestart #1")
-      //   }
-      // };
-
-      // // just in case you were eager to restart
-      // if (restartRequestedBeforeConnected) {
-      //   restartRequestedBeforeConnected = false;
-      //   gracefullyRestart();
-
-      //   console.log("gracefullyRestart #2")
-      // }
-    },
-    keepAlive: 10, // ping server every 10 seconds
-    ping: (received) => {
-      console.log("wsLink #0")
-
-      if (!received){
-        console.log("#1")
-        timedOut = setTimeout(() => {
-          if (activeSocket.readyState === WebSocket.OPEN){
-            activeSocket.close(4408, 'Request Timeout');
-          }
-            
-        }, 5_000); // wait 5 seconds for the pong and then close the connection
-      } // sent
-    },
-    pong: (received) => {
-      console.log("wsLink #4")
-
-      if (received){
-        clearTimeout(timedOut); // pong is received, clear connection close timeout
-      } 
-    },
-  },
-}));
-
-// The split function takes three parameters:
-//
-// * A function that's called for each operation to execute
-// * The Link to use for an operation if the function returns a "truthy" value
-// * The Link to use for an operation if the function returns a "falsy" value
-const splitLink = split(
-  ({ query }) => {
-    const definition = getMainDefinition(query);
-    return (
-      definition.kind === 'OperationDefinition' &&
-      definition.operation === 'subscription'
-    );
-  },
-  wsLink,
-  // httpLink,
-  // authLink.concat(httpLink),
-  createUploadLink({ uri: 'http://'+ process.env.REACT_APP_HOST_GRAPHAL +'/graphql', headers:{ authorization: localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : "", } })
-);
-
-// const link = createUploadLink({ uri: "http://localhost:4000/graphql" });
-const client = new ApolloClient({
-  // uri: 'http://localhost:4040/graphql',
-  link: splitLink,
-  request: (operation) => {
-    console.log("request >>>>>>>  ", operation)
-  },
-  // link: new WebSocketLink({
-  //   uri: 'wss://localhost:4040/graphql',
-  //   options: {
-  //     reconnect: true,
-  //     connectionParams: {
-  //       headers: {
-  //         Authorization: token ? `Bearer ${token}` : "",
-  //       }
-  //     }
-  //   }
-  // }),
-  cache: new InMemoryCache({
-    typePolicies: {
-      Query: {
-        fields: {
-          books: relayStylePagination(),
+    server.applyMiddleware({ 
+        app , 
+        cors: {
+            origin: true,
+            credentials: true,
         },
-      },
-    },
-  }),
-  onError: ({ networkError, graphQLErrors }) => {
-    console.log("graphQLErrors", graphQLErrors)
-    console.log("networkError", networkError)
-  },
-  debug: true
-})
+        bodyParserConfig: {
+            limit:"50mb"
+        } 
+    });
 
-import App from "./App";
+    
+    app.use(express.static(path.join(__dirname, "/app/uploads")));
 
-// import { useConfigClient } from './useConfigClient'; 
-// console.log("useConfigClient :", useConfigClient())
-//////////////////////////////////
-
-/////////////////////////////////
-
-// replace console.* for disable log on production
-if (process.env.NODE_ENV === 'production') {
-  console.log = () => {}
-  console.error = () => {}
-  console.debug = () => {}
+    // Now that our HTTP server is fully set up, actually listen.
+    httpServer.listen(PORT, () => {
+        console.log(`🚀 Query endpoint ready at http://localhost:${PORT}${server.graphqlPath}`);
+        console.log(`🚀 Subscription endpoint ready at ws://localhost:${PORT}${server.graphqlPath}`);
+    });
 }
 
-ReactDOM.render(
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <StrictMode>
-        <ApolloProvider client={client}>
-          <App />
-        </ApolloProvider>
-      </StrictMode>
-    </PersistGate>
-  </Provider>,
-  document.getElementById("root")
-);
+startApolloServer(typeDefs, resolvers) 
