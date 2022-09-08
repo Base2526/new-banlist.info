@@ -28,12 +28,11 @@ const reducer = persistReducer(persistConfig, reducers);
 
 // https://github.com/LogRocket/redux-logger/issues/6
 const logger = createLogger({
-  predicate: () => process.env.NODE_ENV !== "development",
-  // predicate: () => process.env.NODE_ENV !== 'production'
+  predicate: () => process.env.REACT_APP_NODE_ENV !== "development",
 });
 
 let middleware = [];
-if (process.env.NODE_ENV === 'development') {
+if (process.env.REACT_APP_NODE_ENV === 'development') {
   middleware = [...middleware, thunk, logger];
 } else {
   middleware = [...middleware, thunk];
@@ -76,7 +75,7 @@ import {ls_connecting} from "./redux/actions/ws"
 // });
 
 
-console.log("process.env: ", process.env)
+console.log("process.env :: ", process.env)
 
 
 const authLink = setContext((_, { headers }) => {
@@ -96,9 +95,9 @@ const authLink = setContext((_, { headers }) => {
 
 
 /////////////////////////
-const httpLink = new HttpLink({
-  uri: 'https://'+ process.env.REACT_APP_HOST_GRAPHAL +'/graphql'
-});
+// const httpLink = new HttpLink({
+//   uri: 'https://'+ process.env.REACT_APP_HOST_GRAPHAL +'/graphql'
+// });
 
 // authLink.concat(httpLink)
 
@@ -117,7 +116,7 @@ let gracefullyRestart = () => {
 };
 
 const wsLink = new GraphQLWsLink(createClient({
-  url: 'wss://'+ process.env.REACT_APP_HOST_GRAPHAL +'/subscription',
+  url: (process.env.REACT_APP_NODE_ENV === "development" ? "ws://" + process.env.REACT_APP_HOST_GRAPHAL +'/graphql' : "wss://" + process.env.REACT_APP_HOST_GRAPHAL +'/subscription' ) ,
   // reconnect: true,
   disablePong: false,
   connectionAckWaitTimeout: 0,
@@ -221,7 +220,8 @@ const splitLink = split(
   wsLink,
   // httpLink,
   // authLink.concat(httpLink),
-  createUploadLink({ uri: 'https://'+ process.env.REACT_APP_HOST_GRAPHAL +'/graphql', headers:{ authorization: localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : "", } })
+  createUploadLink({ uri: (process.env.REACT_APP_NODE_ENV === "development" ? "http://" : "https://") + process.env.REACT_APP_HOST_GRAPHAL +'/graphql', 
+                    headers:{ authorization: localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : "", } })
 );
 
 // const link = createUploadLink({ uri: "http://localhost:4000/graphql" });
@@ -267,7 +267,7 @@ import App from "./App";
 /////////////////////////////////
 
 // replace console.* for disable log on production
-if (process.env.NODE_ENV === 'production') {
+if (process.env.REACT_APP_NODE_ENV === 'production') {
   console.log = () => {}
   console.error = () => {}
   console.debug = () => {}
