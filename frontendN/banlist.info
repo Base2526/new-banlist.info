@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 server {
     listen 443;
 
@@ -13,20 +12,4 @@ server {
         root /usr/share/nginx/html/;
         index index.html;
     }
-=======
-server {
-    listen 443;
-
-    ssl on;
-    ssl_certificate /etc/nginx-sp/ssl/banlist_info.crt;
-    ssl_certificate_key /etc/nginx-sp/ssl/private.key;
-
-    server_name banlist.info;
-    access_log /var/log/nginx/nginx.vhost.access.log;
-    error_log /var/log/nginx/nginx.vhost.error.log;
-    location / {
-        root /usr/share/nginx/html/;
-        index index.html;
-    }
->>>>>>> 559fb9a3ebf561f256d2eaf6bd474f98b219e565
 }
