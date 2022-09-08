@@ -49,6 +49,9 @@ import DialogLogin from "./DialogLogin";
 
 import Help from "./pages/help"
 
+import PrivacyPage from "./pages/basicContent/Privacy"
+import TermsPage from "./pages/basicContent/Terms"
+
 import { login, addedConversations, addedConversation, addedNotifications, addedNotification } from "./redux/actions/auth"
 
 import { gqlConversations, gqlBookmarksByUserId, subConversation, subBookmark, gqlNotifications, subNotification } from "./gqlQuery"
@@ -293,6 +296,15 @@ const App = (props) => {
                 <Route path="/help">
                   <Help />
                 </Route>
+
+                <Route path="/privacy">
+                  <PrivacyPage />
+                </Route>
+
+                <Route path="/terms">
+                  <TermsPage />
+                </Route>
+                
                 <PrivateRoute path="/">
                   <PrivatePage />
                 </PrivateRoute>   
