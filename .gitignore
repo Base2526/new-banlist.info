@@ -3,6 +3,7 @@ frontendN/ssl
 
 graphqlN/node_modules
 graphqlN/uploads
+graphqlN/src/logs
 
 mongo/data1
 mongo/data2
