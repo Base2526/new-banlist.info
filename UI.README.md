@@ -7,7 +7,7 @@
 
 
 การ build
-docker-compose -f docker-compose.ui.yml build
+1. docker-compose -f docker-compose.ui.yml build
 
 การ run
-docker-compose -f docker-compose.ui.yml up
+2. docker-compose -f docker-compose.ui.yml up
