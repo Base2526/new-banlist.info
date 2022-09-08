@@ -8,6 +8,7 @@ services:
       context: ./frontendN
       dockerfile: Dockerfile.dev
     environment:
+      - REACT_APP_NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
       - PORT=80
       - WATCHPACK_POLLING=true
@@ -16,7 +17,6 @@ services:
       - "80:80"
     volumes:
       - ./frontendN/src:/app/src
-    #  - ./fn/package.json:/app/package.json
       - ./uploads:/var/storage
     networks:
       - nodejs
@@ -46,6 +46,8 @@ services:
       # - MONGO_URI=mongodb://mongo1:27017,mongo2:27017,mongo3:27017/bl?replicaSet=rs
       - MONGO_URI=mongodb://mongo:27017/bl
       - URL_HOST=http://localhost:4000/
+
+      #     - URL_HOST=https://banlist.info/images/
 
       - JWT_SECRET=banlistinfo
     networks:
