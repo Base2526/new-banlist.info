@@ -1,5 +1,13 @@
-#1 run build
+การ clone 
+1. git clone https://github.com/Base2526/new-banlist.info.git
+2. git checkout develop
+3. git pull
+4. git branch feature/xxxx
+5. git checkout feature/xxxx
+
+
+การ build
 docker-compose -f docker-compose.ui.yml build
 
-#2 run
+การ run
 docker-compose -f docker-compose.ui.yml up
