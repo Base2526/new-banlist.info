@@ -46,6 +46,9 @@ const Breadcs = ({ title }) => {
   const phoneMatches = useRouteMatch("/phone/:jobid/edit");
   const phonesMatches = useRouteMatch("/phones");
 
+  const privacyMatche = useRouteMatch("/privacy");
+  const termsMatche = useRouteMatch("/terms");
+
   const handleClick = () => {};
   return (
     <div role="presentation" onClick={handleClick}>
@@ -285,6 +288,18 @@ const Breadcs = ({ title }) => {
         {phonesMatches && (
           <MuiLink component={Link} to="/phones">
             Phones
+          </MuiLink>
+        )}
+
+        {privacyMatche && (
+          <MuiLink component={Link} to="/privacy">
+            Privacy
+          </MuiLink>
+        )}
+
+        {termsMatche && (
+          <MuiLink component={Link} to="/terms">
+            Terms
           </MuiLink>
         )}
 

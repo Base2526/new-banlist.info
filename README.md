@@ -23,3 +23,8 @@ https://medium.com/geekculture/multiple-file-upload-with-apollo-server-3-react-g
 docker-compose 
 docker-compose -f docker-compose.dev.yml build
 docker-compose -f docker-compose.prod.yml build
+
+
+// SSL Websocket proxy with Nginx for Graphql Subscriptions
+https://sandny.com/2022/05/12/ssl-websocket-proxy-with-nginx-for-graphql-subscriptions/
+https://phoenixnap.com/kb/docker-nginx-reverse-proxy
