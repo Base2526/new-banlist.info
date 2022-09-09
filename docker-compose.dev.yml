@@ -58,6 +58,8 @@ services:
     image: mongo
     expose:
       - 27017
+    ports:
+      - "27017:27017"
     volumes:
       - ./mongo-single/data:/data/db
       - ./mongo-single/restore:/mongo-single/restore
