@@ -4,7 +4,14 @@
 3. git pull
 4. git branch feature/xxxx
 5. git checkout feature/xxxx
-
+ 
+การเอา feature/xxx merge to develop  รวมจะได้ code update ล่าสุด
+1. git checkout develop
+2. git pull
+3. git merge feature/xxx       : branch feature/xxx จะ merge เข้า develop แล้ว
+4. git branch -D feature/xxx   : ลบ branch feature/xxx 
+5. git branch feature/yyy      : จะได้ branch ใหม่ feature/yyy ที code feature/xxx รวมกับ develop แล้ว
+ุ6. git checkout feature/yyy
 
 การ build
 1. docker-compose -f docker-compose.ui.yml build
