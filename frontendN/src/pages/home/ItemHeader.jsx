@@ -32,6 +32,8 @@ const ItemHeader = (props) => {
 
     if(!userValue.loading){
         if(userValue.data.user == null || userValue.data.user.data ==null ){
+
+            console.log("userValue.data :", userValue.data, item)
             return <div />
         }
         let user = userValue.data.user.data
