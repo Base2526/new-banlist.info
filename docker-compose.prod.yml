@@ -27,6 +27,8 @@ services:
       dockerfile: Dockerfile.prod               
     ports:
       - "4000:4000"
+    env_file:
+      - ./.env
     volumes:
       - ./uploads:/app/uploads  
     environment:
@@ -39,7 +41,8 @@ services:
       - ELASTIC_INDEX=banlist_dev
       - PORT=4000
       # - MONGO_URI=mongodb://mongo1:27017,mongo2:27017,mongo3:27017/bl?replicaSet=rs
-      - MONGO_URI=mongodb://mongo:27017/bl
+      # - MONGO_URI=mongodb://mongo:27017/bl
+      - MONGO_URI=mongodb://${MONGO_INITDB_USERNAME}:${MONGO_INITDB_PASSWORD}@mongo:27017/${MONGO_INITDB_DATABASE}?authMechanism=DEFAULT
       - URL_HOST=https://banlist.info/images/
 
       - JWT_SECRET=banlistinfo
@@ -57,9 +60,12 @@ services:
       - 27017
     ports:
       - "27017:27017"
+    env_file:
+      - ./.env
     volumes:
       - ./mongo-single/data:/data/db
       - ./mongo-single/restore:/mongo-single/restore
+      - ./mongo-single/mongod.conf:/etc/mongod.conf
     # command:
     #   - ./mongo-single/restore/import.sh
     restart: always

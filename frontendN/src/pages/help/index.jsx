@@ -14,9 +14,6 @@ const index = (props) => {
     
     console.log("basicContentValue :", basicContentValue)
 
-/*
-
-*/
 
     return (
         <div>
