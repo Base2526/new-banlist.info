@@ -14,7 +14,7 @@ const Terms = (props) => {
     let history = useHistory();
 
     const basicContentValue = useQuery(gqlBasicContent, {
-        variables: {id: "6319ea476fef6e1fac25d3e7"},
+        variables: {id: "631cb358cc23758fc8a59acb"},
         notifyOnNetworkStatusChange: true,
     });
     
