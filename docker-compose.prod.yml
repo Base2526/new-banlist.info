@@ -55,7 +55,7 @@ services:
   #   Setup Api Mongo and mongo-express container
   ################################
   mongo:
-    image: mongo
+    image: mongo:${MONGOD_VERSION}
     expose:
       - 27017
     ports:
