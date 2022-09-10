@@ -14,7 +14,7 @@ const Privacy = (props) => {
     let history = useHistory();
 
     const basicContentValue = useQuery(gqlBasicContent, {
-        variables: {id: "6319ea2e6fef6e5c0d25d3d4"},
+        variables: {id: "631cb30fcc23758543a59ab8"},
         notifyOnNetworkStatusChange: true,
     });
     
