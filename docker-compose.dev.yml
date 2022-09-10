@@ -69,21 +69,21 @@ services:
     networks:
       - nodejs
 
-  mongoexpress:
-    image: mongo-express
-    ports:
-      - "8089:8081"
-    # links:
-    #   - mongo
-    environment: 
-      - ME_CONFIG_MONGODB_URL=mongodb://mongo:27017
-      - ME_CONFIG_MONGODB_SERVER=mongo
-      - ME_CONFIG_BASICAUTH_USERNAME=dev
-      - ME_CONFIG_BASICAUTH_PASSWORD=dev
-    depends_on:
-      - mongo
-    networks:
-      - nodejs
+  # mongoexpress:
+  #   image: mongo-express
+  #   ports:
+  #     - "8089:8081"
+  #   # links:
+  #   #   - mongo
+  #   environment: 
+  #     - ME_CONFIG_MONGODB_URL=mongodb://mongo:27017
+  #     - ME_CONFIG_MONGODB_SERVER=mongo
+  #     - ME_CONFIG_BASICAUTH_USERNAME=dev
+  #     - ME_CONFIG_BASICAUTH_PASSWORD=dev
+  #   depends_on:
+  #     - mongo
+  #   networks:
+  #     - nodejs
   ################################
 
 networks:
