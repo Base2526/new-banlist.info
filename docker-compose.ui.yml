@@ -11,6 +11,8 @@ services:
       - PORT=3000
       - WATCHPACK_POLLING=true
       - REACT_APP_HOST_GRAPHAL=banlist.info
+    env_file:
+      - ./.env
     ports:
       - "3000:3000"
     volumes:
