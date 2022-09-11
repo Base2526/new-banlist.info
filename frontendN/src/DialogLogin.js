@@ -156,7 +156,7 @@ const DialogLogin = (props) => {
           }
 
           <GoogleLogin
-            clientId="693724870615-gokanb6qicvjjhr69cjo5bbn67p602qn.apps.googleusercontent.com"
+            clientId="1094203865843-jqaj9am4tevtocg75tdirmtkh95k27cb.apps.googleusercontent.com"
             render={renderProps => (
               <button onClick={renderProps.onClick} disabled={renderProps.disabled}>This is my custom Google button</button>
             )}
@@ -164,6 +164,7 @@ const DialogLogin = (props) => {
             onSuccess={responseGoogle}
             onFailure={responseGoogle}
             cookiePolicy={'single_host_origin'}
+            isSignedIn={true}
           />
 
           <FacebookLogin
