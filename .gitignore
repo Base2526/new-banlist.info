@@ -13,4 +13,4 @@ mongo-single/data
 uploads
 
 .env
-.env.bak
+# .env.bak
