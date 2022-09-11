@@ -8,13 +8,13 @@ import { useHistory } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { useDeviceData } from "react-device-detect";
 
-import { gqlLogin, gqlConversations, gqlPosts, gqlHomes } from "./gqlQuery"
 
-import {
-  FacebookLoginButton,
-  GoogleLoginButton
-} from "react-social-login-buttons";
+
+import { FacebookLoginButton, GoogleLoginButton } from "react-social-login-buttons";
 import { GoogleLogin, useGoogleLogin  } from "react-google-login";
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+
+import { gqlLogin, gqlConversations, gqlPosts, gqlHomes } from "./gqlQuery"
 
 const DialogLogin = (props) => {
 
@@ -67,13 +67,17 @@ const DialogLogin = (props) => {
     onClose(value);
   };
 
+  const responseFacebook = (response) => {
+    console.log( "responseFacebook :", response);
+  }
+
   // https://github.com/Sivanesh-S/react-google-authentication/blob/master/src/utils/refreshToken.js
   const responseGoogle = async(response) => {
     console.log("responseGoogle :", response);
 
     const newAuthRes = await response.reloadAuthResponse();
 
-    console.log("newAuthRes :", newAuthRes)
+    console.log("responseGoogle newAuthRes :", newAuthRes)
 
     // localStorage.setItem('authToken', newAuthRes.id_token);
   };
@@ -154,6 +158,18 @@ const DialogLogin = (props) => {
           }
 
           <button className="button">Sign in with Google</button>
+
+          <FacebookLogin
+            appId="1227094848056324"
+            autoLoad={false}
+            // fields="name,email,picture"
+            // onClick={(e)=>{
+            //   console.log("FacebookLogin :", e)
+            // }}
+            callback={responseFacebook} 
+            render={renderProps => (
+              <button onClick={renderProps.onClick}>This is my custom FB button</button>
+            )}/>
         </DialogContentText>
         </DialogContent>
         <DialogContent>
