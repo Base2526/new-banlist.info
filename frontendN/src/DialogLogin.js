@@ -156,7 +156,7 @@ const DialogLogin = (props) => {
           }
 
           <GoogleLogin
-            clientId="693724870615-onvcum8flggc52pgiuhujv9n9iqtnirs.apps.googleusercontent.com"
+            clientId="693724870615-gokanb6qicvjjhr69cjo5bbn67p602qn.apps.googleusercontent.com"
             render={renderProps => (
               <button onClick={renderProps.onClick} disabled={renderProps.disabled}>This is my custom Google button</button>
             )}
