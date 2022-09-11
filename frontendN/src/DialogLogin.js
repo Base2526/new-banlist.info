@@ -14,9 +14,13 @@ import { FacebookLoginButton, GoogleLoginButton } from "react-social-login-butto
 import { GoogleLogin, useGoogleLogin  } from "react-google-login";
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 
+import { gapi } from "gapi-script"
+
 import { gqlLogin, gqlConversations, gqlPosts, gqlHomes } from "./gqlQuery"
 
 const DialogLogin = (props) => {
+
+  const clientId = "1094203865843-jqaj9am4tevtocg75tdirmtkh95k27cb.apps.googleusercontent.com";
 
   console.log("DialogLogin :", props)
   let history = useHistory();
@@ -54,6 +58,16 @@ const DialogLogin = (props) => {
     //   // messages
     // }
   }
+
+  useEffect(()=>{
+    const initClient = () =>{
+      gapi.client.init({
+        clientId: clientId,
+        scope: ""
+      })
+    }
+    gapi.load("client:auth2", initClient)
+  }, [])
 
   useEffect(()=>{
     console.log("input :", input)
@@ -156,7 +170,7 @@ const DialogLogin = (props) => {
           }
 
           <GoogleLogin
-            clientId="1094203865843-jqaj9am4tevtocg75tdirmtkh95k27cb.apps.googleusercontent.com"
+            clientId={clientId}
             render={renderProps => (
               <button onClick={renderProps.onClick} disabled={renderProps.disabled}>This is my custom Google button</button>
             )}
