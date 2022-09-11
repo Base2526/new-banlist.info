@@ -72,13 +72,11 @@ const DialogLogin = (props) => {
   }
 
   // https://github.com/Sivanesh-S/react-google-authentication/blob/master/src/utils/refreshToken.js
-  const responseGoogle = async(response) => {
+  const responseGoogle = (response) => {
     console.log("responseGoogle :", response);
 
-    const newAuthRes = await response.reloadAuthResponse();
-
-    console.log("responseGoogle newAuthRes :", newAuthRes)
-
+    // const newAuthRes = await response.reloadAuthResponse();
+    // console.log("responseGoogle newAuthRes :", newAuthRes)
     // localStorage.setItem('authToken', newAuthRes.id_token);
   };
 
@@ -157,7 +155,16 @@ const DialogLogin = (props) => {
             formUserLogin()
           }
 
-          <button className="button">Sign in with Google</button>
+          <GoogleLogin
+            clientId="693724870615-onvcum8flggc52pgiuhujv9n9iqtnirs.apps.googleusercontent.com"
+            render={renderProps => (
+              <button onClick={renderProps.onClick} disabled={renderProps.disabled}>This is my custom Google button</button>
+            )}
+            buttonText="Login"
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle}
+            cookiePolicy={'single_host_origin'}
+          />
 
           <FacebookLogin
             appId="1227094848056324"
