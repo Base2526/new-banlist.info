@@ -8,6 +8,8 @@ services:
     build: 
       context: ./frontendN
       dockerfile: Dockerfile.prod
+    env_file:
+      - ./.env
     ports:
       - "80:80"
       - "443:443"
