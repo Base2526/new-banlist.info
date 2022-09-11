@@ -20,9 +20,9 @@ import { gqlLogin, gqlConversations, gqlPosts, gqlHomes } from "./gqlQuery"
 
 const DialogLogin = (props) => {
 
-  const clientId = "1094203865843-jqaj9am4tevtocg75tdirmtkh95k27cb.apps.googleusercontent.com";
+  const googleClientId = process.env.GOOGLE_CLIENT_ID;
+  const facebookAppId =  process.env.FACEBOOK_APPID
 
-  console.log("DialogLogin :", props)
   let history = useHistory();
 
   let deviceData = useDeviceData();
@@ -62,7 +62,7 @@ const DialogLogin = (props) => {
   useEffect(()=>{
     const initClient = () =>{
       gapi.client.init({
-        clientId: clientId,
+        clientId: googleClientId,
         scope: ""
       })
     }
@@ -73,16 +73,9 @@ const DialogLogin = (props) => {
     console.log("input :", input)
   }, [input])
 
-  const handleClose = () => {
-    onClose(selectedValue);
-  };
 
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
-
-  const responseFacebook = (response) => {
-    console.log( "responseFacebook :", response);
+  const callbackFacebook = (response) => {
+    console.log( "callbackFacebook :", response);
 
     // status: "unknown"
     /*
@@ -98,8 +91,8 @@ const DialogLogin = (props) => {
   }
 
   // https://github.com/Sivanesh-S/react-google-authentication/blob/master/src/utils/refreshToken.js
-  const responseGoogle = (response) => {
-    console.log("responseGoogle :", response);
+  const onSuccess = (response) => {
+    console.log("onSuccess :", response);
 
     // const newAuthRes = await response.reloadAuthResponse();
     // console.log("responseGoogle newAuthRes :", newAuthRes)
@@ -132,15 +125,9 @@ const DialogLogin = (props) => {
     */ 
   };
 
-  const { signIn } = useGoogleLogin({
-    responseGoogle,
-    responseGoogle,
-    clientId: "693724870615-2hkmknke3sj6puo9c88nk67ouuu9m8l1.apps.googleusercontent.com",
-    isSignedIn: true,
-    accessType: 'offline',
-    responseType: 'code',
-    prompt: 'consent',
-  });
+  const onFailure = (response) =>{
+    console.log("onFailure :", response);
+  };
 
   const handleSubmit = (event) =>{
     event.preventDefault();
@@ -185,48 +172,27 @@ const DialogLogin = (props) => {
       </DialogContent>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          {/* <GoogleLogin
-            clientId="693724870615-2hkmknke3sj6puo9c88nk67ouuu9m8l1.apps.googleusercontent.com"
-            render={(renderProps) => (
-              // <button onClick={renderProps.onClick} disabled={renderProps.disabled}>This is my custom Google button</button>
-              <GoogleLoginButton
-                onClick={(e)=>{
-                  renderProps.onClick
-                }}
-                buttonText="Login"
-                className="mt-3 mb-3"
-              />
-            )}
-            buttonText="Login"
-            onSuccess={responseGoogle}
-            onFailure={responseGoogle}
-            cookiePolicy={"single_host_origin"}
-          /> */}
-
-          {
-            formUserLogin()
-          }
-
+          { formUserLogin() }
           <GoogleLogin
-            clientId={clientId}
+            clientId={googleClientId}
             render={renderProps => (
               <button onClick={renderProps.onClick} disabled={renderProps.disabled}>This is my custom Google button</button>
             )}
             buttonText="Login"
-            onSuccess={responseGoogle}
-            onFailure={responseGoogle}
+            onSuccess={onSuccess}
+            onFailure={onFailure}
             cookiePolicy={'single_host_origin'}
             isSignedIn={true}
           />
 
           <FacebookLogin
-            appId="1227094848056324"
+            appId={facebookAppId}
             autoLoad={false}
             // fields="name,email,picture"
             // onClick={(e)=>{
             //   console.log("FacebookLogin :", e)
             // }}
-            callback={responseFacebook} 
+            callback={callbackFacebook} 
             render={renderProps => (
               <button onClick={renderProps.onClick}>This is my custom FB button</button>
             )}/>
