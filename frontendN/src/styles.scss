@@ -1,9 +1,65 @@
-$font-stack: Helvetica, sans-serif;
+@import 'config-sass.scss';
+//$serifthai: 'Noto Serif Thai', serif !default;
+
+// $font-stack: Helvetica, sans-serif;
 $primary-color: rgb(218, 10, 10);
 
-body {
-  font: 100% $font-stack;
-  color: $primary-color;
-  font-size: 1.275rem !important;
-  background-color: #fff !important;
+:root{
+  font-size: 16px;
 }
+
+
+@mixin fontsnotPara() {
+  font-family: $noto-san-serifthai !important;
+}
+
+@mixin createfonts($getfm) {
+
+  @if $getfm{
+    @each $fontval in $getfm {
+      #{$fontval} {
+        font-family: $font-family !important;
+      }
+    }
+  }
+  
+}
+
+
+body {
+  * {
+    font-family: $font-family !important;
+  }
+  color: $primary-color;
+
+   
+}
+
+body{
+  .MuiContainer-root{
+    .MuiPaper-root *{
+        @include fontsnotPara()
+    }
+  }
+}
+
+.App-content-12{
+  .container{
+    height: auto;
+    min-height:calc(100vh - 50px);
+  }
+}
+
+@include createfonts($font-head);
+
+@import 'sass-components/header';
+@import 'sass-components/breadcrumb';
+@import 'sass-components/utilities';
+
+
+
+
+
+  
+  
+

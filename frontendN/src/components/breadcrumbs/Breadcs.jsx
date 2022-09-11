@@ -2,6 +2,7 @@ import Typography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import { Link, useRouteMatch } from "react-router-dom";
 import MuiLink from "@material-ui/core/Link";
+import HomeIcon from '@mui/icons-material/Home';
 
 const Breadcs = ({ title }) => {
   const homeMatches = useRouteMatch("/");
@@ -51,11 +52,11 @@ const Breadcs = ({ title }) => {
 
   const handleClick = () => {};
   return (
-    <div role="presentation" onClick={handleClick}>
+    <div role="presentation" onClick={handleClick} className="">
       <Breadcrumbs aria-label="breadcrumb">
         {homeMatches && (
           <MuiLink component={Link} to="/">
-            Home
+           <HomeIcon /> Home 
           </MuiLink>
         )}
         {postsMatches && (

@@ -1,0 +1,20 @@
+
+
+@each $abbr, $name in ("t": "top", "r": "right", "b": "bottom", "l": "left"){
+    @for $i from 1 through 20 {
+        .m#{$abbr}-#{$i}{
+            margin-#{$name}: 0.5rem * $i
+        }
+    }
+}
+
+@each $abbr, $name in ("t": "top", "r": "right", "b": "bottom", "l": "left"){
+    @for $i from 1 through 20 {
+        .p#{$abbr}-#{$i}{
+            padding-#{$name}: 0.5rem * $i
+        }
+    }
+}
+
+
+

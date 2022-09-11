@@ -1,0 +1,8 @@
+header{ 
+     .MuiTypography-h6{
+        @media (max-width:$sm){
+            line-height: 1.3;
+        }
+       
+    }
+}
