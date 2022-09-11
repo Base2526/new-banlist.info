@@ -112,7 +112,7 @@ const DialogLogin = (props) => {
                 <label>Password </label>
                 <input type="password" name="password" value={input.password} onChange={onInputChange} required />
               </div>
-              <button type="submit">Login</button>
+              <button type="submit" >Login </button>
             </form>
   }
 

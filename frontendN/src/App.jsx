@@ -283,6 +283,7 @@ const App = (props) => {
             <div className={props.classes.toolbar} />
             <Breadcs title={""} />
             <div className="container">
+             
               <Switch>
                 <Route path="/" exact>
                   <Home />
@@ -312,6 +313,7 @@ const App = (props) => {
                   <NoMatch />
                 </Route>     
               </Switch>
+              
             </div>
           </main>
         </div>
