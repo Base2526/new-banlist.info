@@ -257,7 +257,7 @@ const BookmarkList = (props) => {
             </DialogActions>
           </Dialog>
         )}
-        <Footer />
+        {/* <Footer /> */}
       </Box>
     );
   };

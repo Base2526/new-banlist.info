@@ -759,7 +759,7 @@ const Post = (props) => {
         />
       )}
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

@@ -341,7 +341,7 @@ const BasicContentList = (props) => {
           history.push("/basic-content/new");
         }}
       />
-      <Footer />
+      {/* <Footer /> */}
     </UserListContainer>
   );
 };

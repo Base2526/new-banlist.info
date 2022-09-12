@@ -178,7 +178,7 @@ const DblogList = (props) => {
           </DialogActions>
         </Dialog>
       )}
-      <Footer />
+      {/* <Footer /> */}
     </Box>
   );
 };

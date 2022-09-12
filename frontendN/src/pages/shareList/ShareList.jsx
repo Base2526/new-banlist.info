@@ -219,7 +219,7 @@ const ShareList = (props) => {
           </DialogActions>
         </Dialog>
       )}
-      <Footer />
+      {/* <Footer /> */}
     </Box>
   );
 };

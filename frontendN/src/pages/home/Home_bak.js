@@ -394,7 +394,7 @@ const Home = (props) => {
             count={total}
           />
         </Container>
-        <Footer />
+        {/* <Footer /> */}
       </div>
 
       {snackbar.open && (

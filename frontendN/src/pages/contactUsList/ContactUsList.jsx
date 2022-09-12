@@ -234,7 +234,7 @@ const ContactUsList = (props) => {
             </DialogActions>
           </Dialog>
         )}
-        <Footer />
+        {/* <Footer /> */}
       </UserListContainer>
     );
   };

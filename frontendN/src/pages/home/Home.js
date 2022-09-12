@@ -383,7 +383,7 @@ const Home = (props) => {
               </div>
           }
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
 
       {snackbar.open && (

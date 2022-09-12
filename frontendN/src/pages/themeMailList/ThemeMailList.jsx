@@ -219,7 +219,7 @@ const ThemeMailList = (props) => {
         }}
       />
 
-      <Footer />
+      {/* <Footer /> */}
     </UserListContainer>
   );
 };

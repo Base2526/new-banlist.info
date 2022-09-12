@@ -234,7 +234,7 @@ const BankList = (props) => {
         }}
       />
 
-      <Footer />
+      {/* <Footer /> */}
     </UserListContainer>
   );
 };

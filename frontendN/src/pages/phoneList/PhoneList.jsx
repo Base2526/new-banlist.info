@@ -285,7 +285,7 @@ const PhoneList = (props) => {
         }
       </SpeedDial>
       
-      <Footer />
+      {/* <Footer /> */}
     </Box>
   );
 };

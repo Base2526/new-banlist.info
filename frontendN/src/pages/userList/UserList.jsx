@@ -271,7 +271,7 @@ const UserList = (props) => {
           history.push("/user/new");
         }}
       />
-      <Footer />
+      {/* <Footer /> */}
     </UserListContainer>
   );
 };

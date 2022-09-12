@@ -423,7 +423,7 @@ const PostList = (props) => {
         }
       </SpeedDial>
       
-      <Footer />
+      {/* <Footer /> */}
     </Box>
   );
 };
