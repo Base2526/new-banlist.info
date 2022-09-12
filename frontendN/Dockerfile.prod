@@ -1,8 +1,5 @@
 FROM node:12-alpine as builder
 
-ENV REACT_APP_HOST_GRAPHAL banlist.info
-ENV REACT_APP_NODE_ENV production
-
 RUN apk add --update --no-cache \
     make \
     g++ \

@@ -95,11 +95,6 @@ const authLink = setContext((_, { headers }) => {
 
 
 /////////////////////////
-// const httpLink = new HttpLink({
-//   uri: 'https://'+ process.env.REACT_APP_HOST_GRAPHAL +'/graphql'
-// });
-
-// authLink.concat(httpLink)
 
 const connecting = (status) =>{
   let {ws} = store.getState()

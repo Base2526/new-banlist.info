@@ -8,13 +8,9 @@ services:
       context: ./frontendN
       dockerfile: Dockerfile.dev
     environment:
-      - REACT_APP_NODE_ENV=development
-      - CHOKIDAR_USEPOLLING=true
-      - PORT=3000
-      - WATCHPACK_POLLING=true
-      - REACT_APP_HOST_GRAPHAL=localhost:4000
+      - PORT=${FRONTEND_PORT}
     env_file:
-      - ./.env
+      - ./.env.dev
     ports:
       - "3000:3000"
     volumes:
@@ -34,24 +30,12 @@ services:
     ports:
       - "4000:4000"
     env_file:
-      - ./.env
+      - ./.env.dev
     volumes:
       - ./graphqlN/src:/app/src        
       - ./uploads:/app/uploads    
     environment:
-      - CHOKIDAR_USEPOLLING=true
-      - WATCHPACK_POLLING=true
-
-      - ELASTIC_URL=http://elasticsearch:9200
-      - ELASTIC_USERNAME=elastic
-      - ELASTIC_PASSWORD=changeme
-      - ELASTIC_INDEX=banlist_dev
-      - PORT=4000
-      # - MONGO_URI=mongodb://mongo1:27017,mongo2:27017,mongo3:27017/bl?replicaSet=rs
-      # - MONGO_URI=mongodb://mongo:27017/bl
       - MONGO_URI=mongodb://${MONGO_INITDB_USERNAME}:${MONGO_INITDB_PASSWORD}@mongo:27017/${MONGO_INITDB_DATABASE}?authMechanism=DEFAULT
-      - URL_HOST=http://localhost:4000/
-      - JWT_SECRET=banlistinfo
     networks:
       - nodejs
   ################################
@@ -64,52 +48,17 @@ services:
     expose:
       - 27017
     ports:
-      - "27017:27017"
-    
-    # command:
-    #   - ./mongo-single/restore/import.sh
-    # command: mongod --auth
-    # environment:
-      # - MONGO_INITDB_DATABASE=${MONGOD_DATABASE}
-      # - MONGO_INITDB_ROOT_USERNAME=${MONGOD_USER}
-      # - MONGO_INITDB_ROOT_PASSWORD=${MONGOD_PASS}
-      # - MONGO_INITDB_USERNAME=somkid
-      # - MONGO_INITDB_PASSWORD=1234
-      # - MONGO_INITDB_ROOT_USERNAME=root
-      # - MONGO_INITDB_ROOT_PASSWORD=123456
-      # - MONGO_INITDB_DATABASE=bl
-      # - MONGO_INITDB_USERNAME=kajame
-      # - MONGO_INITDB_PASSWORD=111111
-      
+      - "27018:27017"
     env_file:
-      - ./.env
+      - ./.env.dev
     volumes:
-      # - ./mongo-single/001_users.js:/docker-entrypoint-initdb.d/001_users.js:ro
-      # - ./mongo-single/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
       - ./mongo-single/data:/data/db
       - ./mongo-single/restore:/mongo-single/restore
       - ./mongo-single/mongod.conf:/etc/mongod.conf
     restart: always
     networks:
       - nodejs
-
-  # mongoexpress:
-  #   image: mongo-express
-  #   ports:
-  #     - "8089:8081"
-  #   # links:
-  #   #   - mongo
-  #   environment: 
-  #     - ME_CONFIG_MONGODB_URL=mongodb://mongo:27017
-  #     - ME_CONFIG_MONGODB_SERVER=mongo
-  #     - ME_CONFIG_BASICAUTH_USERNAME=dev
-  #     - ME_CONFIG_BASICAUTH_PASSWORD=dev
-  #   depends_on:
-  #     - mongo
-  #   networks:
-  #     - nodejs
-  ################################
-
+      
 networks:
   nodejs:
     external: true 

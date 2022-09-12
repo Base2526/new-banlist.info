@@ -19,9 +19,11 @@ import { gapi } from "gapi-script"
 import { gqlLogin, gqlConversations, gqlPosts, gqlHomes } from "./gqlQuery"
 
 const DialogLogin = (props) => {
+  
+  const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const facebookAppId =  process.env.REACT_APP_FACEBOOK_APPID
 
-  const googleClientId = process.env.GOOGLE_CLIENT_ID;
-  const facebookAppId =  process.env.FACEBOOK_APPID
+  console.log("DialogLogin :", process.env )
 
   let history = useHistory();
 

@@ -1131,7 +1131,7 @@ export default {
             });
           });
 
-          newFiles.push({ url: `${process.env.URL_HOST}${assetUniqName}`, filename, encoding, mimetype });
+          newFiles.push({ url: `${process.env.RA_HOST}${assetUniqName}`, filename, encoding, mimetype });
         
         
           input = {...input, image: newFiles}
@@ -1227,7 +1227,7 @@ export default {
                 });
               });
     
-              const urlForArray = `${process.env.URL_HOST}${assetUniqName}`;
+              const urlForArray = `${process.env.RA_HOST}${assetUniqName}`;
               newFiles.push({ url: urlForArray, filename, encoding, mimetype });
             }
   
@@ -1291,7 +1291,7 @@ export default {
                   });
                 });
       
-                const urlForArray = `${process.env.URL_HOST}${assetUniqName}`;
+                const urlForArray = `${process.env.RA_HOST}${assetUniqName}`;
                 newFiles.push({ url: urlForArray, filename, encoding, mimetype });
               }else{
                 if(input.files[i].delete){
@@ -1997,7 +1997,7 @@ export default {
             });
           });
 
-          const urlForArray = `${process.env.URL_HOST}${assetUniqName}`;
+          const urlForArray = `${process.env.RA_HOST}${assetUniqName}`;
           url.push({ url: urlForArray });
         }
 
@@ -2144,7 +2144,7 @@ export default {
             });
           });
 
-          const urlForArray = `${process.env.URL_HOST}${assetUniqName}`;
+          const urlForArray = `${process.env.RA_HOST}${assetUniqName}`;
           url.push({ url: urlForArray });
         }
 

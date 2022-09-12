@@ -5,22 +5,9 @@ services:
     build: 
       context: ./frontendN
       dockerfile: Dockerfile.ui
-    environment:
-      - REACT_APP_NODE_ENV=ui
-      - CHOKIDAR_USEPOLLING=true
-      - PORT=3000
-      - WATCHPACK_POLLING=true
-      - REACT_APP_HOST_GRAPHAL=banlist.info
     env_file:
-      - ./.env
+      - ./.env.ui
     ports:
       - "3000:3000"
     volumes:
       - ./frontendN/src:/app/src
-      # - ./uploads:/var/storage
-    networks:
-      - nodejs
-networks:
-  nodejs:
-    external: true 
-    name: banlist-network
