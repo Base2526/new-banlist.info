@@ -20,7 +20,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { useQuery } from "@apollo/client";
 
 import {gqlContactUs, gqlPost, gqlUser, gqlTContactUs} from "../../gqlQuery"
-import Footer from "../footer";
+// import Footer from "../footer";
 import Table from "../../TableContainer"
   
 const ContactUsList = (props) => {

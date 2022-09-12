@@ -26,7 +26,7 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import { useQuery, useMutation } from "@apollo/client";
 
 import {gqlBasicContents, gqlDeleteBasicContent} from "../../gqlQuery"
-import Footer from "../footer";
+// import Footer from "../footer";
 import Table from "../../TableContainer"
 
 const BasicContentList = (props) => {

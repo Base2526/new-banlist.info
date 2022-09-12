@@ -23,7 +23,7 @@ import { useQuery } from "@apollo/client";
 import Box from "@mui/material/Box";
 
 import {gqlShares, gqlPost, gqlUser} from "../../gqlQuery"
-import Footer from "../footer";
+// import Footer from "../footer";
 import Table from "../../TableContainer"
 
 const ShareList = (props) => {

@@ -26,7 +26,7 @@ import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import { connect } from "react-redux";
 
 
-import Footer from "../footer";
+// import Footer from "../footer";
 import {gqlPosts, gqlBookmarksByPostId, gqlShareByPostId, gqlComment, gqlDeletePost} from "../../gqlQuery"
 import ReadMoreMaster from "../../utils/ReadMoreMaster"
 import Table from "../../TableContainer"

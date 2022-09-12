@@ -22,7 +22,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import LinearProgress from '@mui/material/LinearProgress';
 
 import {gqlUsers, gqlPostsByUser, gqlDeleteUser} from "../../gqlQuery"
-import Footer from "../footer";
+// import Footer from "../footer";
 import Table from "../../TableContainer"
 
 const UserList = (props) => {

@@ -31,7 +31,7 @@ import moment from "moment";
 
 import PanelComment from "./PanelComment";
 import PopupSnackbar from "./PopupSnackbar";
-import Footer from "./Footer";
+// import Footer from "./Footer";
 import SearchBar from "./SearchBar";
 import Pagination from "./Pagination";
 

@@ -26,7 +26,7 @@ import Box from "@mui/material/Box";
 import _ from "lodash"
 import { useQuery } from "@apollo/client";
 import { gqlDblog } from "../../gqlQuery"
-import Footer from "../footer";
+// import Footer from "../footer";
 
 import Table from "../../TableContainer"
 
