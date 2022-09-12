@@ -14,14 +14,14 @@ mongoimport --db dbName --collection collectionName --file fileName.json
 3. mongosh เข้าไปเพื่อสร้าง user admin 
    3.1  use admin
    3.2  db.createUser({
-            user: "xxx",
-            pwd: "yyy",
+            user: "root",
+            pwd: "b9be11166d72e9e3ae7fd407165e4bd2",
             roles: [ { role: 'root', db: 'admin' } ]
         });
 
          <!-- db.createUser({
-            user: "xxx",
-            pwd: "yyy",
+            user: "banlistinfo",
+            pwd: "6c09093474284f6bfc3749a5bd24cbb6",
             roles: [ { role: 'readWrite', db: 'bl' } ]
         }); -->
 

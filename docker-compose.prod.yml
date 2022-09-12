@@ -1,5 +1,4 @@
 version: "3"
-
 services:
   ################################
   #   Setup React-admin container
@@ -9,7 +8,7 @@ services:
       context: ./frontendN
       dockerfile: Dockerfile.prod
     env_file:
-      - ./.env
+      - ./env/.env.prod
     ports:
       - "80:80"
       - "443:443"
@@ -30,28 +29,14 @@ services:
     ports:
       - "4000:4000"
     env_file:
-      - ./.env
+      - ./env/.env.prod
     volumes:
       - ./uploads:/app/uploads  
     environment:
-      - CHOKIDAR_USEPOLLING=true
-      - WATCHPACK_POLLING=true
-
-      - ELASTIC_URL=http://elasticsearch:9200
-      - ELASTIC_USERNAME=elastic
-      - ELASTIC_PASSWORD=changeme
-      - ELASTIC_INDEX=banlist_dev
-      - PORT=4000
-      # - MONGO_URI=mongodb://mongo1:27017,mongo2:27017,mongo3:27017/bl?replicaSet=rs
-      # - MONGO_URI=mongodb://mongo:27017/bl
       - MONGO_URI=mongodb://${MONGO_INITDB_USERNAME}:${MONGO_INITDB_PASSWORD}@mongo:27017/${MONGO_INITDB_DATABASE}?authMechanism=DEFAULT
-      - URL_HOST=https://banlist.info/images/
-
-      - JWT_SECRET=banlistinfo
     networks:
       - nodejs
   ################################
-
 
   ################################
   #   Setup Api Mongo and mongo-express container
@@ -63,40 +48,16 @@ services:
     ports:
       - "27017:27017"
     env_file:
-      - ./.env
+      - ./env/.env.prod
     volumes:
       - ./mongo-single/data:/data/db
       - ./mongo-single/restore:/mongo-single/restore
       - ./mongo-single/mongod.conf:/etc/mongod.conf
-    # command:
-    #   - ./mongo-single/restore/import.sh
     restart: always
     networks:
       - nodejs
-
-  # mongoexpress:
-  #   image: mongo-express
-  #   ports:
-  #     - "8081:8081"
-  #   # links:
-  #   #   - mongo
-  #   environment: 
-  #     - ME_CONFIG_MONGODB_URL=mongodb://mongo:27017
-  #     - ME_CONFIG_MONGODB_SERVER=mongo
-  #     - ME_CONFIG_BASICAUTH_USERNAME=dev
-  #     - ME_CONFIG_BASICAUTH_PASSWORD=dev
-  #   depends_on:
-  #     - mongo
-  #   networks:
-  #     - nodejs
-  ################################
   
 networks:
   nodejs:
     external: true 
     name: banlist-network
-
-# networks:
-#   default:
-#     name: banlist-network
-#     external: true
