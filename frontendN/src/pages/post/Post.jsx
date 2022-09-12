@@ -31,7 +31,7 @@ import AttackFileField from "./AttackFileField";
 import RadioGroupField from "./RadioGroupField";
 import TelInputField from "./TelInputField";
 import PopupSnackbar from "../home/PopupSnackbar";
-import Footer from "../footer";
+// import Footer from "../footer";
 import Editor from "../../components/editor/Editor";
 
 import { useQuery, useMutation } from "@apollo/client";
@@ -759,7 +759,7 @@ const Post = (props) => {
         />
       )}
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

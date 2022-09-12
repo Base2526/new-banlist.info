@@ -223,7 +223,7 @@ const RoleList = (props) => {
         }}
       />
 
-      <Footer />
+      {/* <Footer /> */}
     </Box>
   );
 };

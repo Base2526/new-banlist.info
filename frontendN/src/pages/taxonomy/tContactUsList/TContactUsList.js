@@ -226,7 +226,7 @@ const TContactUsList = (props) => {
                 }}
             />
 
-            <Footer />
+            {/* <Footer /> */}
         </UserListContainer>
     );
 };

@@ -25,7 +25,7 @@ import queryString from 'query-string';
 
 import PanelComment from "./PanelComment";
 import PopupSnackbar from "./PopupSnackbar";
-import Footer from "../footer";
+// import Footer from "../footer";
 import SearchBar from "./SearchBar";
 import Pagination from "./Pagination";
 import DialogLogin from "../../DialogLogin";
@@ -383,7 +383,7 @@ const Home = (props) => {
               </div>
           }
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
 
       {snackbar.open && (

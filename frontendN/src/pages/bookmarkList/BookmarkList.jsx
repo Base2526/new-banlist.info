@@ -21,7 +21,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { useQuery } from "@apollo/client";
 
 import {gqlBookmarks, gqlPost, gqlUser} from "../../gqlQuery"
-import Footer from "../footer";
+// import Footer from "../footer";
 import Table from "../../TableContainer"
   
 const BookmarkList = (props) => {
@@ -257,7 +257,7 @@ const BookmarkList = (props) => {
             </DialogActions>
           </Dialog>
         )}
-        <Footer />
+        {/* <Footer /> */}
       </Box>
     );
   };

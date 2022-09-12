@@ -192,7 +192,7 @@ const SocketList = (props) => {
           </DialogActions>
         </Dialog>
       )}
-      <Footer />
+      {/* <Footer /> */}
     </Box>
   );
 };
