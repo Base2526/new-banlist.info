@@ -10,7 +10,7 @@ services:
     environment:
       - PORT=${FRONTEND_PORT}
     env_file:
-      - ./.env.dev
+      - ./env/.env.dev
     ports:
       - "3000:3000"
     volumes:
@@ -30,7 +30,7 @@ services:
     ports:
       - "4000:4000"
     env_file:
-      - ./.env.dev
+      - ./env/.env.dev
     volumes:
       - ./graphqlN/src:/app/src        
       - ./uploads:/app/uploads    
@@ -50,7 +50,7 @@ services:
     ports:
       - "27018:27017"
     env_file:
-      - ./.env.dev
+      - ./env/.env.dev
     volumes:
       - ./mongo-single/data:/data/db
       - ./mongo-single/restore:/mongo-single/restore

@@ -6,7 +6,7 @@ services:
       context: ./frontendN
       dockerfile: Dockerfile.ui
     env_file:
-      - ./.env.ui
+      - ./env/.env.ui
     ports:
       - "3000:3000"
     volumes:
