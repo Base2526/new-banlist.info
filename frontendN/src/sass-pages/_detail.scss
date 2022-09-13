@@ -1,0 +1,12 @@
+.col-container {
+    @media (max-width:$sm){
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        .col1,
+        .col2{
+            flex-grow: 1;
+            width: 100%;
+        }
+    }
+   
+}

@@ -1,4 +1,5 @@
 @import 'config-sass.scss';
+@import 'sass-mixin/fucntion';
 //$serifthai: 'Noto Serif Thai', serif !default;
 
 // $font-stack: Helvetica, sans-serif;
@@ -43,7 +44,25 @@ body{
   }
 }
 
+.row{
+  margin-left: -1rem;
+  margin-right: -1rem;
+  width: 100%;
+}
+.container{
+  padding-left: 1rem;
+  padding-right:1rem;
+  position: relative;
+  width: 100%;
+  @include container();
+}
 .App-content-12{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-bottom: 0 !important;
+  // @media (min-width:$md){
+  //   padding-left: 1.5rem !important;
+  // }
   .container{
     height: auto;
     min-height:calc(100vh - 50px);
@@ -55,6 +74,8 @@ body{
 @import 'sass-components/header';
 @import 'sass-components/breadcrumb';
 @import 'sass-components/utilities';
+@import 'sass-components/home';
+@import 'sass-pages/detail'
 
 
 
