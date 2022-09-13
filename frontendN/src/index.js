@@ -75,7 +75,7 @@ import {ls_connecting} from "./redux/actions/ws"
 // });
 
 
-console.log("process.env :: ", process.env)
+// console.log("process.env :: ", process.env)
 
 
 const authLink = setContext((_, { headers }) => {
@@ -262,11 +262,11 @@ import App from "./App";
 /////////////////////////////////
 
 // replace console.* for disable log on production
-// if (process.env.REACT_APP_NODE_ENV === 'production') {
-//   console.log = () => {}
-//   console.error = () => {}
-//   console.debug = () => {}
-// }
+if (process.env.REACT_APP_NODE_ENV === 'production') {
+   console.log = () => {}
+   console.error = () => {}
+   console.debug = () => {}
+}
 
 ReactDOM.render(
   <Provider store={store}>
