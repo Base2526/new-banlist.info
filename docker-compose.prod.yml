@@ -40,9 +40,9 @@ services:
       - ./uploads:/app/uploads  
     environment:
       - MONGO_URI=mongodb://${MONGO_INITDB_USERNAME}:${MONGO_INITDB_PASSWORD}@mongo:27017/${MONGO_INITDB_DATABASE}?authMechanism=DEFAULT
-      - RA_HOST: ${RA_HOST}
-      - GRAPHQL_PORT: ${GRAPHQL_PORT}
-      - JWT_SECRET: ${JWT_SECRET}
+      - RA_HOST=${RA_HOST}
+      - GRAPHQL_PORT=${GRAPHQL_PORT}
+      - JWT_SECRET=${JWT_SECRET}
     networks:
       - nodejs
   ################################
