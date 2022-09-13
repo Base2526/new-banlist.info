@@ -25,15 +25,10 @@ services:
   ################################
   #   Setup Api Graphql container
   ################################
-  
   graphql:
     build: 
       context: ./graphqlN
       dockerfile: Dockerfile.prod   
-      # args:
-      #   RA_HOST: ${RA_HOST}
-      #   GRAPHQL_PORT: ${GRAPHQL_PORT}
-      #   JWT_SECRET: ${JWT_SECRET}
     ports:
       - "4000:4000"
     volumes:
