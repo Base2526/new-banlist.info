@@ -38,9 +38,9 @@ const DialogLogin = (props) => {
 
       console.log("onCompleted :", data)
 
-      localStorage.setItem('token', data.login.token)
-      login(data.login.data)
-      onComplete()
+      // localStorage.setItem('token', data.login.token)
+      // login(data.login.data)
+      // onComplete()
     },
     onError(err){
       console.log("onError :", err)
