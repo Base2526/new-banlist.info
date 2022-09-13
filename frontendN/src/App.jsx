@@ -283,37 +283,54 @@ const App = (props) => {
             <div className={props.classes.toolbar} />
             <Breadcs title={""} />
             <div className="container">
-             
-              <Switch>
-                <Route path="/" exact>
-                  <Home />
-                </Route>
-                <Route path="/detail/:id">
-                  <Detail/>
-                </Route>
-                <Route path="/user/:id/view">
-                  <UserView />
-                </Route>
-                <Route path="/help">
-                  <Help />
-                </Route>
+               <div className="row">
+                <Switch>
+                  <Route path="/" exact>
+                    <div className="page-home">
+                      <Home />
+                    </div>
+                  </Route>
+                  <Route path="/detail/:id">
+                    <div className="page-detail">
+                      <Detail/>
+                    </div>
+                    
+                  </Route>
+                  <Route path="/user/:id/view">
+                    <div className="page-view">
+                      <UserView />
+                    </div>
+                  </Route>
+                  <Route path="/help">
+                    <div className="page-help pl-2 pr-2">
+                      <Help />
+                    </div>
+                  </Route>
 
-                <Route path="/privacy">
-                  <PrivacyPage />
-                </Route>
+                  <Route path="/privacy">
+                    <div className="page-privacy pl-2 pr-2">
+                      <PrivacyPage />
+                    </div>
+                  </Route>
 
-                <Route path="/terms">
-                  <TermsPage />
-                </Route>
-                
-                <PrivateRoute path="/">
-                  <PrivatePage />
-                </PrivateRoute>   
-                <Route path="*">
-                  <NoMatch />
-                </Route>     
-              </Switch>
-              
+                  <Route path="/terms">
+                    <div className="page-term pl-2 pr-2">
+                      <TermsPage />
+                    </div>
+                  </Route>
+                  
+                  <PrivateRoute path="/">
+                    <div className="page-private pl-2 pr-2">
+                      <PrivatePage />
+                    </div>
+                  </PrivateRoute>   
+                  <Route path="*">
+                    <div className="page-notmatch pl-2 pr-2">
+                      <NoMatch />
+                    </div>
+                  </Route>     
+                </Switch>
+              </div>
             </div>
           </main>
         </div>
