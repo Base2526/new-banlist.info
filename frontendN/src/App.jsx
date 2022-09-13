@@ -52,6 +52,8 @@ import Help from "./pages/help"
 import PrivacyPage from "./pages/basicContent/Privacy"
 import TermsPage from "./pages/basicContent/Terms"
 
+import Footer from "./pages/footer";
+
 import { login, addedConversations, addedConversation, addedNotifications, addedNotification } from "./redux/actions/auth"
 
 import { gqlConversations, gqlBookmarksByUserId, subConversation, subBookmark, gqlNotifications, subNotification } from "./gqlQuery"
@@ -315,7 +317,10 @@ const App = (props) => {
               </Switch>
               
             </div>
+            
+            <div className="footer"><Footer /></div>
           </main>
+          
         </div>
 
         {

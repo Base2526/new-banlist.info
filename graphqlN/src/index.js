@@ -24,7 +24,7 @@ const {
 // const graphqlUploadExpress = require('graphql-upload/graphqlUploadExpress.js');
 
 let logger = require("./utils/logger");
-let PORT = process.env.PORT || 4000;
+let PORT = process.env.GRAPHQL_PORT || 4000;
 
 async function startApolloServer(typeDefs, resolvers) {
 

@@ -25,7 +25,7 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import { connect } from "react-redux";
 
-import Footer from "../footer";
+// import Footer from "../footer";
 import { gqlPhones, gqlDeletePhone } from "../../gqlQuery"
 import ReadMoreMaster from "../../utils/ReadMoreMaster"
 import Table from "../../TableContainer"
@@ -285,7 +285,7 @@ const PhoneList = (props) => {
         }
       </SpeedDial>
       
-      <Footer />
+      {/* <Footer /> */}
     </Box>
   );
 };

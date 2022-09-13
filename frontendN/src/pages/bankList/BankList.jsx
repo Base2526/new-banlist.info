@@ -23,7 +23,7 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import { useQuery, useMutation } from "@apollo/client";
 
 import {gqlBanks, gqlDeleteBank} from "../../gqlQuery"
-import Footer from "../footer";
+// import Footer from "../footer";
 
 import Table from "../../TableContainer"
 
@@ -234,7 +234,7 @@ const BankList = (props) => {
         }}
       />
 
-      <Footer />
+      {/* <Footer /> */}
     </UserListContainer>
   );
 };
