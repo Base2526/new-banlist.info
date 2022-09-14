@@ -75,7 +75,7 @@ import {ls_connecting} from "./redux/actions/ws"
 // });
 
 
-console.log("process.env :: ", process.env)
+// console.log("process.env :: ", process.env)
 
 
 const authLink = setContext((_, { headers }) => {
@@ -111,7 +111,7 @@ let gracefullyRestart = () => {
 };
 
 const wsLink = new GraphQLWsLink(createClient({
-  url: (process.env.REACT_APP_NODE_ENV === "development" ? "ws://" + process.env.REACT_APP_HOST_GRAPHAL +'/graphql' : "wss://" + process.env.REACT_APP_HOST_GRAPHAL +'/subscription' ) ,
+  url: (process.env.REACT_APP_NODE_ENV === "development" ? "ws://" + process.env.REACT_APP_HOST_GRAPHAL +'/graphql' :  "wss://" + process.env.REACT_APP_HOST_GRAPHAL +'/subscription' ) ,
   // reconnect: true,
   disablePong: false,
   connectionAckWaitTimeout: 0,
@@ -262,11 +262,11 @@ import App from "./App";
 /////////////////////////////////
 
 // replace console.* for disable log on production
-// if (process.env.REACT_APP_NODE_ENV === 'production') {
-//   console.log = () => {}
-//   console.error = () => {}
-//   console.debug = () => {}
-// }
+if (process.env.REACT_APP_NODE_ENV === 'production') {
+   console.log = () => {}
+   console.error = () => {}
+   console.debug = () => {}
+}
 
 ReactDOM.render(
   <Provider store={store}>

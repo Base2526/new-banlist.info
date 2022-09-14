@@ -28,13 +28,16 @@ services:
   graphql:
     build: 
       context: ./graphqlN
-      dockerfile: Dockerfile.prod            
+      dockerfile: Dockerfile.prod   
     ports:
       - "4000:4000"
     volumes:
       - ./uploads:/app/uploads  
     environment:
       - MONGO_URI=mongodb://${MONGO_INITDB_USERNAME}:${MONGO_INITDB_PASSWORD}@mongo:${MONGO_PORT}/${MONGO_INITDB_DATABASE}?authMechanism=DEFAULT
+      - RA_HOST=${RA_HOST}
+      - GRAPHQL_PORT=${GRAPHQL_PORT}
+      - JWT_SECRET=${JWT_SECRET}
     networks:
       - nodejs
   ################################
