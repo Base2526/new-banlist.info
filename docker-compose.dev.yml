@@ -45,9 +45,27 @@ services:
   ################################
   #   Setup Api Mongo and mongo-express container
   ################################
+  mongo:
+    container_name: mongo
+    image: mongo:${MONGO_VERSION}
+    command: mongod --port ${MONGO_PORT}
+    expose:
+      - ${MONGO_PORT}
+    ports:
+      - "${MONGO_PORT}:${MONGO_PORT}"
+    volumes:
+      - ./mongo-single/data:/data/db
+      - ./mongo-single/restore:/mongo-single/restore
+      - ./mongo-single/mongod.conf:/etc/mongod.conf
+    restart: always
+    networks:
+      - nodejs
+
   # mongo:
   #   container_name: mongo
-  #   image: mongo:${MONGO_VERSION}
+  #   build: 
+  #     context: ./mongo-single
+  #     dockerfile: Dockerfile          
   #   command: mongod --port ${MONGO_PORT}
   #   expose:
   #     - ${MONGO_PORT}
@@ -61,21 +79,16 @@ services:
   #   networks:
   #     - nodejs
 
-  mongo:
-    container_name: mongo
+  mongo-backup:
     build: 
-      context: ./mongo-single
-      dockerfile: Dockerfile          
-    command: mongod --port ${MONGO_PORT}
-    expose:
-      - ${MONGO_PORT}
-    ports:
-      - "${MONGO_PORT}:${MONGO_PORT}"
+      context: ./mongo-backup
+      dockerfile: Dockerfile    
     volumes:
-      - ./mongo-single/data:/data/db
-      - ./mongo-single/restore:/mongo-single/restore
-      - ./mongo-single/mongod.conf:/etc/mongod.conf
-    restart: always
+      - ./mongo-backup/data:/backup
+    environment:
+      TZ: Asia/Bangkok
+    depends_on:
+      - mongo
     networks:
       - nodejs
 
