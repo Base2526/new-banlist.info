@@ -61,31 +61,20 @@ services:
     networks:
       - nodejs
 
-  # mongo:
-  #   container_name: mongo
-  #   build: 
-  #     context: ./mongo-single
-  #     dockerfile: Dockerfile          
-  #   command: mongod --port ${MONGO_PORT}
-  #   expose:
-  #     - ${MONGO_PORT}
-  #   ports:
-  #     - "${MONGO_PORT}:${MONGO_PORT}"
-  #   volumes:
-  #     - ./mongo-single/data:/data/db
-  #     - ./mongo-single/restore:/mongo-single/restore
-  #     - ./mongo-single/mongod.conf:/etc/mongod.conf
-  #   restart: always
-  #   networks:
-  #     - nodejs
-
+  ################################
+  #   Setup Api Mongo Backup
+  ################################
   mongo-backup:
     build: 
       context: ./mongo-backup
       dockerfile: Dockerfile    
+      args:
+        MONGO_VERSION: ${MONGO_VERSION} 
     volumes:
       - ./mongo-backup/data:/backup
     environment:
+      MONGO_URI: mongodb://${MONGO_INITDB_USERNAME}:${MONGO_INITDB_PASSWORD}@mongo:${MONGO_PORT}/${MONGO_INITDB_DATABASE}
+      CRON_SCHEDULE: "* * * * *"
       TZ: Asia/Bangkok
     depends_on:
       - mongo
