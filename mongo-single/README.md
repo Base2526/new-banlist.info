@@ -39,3 +39,11 @@ mongoimport --db dbName --collection collectionName --file fileName.json
         - use xxx 
         - db.getUsers()
 
+
+
+Backup
+https://davejansen.com/how-to-dump-restore-a-mongodb-database-from-a-docker-container/
+
+docker exec -i a67d48abfccf /usr/bin/mongodump --username banlistinfo --password 6c09093474284f6bfc3749a5bd24cbb6 --authenticationDatabase admin --db bl --port 29101 --out /dump
+docker exec -i mongo /usr/bin/mongodump --username banlistinfo --password 6c09093474284f6bfc3749a5bd24cbb6 --db bl --port 29101 --out /dump
+
