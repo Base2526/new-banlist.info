@@ -47,6 +47,7 @@ const Breadcs = ({ title }) => {
   const phonesMatches = useRouteMatch("/phones");
 
   const privacyMatche = useRouteMatch("/privacy");
+  const developerMatche = useRouteMatch("/developer");
   const termsMatche = useRouteMatch("/terms");
 
   const handleClick = () => {};
@@ -296,6 +297,13 @@ const Breadcs = ({ title }) => {
             Privacy
           </MuiLink>
         )}
+
+        {developerMatche && (
+          <MuiLink component={Link} to="/developer">
+            Developer
+          </MuiLink>
+        )}
+
 
         {termsMatche && (
           <MuiLink component={Link} to="/terms">
