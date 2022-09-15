@@ -6,6 +6,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { FacebookShareButton, TwitterShareButton } from "react-share";
 import { FacebookIcon, TwitterIcon } from "react-share";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useHistory } from "react-router-dom";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
@@ -226,6 +227,30 @@ const Home = (props) => {
                   <TwitterIcon size={32} round />
                   Twitter
                 </TwitterShareButton>
+              </MenuItem>
+
+              <MenuItem 
+              onClick={async(e)=>{
+                let text = window.location.href + "detail/" + item._id
+                if ('clipboard' in navigator) {
+                  await navigator.clipboard.writeText(text);
+                } else {
+                  document.execCommand('copy', true, text);
+                }
+
+                handleAnchorElShareClose()
+              }}>
+                
+
+              {/* <CopyToClipboard text={ window.location.href + "detail/" + item._id }
+                // onCopy={() => this.setState({copied: true})}
+                >
+                <ContentCopyIcon size={32} round /> Copy link
+              </CopyToClipboard> */}
+
+              {/* document.execCommand('copy', true, text); */}
+              <ContentCopyIcon size={32} round /> Copy link
+
               </MenuItem>
             </Menu>
   }
