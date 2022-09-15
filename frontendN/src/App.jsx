@@ -50,6 +50,7 @@ import DialogLogin from "./DialogLogin";
 import Help from "./pages/help"
 
 import PrivacyPage from "./pages/basicContent/Privacy"
+import DeveloperPage from "./pages/basicContent/Developer"
 import TermsPage from "./pages/basicContent/Terms"
 
 import Footer from "./pages/footer";
@@ -301,6 +302,10 @@ const App = (props) => {
 
                 <Route path="/privacy">
                   <PrivacyPage />
+                </Route>
+
+                <Route path="/developer">
+                  <DeveloperPage />
                 </Route>
 
                 <Route path="/terms">

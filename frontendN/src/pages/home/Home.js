@@ -17,17 +17,13 @@ import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import { connect } from "react-redux";
 import IconButton from "@mui/material/IconButton";
-
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
-
 import queryString from 'query-string';
-
 
 import PanelComment from "./PanelComment";
 import PopupSnackbar from "./PopupSnackbar";
-// import Footer from "../footer";
 import SearchBar from "./SearchBar";
 import Pagination from "./Pagination";
 import DialogLogin from "../../DialogLogin";
@@ -372,27 +368,32 @@ const Home = (props) => {
                   </Masonry>
                 </Container>
                 <Container sx={{ py: 2 }} maxWidth="xl">
-                  <Pagination
-                    page={page}
-                    onPageChange={(event, newPage) => {
-                      setPage(newPage);
-                      history.push({
-                        pathname: "/",
-                        search: "?page=" + newPage + "&perPage=" + rowsPerPage
-                      });
-                    }}
-                    rowsPerPage={rowsPerPage}
-                    onRowsPerPageChange={(event) => {
-                      setRowsPerPage(parseInt(event.target.value, 10));
-                      setPage(0);
 
-                      history.push({
-                        pathname: "/",
-                        search: "?perPage=" + parseInt(event.target.value, 10)
-                      });
-                    }}
-                    count={homesValues.data.homes.total}
-                  />
+                  { 
+                    homesValues.data.homes.total > rowsPerPage 
+                    ? <Pagination
+                        page={page}
+                        onPageChange={(event, newPage) => {
+                          setPage(newPage);
+                          history.push({
+                            pathname: "/",
+                            search: "?page=" + newPage + "&perPage=" + rowsPerPage
+                          });
+                        }}
+                        rowsPerPage={rowsPerPage}
+                        onRowsPerPageChange={(event) => {
+                          setRowsPerPage(parseInt(event.target.value, 10));
+                          setPage(0);
+
+                          history.push({
+                            pathname: "/",
+                            search: "?perPage=" + parseInt(event.target.value, 10)
+                          });
+                        }}
+                        count={homesValues.data.homes.total}
+                      /> 
+                    : <div /> 
+                  }
                 </Container>
               </div>
           }
