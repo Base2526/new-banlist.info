@@ -71,7 +71,7 @@ services:
       args:
         MONGO_VERSION: ${MONGO_VERSION} 
     volumes:
-      - ./mongo-backup/data:/backup
+      - ./mongo-backup/backup:/backup
     environment:
       MONGO_URI: mongodb://${MONGO_INITDB_USERNAME}:${MONGO_INITDB_PASSWORD}@mongo:${MONGO_PORT}/${MONGO_INITDB_DATABASE}
       CRON_SCHEDULE: "* 1 * * *"

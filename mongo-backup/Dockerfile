@@ -1,13 +1,10 @@
 ARG MONGO_VERSION
 
 FROM mongo:${MONGO_VERSION}
-# MAINTAINER Ilya Stepanov <dev@ilyastepanov.com>
 
 RUN apt-get update && \
     apt-get install -y cron python3 python3-pip && \
     rm -rf /var/lib/apt/lists/*
-
-# RUN pip3 install awscli
 
 ADD backup.sh /backup.sh
 ADD entrypoint.sh /entrypoint.sh
