@@ -23,6 +23,7 @@ import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 
 import queryString from 'query-string';
 
+
 import PanelComment from "./PanelComment";
 import PopupSnackbar from "./PopupSnackbar";
 // import Footer from "../footer";
@@ -163,6 +164,7 @@ const Home = (props) => {
   };
 
   const menuShare = (item, index) =>{
+
     return  <Menu
               anchorEl={anchorElShare && anchorElShare[index]}
               keepMounted
@@ -186,57 +188,44 @@ const Home = (props) => {
               }}
               >
               <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
-                  {/* <FacebookShareButton
-                    url={window.location.href + "detail/" + item.id}
-                    quote={item.title}
-                    hashtag={"#hashtag"}
-                    description={item.title}
-                    className="Demo__some-network__share-button"
-                  > */}
-                 <div onClick={(e)=>{
+                 {/* <div onClick={(e)=>{
 
                     if(_.isEmpty(user)){
                       setDialogLoginOpen(true)
                     }else{
-                      onCreateShare({ variables: { input: {
-                            postId: item.id,
-                            userId: user._id,
-                            destination: "facebook"
-                          }
-                        }
-                      });  
+                      // onCreateShare({ variables: { input: {
+                      //       postId: item.id,
+                      //       userId: user._id,
+                      //       destination: "facebook"
+                      //     }
+                      //   }
+                      // });  
                     }
                     handleAnchorElShareClose()
                   }}>
                     <FacebookIcon size={32} round /> Facebook
-                  </div>
-                  {/* </FacebookShareButton> */}
+                  </div> */}
+
+                  <FacebookShareButton
+                    url={ window.location.href + "detail/" + item._id}
+                    quote={item?.title}
+                    // hashtag={"#hashtag"}
+                    description={item?.description}
+                    className="Demo__some-network__share-button"
+                    onClick={(e)=>{ handleAnchorElShareClose() }} >
+                    <FacebookIcon size={32} round /> Facebook
+                  </FacebookShareButton>
               </MenuItem>{" "}
+
               <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
-                  {/* <TwitterShareButton
-                    title={item.title}
-                    url={window.location.href + "detail/" + item.id}
-                    hashtags={["hashtag1", "hashtag2"]}
-                  > */}
-                  <div onClick={(e)=>{
-
-                    if(_.isEmpty(user)){
-                      setDialogLoginOpen(true)
-                    }else{
-                      onCreateShare({ variables: { input: {
-                            postId: item.id,
-                            userId: user._id,
-                            destination: "twitter"
-                          }
-                        }
-                      });  
-                    }
-
-                    handleAnchorElShareClose()
-                  }}>
-                    <TwitterIcon size={32} round />Twitter
-                  </div>
-                  {/* </TwitterShareButton> */}
+                <TwitterShareButton
+                  title={item?.title}
+                  url={ window.location.href + "detail/" + item._id }
+                  // hashtags={["hashtag1", "hashtag2"]}
+                  onClick={(e)=>{ handleAnchorElShareClose() }} >
+                  <TwitterIcon size={32} round />
+                  Twitter
+                </TwitterShareButton>
               </MenuItem>
             </Menu>
   }

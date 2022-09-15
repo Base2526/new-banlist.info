@@ -8,6 +8,12 @@ services:
       context: ./frontendN
       dockerfile: Dockerfile.dev
     environment:
+      - CHOKIDAR_USEPOLLING=${CHOKIDAR_USEPOLLING}
+      - WATCHPACK_POLLING=${CHOKIDAR_USEPOLLING}
+      
+      - REACT_APP_NODE_ENV=${REACT_APP_NODE_ENV}
+      - REACT_APP_HOST_GRAPHAL=${REACT_APP_HOST_GRAPHAL}
+      - FRONTEND_PORT=${FRONTEND_PORT}
       - PORT=${FRONTEND_PORT}
     ports:
       - "3000:3000"
@@ -31,6 +37,9 @@ services:
       - ./graphqlN/src:/app/src        
       - ./uploads:/app/uploads    
     environment:
+      - RA_HOST=${RA_HOST}
+      - GRAPHQL_PORT=${GRAPHQL_PORT}
+      - JWT_SECRET=${JWT_SECRET}
       - MONGO_URI=mongodb://${MONGO_INITDB_USERNAME}:${MONGO_INITDB_PASSWORD}@mongo:${MONGO_PORT}/${MONGO_INITDB_DATABASE}?authMechanism=DEFAULT
     networks:
       - nodejs
@@ -40,6 +49,7 @@ services:
   #   Setup Api Mongo and mongo-express container
   ################################
   mongo:
+    container_name: mongo
     image: mongo:${MONGO_VERSION}
     command: mongod --port ${MONGO_PORT}
     expose:
@@ -53,7 +63,7 @@ services:
     restart: always
     networks:
       - nodejs
-      
+
 networks:
   nodejs:
     external: true 
