@@ -276,7 +276,7 @@ const Home = (props) => {
                 !_.isEmpty(user) && user._id == item.ownerId
                 ? <MenuItem onClick={(e)=>{
                     handleAnchorElSettingClose()
-                    history.push("/post/"+item.id+ "/edit");
+                    history.push("/post/"+item._id+ "/edit");
                   }}>
                     Edit
                   </MenuItem>

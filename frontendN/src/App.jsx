@@ -55,7 +55,9 @@ import TermsPage from "./pages/basicContent/Terms"
 
 import Footer from "./pages/footer";
 
-import { login, addedConversations, addedConversation, addedNotifications, addedNotification } from "./redux/actions/auth"
+import DialogTermsAndConditions from "./DialogTermsAndConditions"
+
+import { login, addedConversations, addedConversation, addedNotifications, addedNotification, termsAndConditions } from "./redux/actions/auth"
 
 import { gqlConversations, gqlBookmarksByUserId, subConversation, subBookmark, gqlNotifications, subNotification } from "./gqlQuery"
 
@@ -141,7 +143,7 @@ const styles = (theme) => ({
 });
 
 const App = (props) => {
-  let {is_connnecting, user, addedConversations, addedConversation, addedNotifications, addedNotification} = props
+  let {is_connnecting, user, terms_and_conditions, addedConversations, addedConversation, addedNotifications, addedNotification, termsAndConditions} = props
 
   const history = useHistory();
   const [open, setOpen] = useState(false)
@@ -149,6 +151,7 @@ const App = (props) => {
 
   const [dialogLoginOpen, setDialogLoginOpen] = useState(false);
 
+  const [dialogTermsAndConditions, setDialogTermsAndConditions] = useState(false);
   ////////////////////// conversation ////////////////////////////
   const conversationValues =useQuery(gqlConversations, { variables: { userId: ""}, notifyOnNetworkStatusChange: true });
 
@@ -299,19 +302,15 @@ const App = (props) => {
                 <Route path="/help">
                   <Help />
                 </Route>
-
                 <Route path="/privacy">
                   <PrivacyPage />
                 </Route>
-
                 <Route path="/developer">
                   <DeveloperPage />
                 </Route>
-
                 <Route path="/terms">
                   <TermsPage />
                 </Route>
-                
                 <PrivateRoute path="/">
                   <PrivatePage />
                 </PrivateRoute>   
@@ -320,10 +319,8 @@ const App = (props) => {
                 </Route>     
               </Switch>
             </div>
-            
             <div className="footer"><Footer /></div>
           </main>
-          
         </div>
 
         {
@@ -348,6 +345,15 @@ const App = (props) => {
             }}
           />
         }
+
+        {
+          // dialogTermsAndConditions && 
+          <DialogTermsAndConditions 
+            open={!terms_and_conditions}
+            onOK={()=>{
+              termsAndConditions(true)
+            }}/>
+        }
       </Store>
     </Router>
   );
@@ -356,10 +362,11 @@ const App = (props) => {
 // export default withStyles(styles, { withTheme: true })(App);
 
 const mapStateToProps = (state, ownProps) => {
-  // console.log("mapStateToProps :", state)
+  console.log("mapStateToProps :", state)
   return {
     user: state.auth.user,
-    is_connnecting: state.ws.is_connnecting
+    is_connnecting: state.ws.is_connnecting,
+    terms_and_conditions: state.auth.terms_and_conditions
   }
 };
 
@@ -369,7 +376,9 @@ const mapDispatchToProps = {
   addedConversation,
 
   addedNotifications, 
-  addedNotification
+  addedNotification,
+
+  termsAndConditions
 }
 
 export default compose(

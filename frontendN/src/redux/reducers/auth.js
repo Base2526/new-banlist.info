@@ -11,7 +11,9 @@ import {LOGIN,
         EDITED_MESSAGE, 
         DELETED_MESSAGE,
         ADDED_BOOKMARKS, 
-        ADDED_BOOKMARK } from "../../constants"
+        ADDED_BOOKMARK,
+    
+        TERMS_AND_CONDITIONS } from "../../constants"
 
 import _ from "lodash"
 
@@ -21,7 +23,8 @@ const initialState = {
     bookmarks:[],
     messages:[],
 
-    notifications: []
+    notifications: [],
+    terms_and_conditions: false
 }
 
 const auth = (state = initialState, action) => {
@@ -106,19 +109,12 @@ const auth = (state = initialState, action) => {
             return { ...state, messages:newMessages };
         }
 
-        /*
-        ADDED_BOOKMARKS, 
-        ADDED_BOOKMARK
-        */
-
         case ADDED_BOOKMARKS: {
-
             console.log("ADDED_BOOKMARKS : ", action.data)
             if(!_.isEqual(state.bookmark, action.data)){
                 return  {...state, bookmarks: action.data }
             }
             return state
-            
         }
 
         case ADDED_BOOKMARK: {
@@ -180,6 +176,10 @@ const auth = (state = initialState, action) => {
             //     }
             // }
             // return { ...state, bookmarks };
+        }
+
+        case TERMS_AND_CONDITIONS:{
+            return { ...state, terms_and_conditions: action.data };
         }
     }
 
