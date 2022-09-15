@@ -274,7 +274,7 @@ const UserPostList = (props) => {
                                                     ยอดเงิน : {item.amount}
                                                     </Typography>
                                                     </>
-                                                    <React.Fragment>
+                                                    {/* <React.Fragment>
                                                         <Typography
                                                         sx={{ display: "inline" }}
                                                             component="span"
@@ -284,6 +284,15 @@ const UserPostList = (props) => {
                                                             รายละเอียด :
                                                         </Typography>
                                                         { item.description }
+                                                    </React.Fragment> */}
+
+                                                    <React.Fragment>
+                                                        รายละเอียด :
+                                                        <Typography
+                                                            component="span"
+                                                            variant="body2"
+                                                            color="text.primary"
+                                                            dangerouslySetInnerHTML={{ __html: item.description }} />  
                                                     </React.Fragment>
                                                 </CardContent>
 
