@@ -17,4 +17,20 @@
 }
 
 
+.rounded{
+    border-radius: .5rem;
+    -webkit-border-radius: .5rem;
+}
+
+.bg-white{
+    background: $white;
+}
+
+
+// border 
+.border{
+    border: 1px solid $gray-d;
+}
+
+
 

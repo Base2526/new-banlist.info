@@ -1,4 +1,10 @@
 header{ 
+     .MuiToolbar-regular{
+        justify-content: space-between;
+        .App-menuButton-4{
+            margin-left: 0;
+        }
+     }
      .MuiTypography-h6{
         @media (max-width:$sm){
             line-height: 1.3;
@@ -11,5 +17,13 @@ header{
         }
         padding-left: 1rem;
         padding-right: 1rem;
+    }
+
+    .css-sghohy-MuiButtonBase-root-MuiButton-root{
+        margin-right: 0 !important;
+    }
+
+    .MuiSvgIcon-root{
+        margin-right: .25rem;
     }
 }

@@ -48,6 +48,7 @@ body{
   margin-left: -1rem;
   margin-right: -1rem;
   width: 100%;
+  flex-grow: 1;
 }
 .container{
   padding-left: 1rem;
@@ -69,13 +70,28 @@ body{
   }
 }
 
+.css-wb57ya-MuiFormControl-root-MuiTextField-root{
+  background-color: $white;
+  // box-shadow: 0 1px 3px rgba($black, 30%);
+  border-radius: .5rem;
+   > .css-1gywuxd-MuiInputBase-root-MuiOutlinedInput-root{
+    border-radius: .5rem;
+    -webkit-border-radius: .5rem;
+    // .css-1d3z3hw-MuiOutlinedInput-notchedOutline{
+    //   border-color: $white;
+    // }
+   }
+}
+
 @include createfonts($font-head);
 
 @import 'sass-components/header';
 @import 'sass-components/breadcrumb';
 @import 'sass-components/utilities';
+@import 'sass-components/paging';
 @import 'sass-components/home';
-@import 'sass-pages/detail'
+@import 'sass-pages/detail';
+@import 'sass-components/footer';
 
 
 
