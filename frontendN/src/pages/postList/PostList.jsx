@@ -105,7 +105,7 @@ const PostList = (props) => {
     () => [
       // 
       {
-        Header: 'Username',
+        Header: 'Post list',
         accessor: 'id',
         columns: [
           {

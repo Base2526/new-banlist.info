@@ -69,7 +69,7 @@ const ShareList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: 'Name',
+        Header: 'Share list',
         columns: [
           {
             Header: 'Username',
