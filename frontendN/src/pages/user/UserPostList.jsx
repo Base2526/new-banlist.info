@@ -23,6 +23,7 @@ import { FacebookShareButton, TwitterShareButton } from "react-share";
 import { FacebookIcon, TwitterIcon } from "react-share";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 import { gqlPostsByUser, gqlCreateShare } from "../../gqlQuery"
 import ItemComment from "../home/ItemComment"
@@ -98,17 +99,7 @@ const UserPostList = (props) => {
                       role: "listbox"
                   }}
                   >
-                  <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
-                      {/* <FacebookShareButton
-                        url={window.location.href + "detail/" + item.id}
-                        quote={item.title}
-                        hashtag={"#hashtag"}
-                        description={item.title}
-                        className="Demo__some-network__share-button"
-                      >
-                      <FacebookIcon size={32} round /> Facebook
-                      </FacebookShareButton> */}
-
+                  {/* <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
                     <div onClick={(e)=>{
                         if(_.isEmpty(user)){
                             setDialogLoginOpen(true)
@@ -127,15 +118,6 @@ const UserPostList = (props) => {
                     </div>
                   </MenuItem>{" "}
                   <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
-                      {/* <TwitterShareButton
-                        title={item.title}
-                        url={window.location.href + "detail/" + item.id}
-                        hashtags={["hashtag1", "hashtag2"]}
-                      >
-                      <TwitterIcon size={32} round />
-                      Twitter
-                      </TwitterShareButton> */}
-
                         <div onClick={(e)=>{
                             if(_.isEmpty(user)){
                                 setDialogLoginOpen(true)
@@ -152,7 +134,42 @@ const UserPostList = (props) => {
                         }}>
                         <TwitterIcon size={32} round />Twitter
                         </div>
-                  </MenuItem>
+                  </MenuItem> */}
+
+                    <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
+                    <FacebookShareButton
+                        url={ window.location.origin + "/detail/" + item._id}
+                        quote={item?.title}
+                        // hashtag={"#hashtag"}
+                        description={item?.description}
+                        className="Demo__some-network__share-button"
+                        onClick={(e)=>{handleAnchorElShareClose() }} >
+                        <FacebookIcon size={32} round /> Facebook
+                    </FacebookShareButton>
+                    </MenuItem>{" "}
+                    <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
+                        <TwitterShareButton
+                        title={item?.title}
+                        url={ window.location.origin + "/detail/" + item._id }
+                        // hashtags={["hashtag1", "hashtag2"]}
+                        onClick={(e)=>{ handleAnchorElShareClose() }} >
+                        <TwitterIcon size={32} round />
+                        Twitter
+                        </TwitterShareButton>
+                    </MenuItem>
+                    <MenuItem 
+                        onClick={async(e)=>{
+                        let text = window.location.origin + "/detail/" + item._id
+                        if ('clipboard' in navigator) {
+                            await navigator.clipboard.writeText(text);
+                        } else {
+                            document.execCommand('copy', true, text);
+                        }
+
+                        handleAnchorElShareClose()
+                        }}>
+                        <ContentCopyIcon size={32} round /> Copy link
+                    </MenuItem>
                 </Menu>
     }
     
@@ -176,16 +193,7 @@ const UserPostList = (props) => {
                     role: "listbox"
                   }}
                 >
-                  {/* {
-                    !_.isEmpty(user) && user.id == item.ownerId
-                    ? <MenuItem onClick={(e)=>{
-                        handleAnchorElSettingClose()
-                        history.push("/post/"+item.id+ "/edit");
-                      }}>
-                        Edit
-                      </MenuItem>
-                    : <div /> 
-                  } */}
+                 
                   
                   <MenuItem onClick={(e)=>{
                     handleAnchorElSettingClose()
