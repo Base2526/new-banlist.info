@@ -420,7 +420,6 @@ export const gqlCreateAndUpdateFollow = gql`
         }
     }`;
 
-// gqlCreatePhone
 export const gqlCreatePhone = gql`mutation CreatePhone($input: PhoneInput) { createPhone(input: $input) }`;
 export const gqlUpdatePhone = gql`mutation updatePhone($id: ID!, $input: PhoneInput) { updatePhone(_id: $id, input: $input) }`;
    

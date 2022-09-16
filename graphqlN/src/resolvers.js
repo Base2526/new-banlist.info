@@ -2160,20 +2160,19 @@ export default {
       try{
         let start = Date.now()
 
-        let { currentUser } = context
+        // let { currentUser } = context
 
         let { input } = args
 
-        console.log("input :", input, currentUser)
+        console.log("input :", input )
 
-        input = {...input, ownerId: currentUser._id}
+        // input = {...input, ownerId: currentUser._id}
 
         let data = await Phone.create(input);
         return {
           status: true,
           data,
-          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
-        }
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds` }
       } catch(err) {
         logger.error(err.toString());
         return;

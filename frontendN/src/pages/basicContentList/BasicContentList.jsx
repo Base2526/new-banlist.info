@@ -88,7 +88,7 @@ const BasicContentList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: 'Name',
+        Header: 'Basic content list',
         columns: [
           {
             Header: 'Name',

@@ -69,7 +69,7 @@ const ContactUsList = (props) => {
       () => [
         // 
         {
-          Header: 'Username',
+          Header: 'Contact us list',
           columns: [
             {
               Header: 'Name',

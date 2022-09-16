@@ -91,7 +91,7 @@ const UserList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: 'Name',
+        Header: 'User list',
         columns: [
           {
             Header: 'Image',
