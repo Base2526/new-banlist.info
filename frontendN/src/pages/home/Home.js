@@ -185,26 +185,8 @@ const Home = (props) => {
               }}
               >
               <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
-                 {/* <div onClick={(e)=>{
-
-                    if(_.isEmpty(user)){
-                      setDialogLoginOpen(true)
-                    }else{
-                      // onCreateShare({ variables: { input: {
-                      //       postId: item.id,
-                      //       userId: user._id,
-                      //       destination: "facebook"
-                      //     }
-                      //   }
-                      // });  
-                    }
-                    handleAnchorElShareClose()
-                  }}>
-                    <FacebookIcon size={32} round /> Facebook
-                  </div> */}
-
                   <FacebookShareButton
-                    url={ window.location.href + "detail/" + item._id}
+                    url={ window.location.origin + "/detail/" + item._id}
                     quote={item?.title}
                     // hashtag={"#hashtag"}
                     description={item?.description}
@@ -213,40 +195,28 @@ const Home = (props) => {
                     <FacebookIcon size={32} round /> Facebook
                   </FacebookShareButton>
               </MenuItem>{" "}
-
               <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
                 <TwitterShareButton
                   title={item?.title}
-                  url={ window.location.href + "detail/" + item._id }
+                  url={ window.location.origin + "/detail/" + item._id }
                   // hashtags={["hashtag1", "hashtag2"]}
                   onClick={(e)=>{ handleAnchorElShareClose() }} >
                   <TwitterIcon size={32} round />
                   Twitter
                 </TwitterShareButton>
               </MenuItem>
-
               <MenuItem 
-              onClick={async(e)=>{
-                let text = window.location.href + "detail/" + item._id
-                if ('clipboard' in navigator) {
-                  await navigator.clipboard.writeText(text);
-                } else {
-                  document.execCommand('copy', true, text);
-                }
+                onClick={async(e)=>{
+                  let text = window.location.origin + "/detail/" + item._id
+                  if ('clipboard' in navigator) {
+                    await navigator.clipboard.writeText(text);
+                  } else {
+                    document.execCommand('copy', true, text);
+                  }
 
-                handleAnchorElShareClose()
-              }}>
-                
-
-              {/* <CopyToClipboard text={ window.location.href + "detail/" + item._id }
-                // onCopy={() => this.setState({copied: true})}
-                >
+                  handleAnchorElShareClose()
+                }}>
                 <ContentCopyIcon size={32} round /> Copy link
-              </CopyToClipboard> */}
-
-              {/* document.execCommand('copy', true, text); */}
-              <ContentCopyIcon size={32} round /> Copy link
-
               </MenuItem>
             </Menu>
   }

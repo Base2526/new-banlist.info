@@ -14,6 +14,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -176,6 +177,8 @@ const Detail = (props) => {
     */
 
     const menuShare = (item) =>{
+
+        console.log("window.location.href :", window.location)
         return  <Menu
                   anchorEl={anchorElShare}
                   keepMounted
@@ -197,19 +200,9 @@ const Detail = (props) => {
                       role: "listbox"
                   }}
                   >
-                  <MenuItem onClose={(e)=>{
+                  {/* <MenuItem onClose={(e)=>{
                     setAnchorElShare(null);
                   }}>
-                      {/* <FacebookShareButton
-                      url={"https://peing.net/ja/"}
-                      quote={"quotequotequotequote"}
-                      hashtag={"#hashtag"}
-                      description={"aiueo"}
-                      className="Demo__some-network__share-button"
-                      >
-                      <FacebookIcon size={32} round /> Facebook
-                      </FacebookShareButton> */}
-
                     <div onClick={(e)=>{
                         if(_.isEmpty(user)){
                             setDialogLoginOpen(true)
@@ -230,14 +223,6 @@ const Detail = (props) => {
                   <MenuItem onClose={(e)=>{
                     setAnchorElShare(null);
                   }}>
-                      {/* <TwitterShareButton
-                      title={"test"}
-                      url={"https://peing.net/ja/"}
-                      hashtags={["hashtag1", "hashtag2"]}
-                      >
-                      <TwitterIcon size={32} round />
-                      Twitter
-                      </TwitterShareButton> */}
 
                     <div onClick={(e)=>{
 
@@ -256,7 +241,42 @@ const Detail = (props) => {
                     }}>
                         <TwitterIcon size={32} round />Twitter
                     </div>
-                  </MenuItem>
+                  </MenuItem> */}
+
+                    <MenuItem onClose={(e)=>setAnchorElShare(null)}>
+                    <FacebookShareButton
+                        url={ window.location.origin + "/detail/" + item._id}
+                        quote={item?.title}
+                        // hashtag={"#hashtag"}
+                        description={item?.description}
+                        className="Demo__some-network__share-button"
+                        onClick={(e)=>{setAnchorElShare(null); }} >
+                        <FacebookIcon size={32} round /> Facebook
+                    </FacebookShareButton>
+                    </MenuItem>{" "}
+                    <MenuItem onClose={(e)=>setAnchorElShare(null)}>
+                        <TwitterShareButton
+                        title={item?.title}
+                        url={ window.location.origin + "/detail/" + item._id }
+                        // hashtags={["hashtag1", "hashtag2"]}
+                        onClick={(e)=>{ setAnchorElShare(null); }} >
+                        <TwitterIcon size={32} round />
+                        Twitter
+                        </TwitterShareButton>
+                    </MenuItem>
+                    <MenuItem 
+                        onClick={async(e)=>{
+                        let text = window.location.origin + "/detail/" + item._id
+                        if ('clipboard' in navigator) {
+                            await navigator.clipboard.writeText(text);
+                        } else {
+                            document.execCommand('copy', true, text);
+                        }
+
+                        setAnchorElShare(null);
+                        }}>
+                        <ContentCopyIcon size={32} round /> Copy link
+                    </MenuItem>
                 </Menu>
     }
 
@@ -280,12 +300,7 @@ const Detail = (props) => {
                     role: "listbox"
                   }}
                 >
-                  {/* <MenuItem onClick={(e)=>{
-                    handleAnchorElSettingClose()
-                    history.push("/post/"+item._id+ "/edit");
-                  }}>
-                    Edit
-                  </MenuItem> */}
+
                   <MenuItem onClick={(e)=>{
                     handleAnchorElSettingClose()
     
