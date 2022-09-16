@@ -22,10 +22,7 @@ const Devel = (props) => {
   let {user} = props
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
-  const valueUsers = useQuery(gqlUsers, {
-    variables: {page: 0, perPage: 1000},
-    notifyOnNetworkStatusChange: true,
-  });
+  const valueUsers = useQuery(gqlUsers, { variables: {page: 0, perPage: 1000}, notifyOnNetworkStatusChange: true });
 
   // console.log("valueUsers :", valueUsers)
 
@@ -249,7 +246,7 @@ const Devel = (props) => {
           let start = Date.now();
 
           {
-            for (var i = 0; i < 300; i++) {
+            for (var i = 0; i < 5000; i++) {
 
                     //////////// bank
                     const min = 0;
@@ -271,7 +268,7 @@ const Devel = (props) => {
                                   fake: true,
                                 }
 
-                    console.log("input :", input)
+                    // console.log("input :", input)
 
                     onCreatePost({ variables: { input } });     
                 }
@@ -394,9 +391,7 @@ const Devel = (props) => {
             }
           }
 
-          let executionTime = `Time to execute = ${
-            (Date.now() - start) / 1000
-          } seconds`;
+          let executionTime = `Time to execute = ${ (Date.now() - start) / 1000 } seconds`;
 
           setSnackbarOpen(true);
 
