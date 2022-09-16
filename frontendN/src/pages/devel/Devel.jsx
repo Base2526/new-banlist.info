@@ -12,7 +12,8 @@ import { gqlUsers, gqlPosts, gqlRoles,
         gqlCreateAndUpdateBookmark, 
         gqlCreateUser,
         gqlCreateRole,
-        gqlCreateShare } from "../../gqlQuery"
+        gqlCreateShare,
+        gqlCreatePhone } from "../../gqlQuery"
 
 const { faker } = require("@faker-js/faker");
 
@@ -53,6 +54,30 @@ const Devel = (props) => {
   });
 
   console.log("resultCreatePost :", resultCreatePost)
+
+  const [onCreatePhone, resultCreatePhone] = useMutation(gqlCreatePhone, {
+    update: (cache, {data: {createPhone}}) => {
+
+      console.log("createPhone :", createPhone)
+
+      // const data1 = cache.readQuery({ query: gqlPhones, variables: { page: 0, perPage: 30 } });
+      // if(data1 != null){
+      //   let newPhones = {...data1.phones}
+      //   let newData = [...newPhones.data, createPhone.data]
+
+      //   newPhones = {...newPhones, data: newData}
+      //   cache.writeQuery({
+      //     query: gqlPhones,
+      //     data: { phones: newPhones },
+      //     variables: { userId: _.isEmpty(user) ? "" : user._id, page: 0, perPage: 30 }
+      //   });
+      // }
+    },
+    onCompleted({ data }) {
+      // history.push("/phones")
+    },
+  });
+  console.log("createPhone :", resultCreatePhone)
 
   const [onCreateBookmark, resultCreateBookmark] = useMutation(gqlCreateAndUpdateBookmark, {
     variables: {
@@ -148,15 +173,14 @@ const Devel = (props) => {
   const makeBank = (length) =>{
       let banks = []
       for ( var i = 0; i < length; i++ ) {
+        const min = 0;
+        const max = valueBanks.data.banks.data.length;
+        const rand = min + Math.random() * (max - min);
 
-          const min = 0;
-          const max = valueBanks.data.banks.data.length;
-          const rand = min + Math.random() * (max - min);
-
-          banks.push({
-                    bankAccountName: makeNumber(11),
-                    bankId:valueBanks.data.banks.data[Math.floor(rand)]._id
-                  })
+        banks.push({
+                  bankAccountName: makeNumber(11),
+                  bankId:valueBanks.data.banks.data[Math.floor(rand)]._id
+                })
       }
       return banks
   }
@@ -208,23 +232,22 @@ const Devel = (props) => {
   }
   
   const makeRole = () =>{
-      const min = 0;
-      const max = valueRoles.data.Roles.data.length;
-      const rand = min + Math.random() * (max - min);
+    const min = 0;
+    const max = valueRoles.data.Roles.data.length;
+    const rand = min + Math.random() * (max - min);
 
-      let roles = []
-      for ( var i = 0; i < rand; i++ ) {
+    let roles = []
+    for ( var i = 0; i < rand; i++ ) {
+      const minRole = 1;
+      const maxRole = valueRoles.data.Roles.data.length;
+      const randRole = minRole + Math.random() * (maxRole - minRole);
 
-          const minRole = 1;
-          const maxRole = valueRoles.data.Roles.data.length;
-          const randRole = minRole + Math.random() * (maxRole - minRole);
+      let rols = valueRoles.data.Roles.data[Math.floor(randRole)]
 
-          let rols = valueRoles.data.Roles.data[Math.floor(randRole)]
+      roles.push(rols._id)
+    }
 
-          roles.push(rols._id)
-      }
-
-      return  Array.from(new Set(roles))
+    return  Array.from(new Set(roles))
   }
 
   const makeDestination = () =>{
@@ -247,36 +270,33 @@ const Devel = (props) => {
 
           {
             for (var i = 0; i < 5000; i++) {
+              //////////// bank
+              const min = 0;
+              const max = total;
+              const rand = min + Math.random() * (max - min);
 
-                    //////////// bank
-                    const min = 0;
-                    const max = total;
-                    const rand = min + Math.random() * (max - min);
+              let input = {
+                            title: faker.lorem.lines(1),
+                            nameSubname: faker.name.firstName() +" "+ faker.name.firstName(),
+                            idCard: makeNumber(6),
+                            amount: makeNumber(6),
+                            tels: makeTels(rand),
+                            banks: makeBank(rand),
+                            description: faker.lorem.paragraph(),
+                            dateTranfer:  faker.date.past(),
+                            files:makeFile(rand),
+                            ownerId: makeUserId(),
 
-                    let input = {
-                                  title: faker.lorem.lines(1),
-                                  nameSubname: faker.name.firstName() +" "+ faker.name.firstName(),
-                                  idCard: makeNumber(6),
-                                  amount: makeNumber(6),
-                                  tels: makeTels(rand),
-                                  banks: makeBank(rand),
-                                  description: faker.lorem.paragraph(),
-                                  dateTranfer:  faker.date.past(),
-                                  files:makeFile(rand),
-                                  ownerId: makeUserId(),
+                            fake: true,
+                          }
 
-                                  fake: true,
-                                }
+              // console.log("input :", input)
 
-                    // console.log("input :", input)
-
-                    onCreatePost({ variables: { input } });     
-                }
+              onCreatePost({ variables: { input } });     
+            }
           }
 
-          let executionTime = `Time to execute = ${
-            (Date.now() - start) / 1000
-          } seconds`;
+          let executionTime = `Time to execute = ${ (Date.now() - start) / 1000 } seconds`;
 
           setSnackbarOpen(true);
           console.log("executionTime : ", executionTime);
@@ -287,36 +307,39 @@ const Devel = (props) => {
         POST [Auto Create]
       </Button>
 
-      {/* <Button
+      <Button
         onClick={() => {
-          console.log("COMMENT [Auto Create]");
+          console.log("PHONE [Auto Create]");
 
           let start = Date.now();
 
-          {
-           
+          for (var i = 0; i < 1000; i++) {
+
+            const min = 0;
+            const max = total;
+            const rand = min + Math.random() * (max - min);
+
+            onCreatePhone({ variables: { input: {
+                ownerId: makeUserId(),
+                phones: makeTels(rand),
+                description: faker.lorem.paragraph()
+              }
+            }});
           }
 
-          let executionTime = `Time to execute = ${
-            (Date.now() - start) / 1000
-          } seconds`;
-
-          setSnackbarOpen(true);
-
+          let executionTime = `Time to execute = ${ (Date.now() - start) / 1000 } seconds`;
           console.log("executionTime : ", executionTime);
         }}
         variant="contained"
-        color="primary"
-      >
-        COMMENT [Auto Create]
-      </Button> */}
+        color="primary">
+        PHONE [Auto Create]
+      </Button>
 
       <Button
         onClick={() => {
           console.log("USER [Auto Create]");
 
           let start = Date.now();
-
           {
             for (var i = 0; i < 1000; i++) {
               onCreateUser({ variables: { input: {

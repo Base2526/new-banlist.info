@@ -69,7 +69,7 @@ const ThemeMailList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: 'Name',
+        Header: 'Theme mail list',
         columns: [
           {
             Header: 'Username',

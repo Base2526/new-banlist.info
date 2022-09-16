@@ -74,7 +74,7 @@ const DblogList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: 'Name',
+        Header: 'DbLog list',
         columns: [
           {
             Header: 'Name',

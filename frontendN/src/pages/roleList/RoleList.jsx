@@ -77,7 +77,7 @@ const RoleList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: 'Name',
+        Header: 'Role list',
         columns: [
           {
             Header: 'Name',

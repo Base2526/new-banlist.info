@@ -66,7 +66,7 @@ const BookmarkList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: 'Name',
+        Header: 'Bookmark list',
         columns: [
           {
             Header: 'Username',
