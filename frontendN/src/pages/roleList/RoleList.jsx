@@ -36,11 +36,7 @@ const RoleList = (props) => {
   const [pageOptions, setPageOptions] = useState([30, 50, 100]);  
   const [pageIndex, setPageIndex] = useState(0);  
   const [pageSize, setPageSize] = useState(pageOptions[0])
-
-  const [openDialogDelete, setOpenDialogDelete] = useState({
-    isOpen: false,
-    id: ""
-  });
+  const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "" });
 
   const rolesValues = useQuery(gqlRoles, { notifyOnNetworkStatusChange: true });
 
@@ -77,7 +73,7 @@ const RoleList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: 'Name',
+        Header: 'Role list',
         columns: [
           {
             Header: 'Name',

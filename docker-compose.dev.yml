@@ -37,6 +37,11 @@ services:
       - ./graphqlN/src:/app/src        
       - ./uploads:/app/uploads    
     environment:
+<<<<<<< HEAD
+=======
+      - CHOKIDAR_USEPOLLING=${CHOKIDAR_USEPOLLING}
+      - WATCHPACK_POLLING=${CHOKIDAR_USEPOLLING}
+>>>>>>> b53c3686560c60021d48779f79bfc46fba5445c8
       - RA_HOST=${RA_HOST}
       - GRAPHQL_PORT=${GRAPHQL_PORT}
       - JWT_SECRET=${JWT_SECRET}

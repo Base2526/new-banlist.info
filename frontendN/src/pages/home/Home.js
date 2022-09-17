@@ -185,6 +185,7 @@ const Home = (props) => {
               }}
               >
               <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
+<<<<<<< HEAD
                  {/* <div onClick={(e)=>{
 
                     if(_.isEmpty(user)){
@@ -211,19 +212,34 @@ const Home = (props) => {
                     className="Demo__some-network__share-button"
                     onClick={(e)=>{ handleAnchorElShareClose() }} >
                     <FacebookIcon size={32} round /> Facebook
+=======
+                  <FacebookShareButton
+                    url={ window.location.origin + "/detail/" + item._id}
+                    quote={item?.title}
+                    // hashtag={"#hashtag"}
+                    description={item?.description}
+                    className="Demo__some-network__share-button"
+                    onClick={(e)=>{ handleAnchorElShareClose() }} >
+                    <FacebookIcon size={32} round /> Facebook
+>>>>>>> b53c3686560c60021d48779f79bfc46fba5445c8
                   </FacebookShareButton>
               </MenuItem>{" "}
 
               <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
                 <TwitterShareButton
                   title={item?.title}
+<<<<<<< HEAD
                   url={ window.location.href + "detail/" + item._id }
+=======
+                  url={ window.location.origin + "/detail/" + item._id }
+>>>>>>> b53c3686560c60021d48779f79bfc46fba5445c8
                   // hashtags={["hashtag1", "hashtag2"]}
                   onClick={(e)=>{ handleAnchorElShareClose() }} >
                   <TwitterIcon size={32} round />
                   Twitter
                 </TwitterShareButton>
               </MenuItem>
+<<<<<<< HEAD
 
               <MenuItem 
               onClick={async(e)=>{
@@ -247,6 +263,20 @@ const Home = (props) => {
               {/* document.execCommand('copy', true, text); */}
               <ContentCopyIcon size={32} round /> Copy link
 
+=======
+              <MenuItem 
+                onClick={async(e)=>{
+                  let text = window.location.origin + "/detail/" + item._id
+                  if ('clipboard' in navigator) {
+                    await navigator.clipboard.writeText(text);
+                  } else {
+                    document.execCommand('copy', true, text);
+                  }
+
+                  handleAnchorElShareClose()
+                }}>
+                <ContentCopyIcon size={32} round /> Copy link
+>>>>>>> b53c3686560c60021d48779f79bfc46fba5445c8
               </MenuItem>
             </Menu>
   }
@@ -276,7 +306,7 @@ const Home = (props) => {
                 !_.isEmpty(user) && user._id == item.ownerId
                 ? <MenuItem onClick={(e)=>{
                     handleAnchorElSettingClose()
-                    history.push("/post/"+item.id+ "/edit");
+                    history.push("/post/"+item._id+ "/edit");
                   }}>
                     Edit
                   </MenuItem>

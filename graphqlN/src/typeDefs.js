@@ -528,6 +528,7 @@ export default gql`
   }
 
   input PhoneInput {
+    ownerId: ID!
     phones: [String!]
     description: String
   }

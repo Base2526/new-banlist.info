@@ -86,7 +86,7 @@ const BankList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: 'Name',
+        Header: 'Bank list',
         columns: [
           {
             Header: 'Name',

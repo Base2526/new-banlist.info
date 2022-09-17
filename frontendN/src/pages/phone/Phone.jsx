@@ -15,7 +15,7 @@ import Editor from "../../components/editor/Editor";
 import { gqlCreatePhone, gqlUpdatePhone, gqlPhones, gqlPhone } from "../../gqlQuery"
 
 let editValues = undefined;
-let initValues = { phones: [''] , description: ""}
+let initValues = { phones: [''] , description: "", ownerId:""}
 
 const Phone = (props) => {
     let history = useHistory();
@@ -122,6 +122,8 @@ const Phone = (props) => {
 
     const submitForm = async(event) => {
         event.preventDefault();
+
+        input = {...input, ownerId: user._id}
 
         switch(mode){
             case "new":{

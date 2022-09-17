@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import { useHistory } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { useDeviceData } from "react-device-detect";
+<<<<<<< HEAD
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import LockIcon from '@mui/icons-material/Lock';
 import FacebookIcon from '@mui/icons-material/Facebook';
@@ -14,6 +15,8 @@ import GoogleIcon from '@mui/icons-material/Google';
 
 
 
+=======
+>>>>>>> b53c3686560c60021d48779f79bfc46fba5445c8
 import { FacebookLoginButton, GoogleLoginButton } from "react-social-login-buttons";
 import { GoogleLogin, useGoogleLogin  } from "react-google-login";
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
@@ -186,7 +189,22 @@ const DialogLogin = (props) => {
       </DialogContent>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
+<<<<<<< HEAD
           { formUserLogin() }
+=======
+          {/* { formUserLogin() } */}
+          <GoogleLogin
+            clientId={googleClientId}
+            render={renderProps => (
+              <button onClick={renderProps.onClick} disabled={renderProps.disabled}>This is my custom Google button</button>
+            )}
+            buttonText="Login"
+            onSuccess={onSuccess}
+            onFailure={onFailure}
+            cookiePolicy={'single_host_origin'}
+            isSignedIn={true}
+          />
+>>>>>>> b53c3686560c60021d48779f79bfc46fba5445c8
 
           <div className="d-flex flex-wrap">
             <GoogleLogin

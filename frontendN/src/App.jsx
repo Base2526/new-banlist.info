@@ -53,9 +53,13 @@ import PrivacyPage from "./pages/basicContent/Privacy"
 import DeveloperPage from "./pages/basicContent/Developer"
 import TermsPage from "./pages/basicContent/Terms"
 
+import LoginPage from "./pages/auth/Login"
+
 import Footer from "./pages/footer";
 
-import { login, addedConversations, addedConversation, addedNotifications, addedNotification } from "./redux/actions/auth"
+import DialogTermsAndConditions from "./DialogTermsAndConditions"
+
+import { login, addedConversations, addedConversation, addedNotifications, addedNotification, termsAndConditions } from "./redux/actions/auth"
 
 import { gqlConversations, gqlBookmarksByUserId, subConversation, subBookmark, gqlNotifications, subNotification } from "./gqlQuery"
 
@@ -141,7 +145,7 @@ const styles = (theme) => ({
 });
 
 const App = (props) => {
-  let {is_connnecting, user, addedConversations, addedConversation, addedNotifications, addedNotification} = props
+  let {is_connnecting, user, terms_and_conditions, addedConversations, addedConversation, addedNotifications, addedNotification, termsAndConditions} = props
 
   const history = useHistory();
   const [open, setOpen] = useState(false)
@@ -149,6 +153,7 @@ const App = (props) => {
 
   const [dialogLoginOpen, setDialogLoginOpen] = useState(false);
 
+  const [dialogTermsAndConditions, setDialogTermsAndConditions] = useState(false);
   ////////////////////// conversation ////////////////////////////
   const conversationValues =useQuery(gqlConversations, { variables: { userId: ""}, notifyOnNetworkStatusChange: true });
 
@@ -286,6 +291,7 @@ const App = (props) => {
             <div className={props.classes.toolbar} />
             <Breadcs title={""} />
             <div className="container">
+<<<<<<< HEAD
                <div className="row">
                 <Switch>
                   <Route path="/" exact>
@@ -320,26 +326,51 @@ const App = (props) => {
                   <div className="page-dev pl-2 pr-2">
                     <DeveloperPage />
                   </div>
+=======
+              <Switch>
+                <Route path="/" exact>
+                  <Home />
                 </Route>
-
+                <Route path="/user/login">
+                  <LoginPage />
+                </Route>
+                <Route path="/detail/:id">
+                  <Detail/>
+                </Route>
+                <Route path="/user/:id/view">
+                  <UserView />
+                </Route>
+                <Route path="/help">
+                  <Help />
+                </Route>
+                <Route path="/privacy">
+                  <PrivacyPage />
+>>>>>>> b53c3686560c60021d48779f79bfc46fba5445c8
+                </Route>
+                <Route path="/developer">
+                  <DeveloperPage />
+                </Route>
                 <Route path="/terms">
                   <div className="page-terms pl-2 pr-2">
                     <TermsPage />
                   </div>
                 </Route>
-                
                 <PrivateRoute path="/">
                   <PrivatePage />
                 </PrivateRoute>   
+                
                 <Route path="*">
                   <NoMatch />
                 </Route>     
               </Switch>
+<<<<<<< HEAD
               </div>
              </div>
+=======
+            </div>
+>>>>>>> b53c3686560c60021d48779f79bfc46fba5445c8
             <div className="footer"><Footer /></div>
           </main>
-          
         </div>
 
         {
@@ -364,6 +395,15 @@ const App = (props) => {
             }}
           />
         }
+
+        {
+          // dialogTermsAndConditions && 
+          <DialogTermsAndConditions 
+            open={!terms_and_conditions}
+            onOK={()=>{
+              termsAndConditions(true)
+            }}/>
+        }
       </Store>
     </Router>
   );
@@ -372,10 +412,11 @@ const App = (props) => {
 // export default withStyles(styles, { withTheme: true })(App);
 
 const mapStateToProps = (state, ownProps) => {
-  // console.log("mapStateToProps :", state)
+  console.log("mapStateToProps :", state)
   return {
     user: state.auth.user,
-    is_connnecting: state.ws.is_connnecting
+    is_connnecting: state.ws.is_connnecting,
+    terms_and_conditions: state.auth.terms_and_conditions
   }
 };
 
@@ -385,7 +426,9 @@ const mapDispatchToProps = {
   addedConversation,
 
   addedNotifications, 
-  addedNotification
+  addedNotification,
+
+  termsAndConditions
 }
 
 export default compose(

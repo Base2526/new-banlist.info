@@ -51,6 +51,8 @@ const Breadcs = ({ title }) => {
   const developerMatche = useRouteMatch("/developer");
   const termsMatche = useRouteMatch("/terms");
 
+  const loginMatche = useRouteMatch("/user/login");
+
   const handleClick = () => {};
   return (
     <div role="presentation" onClick={handleClick} className="container-breadcrumb">
@@ -328,12 +330,77 @@ const Breadcs = ({ title }) => {
             sx={{ display: "flex", alignItems: "center" }}
             color="text.primary"
           >
+<<<<<<< HEAD
             <GrainIcon sx={{ mr: 0.5 }} fontSize="inherit" />
             Breadcrumb
           </Typography>
           */}
         </Breadcrumbs>
       </div>
+=======
+            Edit phone
+          </MuiLink>
+        )}
+
+        {phonesMatches && (
+          <MuiLink component={Link} to="/phones">
+            Phones
+          </MuiLink>
+        )}
+
+        {privacyMatche && (
+          <MuiLink component={Link} to="/privacy">
+            Privacy
+          </MuiLink>
+        )}
+
+        {developerMatche && (
+          <MuiLink component={Link} to="/developer">
+            Developer
+          </MuiLink>
+        )}
+
+
+        {termsMatche && (
+          <MuiLink component={Link} to="/terms">
+            Terms
+          </MuiLink>
+        )}
+
+        {loginMatche && (
+          <MuiLink component={Link} to="/user/login">
+            Login
+          </MuiLink>
+        )}
+
+        {/*<Link
+          underline="hover"
+          sx={{ display: "flex", alignItems: "center" }}
+          color="inherit"
+          href="/"
+        >
+          <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+          MUI
+        </Link>
+        <Link
+          underline="hover"
+          sx={{ display: "flex", alignItems: "center" }}
+          color="inherit"
+          href="/material-ui/getting-started/installation/"
+        >
+          <WhatshotIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+          Core
+        </Link>
+        <Typography
+          sx={{ display: "flex", alignItems: "center" }}
+          color="text.primary"
+        >
+          <GrainIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+          Breadcrumb
+        </Typography>
+        */}
+      </Breadcrumbs>
+>>>>>>> b53c3686560c60021d48779f79bfc46fba5445c8
     </div>
   );
 };
