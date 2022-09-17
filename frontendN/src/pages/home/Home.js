@@ -6,6 +6,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { FacebookShareButton, TwitterShareButton } from "react-share";
 import { FacebookIcon, TwitterIcon } from "react-share";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useHistory } from "react-router-dom";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
@@ -16,16 +17,13 @@ import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import { connect } from "react-redux";
 import IconButton from "@mui/material/IconButton";
-
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
-
 import queryString from 'query-string';
 
 import PanelComment from "./PanelComment";
 import PopupSnackbar from "./PopupSnackbar";
-// import Footer from "../footer";
 import SearchBar from "./SearchBar";
 import Pagination from "./Pagination";
 import DialogLogin from "../../DialogLogin";
@@ -163,6 +161,7 @@ const Home = (props) => {
   };
 
   const menuShare = (item, index) =>{
+
     return  <Menu
               anchorEl={anchorElShare && anchorElShare[index]}
               keepMounted
@@ -186,57 +185,68 @@ const Home = (props) => {
               }}
               >
               <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
-                  {/* <FacebookShareButton
-                    url={window.location.href + "detail/" + item.id}
-                    quote={item.title}
-                    hashtag={"#hashtag"}
-                    description={item.title}
-                    className="Demo__some-network__share-button"
-                  > */}
-                 <div onClick={(e)=>{
+                 {/* <div onClick={(e)=>{
 
                     if(_.isEmpty(user)){
                       setDialogLoginOpen(true)
                     }else{
-                      onCreateShare({ variables: { input: {
-                            postId: item.id,
-                            userId: user._id,
-                            destination: "facebook"
-                          }
-                        }
-                      });  
+                      // onCreateShare({ variables: { input: {
+                      //       postId: item.id,
+                      //       userId: user._id,
+                      //       destination: "facebook"
+                      //     }
+                      //   }
+                      // });  
                     }
                     handleAnchorElShareClose()
                   }}>
                     <FacebookIcon size={32} round /> Facebook
-                  </div>
-                  {/* </FacebookShareButton> */}
+                  </div> */}
+
+                  <FacebookShareButton
+                    url={ window.location.href + "detail/" + item._id}
+                    quote={item?.title}
+                    // hashtag={"#hashtag"}
+                    description={item?.description}
+                    className="Demo__some-network__share-button"
+                    onClick={(e)=>{ handleAnchorElShareClose() }} >
+                    <FacebookIcon size={32} round /> Facebook
+                  </FacebookShareButton>
               </MenuItem>{" "}
+
               <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
-                  {/* <TwitterShareButton
-                    title={item.title}
-                    url={window.location.href + "detail/" + item.id}
-                    hashtags={["hashtag1", "hashtag2"]}
-                  > */}
-                  <div onClick={(e)=>{
+                <TwitterShareButton
+                  title={item?.title}
+                  url={ window.location.href + "detail/" + item._id }
+                  // hashtags={["hashtag1", "hashtag2"]}
+                  onClick={(e)=>{ handleAnchorElShareClose() }} >
+                  <TwitterIcon size={32} round />
+                  Twitter
+                </TwitterShareButton>
+              </MenuItem>
 
-                    if(_.isEmpty(user)){
-                      setDialogLoginOpen(true)
-                    }else{
-                      onCreateShare({ variables: { input: {
-                            postId: item.id,
-                            userId: user._id,
-                            destination: "twitter"
-                          }
-                        }
-                      });  
-                    }
+              <MenuItem 
+              onClick={async(e)=>{
+                let text = window.location.href + "detail/" + item._id
+                if ('clipboard' in navigator) {
+                  await navigator.clipboard.writeText(text);
+                } else {
+                  document.execCommand('copy', true, text);
+                }
 
-                    handleAnchorElShareClose()
-                  }}>
-                    <TwitterIcon size={32} round />Twitter
-                  </div>
-                  {/* </TwitterShareButton> */}
+                handleAnchorElShareClose()
+              }}>
+                
+
+              {/* <CopyToClipboard text={ window.location.href + "detail/" + item._id }
+                // onCopy={() => this.setState({copied: true})}
+                >
+                <ContentCopyIcon size={32} round /> Copy link
+              </CopyToClipboard> */}
+
+              {/* document.execCommand('copy', true, text); */}
+              <ContentCopyIcon size={32} round /> Copy link
+
               </MenuItem>
             </Menu>
   }
@@ -358,27 +368,32 @@ const Home = (props) => {
                   </Masonry>
                 </Container>
                 <Container sx={{ py: 2 }} maxWidth="xl">
-                  <Pagination
-                    page={page}
-                    onPageChange={(event, newPage) => {
-                      setPage(newPage);
-                      history.push({
-                        pathname: "/",
-                        search: "?page=" + newPage + "&perPage=" + rowsPerPage
-                      });
-                    }}
-                    rowsPerPage={rowsPerPage}
-                    onRowsPerPageChange={(event) => {
-                      setRowsPerPage(parseInt(event.target.value, 10));
-                      setPage(0);
 
-                      history.push({
-                        pathname: "/",
-                        search: "?perPage=" + parseInt(event.target.value, 10)
-                      });
-                    }}
-                    count={homesValues.data.homes.total}
-                  />
+                  { 
+                    homesValues.data.homes.total > rowsPerPage 
+                    ? <Pagination
+                        page={page}
+                        onPageChange={(event, newPage) => {
+                          setPage(newPage);
+                          history.push({
+                            pathname: "/",
+                            search: "?page=" + newPage + "&perPage=" + rowsPerPage
+                          });
+                        }}
+                        rowsPerPage={rowsPerPage}
+                        onRowsPerPageChange={(event) => {
+                          setRowsPerPage(parseInt(event.target.value, 10));
+                          setPage(0);
+
+                          history.push({
+                            pathname: "/",
+                            search: "?perPage=" + parseInt(event.target.value, 10)
+                          });
+                        }}
+                        count={homesValues.data.homes.total}
+                      /> 
+                    : <div /> 
+                  }
                 </Container>
               </div>
           }

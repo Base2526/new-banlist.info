@@ -48,6 +48,7 @@ const Breadcs = ({ title }) => {
   const phonesMatches = useRouteMatch("/phones");
 
   const privacyMatche = useRouteMatch("/privacy");
+  const developerMatche = useRouteMatch("/developer");
   const termsMatche = useRouteMatch("/terms");
 
   const handleClick = () => {};

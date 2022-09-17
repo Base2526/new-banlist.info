@@ -50,6 +50,7 @@ import DialogLogin from "./DialogLogin";
 import Help from "./pages/help"
 
 import PrivacyPage from "./pages/basicContent/Privacy"
+import DeveloperPage from "./pages/basicContent/Developer"
 import TermsPage from "./pages/basicContent/Terms"
 
 import Footer from "./pages/footer";
@@ -315,26 +316,27 @@ const App = (props) => {
                     </div>
                   </Route>
 
-                  <Route path="/terms">
-                    <div className="page-term pl-2 pr-2">
-                      <TermsPage />
-                    </div>
-                  </Route>
-                  
-                  <PrivateRoute path="/">
-                    <div className="page-private pl-2 pr-2">
-                      <PrivatePage />
-                    </div>
-                  </PrivateRoute>   
-                  <Route path="*">
-                    <div className="page-notmatch pl-2 pr-2">
-                      <NoMatch />
-                    </div>
-                  </Route>     
-                </Switch>
+                <Route path="/developer">
+                  <div className="page-dev pl-2 pr-2">
+                    <DeveloperPage />
+                  </div>
+                </Route>
+
+                <Route path="/terms">
+                  <div className="page-terms pl-2 pr-2">
+                    <TermsPage />
+                  </div>
+                </Route>
+                
+                <PrivateRoute path="/">
+                  <PrivatePage />
+                </PrivateRoute>   
+                <Route path="*">
+                  <NoMatch />
+                </Route>     
+              </Switch>
               </div>
-            </div>
-            
+             </div>
             <div className="footer"><Footer /></div>
           </main>
           

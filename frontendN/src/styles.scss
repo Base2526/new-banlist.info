@@ -70,6 +70,10 @@ body{
   }
 }
 
+.position-relative{
+  position: relative;
+}
+
 .css-wb57ya-MuiFormControl-root-MuiTextField-root{
   background-color: $white;
   // box-shadow: 0 1px 3px rgba($black, 30%);
@@ -88,6 +92,8 @@ body{
 @import 'sass-components/header';
 @import 'sass-components/breadcrumb';
 @import 'sass-components/utilities';
+@import 'sass-components/grid';
+@import 'sass-components/modal-login';
 @import 'sass-components/paging';
 @import 'sass-components/home';
 @import 'sass-pages/detail';

@@ -16,6 +16,13 @@
     }
 }
 
+@each $tname in ("left","center", "right"){
+    //@debug $tname;
+    .text-#{$tname} {
+        text-align: #{$tname};
+    }
+}
+
 
 .rounded{
     border-radius: .5rem;

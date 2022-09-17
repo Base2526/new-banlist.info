@@ -8,9 +8,13 @@ services:
       context: ./frontendN
       dockerfile: Dockerfile.dev
     environment:
+      - CHOKIDAR_USEPOLLING=${CHOKIDAR_USEPOLLING}
+      - WATCHPACK_POLLING=${CHOKIDAR_USEPOLLING}
+      
+      - REACT_APP_NODE_ENV=${REACT_APP_NODE_ENV}
+      - REACT_APP_HOST_GRAPHAL=${REACT_APP_HOST_GRAPHAL}
+      - FRONTEND_PORT=${FRONTEND_PORT}
       - PORT=${FRONTEND_PORT}
-    env_file:
-      - ./env/.env.dev
     ports:
       - "3000:3000"
     volumes:
@@ -29,13 +33,14 @@ services:
       dockerfile: Dockerfile.dev                
     ports:
       - "4000:4000"
-    env_file:
-      - ./env/.env.dev
     volumes:
       - ./graphqlN/src:/app/src        
       - ./uploads:/app/uploads    
     environment:
-      - MONGO_URI=mongodb://${MONGO_INITDB_USERNAME}:${MONGO_INITDB_PASSWORD}@mongo:27017/${MONGO_INITDB_DATABASE}?authMechanism=DEFAULT
+      - RA_HOST=${RA_HOST}
+      - GRAPHQL_PORT=${GRAPHQL_PORT}
+      - JWT_SECRET=${JWT_SECRET}
+      - MONGO_URI=mongodb://${MONGO_INITDB_USERNAME}:${MONGO_INITDB_PASSWORD}@mongo:${MONGO_PORT}/${MONGO_INITDB_DATABASE}?authMechanism=DEFAULT
     networks:
       - nodejs
   ################################
@@ -44,13 +49,13 @@ services:
   #   Setup Api Mongo and mongo-express container
   ################################
   mongo:
-    image: mongo:${MONGOD_VERSION}
+    container_name: mongo
+    image: mongo:${MONGO_VERSION}
+    command: mongod --port ${MONGO_PORT}
     expose:
-      - 27017
+      - ${MONGO_PORT}
     ports:
-      - "27018:27017"
-    env_file:
-      - ./env/.env.dev
+      - "${MONGO_PORT}:${MONGO_PORT}"
     volumes:
       - ./mongo-single/data:/data/db
       - ./mongo-single/restore:/mongo-single/restore
@@ -58,7 +63,7 @@ services:
     restart: always
     networks:
       - nodejs
-      
+
 networks:
   nodejs:
     external: true 

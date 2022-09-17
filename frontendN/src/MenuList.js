@@ -31,6 +31,8 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import BugReportIcon from '@mui/icons-material/BugReport';
 
+import DeveloperModeIcon from '@mui/icons-material/DeveloperMode';
+
 const MenuAdministrator = [
   {
     Id: 1,
@@ -137,6 +139,12 @@ const MenuAdministrator = [
   },
   {
     Id: 11,
+    Name: "Developer",
+    Icon: <DeveloperModeIcon className="icon" />,
+    Path: "/developer"
+  },
+  {
+    Id: 12,
     Name: "Help",
     Icon: <HelpIcon className="icon" />,
     Path: "/help"
@@ -173,6 +181,12 @@ const MenuAuthenticated = [
     Name: "Privacy",
     Icon: <SecurityIcon className="icon" />,
     Path: "/privacy"
+  },
+  {
+    Id: 11,
+    Name: "Developer",
+    Icon: <DeveloperModeIcon className="icon" />,
+    Path: "/developer"
   },
   {
     Id: 6,
