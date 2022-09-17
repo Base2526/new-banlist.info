@@ -7,9 +7,6 @@ import Typography from "@mui/material/Typography";
 import { useHistory } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { useDeviceData } from "react-device-detect";
-
-
-
 import { FacebookLoginButton, GoogleLoginButton } from "react-social-login-buttons";
 import { GoogleLogin, useGoogleLogin  } from "react-google-login";
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
@@ -174,7 +171,7 @@ const DialogLogin = (props) => {
       </DialogContent>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          { formUserLogin() }
+          {/* { formUserLogin() } */}
           <GoogleLogin
             clientId={googleClientId}
             render={renderProps => (

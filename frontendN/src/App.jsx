@@ -53,6 +53,8 @@ import PrivacyPage from "./pages/basicContent/Privacy"
 import DeveloperPage from "./pages/basicContent/Developer"
 import TermsPage from "./pages/basicContent/Terms"
 
+import LoginPage from "./pages/auth/Login"
+
 import Footer from "./pages/footer";
 
 import DialogTermsAndConditions from "./DialogTermsAndConditions"
@@ -293,6 +295,9 @@ const App = (props) => {
                 <Route path="/" exact>
                   <Home />
                 </Route>
+                <Route path="/user/login">
+                  <LoginPage />
+                </Route>
                 <Route path="/detail/:id">
                   <Detail/>
                 </Route>
@@ -314,6 +319,7 @@ const App = (props) => {
                 <PrivateRoute path="/">
                   <PrivatePage />
                 </PrivateRoute>   
+                
                 <Route path="*">
                   <NoMatch />
                 </Route>     
