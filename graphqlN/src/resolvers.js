@@ -1378,56 +1378,60 @@ export default {
     // post
 
     // role     
-    async createRole(root, {
-      input
-    }) {
-      console.log("createRole :",JSON.parse(JSON.stringify(input)))
-
-      return await Role.create(JSON.parse(JSON.stringify(input)));
+    async createRole(parent, args, context, info) {
+      try{
+        let { input } = args
+        return await Role.create(JSON.parse(JSON.stringify(input)));
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
     },
-    async updateRole(root, {
-      _id,
-      input
-    }) {
-      console.log("updateRole :", _id )
+    async updateRole(parent, args, context, info) {
+      try{
+        let { _id, input } = args
       
-      return await Role.findOneAndUpdate({
-        _id
-      }, input, {
-        new: true
-      })
+        return await Role.findOneAndUpdate({ _id }, input, { new: true })
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
     },
-    async deleteRole(root, {
-      _id
-    }) {
-      console.log("deleteRole :", _id)
+    async deleteRole(parent, args, context, info) {
+      try{
+        let { _id } = args
 
-      return await Role.findByIdAndRemove({_id})
+        return await Role.findByIdAndRemove({_id})
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
     },
-    async deleteRoles(root, {
-      _ids
-    }) {
-      console.log("deleteRole :", _ids)
+    async deleteRoles(parent, args, context, info) {
+      try{
+        let { _ids } = args
 
-      let deleteMany =  await Role.deleteMany({_id: {
-        $in: _ids,
-      }})
-      return deleteMany;
+        return await Role.deleteMany({_id: { $in: _ids }});
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
     },
     // role
 
     // bank
-    async createBank(root, {
-      input
-    }) {
-      console.log("createBank :",JSON.parse(JSON.stringify(input)))
-
-      return await Bank.create(JSON.parse(JSON.stringify(input)));
+    async createBank(parent, args, context, info){
+      try{
+        let { input } = args
+        return await Bank.create(JSON.parse(JSON.stringify(input)));
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
     },
     async updateBank(parent, args, context, info) {
       try{
         let {_id, input } = args
-        console.log("updateBank :", _id, JSON.parse(JSON.stringify(input)))
         
         return await Bank.findOneAndUpdate({ _id }, input, { new: true })
       } catch(err) {
