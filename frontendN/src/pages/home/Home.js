@@ -193,8 +193,10 @@ const Home = (props) => {
                     className="Demo__some-network__share-button"
                     onClick={(e)=>{ handleAnchorElShareClose() }} >
                     <FacebookIcon size={32} round /> Facebook
+
                   </FacebookShareButton>
               </MenuItem>{" "}
+
               <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
                 <TwitterShareButton
                   title={item?.title}
@@ -205,6 +207,9 @@ const Home = (props) => {
                   Twitter
                 </TwitterShareButton>
               </MenuItem>
+
+             
+
               <MenuItem 
                 onClick={async(e)=>{
                   let text = window.location.origin + "/detail/" + item._id

@@ -1,0 +1,33 @@
+$sm-600: 600px;
+.page-home{
+    .css-4hc8cj-MuiContainer-root{
+        @media (min-width:$sm-600){
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        > .css-4hc8cj-MuiContainer-root{
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+
+    .MuiContainer-root{
+        padding-left: 1rem;
+        padding-right: 1rem;
+        max-width: none;
+        .MuiContainer-root{
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+
+    .MuiContainer-maxWidthLg{
+        max-width: none;
+    }
+
+    .css-4reedn-MuiSpeedDial-root{
+        position: fixed;
+        bottom: auto;
+        top: 32%;
+    }
+}
