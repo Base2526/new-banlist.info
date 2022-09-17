@@ -1,0 +1,142 @@
+.MuiDialogContent-root{
+    .form-input{
+        flex-direction: column;
+        margin-bottom: 1.5rem;
+        label{
+            flex-grow: 1;
+        }
+        .input-bl-form{
+           width: 100%;
+           display: block;
+           height: calc(1.5em + 1rem + 2px);
+           padding: .375rem .75rem .375rem 2rem;
+           font-size: 1rem;
+           font-weight: 400;
+           line-height: 1.2;
+           background-color: $white;
+           background-clip: padding-box;
+           border: 1px solid $gray-d;
+           border-radius: .25rem;
+        }
+    }
+    .wrapper-form{
+        width: 100%;
+        flex-grow: 1;
+        .MuiSvgIcon-root{
+            position: absolute;
+            top: 20%;
+            left: .5rem;
+            z-index: 5;
+        }
+    }
+
+    button[type=submit]{
+        width: 100%;
+        height: calc(1.5em + 1rem + 2px);
+        padding: .375rem .75rem .375rem ;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.2;
+        border: 1px solid $gray-d;
+        border-radius: .25rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .d-flex {
+        margin-top: .5rem;
+        @media (max-width:$md){
+            flex-direction: column;
+        }
+        button{
+            --bgcolor: #dd4e41;
+            --bgcolor2: #c9453a;
+            --bgfb:#4b66a0;
+            --bgfb2:#3b5998;
+
+            position: relative;
+            height: calc(1.5em + 1rem + 2px);
+            padding: .375rem .75rem .375rem ;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.2;
+            border-radius: .25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            border:0;
+            
+            &:first-child{
+                @include social-media(var(--bgcolor),var(--bgcolor2));
+            }
+            &:last-child{
+                @include social-media(var(--bgfb),var(--bgfb2));
+            }
+            @media (max-width:$md){
+                width: 100%;
+            }
+
+            @media (min-width:$md){
+                &:first-child{
+                    margin-right: .5rem;
+                }
+                &:last-child{
+                    margin-left: .5rem;
+                }
+            }
+            span{
+                flex-grow: 1;
+            }
+           &::before{
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            left: 20%;
+            background-color: rgba($black, .2) ;
+           }
+           
+        }
+    }
+
+}
+
+.MuiDialog-container{
+    .MuiPaper-root{
+        position: relative;
+        &::before{
+            content: "";
+            position: absolute;
+            top: .5rem;
+            left: .5rem;
+            right: .5rem;
+            bottom: .5rem;
+            outline: 2px solid $gray-d;
+            z-index: inherit;
+        }
+    }
+}
+
+.MuiPaper-root{
+   .css-ypiqx9-MuiDialogContent-root{
+    overflow: visible;
+    // &:nth-child(1){
+    //     padding-bottom: 1rem !important;
+    // }
+    }
+    h2 + .css-ypiqx9-MuiDialogContent-root{
+       
+        padding-bottom: .5rem !important;
+
+        + .css-ypiqx9-MuiDialogContent-root{
+            padding-top: .5rem !important;
+            padding-bottom: .5rem !important;
+        }
+        
+    }
+
+  
+   
+}
+

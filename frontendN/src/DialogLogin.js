@@ -7,6 +7,13 @@ import Typography from "@mui/material/Typography";
 import { useHistory } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { useDeviceData } from "react-device-detect";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import LockIcon from '@mui/icons-material/Lock';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import GoogleIcon from '@mui/icons-material/Google';
+
+
+
 import { FacebookLoginButton, GoogleLoginButton } from "react-social-login-buttons";
 import { GoogleLogin, useGoogleLogin  } from "react-google-login";
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
@@ -144,15 +151,22 @@ const DialogLogin = (props) => {
 
   const formUserLogin = () =>{
     return  <form onSubmit={handleSubmit}>
-              <div>
+              <div className="d-flex form-input">
                 <label>Username </label>
-                <input type="text" name="username" value={input.username} onChange={onInputChange} required />
+                <div className="position-relative wrapper-form">
+                  <input type="text" className="input-bl-form" name="username" value={input.username} onChange={onInputChange} required />
+                  <AccountCircle />
+                </div>
+               
               </div>
-              <div>
+              <div className="d-flex form-input">
                 <label>Password </label>
-                <input type="password" name="password" value={input.password} onChange={onInputChange} required />
+                <div className="position-relative wrapper-form">
+                  <input type="password" className="input-bl-form" name="password" value={input.password} onChange={onInputChange} required />
+                  <LockIcon />
+                </div>
               </div>
-              <button type="submit">Login</button>
+              <button type="submit" >Login </button>
             </form>
   }
 
@@ -162,42 +176,47 @@ const DialogLogin = (props) => {
       onClose(false)
     }} 
     open={open}>
-      <DialogTitle>Sign in to Banlist</DialogTitle>
+      
+      <DialogTitle className="text-center">เข้าสู่ระบบ Banlist</DialogTitle>
 
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
+        <DialogContentText id="alert-dialog-description" className="text-center">
           Get a free account, no credit card required
         </DialogContentText>
       </DialogContent>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          {/* { formUserLogin() } */}
-          <GoogleLogin
-            clientId={googleClientId}
-            render={renderProps => (
-              <button onClick={renderProps.onClick} disabled={renderProps.disabled}>This is my custom Google button</button>
-            )}
-            buttonText="Login"
-            onSuccess={onSuccess}
-            onFailure={onFailure}
-            cookiePolicy={'single_host_origin'}
-            isSignedIn={true}
-          />
+          { formUserLogin() }
 
-          <FacebookLogin
-            appId={facebookAppId}
-            autoLoad={false}
-            // fields="name,email,picture"
-            // onClick={(e)=>{
-            //   console.log("FacebookLogin :", e)
-            // }}
-            callback={callbackFacebook} 
-            render={renderProps => (
-              <button onClick={renderProps.onClick}>This is my custom FB button</button>
-            )}/>
+          <div className="d-flex flex-wrap">
+            <GoogleLogin
+              clientId={googleClientId}
+              render={renderProps => (
+                <button onClick={renderProps.onClick} disabled={renderProps.disabled}><GoogleIcon /> <span> Google</span> </button>
+              )}
+              buttonText="Login"
+              onSuccess={onSuccess}
+              onFailure={onFailure}
+              cookiePolicy={'single_host_origin'}
+              isSignedIn={true}
+              
+            />
+
+            <FacebookLogin
+              appId={facebookAppId}
+              autoLoad={false}
+              // fields="name,email,picture"
+              // onClick={(e)=>{
+              //   console.log("FacebookLogin :", e)
+              // }}
+              callback={callbackFacebook} 
+              render={renderProps => (
+                <button onClick={renderProps.onClick}><FacebookIcon/> <span>Facebook </span></button>
+              )}/>
+          </div>
         </DialogContentText>
         </DialogContent>
-        <DialogContent>
+        <DialogContent className="text-center">
             <Typography variant="body2" color="text.secondary">By continuing, you agree to Banlist Terms of Service, Privacy Policy</Typography>
         </DialogContent>
     </Dialog>    

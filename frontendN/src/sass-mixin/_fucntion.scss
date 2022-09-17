@@ -1,0 +1,12 @@
+
+@mixin container() {
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@mixin social-media($bg1, $bg2) {
+    background-image: -webkit-linear-gradient(top, $bg1, $bg2);
+    background-image: linear-gradient(to bottom, $bg1, $bg2);
+    color: $white;
+}

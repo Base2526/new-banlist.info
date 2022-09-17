@@ -359,95 +359,97 @@ const Detail = (props) => {
                         
                     </div>
                     <div className="col2">
-                        <div className="col3">
-                            <div>
+                        <div className="bg-white rounded border">
+                            <div className="col3">
                                 <div>
-                                    <ItemBookmark 
-                                        {...props} 
-                                        postId={id}
-                                        onBookmark={(input)=>{
-                                            onCreateAndUpdateBookmark({ variables: { input } }); 
-                                        }}
-                                        onDialogLogin={(e)=>{
-                                            setDialogLoginOpen(true)
-                                        }}/>
-                                    <IconButton onClick={(e) => { 
-                                        _.isEmpty(user)
-                                        ? setDialogLoginOpen(true)    
-                                        : setAnchorElShare(e.currentTarget) 
-                                    }}>
-                                        <ShareIcon />
-                                        {  
-                                            shareValues.loading 
-                                            ? <div /> 
-                                            : shareValues.data.shareByPostId.data.length == 0 ? <></> : <div style={{
-                                                position: "absolute",
-                                                right: "5px",
-                                                borderRadius: "5px",
-                                                borderStyle: "solid",
-                                                borderColor: "red",
-                                                borderWidth: "1px",
-                                                fontSize: "10px"
-                                                }}>{shareValues.data.shareByPostId.data.length}</div> 
-                                        }
-                                    </IconButton>
-                                    <IconButton  onClick={(e) => { 
-                                        _.isEmpty(user)
-                                        ? setDialogLoginOpen(true)    
-                                        : setAnchorElSetting(e.currentTarget) 
-                                    }}>
-                                        <MoreVertIcon />
-                                    </IconButton>
+                                    <div>
+                                        <ItemBookmark 
+                                            {...props} 
+                                            postId={id}
+                                            onBookmark={(input)=>{
+                                                onCreateAndUpdateBookmark({ variables: { input } }); 
+                                            }}
+                                            onDialogLogin={(e)=>{
+                                                setDialogLoginOpen(true)
+                                            }}/>
+                                        <IconButton onClick={(e) => { 
+                                            _.isEmpty(user)
+                                            ? setDialogLoginOpen(true)    
+                                            : setAnchorElShare(e.currentTarget) 
+                                        }}>
+                                            <ShareIcon />
+                                            {  
+                                                shareValues.loading 
+                                                ? <div /> 
+                                                : shareValues.data.shareByPostId.data.length == 0 ? <></> : <div style={{
+                                                    position: "absolute",
+                                                    right: "5px",
+                                                    borderRadius: "5px",
+                                                    borderStyle: "solid",
+                                                    borderColor: "red",
+                                                    borderWidth: "1px",
+                                                    fontSize: "10px"
+                                                    }}>{shareValues.data.shareByPostId.data.length}</div> 
+                                            }
+                                        </IconButton>
+                                        <IconButton  onClick={(e) => { 
+                                            _.isEmpty(user)
+                                            ? setDialogLoginOpen(true)    
+                                            : setAnchorElSetting(e.currentTarget) 
+                                        }}>
+                                            <MoreVertIcon />
+                                        </IconButton>
+                                    </div>
                                 </div>
+                                <Typography variant="subtitle2" color="textSecondary">
+                                    หัวข้อร้องเรียน : {post.title}
+                                </Typography>
+                                <Typography
+                                    style={{ cursor: "pointer" }}
+                                    variant="subtitle2"
+                                    color="textSecondary">
+                                    ชื่อ-นามสกุล : {post.nameSubname}
+                                </Typography>
+                        
+                                <Typography variant="subtitle2" color="textSecondary">
+                                    ยอดเงิน : {post.amount}
+                                </Typography>
+
+                                <Typography variant="subtitle2" color="textSecondary">เบอร์โทร : 
+                                    <ul>
+                                        {
+                                            _.map(post.tels, (v)=>{
+                                                return <li><Typography variant="subtitle2" color="textSecondary">{v}</Typography></li>
+                                            })
+                                        }
+                                    </ul>
+                                </Typography>
+
+                                <Typography variant="subtitle2" color="textSecondary">ธนาคาร : 
+                                    <ul>
+                                        {
+                                            _.map(post.banks, (v)=><ItemBank item={v}/>)
+                                        }
+                                    </ul>
+                                </Typography>
+
+                                {/* TEL. */}
+                                <Typography variant="subtitle2" color="textSecondary">
+                                    วันที่โอน : {moment(post.dateTranfer).format('MMMM Do YYYY')}
+                                </Typography>
+                                <Typography variant="subtitle2" color="textSecondary">{"รายละเอียด :" + post.description}</Typography>
                             </div>
-                            <Typography variant="subtitle2" color="textSecondary">
-                                หัวข้อร้องเรียน : {post.title}
-                            </Typography>
-                            <Typography
-                                style={{ cursor: "pointer" }}
-                                variant="subtitle2"
-                                color="textSecondary">
-                                ชื่อ-นามสกุล : {post.nameSubname}
-                            </Typography>
-                    
-                            <Typography variant="subtitle2" color="textSecondary">
-                                ยอดเงิน : {post.amount}
-                            </Typography>
-
-                            <Typography variant="subtitle2" color="textSecondary">เบอร์โทร : 
-                                <ul>
-                                    {
-                                        _.map(post.tels, (v)=>{
-                                            return <li><Typography variant="subtitle2" color="textSecondary">{v}</Typography></li>
-                                        })
-                                    }
-                                </ul>
-                            </Typography>
-
-                            <Typography variant="subtitle2" color="textSecondary">ธนาคาร : 
-                                <ul>
-                                    {
-                                        _.map(post.banks, (v)=><ItemBank item={v}/>)
-                                    }
-                                </ul>
-                            </Typography>
-
-                            {/* TEL. */}
-                            <Typography variant="subtitle2" color="textSecondary">
-                                วันที่โอน : {moment(post.dateTranfer).format('MMMM Do YYYY')}
-                            </Typography>
-                            <Typography variant="subtitle2" color="textSecondary">{"รายละเอียด :" + post.description}</Typography>
-                        </div>
-                        <div className="col4">
-                            <ItemComment 
-                                {...props}
-                                id={id}
-                                onComment={(input)=>{
-                                    onCreateComment({ variables: { input: input }});
-                                }}
-                                onDialogLogin={()=>{
-                                    setDialogLoginOpen(true)
-                                }}/>
+                            <div className="col4">
+                                <ItemComment 
+                                    {...props}
+                                    id={id}
+                                    onComment={(input)=>{
+                                        onCreateComment({ variables: { input: input }});
+                                    }}
+                                    onDialogLogin={()=>{
+                                        setDialogLoginOpen(true)
+                                    }}/>
+                            </div>
                         </div>
                     </div>
 

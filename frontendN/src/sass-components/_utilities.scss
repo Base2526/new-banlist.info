@@ -1,0 +1,43 @@
+
+
+@each $abbr, $name in ("t": "top", "r": "right", "b": "bottom", "l": "left"){
+    @for $i from 1 through 20 {
+        .m#{$abbr}-#{$i}{
+            margin-#{$name}: 0.5rem * $i
+        }
+    }
+}
+
+@each $abbr, $name in ("t": "top", "r": "right", "b": "bottom", "l": "left"){
+    @for $i from 1 through 20 {
+        .p#{$abbr}-#{$i}{
+            padding-#{$name}: 0.5rem * $i
+        }
+    }
+}
+
+@each $tname in ("left","center", "right"){
+    //@debug $tname;
+    .text-#{$tname} {
+        text-align: #{$tname};
+    }
+}
+
+
+.rounded{
+    border-radius: .5rem;
+    -webkit-border-radius: .5rem;
+}
+
+.bg-white{
+    background: $white;
+}
+
+
+// border 
+.border{
+    border: 1px solid $gray-d;
+}
+
+
+
