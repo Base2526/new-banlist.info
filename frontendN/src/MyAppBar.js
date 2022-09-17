@@ -170,7 +170,10 @@ const MyAppBar = (props) =>{
                       //   console.log("B")
                       //   localStorage.setItem('token', "data.login.token")
                       // }
-                    }}>Login</Button>
+                    }}>
+                      <AccountCircle  />
+                      Login 
+                    </Button>
               }
             </Toolbar>
           </AppBar>

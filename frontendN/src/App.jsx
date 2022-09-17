@@ -291,30 +291,57 @@ const App = (props) => {
             <div className={props.classes.toolbar} />
             <Breadcs title={""} />
             <div className="container">
-              <Switch>
-                <Route path="/" exact>
-                  <Home />
+               <div className="row">
+                <Switch>
+                  <Route path="/" exact>
+                    <div className="page-home">
+                      <Home />
+                    </div>
+                  </Route>
+
+                  <Route path="/user/login">
+                    <LoginPage />
+                  </Route>
+
+
+                  <Route path="/detail/:id">
+                    <div className="page-detail">
+                      <Detail/>
+                    </div>
+                    
+                  </Route>
+                  <Route path="/user/:id/view">
+                    <div className="page-view">
+                      <UserView />
+                    </div>
+                  </Route>
+                  <Route path="/help">
+                    <div className="page-help pl-2 pr-2">
+                      <Help />
+                    </div>
+                  </Route>
+
+                  <Route path="/privacy">
+                    <div className="page-privacy pl-2 pr-2">
+                      <PrivacyPage />
+                    </div>
+                  </Route>
+
+                <Route path="/developer">
+                  <div className="page-dev pl-2 pr-2">
+                    <DeveloperPage />
+                  </div>
                 </Route>
-                <Route path="/user/login">
-                  <LoginPage />
-                </Route>
-                <Route path="/detail/:id">
-                  <Detail/>
-                </Route>
-                <Route path="/user/:id/view">
-                  <UserView />
-                </Route>
-                <Route path="/help">
-                  <Help />
-                </Route>
-                <Route path="/privacy">
-                  <PrivacyPage />
+                <Route path="/developer">
+                  <DeveloperPage />
                 </Route>
                 <Route path="/developer">
                   <DeveloperPage />
                 </Route>
                 <Route path="/terms">
-                  <TermsPage />
+                  <div className="page-terms pl-2 pr-2">
+                    <TermsPage />
+                  </div>
                 </Route>
                 <PrivateRoute path="/">
                   <PrivatePage />
@@ -324,7 +351,10 @@ const App = (props) => {
                   <NoMatch />
                 </Route>     
               </Switch>
+
             </div>
+            </div>
+
             <div className="footer"><Footer /></div>
           </main>
         </div>

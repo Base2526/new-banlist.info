@@ -1,9 +1,108 @@
-$font-stack: Helvetica, sans-serif;
+@import 'config-sass.scss';
+@import 'sass-mixin/fucntion';
+//$serifthai: 'Noto Serif Thai', serif !default;
+
+// $font-stack: Helvetica, sans-serif;
 $primary-color: rgb(218, 10, 10);
 
-body {
-  font: 100% $font-stack;
-  color: $primary-color;
-  font-size: 1.275rem !important;
-  background-color: #fff !important;
+:root{
+  font-size: 16px;
 }
+
+
+@mixin fontsnotPara() {
+  font-family: $noto-san-serifthai !important;
+}
+
+@mixin createfonts($getfm) {
+
+  @if $getfm{
+    @each $fontval in $getfm {
+      #{$fontval} {
+        font-family: $font-family !important;
+      }
+    }
+  }
+  
+}
+
+
+body {
+  * {
+    font-family: $font-family !important;
+  }
+  color: $primary-color;
+
+   
+}
+
+body{
+  .MuiContainer-root{
+    .MuiPaper-root *{
+        @include fontsnotPara()
+    }
+  }
+}
+
+.row{
+  margin-left: -1rem;
+  margin-right: -1rem;
+  width: 100%;
+  flex-grow: 1;
+}
+.container{
+  padding-left: 1rem;
+  padding-right:1rem;
+  position: relative;
+  width: 100%;
+  @include container();
+}
+.App-content-12{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-bottom: 0 !important;
+  // @media (min-width:$md){
+  //   padding-left: 1.5rem !important;
+  // }
+  .container{
+    height: auto;
+    min-height:calc(100vh - 50px);
+  }
+}
+
+.position-relative{
+  position: relative;
+}
+
+.css-wb57ya-MuiFormControl-root-MuiTextField-root{
+  background-color: $white;
+  // box-shadow: 0 1px 3px rgba($black, 30%);
+  border-radius: .5rem;
+   > .css-1gywuxd-MuiInputBase-root-MuiOutlinedInput-root{
+    border-radius: .5rem;
+    -webkit-border-radius: .5rem;
+    // .css-1d3z3hw-MuiOutlinedInput-notchedOutline{
+    //   border-color: $white;
+    // }
+   }
+}
+
+@include createfonts($font-head);
+
+@import 'sass-components/header';
+@import 'sass-components/breadcrumb';
+@import 'sass-components/utilities';
+@import 'sass-components/grid';
+@import 'sass-components/modal-login';
+@import 'sass-components/paging';
+@import 'sass-components/home';
+@import 'sass-pages/detail';
+@import 'sass-components/footer';
+
+
+
+
+
+  
+  
+
