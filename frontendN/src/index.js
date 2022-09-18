@@ -270,7 +270,7 @@ if (process.env.REACT_APP_NODE_ENV === 'production') {
   console.debug = () => {}
 }
 
-ReactGA4.initialize("G-M8LZ0N9TRY")
+ReactGA4.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS4)
 
 ReactDOM.render(
   <Provider store={store}>
