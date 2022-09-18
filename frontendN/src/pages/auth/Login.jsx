@@ -15,7 +15,7 @@ import axios from "axios";
 
 import { login } from "../../redux/actions/auth"
 
-import { gqlLogin, gqlConversations, gqlPosts, gqlHomes } from "../../gqlQuery"
+import { gqlLogin, gqlLoginWithSocial, gqlConversations, gqlPosts, gqlHomes } from "../../gqlQuery"
 
 const Login = (props) => {
     let history = useHistory();
@@ -50,6 +50,30 @@ const Login = (props) => {
         console.log("resultLogin :", resultLogin)
     }
 
+    const [onLoginWithSocial, resultLoginWithSocial] = useMutation(gqlLoginWithSocial, 
+        {
+          update: (cache, {data: {loginWithSocial}}) => {
+
+            console.log("loginWithSocial :", loginWithSocial)
+            // const data1 = cache.readQuery({ query: gqlBanks });
+    
+            // let newBanks = {...data1.banks}
+            // let newData  = _.map(newBanks.data, bank=>bank._id == updateBank._id ? updateBank : bank)
+    
+            // newBanks = {...newBanks, data: newData}
+            // cache.writeQuery({
+            //   query: gqlBanks,
+            //   data: { banks: newBanks },
+            // });
+          },
+          onCompleted({ data }) {
+            history.push("/");
+          }
+        }
+    );
+    
+    console.log("resultLoginWithSocial : ", resultLoginWithSocial)
+
     const onInputChange = (e) => {
         const { name, value } = e.target;
         setInput((prev) => ({
@@ -64,22 +88,11 @@ const Login = (props) => {
     }
 
     const onGithubSuccess = async(response) =>{
-        let oauth_access_token = await axios.post("https://github.com/login/oauth/access_token", 
-                                    {
-                                        client_id: '04e44718d32d5ddbec4c',
-                                        client_secret: 'dd1252dea6ec4d05083dc2c2cd53def7be4a9033',
-                                        code: response?.code
-                                    })
+        console.log("onGithubSuccess :", response)
 
-        
-        let params = new URLSearchParams(oauth_access_token);
-        let access_token = params.get('access_token')
-
-        console.log("onGithubSuccess params :", response, oauth_access_token, access_token)
-
-        if(!_.isEmpty(access_token)){
-            let git_user = await axios.get("https://api.github.com/user", { 'Authorization': 'Bearer ' + access_token });
-            console.log("git_user :", git_user)
+        let {code} = response
+        if(!_.isEmpty(code)){
+            onLoginWithSocial({ variables: { input: { authType: "GITHUB",  code }} })
         }
     }
 
@@ -98,12 +111,11 @@ const Login = (props) => {
                     <label>Password </label>
                     <input type="password" name="password" value={input.password} onChange={onInputChange} required />
                 </div>
-                <button type="submit">Login</button>
-
-                
+                <button type="submit">Login</button>    
             </form>
-            
-            <LoginGithub clientId="04e44718d32d5ddbec4c"
+                        
+            <LoginGithub 
+                clientId={process.env.REACT_APP_GITHUB_CLIENT_ID}
                 onSuccess={onGithubSuccess}
                 onFailure={onGithubFailure}
             />
