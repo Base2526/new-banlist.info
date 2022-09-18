@@ -29,7 +29,7 @@ const DialogTermsAndConditions = (props) => {
   let history = useHistory();
   let { open, onOK } = props
 
-  console.log("DialogTermsAndConditions")
+  // console.log("DialogTermsAndConditions")
 
   // let followerValues = useQuery(gqlFollower, {
   //   variables: {userId: id},

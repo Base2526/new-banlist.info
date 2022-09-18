@@ -343,11 +343,7 @@ export const gqlPhone = gql`query phone($id: ID!){ phone(_id: $id) }`;
 export const gqlLogin = gql`mutation Login($input: LoginInput) { login(input: $input) }`;
 
 export const gqlLoginWithSocial = gql`
-    mutation LoginWithSocial($input: LoginWithSocialInput) {
-        loginWithSocial(input: $input) {
-        id: _id
-        }
-    }`;
+    mutation LoginWithSocial($input: LoginWithSocialInput) { loginWithSocial(input: $input) }`;
 
 export const gqlCreateUser = gql`
     mutation CreateUser($input: UserInput) {

@@ -60,11 +60,15 @@ export default gql`
     deviceAgent: String
   }
 
+  enum AuthType {
+    GOOGLE
+    GITHUB
+    FACEBOOK
+  }
+
   input LoginWithSocialInput{
-    idToken: String!
-    name: String!
-    email: String!
-    typeSocial: String!
+    authType: AuthType!     # 
+    code: String            # for github
   }
 
   type RoomPayLoad {
@@ -653,7 +657,7 @@ export default gql`
 
   type Mutation {
     login(input: LoginInput): JSON
-    loginWithSocial(input: LoginWithSocialInput): LoginWithSocial
+    loginWithSocial(input: LoginWithSocialInput): JSON
 
     createUser(input: UserInput): User
     updateUser(_id: ID!, input: JSON): JSON
@@ -713,6 +717,8 @@ export default gql`
     deletePhone(_id: ID!): JSON
 
     fileUpload(text: String!, file: [Upload]!): [FileX]!
+
+    loginWithGithub(code: String!):JSON
   }
 
   type Subscription {

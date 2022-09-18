@@ -1,5 +1,6 @@
 import { createServer } from "http";
 import express from "express";
+import bodyParser from "body-parser";
 import { ApolloServer, gql } from "apollo-server-express";
 import { ApolloServerPluginDrainHttpServer, ApolloServerPluginLandingPageLocalDefault } from "apollo-server-core";
 import { makeExecutableSchema } from "@graphql-tools/schema";
@@ -228,6 +229,16 @@ async function startApolloServer(typeDefs, resolvers) {
 
     
     app.use(express.static("/app/uploads"));
+
+    app.use(bodyParser.json());
+    app.use(bodyParser.json({ type: "text/*" }));
+    app.use(bodyParser.urlencoded({ extended: false }));
+
+    // Enabled Access-Control-Allow-Origin", "*" in the header so as to by-pass the CORS error.
+    app.use((req, res, next) => {
+        res.header("Access-Control-Allow-Origin", "*");
+        next();
+    });
 
     // Now that our HTTP server is fully set up, actually listen.
     httpServer.listen(PORT, () => {
