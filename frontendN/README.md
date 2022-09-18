@@ -51,3 +51,4 @@ https://stackoverflow.com/questions/23538462/how-to-remove-buttons-from-ckeditor
 
 // login with github
 https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app
+https://levelup.gitconnected.com/how-to-implement-login-with-github-in-a-react-app-bd3d704c64fc
