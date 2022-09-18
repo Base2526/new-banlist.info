@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { withFilter } from 'graphql-subscriptions';
 import _ from "lodash";
+import FormData from "form-data";
+// import fetch from "node-fetch";
 
 import deepdash from "deepdash";
 deepdash(_);
@@ -37,6 +39,8 @@ import {fileRenamer} from "./utils"
 import { __TypeKind } from 'graphql';
 
 const path = require('path');
+
+const fetch = require("node-fetch");
 
 // const GraphQLUpload = require('graphql-upload/GraphQLUpload.js');
 const {
@@ -1080,14 +1084,60 @@ export default {
       }
     },
     // loginWithSocial
-    async loginWithSocial(root, {
-      input
-    }) {
+    async loginWithSocial(parent, args, context, info) {
+      let {input} = args
       console.log("loginWithSocial :", input)
       // input = {...input, displayName: input.username}
       // return await User.create(input);
 
-      return {_id: "12222"}
+
+      switch(input.authType){
+        case "GOOGLE":{
+
+          break;
+        }
+
+        case "GITHUB":{
+          let { code } = input
+          
+          const data = new FormData();
+          data.append("client_id", process.env.GITHUB_CLIENT_ID);
+          data.append("client_secret", process.env.GITHUB_CLIENT_SECRET);
+          data.append("code", code);
+
+          // Request to exchange code for an access token
+          let github_user = await fetch(process.env.GITHUB_URL_OAUTH_ACCESS_TOKEN, { method: "POST", body: data })
+                                      .then((response) => response.text())
+                                      .then((paramsString) => {
+                                        let params = new URLSearchParams(paramsString);
+
+                                        console.log("params :", params)
+
+                                        logger.error(JSON.stringify(params));
+                                        
+                                        let access_token = params.get("access_token");
+                                  
+                                        // Request to return data of a user that has been authenticated
+                                        return fetch(process.env.GITHUB_URL_OAUTH_USER, {
+                                          headers: {
+                                            Authorization: `token ${access_token}`,
+                                          },
+                                        });
+                                      })
+                                      .then((response) => response.json())
+
+          console.log("GITHUB :", github_user)
+
+          return github_user
+        }
+
+        case "FACEBOOK":{
+
+          break;
+        }
+      }
+
+      return input
     },
     // user
     async createUser(parent, args, context, info) {
@@ -2214,6 +2264,51 @@ export default {
         // });
         
         return phone;
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
+    },
+
+    // https://github.com/PrincewillIroka/login-with-github/blob/master/server/index.js
+    async loginWithGithub(parent, args, context, info){
+      try{
+        let start = Date.now()
+
+        let { code } = args
+
+        console.log("loginWithGithub :", args)
+
+        const data = new FormData();
+        data.append("client_id", "04e44718d32d5ddbec4c");
+        data.append("client_secret", "dd1252dea6ec4d05083dc2c2cd53def7be4a9033");
+        data.append("code", code);
+        // data.append("redirect_uri", "https://banlist.info");
+
+        // Request to exchange code for an access token
+        let github_user = await fetch(`https://github.com/login/oauth/access_token`, { method: "POST", body: data })
+                                    .then((response) => response.text())
+                                    .then((paramsString) => {
+                                      let params = new URLSearchParams(paramsString);
+
+                                      console.log("params :", params)
+
+                                      logger.error(JSON.stringify(params));
+                                      
+                                      let access_token = params.get("access_token");
+                                
+                                      // Request to return data of a user that has been authenticated
+                                      return fetch(`https://api.github.com/user`, {
+                                        headers: {
+                                          Authorization: `token ${access_token}`,
+                                        },
+                                      });
+                                    })
+                                    .then((response) => response.json())
+
+        console.log("github_user :", github_user)
+        console.log(`Time to execute = ${ (Date.now() - start) / 1000 } seconds`)
+
       } catch(err) {
         logger.error(err.toString());
         return;
