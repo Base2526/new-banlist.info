@@ -35,6 +35,8 @@ import _ from "lodash";
 
 import { useQuery } from "@apollo/client";
 
+import ReactGA4 from "react-ga4";
+
 import Breadcs from "./components/breadcrumbs/Breadcs";
 import Home from "./pages/home/Home";
 // import { socket } from "./SocketioClient";
@@ -158,6 +160,10 @@ const App = (props) => {
   const conversationValues =useQuery(gqlConversations, { variables: { userId: ""}, notifyOnNetworkStatusChange: true });
 
   // console.log("conversationValues :", conversationValues )
+    
+  // react-ga4
+  ReactGA4.send({ hitType: "pageview", page: window.location.pathname });
+
 
   if(  is_connnecting && !conversationValues.loading && conversationValues.data.conversations){
     let { status, data } = conversationValues.data.conversations  

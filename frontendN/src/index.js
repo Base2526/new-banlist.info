@@ -16,6 +16,8 @@ import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
 import { BrowserRouter, Switch } from "react-router-dom";
 
+import ReactGA4 from "react-ga4";
+
 import reducers from "./redux/reducers";
 
 const persistConfig = {
@@ -267,6 +269,8 @@ if (process.env.REACT_APP_NODE_ENV === 'production') {
   console.error = () => {}
   console.debug = () => {}
 }
+
+ReactGA4.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS4)
 
 ReactDOM.render(
   <Provider store={store}>
