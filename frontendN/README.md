@@ -46,3 +46,8 @@ https://codesandbox.io/s/445h05?file=/demo.tsx:790-802
 // CKEditor
 https://codesandbox.io/s/charming-christian-wo3z0p?file=/src/App.js:1446-1455
 https://stackoverflow.com/questions/23538462/how-to-remove-buttons-from-ckeditor-4
+
+
+
+// login with github
+https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app
