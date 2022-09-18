@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import LoginGithub from 'react-login-github';
 import axios from "axios";
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 import { login } from "../../redux/actions/auth"
 
@@ -102,23 +103,23 @@ const Login = (props) => {
 
     return (
             <div>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Username </label>
-                        <input type="text" name="username" value={input.username} onChange={onInputChange} required />
-                </div>
-                <div>
-                    <label>Password </label>
-                    <input type="password" name="password" value={input.password} onChange={onInputChange} required />
-                </div>
-                <button type="submit">Login</button>    
-            </form>
-                        
-            <LoginGithub 
-                clientId={process.env.REACT_APP_GITHUB_CLIENT_ID}
-                onSuccess={onGithubSuccess}
-                onFailure={onGithubFailure}
-            />
+                <form onSubmit={handleSubmit}>
+                    <div>
+                        <label>Username </label>
+                            <input type="text" name="username" value={input.username} onChange={onInputChange} required />
+                    </div>
+                    <div>
+                        <label>Password </label>
+                        <input type="password" name="password" value={input.password} onChange={onInputChange} required />
+                    </div>
+                    <button type="submit">Login</button>    
+                </form>
+                <LoginGithub 
+                    clientId={process.env.REACT_APP_GITHUB_CLIENT_ID}
+                    onSuccess={onGithubSuccess}
+                    onFailure={onGithubFailure}
+                    className={"login-github"}
+                    children={<React.Fragment><i className="left"><GitHubIcon /></i><span>Github</span></React.Fragment>}/>
             </div> );
 };
 
