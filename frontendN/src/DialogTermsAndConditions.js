@@ -55,7 +55,7 @@ const DialogTermsAndConditions = (props) => {
       open={open}>
       <DialogTitle>Terms and conditions</DialogTitle>
       <DialogContent>
-       คำเตือน! ข้อมูลทั้งหมดนี้ เป็นข้อมูลเพื่อทดสอบระบบไม่สามารถนําไปอ้างอิงใดๆ ได้ทั้งสิ้น
+       คำเตือน! อยู่ในช่วงทดสอบระบบ ข้อมูลทั้งหมดนี้ เป็นข้อมูลเพื่อทดสอบระบบไม่สามารถนําไปอ้างอิงใดๆ ได้ทั้งสิ้น
       </DialogContent>
       <DialogActions>
         {/* <FormControlLabel
