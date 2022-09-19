@@ -319,112 +319,116 @@ const PostList = (props) => {
   //////////////////////
 
   return (
-    <Box style={{ flex: 4 }}>
-      {
-        postsValue.loading
-        ? <div><CircularProgress /></div> 
-        : <Table
-            columns={columns}
-            data={postsValue.data.posts.data}
-            fetchData={fetchData}
-            rowsPerPage={pageOptions}
-            updateMyData={updateMyData}
-            skipReset={skipResetRef.current}
-            isDebug={false}
-          />
-      }
-
-      {openDialogDelete.isOpen && (
-        <Dialog
-          open={openDialogDelete.isOpen}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              {openDialogDelete.description}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                handleDelete(openDialogDelete.id);
-
-                setOpenDialogDelete({ isOpen: false, id: "" });
-              }}
-            >
-              Delete
-            </Button>
-            <Button variant="contained" onClick={handleClose} autoFocus>
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
-
-      {lightbox.isOpen && (
-        <Lightbox
-          mainSrc={lightbox.images[lightbox.photoIndex].url}
-          nextSrc={lightbox.images[(lightbox.photoIndex + 1) % lightbox.images.length].url}
-          prevSrc={
-            lightbox.images[(lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length].url
+    <div className="page-posts">
+      <div className="pl-2 pr-2">
+        <Box style={{ flex: 4 }} className="table-responsive">
+          {
+            postsValue.loading
+            ? <div><CircularProgress /></div> 
+            : <Table
+                columns={columns}
+                data={postsValue.data.posts.data}
+                fetchData={fetchData}
+                rowsPerPage={pageOptions}
+                updateMyData={updateMyData}
+                skipReset={skipResetRef.current}
+                isDebug={false}
+              />
           }
-          onCloseRequest={() => {
-            setLightbox({ ...lightbox, isOpen: false });
-          }}
-          onMovePrevRequest={() => {
-            setLightbox({
-              ...lightbox,
-              photoIndex:
-                (lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length
-            });
-          }}
-          onMoveNextRequest={() => {
-            setLightbox({
-              ...lightbox,
-              photoIndex: (lightbox.photoIndex + 1) % lightbox.images.length
-            });
-          }}
-        />
-      )}
 
-      <SpeedDial
-        ariaLabel="SpeedDial basic example"
-        sx={{ position: 'absolute', bottom: 16, right: 16 }}
-        icon={<SpeedDialIcon />}>
-        {
-          _.map([
-                  { icon: <PostAddIcon />, name: 'Post', id: 1 },
-                  // { icon: <AddIcCallIcon />, name: 'Phone', id: 2 },
-                ], (action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    icon={action.icon}
-                    tooltipTitle={action.name}
-                    tooltipOpen
-                    onClick={(e)=>{
-                      switch(action.id){
-                        case 1:{
-                          history.push({ pathname: "/post/new", state: {from: "/"} });
-                          break;
-                        }
+          {openDialogDelete.isOpen && (
+            <Dialog
+              open={openDialogDelete.isOpen}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  {openDialogDelete.description}
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  variant="outlined"
+                  onClick={() => {
+                    handleDelete(openDialogDelete.id);
 
-                        // case 2:{
-                        //   history.push({ pathname: "/phone/new", state: {from: "/"} });
-                        //   break;
-                        // }
-                      }
-                    }}
-                  />
-                ))
-        }
-      </SpeedDial>
-      
-      {/* <Footer /> */}
-    </Box>
+                    setOpenDialogDelete({ isOpen: false, id: "" });
+                  }}
+                >
+                  Delete
+                </Button>
+                <Button variant="contained" onClick={handleClose} autoFocus>
+                  Close
+                </Button>
+              </DialogActions>
+            </Dialog>
+          )}
+
+          {lightbox.isOpen && (
+            <Lightbox
+              mainSrc={lightbox.images[lightbox.photoIndex].url}
+              nextSrc={lightbox.images[(lightbox.photoIndex + 1) % lightbox.images.length].url}
+              prevSrc={
+                lightbox.images[(lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length].url
+              }
+              onCloseRequest={() => {
+                setLightbox({ ...lightbox, isOpen: false });
+              }}
+              onMovePrevRequest={() => {
+                setLightbox({
+                  ...lightbox,
+                  photoIndex:
+                    (lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length
+                });
+              }}
+              onMoveNextRequest={() => {
+                setLightbox({
+                  ...lightbox,
+                  photoIndex: (lightbox.photoIndex + 1) % lightbox.images.length
+                });
+              }}
+            />
+          )}
+
+          <SpeedDial
+            ariaLabel="SpeedDial basic example"
+            sx={{ position: 'absolute', bottom: 16, right: 16 }}
+            icon={<SpeedDialIcon />}>
+            {
+              _.map([
+                      { icon: <PostAddIcon />, name: 'Post', id: 1 },
+                      // { icon: <AddIcCallIcon />, name: 'Phone', id: 2 },
+                    ], (action) => (
+                      <SpeedDialAction
+                        key={action.name}
+                        icon={action.icon}
+                        tooltipTitle={action.name}
+                        tooltipOpen
+                        onClick={(e)=>{
+                          switch(action.id){
+                            case 1:{
+                              history.push({ pathname: "/post/new", state: {from: "/"} });
+                              break;
+                            }
+
+                            // case 2:{
+                            //   history.push({ pathname: "/phone/new", state: {from: "/"} });
+                            //   break;
+                            // }
+                          }
+                        }}
+                      />
+                    ))
+            }
+          </SpeedDial>
+          
+          {/* <Footer /> */}
+        </Box>
+      </div>
+    </div>
   );
 };
 

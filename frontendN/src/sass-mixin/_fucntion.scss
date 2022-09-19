@@ -10,3 +10,10 @@
     background-image: linear-gradient(to bottom, $bg1, $bg2);
     color: $white;
 }
+
+@mixin card-ui() {
+    border-radius: .5rem;
+    -webkit-border-radius: .5rem;
+    background: $white;
+    border: 1px solid $gray-d;
+}

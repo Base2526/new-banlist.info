@@ -459,14 +459,14 @@ const Post = (props) => {
     console.log("mainView : ", mode)
     switch(mode){
       case "new":{
-        return  <LocalizationProvider dateAdapter={AdapterDateFns}>
+        return  <LocalizationProvider dateAdapter={AdapterDateFns} >
                   <Box
                     component="form"
                     sx={{
                       "& .MuiTextField-root": { m: 1, width: "50ch" }
                     }}
                     onSubmit={submitForm}>
-                    <div>
+                    <div >
                       <TextField
                         id="post-title"
                         name="title"
@@ -744,9 +744,12 @@ const Post = (props) => {
   }
 
   return (
-    <div>
+    <div className="page-post pl-2 pr-2 mb-4">
+      <div className="MuiBox-root-postinss">
       {
+        
         mainView()
+       
       }
      
       {snackbar.open && (
@@ -760,6 +763,7 @@ const Post = (props) => {
       )}
 
       {/* <Footer /> */}
+      </div>
     </div>
   );
 };
