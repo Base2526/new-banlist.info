@@ -10,13 +10,19 @@ import { useDeviceData } from "react-device-detect";
 import Typography from "@material-ui/core/Typography";
 import { connect } from "react-redux";
 import _ from "lodash";
+import LoginGithub from 'react-login-github';
+import axios from "axios";
+import GitHubIcon from '@mui/icons-material/GitHub';
+
 import { login } from "../../redux/actions/auth"
 
-import { gqlLogin, gqlConversations, gqlPosts, gqlHomes } from "../../gqlQuery"
+import { gqlLogin, gqlLoginWithSocial, gqlConversations, gqlPosts, gqlHomes } from "../../gqlQuery"
 
 const Login = (props) => {
     let history = useHistory();
     let deviceData = useDeviceData();
+
+    // localStorage.clear()
 
     let { user, login } = props
 
@@ -45,6 +51,30 @@ const Login = (props) => {
         console.log("resultLogin :", resultLogin)
     }
 
+    const [onLoginWithSocial, resultLoginWithSocial] = useMutation(gqlLoginWithSocial, 
+        {
+          update: (cache, {data: {loginWithSocial}}) => {
+
+            console.log("loginWithSocial :", loginWithSocial)
+            // const data1 = cache.readQuery({ query: gqlBanks });
+    
+            // let newBanks = {...data1.banks}
+            // let newData  = _.map(newBanks.data, bank=>bank._id == updateBank._id ? updateBank : bank)
+    
+            // newBanks = {...newBanks, data: newData}
+            // cache.writeQuery({
+            //   query: gqlBanks,
+            //   data: { banks: newBanks },
+            // });
+          },
+          onCompleted({ data }) {
+            history.push("/");
+          }
+        }
+    );
+    
+    console.log("resultLoginWithSocial : ", resultLoginWithSocial)
+
     const onInputChange = (e) => {
         const { name, value } = e.target;
         setInput((prev) => ({
@@ -58,17 +88,39 @@ const Login = (props) => {
         onLogin({ variables: { input: { username: input.username,  password: input.password, deviceAgent: JSON.stringify(deviceData) }} })
     }
 
-    return (<form onSubmit={handleSubmit}>
-                <div>
-                    <label>Username </label>
-                        <input type="text" name="username" value={input.username} onChange={onInputChange} required />
-                </div>
-                <div>
-                    <label>Password </label>
-                    <input type="password" name="password" value={input.password} onChange={onInputChange} required />
-                </div>
-                <button type="submit">Login</button>
-            </form> );
+    const onGithubSuccess = async(response) =>{
+        console.log("onGithubSuccess :", response)
+
+        let {code} = response
+        if(!_.isEmpty(code)){
+            onLoginWithSocial({ variables: { input: { authType: "GITHUB",  code }} })
+        }
+    }
+
+    const onGithubFailure = (response) =>{
+        console.log("onGithubFailure :", response)
+    }
+
+    return (
+            <div>
+                <form onSubmit={handleSubmit}>
+                    <div>
+                        <label>Username </label>
+                            <input type="text" name="username" value={input.username} onChange={onInputChange} required />
+                    </div>
+                    <div>
+                        <label>Password </label>
+                        <input type="password" name="password" value={input.password} onChange={onInputChange} required />
+                    </div>
+                    <button type="submit">Login</button>    
+                </form>
+                <LoginGithub 
+                    clientId={process.env.REACT_APP_GITHUB_CLIENT_ID}
+                    onSuccess={onGithubSuccess}
+                    onFailure={onGithubFailure}
+                    className={"login-github"}
+                    children={<React.Fragment><i className="left"><GitHubIcon /></i><span>Github</span></React.Fragment>}/>
+            </div> );
 };
 
 const mapStateToProps = (state, ownProps) => {
