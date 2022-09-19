@@ -61,9 +61,9 @@ export const gqlBanks = gql`query banks{ banks }`;
 
 export const gqlBank = gql`query bank($id: ID!){ bank(_id: $id) }`;
 
-export const gqlTContactUsList = gql`
-    query TContactUsList($page: Int, $perPage: Int){
-        TContactUsList(
+export const gqlTReportList = gql`
+    query TReportList($page: Int, $perPage: Int){
+        TReportList(
             page: $page
             perPage: $perPage
         ){
@@ -77,9 +77,9 @@ export const gqlTContactUsList = gql`
         }
     }`;
 
-export const gqlTContactUs = gql`
-    query TContactUs($id: ID!){
-        TContactUs(_id: $id){
+export const gqlTReport = gql`
+    query TReport($id: ID!){
+        TReport(_id: $id){
             status
             executionTime
             data{
@@ -205,9 +205,9 @@ export const gqlIsBookmark = gql`
         }
     }`;
 
-export const gqlContactUs = gql`
-    query ContactUsList($page: Int, $perPage: Int){
-        ContactUsList(
+export const gqlReport = gql`
+    query ReportList($page: Int, $perPage: Int){
+        ReportList(
             page: $page
             perPage: $perPage
         ){
@@ -383,16 +383,16 @@ export const gqlCreateBasicContent = gql`
         }
     }`;
 
-export const gqlCreateContactUs = gql`
-    mutation CreateContactUs($input: ContactUsInput) {
-        createContactUs(input: $input) {
+export const gqlCreateReport = gql`
+    mutation CreateReport($input: ReportInput) {
+        createReport(input: $input) {
             id: _id
         }
     }`;
 
-export const gqlCreateTContactUs = gql`
-    mutation CreateTContactUs($input: TContactUsInput) {
-        createTContactUs(input: $input) {
+export const gqlCreateTReport = gql`
+    mutation CreateTReport($input: TReportInput) {
+        createTReport(input: $input) {
             id: _id
         }
     }`;
@@ -439,9 +439,9 @@ export const gqlUpdateBank = gql`mutation UpdateBank($id: ID!, $input: BankInput
 
 export const gqlUpdateBasicContent = gql`mutation UpdateBasicContent($id: ID!, $input: BasicContentInput) { updateBasicContent(_id: $id, input: $input) }`;
 
-export const gqlUpdateTContactUs = gql`
-    mutation UpdateTContactUs($id: ID!, $input: TContactUsInput) {
-        updateTContactUs(_id: $id, input: $input) {
+export const gqlUpdateTReport = gql`
+    mutation UpdateTReport($id: ID!, $input: TReportInput) {
+        updateTReport(_id: $id, input: $input) {
             id: _id
         }
     }`;

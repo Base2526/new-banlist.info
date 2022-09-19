@@ -6,9 +6,9 @@ import UserModel from './UserModel'
 import CommentModel from './CommentModel'
 import MailModel from './MailModel'
 import BookmarkModel from './BookmarkModel'
-import ContactUsModel from './ContactUsModel'
+import ReportModel from './ReportModel'
 
-import tContactUsModel from "./tContactUsModel"
+import tReportModel from "./tReportModel"
 
 import ShareModel from "./ShareModel"
 import DblogModel from "./DblogModel"
@@ -36,9 +36,9 @@ module.exports =  {
     Comment:CommentModel,
     Mail:MailModel,
     Bookmark:BookmarkModel,
-    ContactUs:ContactUsModel,
+    Report:ReportModel,
 
-    tContactUs:tContactUsModel,
+    tReport:tReportModel,
 
     Share:ShareModel,
     Dblog:DblogModel,

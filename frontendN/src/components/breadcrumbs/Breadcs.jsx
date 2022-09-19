@@ -31,10 +31,10 @@ const Breadcs = ({ title }) => {
   const notificationMatches =useRouteMatch("/notification")
   const messengerMatches =useRouteMatch("/message")
   const bookmarksMatches =useRouteMatch("/bookmarks")
-  const reportsMatches =useRouteMatch("/reports")
+  // const reportsMatches =useRouteMatch("/reports")
   const sharesMatches =useRouteMatch("/shares")
-  const contactUsMatches =useRouteMatch("/contact-us")
-  const tcontactusListMatches =useRouteMatch("/tcontactus-list")
+  const reportMatches =useRouteMatch("/report")
+  const treportListMatches =useRouteMatch("/treport-list")
   const dblogMatches =useRouteMatch("/dblog")
   const detailMatches =useRouteMatch("/detail")
   const helpMatches =useRouteMatch("/help")
@@ -206,24 +206,24 @@ const Breadcs = ({ title }) => {
               Bookmarks
             </MuiLink>
           )}
-          {reportsMatches && (
+          {/* {reportsMatches && (
             <MuiLink component={Link} to="/reports">
               Reports
             </MuiLink>
-          )}
+          )} */}
           {sharesMatches && (
             <MuiLink component={Link} to="/shares">
               Shares
             </MuiLink>
           )}
-          {contactUsMatches && (
-            <MuiLink component={Link} to="/contact-us">
-              Contact Us
+          {reportMatches && (
+            <MuiLink component={Link} to="/report">
+              Report
             </MuiLink>
           )}
-          {tcontactusListMatches && (
-            <MuiLink component={Link} to="/tcontactus-list">
-              Taxonomy Contact Us
+          {treportListMatches && (
+            <MuiLink component={Link} to="/treport-list">
+              Taxonomy Report
             </MuiLink>
           )}
           {dblogMatches && (
