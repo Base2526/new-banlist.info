@@ -51,6 +51,10 @@ const Breadcs = ({ title }) => {
   const developerMatche = useRouteMatch("/developer");
   const termsMatche = useRouteMatch("/terms");
 
+  const newContactUsMatches = useRouteMatch("/contact-us/new");
+  const contactUsMatches = useRouteMatch("/contact-us/:id/edit");
+  const contactUsListMatches = useRouteMatch("/contact-us-list");
+
   const loginMatche = useRouteMatch("/user/login");
 
   const handleClick = () => {};
@@ -228,7 +232,7 @@ const Breadcs = ({ title }) => {
           )}
           {dblogMatches && (
             <MuiLink component={Link} to="/dblog">
-              Recent log messages 
+              Log messages 
             </MuiLink>
           )}
           {detailMatches && (
@@ -295,6 +299,36 @@ const Breadcs = ({ title }) => {
               Phones
             </MuiLink>
           )}
+
+          {newContactUsMatches && (
+            <MuiLink 
+              component={Link} 
+              to="/contact-us/new">
+              Contact us
+            </MuiLink>
+          )}
+          {contactUsMatches && (
+            <MuiLink
+              component={Link}
+              to={`/contact-us/${contactUsMatches.params.id}/edit`}
+            >
+              Edit Contact us
+            </MuiLink>
+          )}
+
+          {contactUsListMatches && (
+            <MuiLink component={Link} to="/contact-us-list">
+              Contact us list
+            </MuiLink>
+          )}
+          
+          {
+            developerMatche && (
+              <MuiLink component={Link} to="/developer">
+                Developer
+              </MuiLink>
+            )
+          }
 
           {privacyMatche && (
             <MuiLink component={Link} to="/privacy">

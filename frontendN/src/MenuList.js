@@ -110,6 +110,11 @@ const MenuAdministrator = [
         Id: 18,
         Title: "Basic contents",
         Path : "/basic-contents"
+      },
+      {
+        Id: 19,
+        Title: "Contact us",
+        Path: "/contact-us-list"
       }
     ]
   },
@@ -121,7 +126,7 @@ const MenuAdministrator = [
   },
   {
     Id: 8,
-    Name: "Recent log messages",
+    Name: "Log messages",
     Icon: <AdbIcon className="icon" />,
     Path: "/dblog"
   },

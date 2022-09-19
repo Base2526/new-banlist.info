@@ -195,7 +195,7 @@ export default {
           console.log("regex :", data, regex)
 
 
-          total = (await Post.find().lean().exec()).length; 
+          total = (await Post.find({ $or: regex }).lean().exec()).length; 
         }else{
           data = await Post.find().limit(perPage).skip(skip); 
 

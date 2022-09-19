@@ -43,6 +43,9 @@ import Phone from "./pages/phone/Phone"
 
 import PhoneList from "./pages/phoneList/PhoneList"
 
+import ContactUs from "./pages/contactUs/ContactUs"
+import ContactUsList from "./pages/contactUs/ContactUsList"
+
 // import { isAuth } from "./AuthProvider";
 import { connect } from "react-redux";
 import _ from "lodash"
@@ -167,6 +170,16 @@ const PrivatePage =(props) => {
                 </Route>
                 <Route path="/phones">
                     <PhoneList />
+                </Route>
+
+                <Route path="/contact-us/:id/:mode">
+                    <ContactUs />
+                </Route>
+                <Route path="/contact-us/:mode">
+                    <ContactUs />
+                </Route>
+                <Route path="/contact-us-list">
+                    <ContactUsList />
                 </Route>
             </Switch>
         :   <Redirect to="/" />

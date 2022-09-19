@@ -161,7 +161,7 @@ const TReport = (props) => {
               }}/>
 
             <Button type="submit" variant="contained" color="primary">
-              CREATE
+              {mode === 'new' ? "CREATE" : "UPDATE"}
             </Button>
           </Box>
       }

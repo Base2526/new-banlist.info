@@ -45,8 +45,6 @@ const Home = (props) => {
 
   console.log("Home :", params)
 
-  // page=2&perPage=30
-
   let { is_connnecting, user, addedBookmark } = props
 
   const [keywordSearch, setKeywordSearch] = useState("");

@@ -66,7 +66,7 @@ let initValues = {
 const bmColumns = [
   { 
     field: "userId", 
-    headerName: "Username ccc", 
+    headerName: "Username", 
     width: 150,
     renderCell: (params) => {
       let value = useQuery(gqlUser, {
@@ -479,7 +479,6 @@ const Post = (props) => {
                         helperText={error.title}
                         error={_.isEmpty(error.title) ? false : true}
                       />
-
                       <TextField
                         id="post-name-subname"
                         name="nameSubname"
@@ -492,7 +491,6 @@ const Post = (props) => {
                         helperText={error.nameSubname}
                         error={_.isEmpty(error.nameSubname) ? false : true}
                       />
-
                       <TextField
                         id="post-idcard"
                         name="idCard"
@@ -505,7 +503,6 @@ const Post = (props) => {
                         helperText={error.idCard}
                         // error={_.isEmpty(error.idCard) ? false : true}
                       />
-
                       <TextField
                         id="post-amount"
                         name="amount"
@@ -519,7 +516,6 @@ const Post = (props) => {
                         helperText={error.amount}
                         error={_.isEmpty(error.amount) ? false : true}
                       />
-
                       <DesktopDatePicker
                         label="Date"
                         inputFormat="dd/MM/yyyy"
@@ -529,7 +525,6 @@ const Post = (props) => {
                         }}
                         renderInput={(params) => <TextField {...params} required={input.dateTranfer === null ? true: false} />}
                       />
-
                       <TelInputField
                         values={input.tels}
                         onChange={(values) => {
@@ -538,7 +533,6 @@ const Post = (props) => {
                           setInput({...input, tels: values})
                         }}
                       />
-
                       <BankInputField
                         values={input.banks}
                         onChange={(values) => {
@@ -546,7 +540,6 @@ const Post = (props) => {
                           setInput({...input, banks: values})
                         }}
                       />
-
                       <Editor 
                         label={"Description"} 
                         initData={ input.description }
@@ -686,7 +679,7 @@ const Post = (props) => {
 
                           </div>
                           <Button type="submit" variant="contained" color="primary">
-                            Create
+                            Update
                           </Button>
                         </Box>
                       </LocalizationProvider>
