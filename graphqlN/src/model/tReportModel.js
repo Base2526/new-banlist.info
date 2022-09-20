@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema
-const tContactUsSchema = new Schema({
+const tReportSchema = new Schema({
   name: { type: String },
   description: { type: String },
   isPublish: { type: Number}
@@ -9,5 +9,5 @@ const tContactUsSchema = new Schema({
     timestamps: true
 })
 
-const tContactUs = mongoose.model('tContactUs', tContactUsSchema,'tContactUs')
-export default tContactUs
+const tReport = mongoose.model('tReport', tReportSchema, 'tReport')
+export default tReport

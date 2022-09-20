@@ -10,7 +10,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Autocomplete from "@mui/material/Autocomplete";
 import LinearProgress from '@mui/material/LinearProgress';
 import { useQuery, useMutation } from "@apollo/client";
-import { gqlTContactUsList, gqlCreateTContactUs } from "../../gqlQuery"
+import { gqlTReportList, gqlCreateTReport } from "../../gqlQuery"
 
 const index =({open, postId, onReport,  onClose})=> {
 
@@ -19,19 +19,19 @@ const index =({open, postId, onReport,  onClose})=> {
     description: ""
   })
 
-  const tContactUsView = useQuery(gqlTContactUsList, {
+  const tReportView = useQuery(gqlTReportList, {
     variables: {page: 0, perPage: 20},
     notifyOnNetworkStatusChange: true,
   });
 
-  console.log("tContactUsView :", tContactUsView)
+  console.log("tReportView :", tReportView)
 
   const categoryView = () =>{
     return  <Autocomplete
               // multiple
               id="category"
               name="category"
-              options={ tContactUsView.data.TContactUsList.data }
+              options={ tReportView.data.TReportList.data }
               getOptionLabel={(option) => option.name}
               // value={ value }
               renderInput={(params) => (
@@ -56,15 +56,6 @@ const index =({open, postId, onReport,  onClose})=> {
           categoryId: input.categoryId,
           description: input.description
     })
-
-    // onCreateTContactUs({ variables: { input: {
-    //       postId: postId,     
-    //       categoryId: input.categoryId,
-    //       description: input.description
-    //     }
-    //   } 
-    // });
-    // onClose()
   }
 
   return (
@@ -78,7 +69,7 @@ const index =({open, postId, onReport,  onClose})=> {
           </DialogContentText> */}
 
           {
-            tContactUsView.loading
+            tReportView.loading
             ? <LinearProgress sx={{width:"100px"}} /> 
             : categoryView()
           }

@@ -29,7 +29,7 @@ import Pagination from "./Pagination";
 import DialogLogin from "../../DialogLogin";
 import ReportDialog from "../../components/report"
 import DialogProfile from "../../components/dialogProfile"
-import {gqlHomes, gqlCreateContactUs, 
+import {gqlHomes, gqlCreateReport, 
         gqlCreateShare, gqlCurrentNumber, 
         subPost, gqlCreateAndUpdateBookmark, 
         gqlIsBookmark} from "../../gqlQuery"
@@ -44,8 +44,6 @@ const Home = (props) => {
   let params = queryString.parse(history.location.search)
 
   console.log("Home :", params)
-
-  // page=2&perPage=30
 
   let { is_connnecting, user, addedBookmark } = props
 
@@ -64,14 +62,13 @@ const Home = (props) => {
   const [dialogProfile, setDialogProfile] = useState({open: false, id:""});
   const breakpoints = { default: 3, 1100: 2, 700: 1 };
 
-  const [onCreateContactUs, resultCreateContactUsValues] = useMutation(gqlCreateContactUs
+  const [onCreateReport, resultCreateReportValues] = useMutation(gqlCreateReport
     , {
         onCompleted({ data }) {
           history.push("/");
         }
       }
   );
-  // console.log("resultCreateContactUsValues :", resultCreateContactUsValues)
 
   const [onCreateShare, resultCreateShare] = useMutation(gqlCreateShare, {
     onCompleted({ data }) {
@@ -452,7 +449,7 @@ const Home = (props) => {
                         open={report.open} 
                         postId={report.postId} 
                         onReport={(e)=>{
-                          onCreateContactUs({ variables: { input: {
+                          onCreateReport({ variables: { input: {
                                   userId: user._id,
                                   postId: e.postId,     
                                   categoryId: e.categoryId,
@@ -464,7 +461,6 @@ const Home = (props) => {
                           setReport({open: false, postId:""})
                         }}
 
-                        // onCreateTContactUs
                         onClose={()=>setReport({open: false, postId:""})}/>
       }
 

@@ -21,8 +21,8 @@ import {Bank,
         Mail, 
         Socket, 
         Bookmark, 
-        ContactUs, 
-        tContactUs, 
+        Report, 
+        tReport, 
         Share, 
         Dblog,
         Conversation,
@@ -195,7 +195,7 @@ export default {
           console.log("regex :", data, regex)
 
 
-          total = (await Post.find().lean().exec()).length; 
+          total = (await Post.find({ $or: regex }).lean().exec()).length; 
         }else{
           data = await Post.find().limit(perPage).skip(skip); 
 
@@ -741,12 +741,12 @@ export default {
 
 
     // 
-    async ContactUsList(root, {
+    async ReportList(root, {
       page,
       perPage
     }) {
       let start = Date.now()
-      let data = await ContactUs.find();
+      let data = await Report.find();
       return {
         status:true,
         data,
@@ -757,30 +757,30 @@ export default {
     },
 
     /////
-    async TContactUs(root, {
+    async TReport(root, {
       _id
     }) {
 
-      let data = await tContactUs.findById(_id);
+      let data = await tReport.findById(_id);
       return {
         status:true,
         data
       }
     },
-    async TContactUsList(root, {
+    async TReportList(root, {
       page,
       perPage
     }) {
 
       let start = Date.now()
 
-      console.log("TContactUsList: page : ", page,
+      console.log("TReportList: page : ", page,
                   ", perPage : ", perPage, 
                   `Time to execute = ${
                     (Date.now() - start) / 1000
                   } seconds` )
 
-      let data = await tContactUs.find();
+      let data = await tReport.find();
 
       return {
         status:true,
@@ -790,14 +790,14 @@ export default {
         } seconds`
       }
     },
-    async getManyTContactUsList(root, {
+    async getManyTReportList(root, {
       _ids
     }) {
-      console.log("getManyTContactUsList :", _ids)
+      console.log("getManyTReportList :", _ids)
 
       let start = Date.now()
 
-      let data =  await tContactUs.find({_id: {
+      let data =  await tReport.find({_id: {
         $in: _ids,
       }})
 
@@ -1837,44 +1837,44 @@ export default {
 
       return result;
     },
-    // TContactUs
-    async createTContactUs(root, {
+    // TReport
+    async createTReport(root, {
       input
     }) {
-      console.log("createTContactUs")
+      console.log("createTReport")
 
-      return await tContactUs.create(input);
+      return await tReport.create(input);
     },
-    async updateTContactUs(root, {
+    async updateTReport(root, {
       _id,
       input
     }) {
-      console.log("updateTContactUs :", _id )
+      console.log("updateTReport :", _id )
       
-      return await tContactUs.findOneAndUpdate({
+      return await tReport.findOneAndUpdate({
         _id
       }, input, {
         new: true
       })
     },
-    async deleteTContactUs(root, {
+    async deleteTReport(root, {
       _id
     }) {
-      console.log("deleteTContactUs :", _id)
+      console.log("deleteTReport :", _id)
 
-      return await tContactUs.findByIdAndRemove({_id})
+      return await tReport.findByIdAndRemove({_id})
     },
-    async deleteTContactUsList(root, {
+    async deleteTReportList(root, {
       _ids
     }) {
-      console.log("deleteTContactUsList :", _ids)
-      return await tContactUs.deleteMany({_id: {
+      console.log("deleteTReportList :", _ids)
+      return await tReport.deleteMany({_id: {
         $in: _ids,
       }})
     },
-    // TContactUs
+    // TReport
 
-    async createContactUs(parent, args, context, info) {
+    async createReport(parent, args, context, info) {
 
       if(_.isEmpty(context)){
         // logger.error(JSON.stringify(args));
@@ -1899,7 +1899,7 @@ export default {
        * validate data
       */
 
-      return await ContactUs.create(input);
+      return await Report.create(input);
     },
     async createShare(parent, args, context, info) {
 

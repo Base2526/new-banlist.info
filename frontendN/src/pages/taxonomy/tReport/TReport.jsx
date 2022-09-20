@@ -4,7 +4,7 @@ import {
   FormItem,
   GenderContainer,
   NewUserButton
-} from "./TContactUs.styled";
+} from "./TReport.styled";
 
 import React , {useState, useEffect} from "react";
 import Box from "@mui/material/Box";
@@ -17,33 +17,33 @@ import LinearProgress from '@mui/material/LinearProgress';
 
 import Editor from "../../../components/editor/Editor";
 
-import { gqlTContactUs, gqlCreateTContactUs, gqlUpdateTContactUs } from "../../../gqlQuery"
+import { gqlTReport, gqlCreateTReport, gqlUpdateTReport } from "../../../gqlQuery"
 
 let editValues = undefined;
 let initValues = { name: "",  description: "" }
   
-const TContactUs = (props) => {
+const TReport = (props) => {
   let history = useHistory();
 
   const [input, setInput] = useState(initValues)
 
-  const [onCreateTContactUs, resultCreateTContactUsValues] = useMutation(gqlCreateTContactUs
+  const [onCreateTReport, resultCreateTReportValues] = useMutation(gqlCreateTReport
     , {
         onCompleted({ data }) {
-          history.push("/tcontactus-list");
+          history.push("/treport-list");
         }
       }
   );
 
-  const [onUpdateTContactUs, resultUpdateTContactUsValues] = useMutation(gqlUpdateTContactUs, 
+  const [onUpdateTReport, resultUpdateTReportValues] = useMutation(gqlUpdateTReport, 
     {
       onCompleted({ data }) {
-        history.push("/tcontactus-list");
+        history.push("/treport-list");
       }
     }
   );
 
-  console.log("resultUpdateTContactUsValues : ", resultUpdateTContactUsValues)
+  console.log("resultUpdateTReportValues : ", resultUpdateTReportValues)
 
   let { id, mode } = useParams();
 
@@ -56,7 +56,7 @@ const TContactUs = (props) => {
     }
 
     case "edit":{
-      editValues = useQuery(gqlTContactUs, {
+      editValues = useQuery(gqlTReport, {
         variables: {id},
         notifyOnNetworkStatusChange: true,
       });
@@ -68,7 +68,7 @@ const TContactUs = (props) => {
           let {loading}  = editValues
           
           if(!loading){
-            let {status, data} = editValues.data.TContactUs
+            let {status, data} = editValues.data.TReport
 
             console.log("edit editValues : ", status, data.name, data.description)
             if(status){
@@ -91,7 +91,7 @@ const TContactUs = (props) => {
 
     switch(mode){
       case "new":{
-        onCreateTContactUs({ variables: { input: {
+        onCreateTReport({ variables: { input: {
               name: input.name,
               description: input.description
             }
@@ -106,9 +106,9 @@ const TContactUs = (props) => {
                           description: input.description
                         }
 
-        console.log("newInput :", newInput, editValues.data.TContactUs.data.id)
-        onUpdateTContactUs({ variables: { 
-          id: editValues.data.TContactUs.data.id,
+        console.log("newInput :", newInput, editValues.data.TReport.data.id)
+        onUpdateTReport({ variables: { 
+          id: editValues.data.TReport.data.id,
           input: newInput
         }});
 
@@ -161,7 +161,7 @@ const TContactUs = (props) => {
               }}/>
 
             <Button type="submit" variant="contained" color="primary">
-              CREATE
+              {mode === 'new' ? "CREATE" : "UPDATE"}
             </Button>
           </Box>
       }
@@ -169,5 +169,5 @@ const TContactUs = (props) => {
   );
 };
 
-export default TContactUs;
+export default TReport;
   

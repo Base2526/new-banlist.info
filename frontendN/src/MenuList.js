@@ -96,9 +96,9 @@ const MenuAdministrator = [
       },
       {
         Id: 16,
-        Title: "ContactUs",
+        Title: "Report",
         // Icon: <MailIcon className="icon" />,
-        Path: "/tcontactus-list"
+        Path: "/treport-list"
       },
       {
         Id: 17,
@@ -110,18 +110,23 @@ const MenuAdministrator = [
         Id: 18,
         Title: "Basic contents",
         Path : "/basic-contents"
+      },
+      {
+        Id: 19,
+        Title: "Contact us",
+        Path: "/contact-us-list"
       }
     ]
   },
   {
     Id: 7,
-    Name: "Contact Us",
+    Name: "Reports",
     Icon: <BugReportIcon className="icon" />,
-    Path: "/contact-us"
+    Path: "/report"
   },
   {
     Id: 8,
-    Name: "Recent log messages",
+    Name: "Log messages",
     Icon: <AdbIcon className="icon" />,
     Path: "/dblog"
   },

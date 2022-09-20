@@ -3,7 +3,7 @@ import {
     UserWrapper,
     EditButton,
     ButtonWrapper
-} from "./ContactUsList.styled";
+} from "./ReportList.styled";
 import { useState, useContext, useEffect, useMemo, useRef, useCallback  } from "react";
 import { Link, useHistory } from "react-router-dom";
 import Button from "@mui/material/Button";
@@ -19,23 +19,23 @@ import _ from "lodash"
 import LinearProgress from '@mui/material/LinearProgress';
 import { useQuery } from "@apollo/client";
 
-import {gqlContactUs, gqlPost, gqlUser, gqlTContactUs} from "../../gqlQuery"
+import {gqlReport, gqlPost, gqlUser, gqlTReport} from "../../gqlQuery"
 // import Footer from "../footer";
 import Table from "../../TableContainer"
   
-const ContactUsList = (props) => {
+const ReportList = (props) => {
     let history = useHistory();
   
     const [pageOptions, setPageOptions] = useState([30, 50, 100]);  
     const [pageIndex, setPageIndex] = useState(0);  
     const [pageSize, setPageSize] = useState(pageOptions[0])
 
-    const contactUsValues = useQuery(gqlContactUs, {
+    const reportValues = useQuery(gqlReport, {
       variables: {page: pageIndex, perPage: pageSize},
       notifyOnNetworkStatusChange: true,
     });
 
-    console.log("contactUsValues :", contactUsValues)
+    console.log("reportValues :", reportValues)
 
   
     const [openDialogDelete, setOpenDialogDelete] = useState({
@@ -69,7 +69,7 @@ const ContactUsList = (props) => {
       () => [
         // 
         {
-          Header: 'Contact us list',
+          Header: 'Reports',
           columns: [
             {
               Header: 'Name',
@@ -91,7 +91,7 @@ const ContactUsList = (props) => {
               Header: 'Category name',
               accessor: 'categoryId',
               Cell: props =>{
-                let value = useQuery(gqlTContactUs, {
+                let value = useQuery(gqlTReport, {
                   variables: {id: props.value},
                   notifyOnNetworkStatusChange: true,
                 });
@@ -99,7 +99,7 @@ const ContactUsList = (props) => {
                 return  value.loading 
                         ? <LinearProgress sx={{width:"100px"}} />
                         : <Typography variant="overline" display="block" gutterBottom>
-                            {value.data.TContactUs.data.name}
+                            {value.data.TReport.data.name}
                           </Typography>
               } 
             },
@@ -128,20 +128,7 @@ const ContactUsList = (props) => {
             {
               Header: 'Created At',
               accessor: 'createdAt',
-            },
-            // {
-            //   Header: 'Action',
-            //   accessor: 'id',
-            //   Cell: props => {
-            //     console.log("Cell :", props)
-            //     return  <div>
-            //               <Link to={`/contact-us/${props.value}/edit`}>
-            //                 <button>Edit</button>
-            //               </Link>
-            //               <button>Delete</button>
-            //             </div>
-            //   }
-            // },
+            }
           ],
         }
       ],
@@ -191,11 +178,11 @@ const ContactUsList = (props) => {
       <UserListContainer>
 
         {
-          contactUsValues.loading
+          reportValues.loading
           ?  <div><CircularProgress /></div> 
           :   <Table
                 columns={columns}
-                data={contactUsValues.data.ContactUsList.data}
+                data={reportValues.data.ReportList.data}
                 fetchData={fetchData}
                 rowsPerPage={pageOptions}
                 updateMyData={updateMyData}
@@ -239,5 +226,5 @@ const ContactUsList = (props) => {
     );
   };
   
-  export default ContactUsList;
+  export default ReportList;
   

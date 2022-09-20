@@ -276,7 +276,7 @@ const UserView = (props) => {
           open={report.open} 
           postId={report.postId} 
           onReport={(e)=>{
-          onCreateContactUs({ variables: { input: {
+          onCreateReport({ variables: { input: {
                   userId: user._id,
                   postId: e.postId,     
                   categoryId: e.categoryId,
@@ -288,7 +288,6 @@ const UserView = (props) => {
           setReport({open: false, postId:""})
           }}
 
-          // onCreateTContactUs
           onClose={()=>setReport({open: false, postId:""})}/>
       }
     </div>
