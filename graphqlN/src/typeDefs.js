@@ -156,7 +156,7 @@ export default gql`
     description: String
   }
 
-  type TContactUs {
+  type TReport {
     _id: ID!
     name: String!
     description: String
@@ -251,7 +251,7 @@ export default gql`
     destination: String
   }
 
-  type ContactUs {
+  type Report {
     _id: ID!
     postId: String!
     categoryId: String!
@@ -308,16 +308,16 @@ export default gql`
     data:[BasicContent]
   }
 
-  type TContactUsPayLoad {
+  type TReportPayLoad {
     status:Boolean
     executionTime:String
-    data:TContactUs
+    data:TReport
   }
 
-  type TContactUsListPayLoad {
+  type TReportListPayLoad {
     status:Boolean
     executionTime:String
-    data:[TContactUs]
+    data:[TReport]
   }
 
   type MailPayLoad {
@@ -410,10 +410,10 @@ export default gql`
     data:[Dblog]
   }
 
-  type ContactUsListPayLoad{
+  type ReportListPayLoad{
     status:Boolean
     executionTime:String
-    data:[ContactUs]
+    data:[Report]
   }
 
   type ConversationsPayLoad {
@@ -468,11 +468,11 @@ export default gql`
     isBookmark(userId: ID, postId: ID!): BookmarkPayLoad
     bookmarksByUserId( userId: ID! ): BookmarksPayLoad
 
-    ContactUsList(page: Int, perPage: Int): ContactUsListPayLoad
+    ReportList(page: Int, perPage: Int): ReportListPayLoad
 
-    TContactUs(_id: ID!): TContactUsPayLoad
-    TContactUsList(page: Int, perPage: Int): TContactUsListPayLoad
-    getManyTContactUsList(_ids: [ID!]!): TContactUsListPayLoad
+    TReport(_id: ID!): TReportPayLoad
+    TReportList(page: Int, perPage: Int): TReportListPayLoad
+    getManyTReportList(_ids: [ID!]!): TReportListPayLoad
 
 
     shares(page: Int, perPage: Int): JSON
@@ -566,14 +566,14 @@ export default gql`
     description: String
   }
 
-  input ContactUsInput{
+  input ReportInput{
     postId: String!
     categoryId: String!
     userId: ID!
     description: String
   }
 
-  input TContactUsInput {
+  input TReportInput {
     name: String!
     description: String
   }
@@ -690,12 +690,12 @@ export default gql`
 
     createAndUpdateBookmark(input: BookmarkInput): Bookmark
 
-    createContactUs(input: ContactUsInput): ContactUs
+    createReport(input: ReportInput): Report
 
-    createTContactUs(input: TContactUsInput): TContactUs
-    updateTContactUs(_id: ID!, input: TContactUsInput): TContactUs
-    deleteTContactUs(_id: ID!): TContactUs
-    deleteTContactUsList(_ids: [ID!]!): deleteType
+    createTReport(input: TReportInput): TReport
+    updateTReport(_id: ID!, input: TReportInput): TReport
+    deleteTReport(_id: ID!): TReport
+    deleteTReportList(_ids: [ID!]!): deleteType
 
     createShare(input: ShareInput): Share
 

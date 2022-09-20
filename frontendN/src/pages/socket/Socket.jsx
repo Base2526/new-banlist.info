@@ -53,7 +53,7 @@ function Socket() {
               <CalendarToday className="userDisplayIcon" />
               <span className="userInfoTitle">{user.date}</span>
             </div>
-            <span className="detailTitle">Contact Details</span>
+            <span className="detailTitle">Report Details</span>
             <div className="userInfo">
               <PhoneAndroid className="userDisplayIcon" />
               <span className="userInfoTitle">{user.phone}</span>

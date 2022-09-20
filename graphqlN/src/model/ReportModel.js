@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const ContactUsModel = new mongoose.Schema(
+const ReportModel = new mongoose.Schema(
   {
     postId: String,
     categoryId: String,
@@ -12,6 +12,6 @@ const ContactUsModel = new mongoose.Schema(
   }
 );
 
-const ContactUs = mongoose.model("contactUs", ContactUsModel, "contactUs");
-export default ContactUs
+const Report = mongoose.model("report", ReportModel, "report");
+export default Report
 

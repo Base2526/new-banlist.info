@@ -7,8 +7,8 @@ import {Bank,
         Comment, 
         Mail, 
         Bookmark, 
-        ContactUs,
-        tContactUs,
+        Report,
+        tReport,
         Share,
         Dblog,
         Conversation,
@@ -117,27 +117,27 @@ const modelExists =()=>{
     }
   });
 
-  ContactUs.find({}, async(err, result)=> {
+  Report.find({}, async(err, result)=> {
     if (result.length > 0) {
-      console.log('Found ContactUs');
+      console.log('Found Report');
     } else {
-      console.log('Not found ContactUs, creating');
-      let newContactUs = new ContactUs({});
-      await newContactUs.save();
+      console.log('Not found Report, creating');
+      let newReport = new Report({});
+      await newReport.save();
 
-      await ContactUs.deleteMany({})
+      await Report.deleteMany({})
     }
   });
 
-  tContactUs.find({}, async(err, result)=> {
+  tReport.find({}, async(err, result)=> {
     if (result.length > 0) {
-      console.log('Found tContactUs');
+      console.log('Found tReport');
     } else {
-      console.log('Not found tContactUs, creating');
-      let newTContactUs = new tContactUs({});
-      await newTContactUs.save();
+      console.log('Not found tReport, creating');
+      let newTReport = new tReport({});
+      await newTReport.save();
 
-      await tContactUs.deleteMany({})
+      await tReport.deleteMany({})
     }
   });
 

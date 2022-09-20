@@ -11,9 +11,9 @@ import Devel from "./pages/devel/Devel";
 import Notification from "./pages/notification"
 import Message from "./pages/message/MessagePage"
 import BookmarkList from "./pages/bookmarkList/BookmarkList"
-import ContactUsList from "./pages/contactUsList/ContactUsList"
-import TContactUs from "./pages/taxonomy/tContactUs/TContactUs"
-import TContactUsList from "./pages/taxonomy/tContactUsList/TContactUsList"
+import ReportList from "./pages/reportList/ReportList"
+import TReport from "./pages/taxonomy/tReport/TReport"
+import TReportList from "./pages/taxonomy/tReportList/TReportList"
 import ThemeMailList from "./pages/themeMailList/ThemeMailList";
 import ThemeMail from "./pages/themeMail/ThemeMail";
 import ShareList from "./pages/shareList/ShareList"
@@ -42,6 +42,9 @@ import Upload from "./pages/test/Upload"
 import Phone from "./pages/phone/Phone"
 
 import PhoneList from "./pages/phoneList/PhoneList"
+
+import ContactUs from "./pages/contactUs/ContactUs"
+import ContactUsList from "./pages/contactUs/ContactUsList"
 
 // import { isAuth } from "./AuthProvider";
 import { connect } from "react-redux";
@@ -120,14 +123,14 @@ const PrivatePage =(props) => {
                 <Route path="/theme-mail/:mode">
                     <ThemeMail />
                 </Route>
-                <Route path="/tcontactus-list">
-                    <TContactUsList />
+                <Route path="/treport-list">
+                    <TReportList />
                 </Route>
-                <Route path="/tcontactus/:id/:mode">
-                    <TContactUs />
+                <Route path="/treport/:id/:mode">
+                    <TReport />
                 </Route>
-                <Route path="/tcontactus/:mode">
-                    <TContactUs />
+                <Route path="/treport/:mode">
+                    <TReport />
                 </Route>
                 <Route path="/notification">
                     <Notification />
@@ -138,8 +141,8 @@ const PrivatePage =(props) => {
                 <Route path="/bookmarks">
                     <BookmarkList />
                 </Route>
-                <Route path="/contact-us">
-                    <ContactUsList />
+                <Route path="/report">
+                    <ReportList />
                 </Route>
                 <Route path="/shares">
                     <ShareList />
@@ -167,6 +170,16 @@ const PrivatePage =(props) => {
                 </Route>
                 <Route path="/phones">
                     <PhoneList />
+                </Route>
+
+                <Route path="/contact-us/:id/:mode">
+                    <ContactUs />
+                </Route>
+                <Route path="/contact-us/:mode">
+                    <ContactUs />
+                </Route>
+                <Route path="/contact-us-list">
+                    <ContactUsList />
                 </Route>
             </Switch>
         :   <Redirect to="/" />

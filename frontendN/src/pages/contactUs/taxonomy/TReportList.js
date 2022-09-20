@@ -3,7 +3,7 @@ import {
     UserWrapper,
     EditButton,
     ButtonWrapper
-  } from "./TContactUsList.styled";
+  } from "./TReportList.styled";
 
 import { DataGrid } from "@mui/x-data-grid";
 import { DeleteOutline } from "@material-ui/icons";
@@ -25,12 +25,12 @@ import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import { useQuery } from "@apollo/client";
 
-import {gqlTContactUsList} from "../../../gqlQuery"
+import {gqlTReportList} from "../../../gqlQuery"
 import Footer from "../../footer";
 
 import Table from "../../../TableContainer"
   
-const TContactUsList = (props) => {
+const TReportList = (props) => {
     let history = useHistory();
 
     const [pageOptions, setPageOptions] = useState([30, 50, 100]);  
@@ -42,12 +42,12 @@ const TContactUsList = (props) => {
         id: ""
     });
 
-    const tContactUsValues = useQuery(gqlTContactUsList, {
+    const tReportValues = useQuery(gqlTReportList, {
         variables: {page: pageIndex, perPage: pageSize},
         notifyOnNetworkStatusChange: true,
     });
 
-    console.log("tContactUsValues :", tContactUsValues)
+    console.log("tReportValues :", tReportValues)
 
     ///////////////
     const fetchData = useCallback(
@@ -81,7 +81,7 @@ const TContactUsList = (props) => {
     () => [
         // 
         {
-        Header: 'Contact us list',
+        Header: 'Taxonomy Report list',
         columns: [
             {
             Header: 'Name',
@@ -118,7 +118,7 @@ const TContactUsList = (props) => {
             Cell: props => {
                 console.log("Cell :", props)
                 return  <div>
-                        <Link to={`/tcontactus/${props.row.original.id}/edit`}>
+                        <Link to={`/treport/${props.row.original.id}/edit`}>
                             <button>Edit</button>
                         </Link>
                         <button>Delete</button>
@@ -173,11 +173,11 @@ const TContactUsList = (props) => {
     return (
         <UserListContainer>
             {
-                tContactUsValues.loading
+                tReportValues.loading
                 ?   <div><CircularProgress /></div> 
                 :   <Table
                         columns={columns}
-                        data={tContactUsValues.data.TContactUsList.data}
+                        data={tReportValues.data.TReportList.data}
                         fetchData={fetchData}
                         rowsPerPage={pageOptions}
                         updateMyData={updateMyData}
@@ -222,7 +222,7 @@ const TContactUsList = (props) => {
                 sx={{ position: 'absolute', bottom: 16, right: 16 }}
                 icon={<SpeedDialIcon />}
                 onClick={(e)=>{
-                    history.push("/tcontactus/new");
+                    history.push("/treport/new");
                 }}
             />
 
@@ -231,4 +231,4 @@ const TContactUsList = (props) => {
     );
 };
 
-export default TContactUsList;
+export default TReportList;
