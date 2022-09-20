@@ -1,0 +1,50 @@
+.page-posts{
+    .MuiBox-root{
+        &.table-responsive{
+            padding: 1rem;
+            border: 1px solid $gray-d;
+            background-color: $white;
+            border-radius: .5rem;
+            -webkit-border-radius: .5rem;
+            > div:first-child{
+                @media (max-width:$lg){
+                    width: 100%;
+                    overflow-x: auto;
+                    table{
+                        width: 1200px;
+                    }
+                }
+
+                
+            }
+            
+          
+        }
+       
+        table{
+            padding: 0 .5rem;
+            input{
+                border: 1px solid $gray-d;
+                padding: .25rem;
+            }
+        }
+    }
+}
+
+table{
+    width: 100%;
+    border: 1px solid $gray-d !important;
+    border-collapse: collapse;
+    th{
+        border: 1px solid $gray-d;
+    }
+    th,td{
+        padding: 0.5em;
+    }
+    tbody{
+        td{
+            border: 1px solid $gray-d; 
+        }
+    }
+
+}

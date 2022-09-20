@@ -361,7 +361,7 @@ const App = (props) => {
             </div>
             </div>
 
-            <div className="footer"><Footer /></div>
+            <div className="footer "><Footer /></div>
           </main>
         </div>
 
