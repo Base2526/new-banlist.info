@@ -182,15 +182,32 @@ const Home = (props) => {
               }}
               >
               <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
+                 {/* <div onClick={(e)=>{
+
+                    if(_.isEmpty(user)){
+                      setDialogLoginOpen(true)
+                    }else{
+                      // onCreateShare({ variables: { input: {
+                      //       postId: item.id,
+                      //       userId: user._id,
+                      //       destination: "facebook"
+                      //     }
+                      //   }
+                      // });  
+                    }
+                    handleAnchorElShareClose()
+                  }}>
+                    <FacebookIcon size={32} round /> Facebook
+                  </div> */}
+
                   <FacebookShareButton
-                    url={ window.location.origin + "/detail/" + item._id}
+                    url={ window.location.href + "detail/" + item._id}
                     quote={item?.title}
                     // hashtag={"#hashtag"}
                     description={item?.description}
                     className="Demo__some-network__share-button"
                     onClick={(e)=>{ handleAnchorElShareClose() }} >
                     <FacebookIcon size={32} round /> Facebook
-
                   </FacebookShareButton>
               </MenuItem>{" "}
 
@@ -205,20 +222,19 @@ const Home = (props) => {
                 </TwitterShareButton>
               </MenuItem>
 
-             
-
               <MenuItem 
-                onClick={async(e)=>{
-                  let text = window.location.origin + "/detail/" + item._id
-                  if ('clipboard' in navigator) {
-                    await navigator.clipboard.writeText(text);
-                  } else {
-                    document.execCommand('copy', true, text);
-                  }
+              onClick={async(e)=>{
+                let text = window.location.href + "detail/" + item._id
+                if ('clipboard' in navigator) {
+                  await navigator.clipboard.writeText(text);
+                } else {
+                  document.execCommand('copy', true, text);
+                }
 
-                  handleAnchorElShareClose()
-                }}>
-                <ContentCopyIcon size={32} round /> Copy link
+                handleAnchorElShareClose()
+              }}>
+                
+              <ContentCopyIcon size={32} round /> Copy link
               </MenuItem>
             </Menu>
   }

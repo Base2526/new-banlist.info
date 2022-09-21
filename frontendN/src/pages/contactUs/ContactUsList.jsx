@@ -71,7 +71,7 @@ const ContactUsList = (props) => {
       () => [
         // 
         {
-          Header: 'Contact us',
+          Header: 'Contact us list',
           columns: [
             {
               Header: 'Name',
