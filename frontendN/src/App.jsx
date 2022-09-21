@@ -308,8 +308,6 @@ const App = (props) => {
                   <Route path="/user/login">
                     <LoginPage />
                   </Route>
-
-
                   <Route path="/detail/:id">
                     <div className="page-detail">
                       <Detail/>
@@ -337,9 +335,7 @@ const App = (props) => {
                   <div className="page-dev pl-2 pr-2">
                     <DeveloperPage />
                   </div>
-                </Route>
-                <Route path="/developer">
-                  <DeveloperPage />
+
                 </Route>
                 <Route path="/developer">
                   <DeveloperPage />

@@ -11,9 +11,6 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import LockIcon from '@mui/icons-material/Lock';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GoogleIcon from '@mui/icons-material/Google';
-
-
-
 import { FacebookLoginButton, GoogleLoginButton } from "react-social-login-buttons";
 import { GoogleLogin, useGoogleLogin  } from "react-google-login";
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
@@ -187,7 +184,6 @@ const DialogLogin = (props) => {
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           { formUserLogin() }
-
           <div className="d-flex flex-wrap">
             <GoogleLogin
               clientId={googleClientId}
