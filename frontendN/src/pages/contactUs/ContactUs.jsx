@@ -11,46 +11,42 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
 
 import PopupSnackbar from "../home/PopupSnackbar";
 import Editor from "../../components/editor/Editor";
 
-import { gqlTReport, gqlCreateTReport, gqlUpdateTReport } from "../../gqlQuery"
+import { gqlContactUs, gqlTopics, gqlCreateAndUpdateContactUs} from "../../gqlQuery"
 
 import AttackFileField from "../post/AttackFileField";
+import _ from "lodash";
 
 let editValues = undefined;
 let initValues = { nameSurname:"", email:"", tel:"", topic:"", description:"",  attackFiles: [] }
   
+// 
 const ContactUs = (props) => {
   let history = useHistory();
 
   const [input, setInput] = useState(initValues)
   const [snackbar, setSnackbar] = useState({open:false, message:""});
 
-  const [onCreateTReport, resultCreateTReportValues] = useMutation(gqlCreateTReport
+  const [error, setError] = useState({ nameSurname:"", email:"", tel:"", topic:"", description:"" });
+
+  const topicValues = useQuery(gqlTopics, { notifyOnNetworkStatusChange: true });
+
+  console.log("topicValues :", topicValues)
+ 
+  const [onCreateAndUpdateContactUs, resultCreateAndUpdateContactUsValues] = useMutation(gqlCreateAndUpdateContactUs
     , {
         onCompleted({ data }) {
-          history.push("/treport-list");
+          history.push("/contact-us-list");
         }
       }
   );
 
-  const [onUpdateTReport, resultUpdateTReportValues] = useMutation(gqlUpdateTReport, 
-    {
-      onCompleted({ data }) {
-        history.push("/treport-list");
-      }
-    }
-  );
-
-  console.log("resultUpdateTReportValues : ", resultUpdateTReportValues)
-
   const onInputChange = (e) => {
-    
     const { name, value } = e.target;
-
-    console.log("onInputChange :", name, value)
     setInput((prev) => ({
       ...prev,
       [name]: value
@@ -60,36 +56,49 @@ const ContactUs = (props) => {
 
   const validateInput = (e) => {
     let { name, value } = e.target;
-    // setError((prev) => {
-    //   const stateObj = { ...prev, [name]: "" };
-    //   switch (name) {
-    //     case "title": {
-    //       if (!value) {
-    //         stateObj[name] = "Please enter title.";
-    //       }
-    //       break;
-    //     }
+    setError((prev) => {
+      const stateObj = { ...prev, [name]: "" };
+      switch (name) {
+        case "nameSurname": {
+          if (!value) {
+            stateObj[name] = "Please enter name surname.";
+          }
+          break;
+        }
 
-    //     case "nameSubname": {
-    //       if (!value) {
-    //         stateObj[name] = "Please enter name subname.";
-    //       }
-    //       break;
-    //     }
+        case "email": {
+          if (!value) {
+            stateObj[name] = "Please enter email.";
+          }
+          break;
+        }
 
-    //     case "amount": {
-    //       if (!value) {
-    //         stateObj[name] = "Please enter amount.";
-    //       } 
+        case "tel": {
+          if (!value) {
+            stateObj[name] = "Please enter tel.";
+          } 
+          break;
+        }
 
-    //       break;
-    //     }
+        case "topic": {
+          if (!value) {
+            stateObj[name] = "Please enter topic.";
+          } 
+          break;
+        }
 
-    //     default:
-    //       break;
-    //   }
-    //   return stateObj;
-    // });
+        case "description": {
+          if (!value) {
+            stateObj[name] = "Please enter description.";
+          } 
+          break;
+        }
+
+        default:
+          break;
+      }
+      return stateObj;
+    });
   };
 
   let { id, mode } = useParams();
@@ -103,12 +112,9 @@ const ContactUs = (props) => {
     }
 
     case "edit":{
-      editValues = useQuery(gqlTReport, {
-        variables: {id},
-        notifyOnNetworkStatusChange: true,
-      });
+      editValues = useQuery(gqlContactUs, { variables: {id}, notifyOnNetworkStatusChange: true });
      
-      // console.log("editValues : ", editValues)
+      console.log("editValues : ", editValues)
 
       if(_.isEqual(input, initValues)) {
         if(!_.isEmpty(editValues)){
@@ -138,26 +144,26 @@ const ContactUs = (props) => {
 
     switch(mode){
       case "new":{
-        onCreateTReport({ variables: { input: {
-              name: input.name,
-              description: input.description
-            }
-          } 
-        });
+        // onCreateAndUpdateContactUs({ variables: { input: {
+        //       name: input.name,
+        //       description: input.description
+        //     }
+        //   } 
+        // });
         break;
       }
 
       case "edit":{
-        let newInput =  {
-                          name: input.name,
-                          description: input.description
-                        }
+        // let newInput =  {
+        //                   name: input.name,
+        //                   description: input.description
+        //                 }
 
-        console.log("newInput :", newInput, editValues.data.TReport.data.id)
-        onUpdateTReport({ variables: { 
-          id: editValues.data.TReport.data.id,
-          input: newInput
-        }});
+        // console.log("newInput :", newInput, editValues.data.TReport.data.id)
+        // onCreateAndUpdateContactUs({ variables: { 
+        //   id: editValues.data.TReport.data.id,
+        //   input: newInput
+        // }});
 
         break;
       }
@@ -187,6 +193,9 @@ const ContactUs = (props) => {
               value={input.nameSurname}
               required
               onChange={onInputChange}
+              onBlur={validateInput}
+              helperText={error.nameSurname}
+              error={_.isEmpty(error.nameSurname) ? false : true}
             />
 
             <TextField
@@ -195,7 +204,10 @@ const ContactUs = (props) => {
               variant="filled"
               value={input.email}
               required
-              onChange={onInputChange}/>
+              onChange={onInputChange}
+              onBlur={validateInput}
+              helperText={error.email}
+              error={_.isEmpty(error.email) ? false : true}/>
 
             <TextField
               name="tel"
@@ -203,35 +215,46 @@ const ContactUs = (props) => {
               variant="filled"
               value={input.tel}
               required
-              onChange={onInputChange}/>
+              onChange={onInputChange}
+              onBlur={validateInput}
+              helperText={error.tel}
+              error={_.isEmpty(error.tel) ? false : true}/>
 
-            <FormControl sx={{ m: 1, minWidth: 250 }}>
-              <InputLabel id="demo-simple-select-label">Topic</InputLabel>
+            <FormControl sx={{ m: 1, minWidth: 250 }} error={_.isEmpty(error.topic) ? false : true}>
+              <InputLabel id="demo-simple-select-label">Topic *</InputLabel>
               <Select
                 name="topic"
                 value={input.topic}
                 label="Topic"
-                onChange={onInputChange}>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                onChange={onInputChange}
+                onBlur={validateInput}>
+                {
+                  topicValues.loading
+                  ? <LinearProgress />
+                  : _.map(topicValues.data.topics.data, (item)=> <MenuItem value={item._id}>{item.name}</MenuItem> )
+                }
               </Select>
+              <FormHelperText>{error.topic}</FormHelperText>
             </FormControl>
-
-            <Editor 
-              name="description" 
-              label={"Description"}  
-              initData={input.description}
-              onEditorChange={(value)=>{
-                onInputChange({ target:{ name: "description",  value }})
-              }}/>
+            {/* <FormControl  sx={{ m: 1 }} error={_.isEmpty(error.description) ? false : true} > */}
+              <Editor 
+                name="description" 
+                label={"Description"}  
+                initData={input.description}
+                onEditorChange={(value)=>{
+                  onInputChange({ target:{ name: "description",  value }})
+                }}
+                // onBlur={(e)=>{
+                //   validateInput({ target:{ name: "description",  value: e.editor.getData() }})
+                // }}
+                />
+              {/* <FormHelperText>{error.description}</FormHelperText> */}
+            {/* </FormControl> */}
             <AttackFileField
               name="attackFiles" 
               values={input.attackFiles}
               onChange={(value) => {
                 console.log("AttackFileField :", value)
-                // setInput({...input, attackFiles: values})
-
                 onInputChange({ target:{ name: "attackFiles",  value}})
               }}
               onSnackbar={(data) => {

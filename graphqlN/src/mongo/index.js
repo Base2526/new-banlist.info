@@ -16,7 +16,9 @@ import {Bank,
         Follow,
         Session,
         Notification,
-        Phone} from '../model'
+        Phone,
+        Topic,
+        ContactUs} from '../model'
 
 let logger = require("../utils/logger");
 
@@ -234,6 +236,31 @@ const modelExists =()=>{
       await newPhone.save();
 
       await Phone.deleteMany({})
+    }
+  });
+
+  Topic.find({}, async(err, result)=> {
+    if (result.length > 0) {
+      console.log('Found Topic');
+    } else {
+      console.log('Not found Topic, creating');
+      let newTopic = new Topic({});
+      await newTopic.save();
+
+      await Topic.deleteMany({})
+    }
+  });
+
+  // 
+  ContactUs.find({}, async(err, result)=> {
+    if (result.length > 0) {
+      console.log('Found ContactUs');
+    } else {
+      console.log('Not found ContactUs, creating');
+      let newContactUs = new ContactUs({});
+      await newContactUs.save();
+
+      await ContactUs.deleteMany({})
     }
   });
 

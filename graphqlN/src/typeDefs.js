@@ -496,6 +496,12 @@ export default gql`
 
     phones(userId: ID, page: Int, perPage: Int): JSON
     phone(_id: ID!): JSON
+
+    contactUsList(userId: ID, page: Int, perPage: Int): JSON
+    contactUs(_id: ID!): JSON
+
+    topic(_id: ID!): JSON
+    topics:JSON
   }  
   
   input RoomInput {
@@ -574,6 +580,12 @@ export default gql`
   }
 
   input TReportInput {
+    name: String!
+    description: String
+  }
+
+  input TopicInput {
+    _id: ID
     name: String!
     description: String
   }
@@ -696,6 +708,8 @@ export default gql`
     updateTReport(_id: ID!, input: TReportInput): TReport
     deleteTReport(_id: ID!): TReport
     deleteTReportList(_ids: [ID!]!): deleteType
+
+    createAndUpdateTopic(input: TopicInput): JSON
 
     createShare(input: ShareInput): Share
 

@@ -55,6 +55,10 @@ const Breadcs = ({ title }) => {
   const contactUsMatches = useRouteMatch("/contact-us/:id/edit");
   const contactUsListMatches = useRouteMatch("/contact-us-list");
 
+  const newTopicMatches = useRouteMatch("/topic/new");
+  const topicMatches = useRouteMatch("/topic/:id/edit");
+  const topicsMatches = useRouteMatch("/topics");
+
   const loginMatche = useRouteMatch("/user/login");
 
   const handleClick = () => {};
@@ -321,6 +325,36 @@ const Breadcs = ({ title }) => {
               Contact us list
             </MuiLink>
           )}
+
+          {/* 
+          
+            const newTopicMatches = useRouteMatch("/topic/new");
+  const topicMatches = useRouteMatch("/topic/:id/edit");
+  const topicsMatches = useRouteMatch("/topics");
+          */}
+
+          {newTopicMatches && (
+            <MuiLink 
+              component={Link} 
+              to="/topic/new">
+              Topic
+            </MuiLink>
+          )}
+          {topicMatches && (
+            <MuiLink
+              component={Link}
+              to={`/topic/${topicMatches.params.id}/edit`}
+            >
+              Edit Topic
+            </MuiLink>
+          )}
+
+          {topicsMatches && (
+            <MuiLink component={Link} to="/topics">
+              Topics
+            </MuiLink>
+          )}
+
           
           {
             developerMatche && (

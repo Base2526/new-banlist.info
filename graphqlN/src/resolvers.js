@@ -31,7 +31,9 @@ import {Bank,
         Follow,
         Session,
         Notification,
-        Phone} from './model'
+        Phone,
+        Topic,
+        ContactUs} from './model'
 import {emailValidate} from './utils'
 import pubsub from './pubsub'
 
@@ -1007,6 +1009,71 @@ export default {
         return;
       }
     },
+
+    async topics(parent, args, context, info) {
+      try{
+        let start = Date.now()        
+
+        let data=  await Topic.find({});
+
+        return {
+          status:true,
+          data,
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
+    },
+    async topic(parent, args, context, info) {
+      try{
+        let start = Date.now()
+        let {_id} = args
+        let data = await Topic.findById(_id);
+        return {
+          status:true,
+          data,
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
+    },
+
+    async contactUsList(parent, args, context, info) {
+      try{
+        let start = Date.now()        
+
+        let data=  await ContactUs.find({});
+
+        return {
+          status:true,
+          data,
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
+    },
+
+    async contactUs(parent, args, context, info) {
+      try{
+        let start = Date.now()
+        let {_id} = args
+        let data = await ContactUs.findById(_id);
+        return {
+          status:true,
+          data,
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
+    },
   },
   Upload: GraphQLUpload,
   Mutation: {
@@ -1873,6 +1940,23 @@ export default {
       }})
     },
     // TReport
+
+
+    async createAndUpdateTopic(parent, args, context, info) {
+      try{
+        let {input} = args
+        if(!_.isEmpty(input?._id)){
+          return await Topic.findOneAndUpdate({ _id: input._id }, _.omit(input, ['_id']), { new: true })
+        }
+
+        return await Topic.create(input);
+      } catch(err) {
+        logger.error(err.toString());
+        return;
+      }
+    },
+
+
 
     async createReport(parent, args, context, info) {
 

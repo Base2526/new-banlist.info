@@ -27,6 +27,10 @@ import NotificationModel from "./NotificationModel"
 
 import PhoneModel from "./PhoneModel"
 
+import TopicModel from "./TopicModel"
+
+import ContactUsModel from "./ContactUsModel"
+
 module.exports =  {
     Bank:BankModel,
     Post:PostModel,
@@ -55,5 +59,9 @@ module.exports =  {
 
     Notification: NotificationModel,
 
-    Phone: PhoneModel
+    Phone: PhoneModel,
+
+    Topic: TopicModel,
+
+    ContactUs: ContactUsModel
 };

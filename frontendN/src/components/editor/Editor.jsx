@@ -6,13 +6,10 @@ import Typography from "@mui/material/Typography";
 import _ from "lodash";
 import LinearProgress from '@mui/material/LinearProgress';
 
-const Editor = ({label, initData, onEditorChange}) => {
-
-  // console.log("editValues : >", initData)
+const Editor = ({label, initData, onEditorChange, onBlur}) => {
   const [text, setText] = useState(initData)
 
   useEffect(()=>{
-    // console.log("editValues :", text)
     onEditorChange(text)
   }, [text])
 
@@ -30,7 +27,8 @@ const Editor = ({label, initData, onEditorChange}) => {
             <CKEditor 
               label="Descrition" 
               initData={text} 
-              onChange={(event)=>{ setText( event.editor.getData() )}} />
+              onChange={(event)=>{ setText( event.editor.getData() )}}
+              onBlur={onBlur} />
           </Box>
       }
     </div>

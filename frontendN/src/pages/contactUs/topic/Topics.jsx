@@ -1,9 +1,4 @@
-import {
-    UserListContainer,
-    UserWrapper,
-    EditButton,
-    ButtonWrapper
-  } from "./TReportList.styled";
+import { UserListContainer } from "./Topics.styled";
 
 import { DataGrid } from "@mui/x-data-grid";
 import { DeleteOutline } from "@material-ui/icons";
@@ -25,12 +20,11 @@ import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import { useQuery } from "@apollo/client";
 
-import {gqlTReportList} from "../../../gqlQuery"
-import Footer from "../../footer";
+import { gqlTopics } from "../../../gqlQuery"
 
 import Table from "../../../TableContainer"
   
-const TReportList = (props) => {
+const Topics = (props) => {
     let history = useHistory();
 
     const [pageOptions, setPageOptions] = useState([30, 50, 100]);  
@@ -42,12 +36,9 @@ const TReportList = (props) => {
         id: ""
     });
 
-    const tReportValues = useQuery(gqlTReportList, {
-        variables: {page: pageIndex, perPage: pageSize},
-        notifyOnNetworkStatusChange: true,
-    });
+    const topicValues = useQuery(gqlTopics, { notifyOnNetworkStatusChange: true });
 
-    console.log("tReportValues :", tReportValues)
+    console.log("topicValues :", topicValues)
 
     ///////////////
     const fetchData = useCallback(
@@ -118,7 +109,7 @@ const TReportList = (props) => {
             Cell: props => {
                 console.log("Cell :", props)
                 return  <div>
-                        <Link to={`/treport/${props.row.original.id}/edit`}>
+                        <Link to={`/topic/${props.row.original._id}/edit`}>
                             <button>Edit</button>
                         </Link>
                         <button>Delete</button>
@@ -173,11 +164,11 @@ const TReportList = (props) => {
     return (
         <UserListContainer>
             {
-                tReportValues.loading
+                topicValues.loading
                 ?   <div><CircularProgress /></div> 
                 :   <Table
                         columns={columns}
-                        data={tReportValues.data.TReportList.data}
+                        data={topicValues.data.topics.data}
                         fetchData={fetchData}
                         rowsPerPage={pageOptions}
                         updateMyData={updateMyData}
@@ -222,13 +213,10 @@ const TReportList = (props) => {
                 sx={{ position: 'absolute', bottom: 16, right: 16 }}
                 icon={<SpeedDialIcon />}
                 onClick={(e)=>{
-                    history.push("/treport/new");
-                }}
-            />
-
-            {/* <Footer /> */}
+                    history.push("/topic/new");
+                }}/>
         </UserListContainer>
     );
 };
 
-export default TReportList;
+export default Topics;

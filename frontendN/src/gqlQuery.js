@@ -90,6 +90,8 @@ export const gqlTReport = gql`
         }
     }`;
 
+export const gqlTopics = gql`query topics{ topics }`;
+
 export const gqlSockets = gql`
     query sockets($page: Int, $perPage: Int){
         sockets(
@@ -335,8 +337,11 @@ export const gqlFollowingByUserId = gql`
     }`;
 
 export const gqlFetchMessage = gql`query fetchMessage( $conversationId: ID ){ fetchMessage( conversationId: $conversationId ) }`;
-export const gqlPhones = gql`query phones($userId: ID, $page: Int, $perPage: Int) { phones(userId: $userId, page: $page, perPage: $perPage) }`;
-export const gqlPhone = gql`query phone($id: ID!){ phone(_id: $id) }`;
+export const gqlPhones       = gql`query phones($userId: ID, $page: Int, $perPage: Int) { phones(userId: $userId, page: $page, perPage: $perPage) }`;
+export const gqlPhone        = gql`query phone($id: ID!){ phone(_id: $id) }`;
+
+export const gqlContactUsList = gql`query ContactUsList($userId: ID, $page: Int, $perPage: Int) { contactUsList(userId: $userId, page: $page, perPage: $perPage) }`;
+export const gqlContactUs     = gql`query ContactUs($id: ID!){ contactUs(_id: $id) }`;
 
 //////////////////  mutation  ///////////////////
 
@@ -397,7 +402,13 @@ export const gqlCreateTReport = gql`
         }
     }`;
 
+export const gqlTopic = gql`query Topic($id: ID!){ topic(_id: $id) }`;
+export const gqlCreateAndUpdateTopic = gql`mutation CreateAndUpdateTopic($input: TopicInput) { createAndUpdateTopic(input: $input) }`;
+
 export const gqlCreateAndUpdateComment = gql`mutation CreateAndUpdateComment($input: JSON) { createAndUpdateComment(input: $input) }`;
+
+
+// gqlCreateAndUpdateContactUs
 
 export const gqlCreateShare = gql`
     mutation CreateShare($input: ShareInput) {

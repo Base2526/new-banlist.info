@@ -20,9 +20,9 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { useQuery } from "@apollo/client";
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import { connect } from "react-redux";
 
-import {gqlReport, gqlPost, gqlUser, gqlTReport} from "../../gqlQuery"
-// import Footer from "../footer";
+import {gqlReport, gqlPost, gqlUser, gqlContactUsList} from "../../gqlQuery"
 import Table from "../../TableContainer"
   
 const ContactUsList = (props) => {
@@ -32,19 +32,20 @@ const ContactUsList = (props) => {
     const [pageIndex, setPageIndex] = useState(0);  
     const [pageSize, setPageSize] = useState(pageOptions[0])
 
-    const reportValues = useQuery(gqlReport, {
-      variables: {page: pageIndex, perPage: pageSize},
+    const contactUsValues = useQuery(gqlContactUsList, {
+      variables: {userId: "", page: pageIndex, perPage: pageSize},
       notifyOnNetworkStatusChange: true,
     });
 
-    console.log("reportValues :", reportValues)
+    console.log("contactUsValues :", contactUsValues)
 
-  
-    const [openDialogDelete, setOpenDialogDelete] = useState({
-      isOpen: false,
-      id: ""
-    });
+    const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "" });
 
+    useEffect(()=>{
+      if(!_.isEmpty(user)){
+        contactUsValues && contactUsValues.refetch({userId: _.isEmpty(user) ? "" : user._id, page, perPage: rowsPerPage })
+      }
+    }, [user])
 
     ///////////////
     const fetchData = useCallback(
@@ -69,62 +70,70 @@ const ContactUsList = (props) => {
 
      const columns = useMemo(
       () => [
-        // 
         {
-          Header: 'Contact us',
+          Header: 'Contact us list',
           columns: [
             {
-              Header: 'Name',
-              accessor: 'userId',
+              Header: 'Name surname',
+              accessor: 'nameSurname',
               Cell: props =>{
-                let value = useQuery(gqlUser, {
-                  variables: {id: props.value},
-                  notifyOnNetworkStatusChange: true,
-                });
+                // let value = useQuery(gqlUser, {
+                //   variables: {id: props.value},
+                //   notifyOnNetworkStatusChange: true,
+                // });
       
-                return  value.loading 
-                        ? <LinearProgress sx={{width:"100px"}} />
-                        : <Typography variant="overline" display="block" gutterBottom>
-                            {value.data.user.data.displayName}
-                          </Typography>
+                // return  value.loading 
+                //         ? <LinearProgress sx={{width:"100px"}} />
+                //         : <Typography variant="overline" display="block" gutterBottom>
+                //             {value.data.user.data.displayName}
+                //           </Typography>
+
+                return <>nameSurname</>
               }
             },
             {
-              Header: 'Category name',
-              accessor: 'categoryId',
+              Header: 'Email',
+              accessor: 'email',
               Cell: props =>{
-                let value = useQuery(gqlTReport, {
-                  variables: {id: props.value},
-                  notifyOnNetworkStatusChange: true,
-                });
+                // let value = useQuery(gqlTReport, {
+                //   variables: {id: props.value},
+                //   notifyOnNetworkStatusChange: true,
+                // });
 
-                return  value.loading 
-                        ? <LinearProgress sx={{width:"100px"}} />
-                        : <Typography variant="overline" display="block" gutterBottom>
-                            {value.data.TReport.data.name}
-                          </Typography>
+                // return  value.loading 
+                //         ? <LinearProgress sx={{width:"100px"}} />
+                //         : <Typography variant="overline" display="block" gutterBottom>
+                //             {value.data.TReport.data.name}
+                //           </Typography>
+                return <>Email</>
               } 
             },
             {
-              Header: 'Post name',
-              accessor: 'postId',
+              Header: 'Tel',
+              accessor: 'tel',
               Cell: props =>{
-                  let value = useQuery(gqlPost, {
-                    variables: {id:  props.value},
-                    notifyOnNetworkStatusChange: true,
-                  });
+                  // let value = useQuery(gqlPost, {
+                  //   variables: {id:  props.value},
+                  //   notifyOnNetworkStatusChange: true,
+                  // });
 
-                  console.log("postId :", value)
-                  return  value.loading 
-                          ? <LinearProgress sx={{width:"100px"}} />
-                          : <Typography variant="overline" display="block" gutterBottom>
-                              { _.isEmpty(value.data.post.data) ? "" : value.data.post.data.title }
-                            </Typography>
+                  // console.log("postId :", value)
+                  // return  value.loading 
+                  //         ? <LinearProgress sx={{width:"100px"}} />
+                  //         : <Typography variant="overline" display="block" gutterBottom>
+                  //             { _.isEmpty(value.data.post.data) ? "" : value.data.post.data.title }
+                  //           </Typography>
+                  return <>Tel</>
               }
             },
             {
+              Header: 'Topic',
+              accessor: 'topic',
+              Cell: props => <Typography dangerouslySetInnerHTML={{ __html: props.value }} />
+            },
+            {
               Header: 'Description',
-              accessor: 'message',
+              accessor: 'description',
               Cell: props => <Typography dangerouslySetInnerHTML={{ __html: props.value }} />
             },
             {
@@ -179,11 +188,11 @@ const ContactUsList = (props) => {
     return (
       <UserListContainer>
         {
-          reportValues.loading
+          contactUsValues.loading
           ?  <div><CircularProgress /></div> 
           :   <Table
                 columns={columns}
-                data={reportValues.data.ReportList.data}
+                data={contactUsValues.data.contactUsList.data}
                 fetchData={fetchData}
                 rowsPerPage={pageOptions}
                 updateMyData={updateMyData}
@@ -232,7 +241,13 @@ const ContactUsList = (props) => {
         )}
       </UserListContainer>
     );
-  };
+};
   
-  export default ContactUsList;
+const mapStateToProps = (state, ownProps) => {
+  return {
+    user: state.auth.user
+  }
+};
+
+export default connect( mapStateToProps, null )(ContactUsList);
   

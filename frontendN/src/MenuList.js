@@ -96,7 +96,7 @@ const MenuAdministrator = [
       },
       {
         Id: 16,
-        Title: "Report",
+        Title: "Category Report",
         // Icon: <MailIcon className="icon" />,
         Path: "/treport-list"
       },
@@ -113,8 +113,13 @@ const MenuAdministrator = [
       },
       {
         Id: 19,
-        Title: "Contact us",
+        Title: "Contact us list",
         Path: "/contact-us-list"
+      },
+      {
+        Id: 20,
+        Title: "Topics",
+        Path: "/topics"
       }
     ]
   },
