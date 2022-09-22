@@ -30,4 +30,38 @@ $sm-600: 600px;
         bottom: auto;
         top: 32%;
     }
+    // .MuiCardContent-root{
+    //     button{
+    //         &.MuiButtonBase-root{
+    //             img +{
+    //                 div{
+    //                     min-width: 2rem;
+    //                     height: 2rem;
+    //                     color: $black !important;
+    //                     border: 1px solid $bl-dark-4x;
+    //                     background-color: $white !important;
+    //                     border-radius: 50% !important;
+    //                     display: flex;
+    //                     justify-content: center;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    .Mui-containNoti-css{
+        height: 24px;
+        .Mui-iconnoti-cSS{
+            // padding-left: 2px;
+            background-color: $bl-red;
+            color: $white;
+            border-radius: 50%;
+            top: 0;
+            min-width: 1.25rem;
+            height: 1.25rem;
+            font-size: .7rem;
+            top: 0;
+            line-height: 1.45;
+        }
+    }
+   
 }
