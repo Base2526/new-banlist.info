@@ -29,6 +29,21 @@
             }
         }
     }
+
+    .Btn--posts{
+        button{
+            @media (min-width:$lg){
+                display: flex;
+                align-items: center;
+            }
+           width: 100%;
+           margin-bottom: 6px;
+           border: 0;
+           padding: .25rem;
+           box-shadow:0 1px 3px rgba($black, .3);
+           cursor: pointer;
+        }
+    }
 }
 
 table{
