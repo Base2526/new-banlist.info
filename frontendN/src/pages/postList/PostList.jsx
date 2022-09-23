@@ -24,7 +24,8 @@ import SpeedDialAction from '@mui/material/SpeedDialAction';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import { connect } from "react-redux";
-
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
 
 // import Footer from "../footer";
 import {gqlPosts, gqlBookmarksByPostId, gqlShareByPostId, gqlComment, gqlDeletePost} from "../../gqlQuery"
@@ -265,13 +266,13 @@ const PostList = (props) => {
               console.log("action :", props.row.original)
 
               let {_id, title}  = props.row.original
-              return  <div>
+              return  <div className="Btn--posts">
                         <Link to={`/post/${_id}/edit`}>
-                          <button>Edit</button>
+                          <button><EditIcon/> Edit </button>
                         </Link>
                         <button onClick={(e)=>{
                           setOpenDialogDelete({ isOpen: true, id: _id, description: title });
-                        }}>Delete</button>
+                        }}><DeleteForeverIcon/> Delete</button>
                       </div>
             }
           },

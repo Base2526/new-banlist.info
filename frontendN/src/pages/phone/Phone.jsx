@@ -151,30 +151,34 @@ const Phone = (props) => {
     }
 
     return  <div>
-                {
-                    editValues != null && editValues.loading
-                    ? <div><CircularProgress /></div> 
-                    :<LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <Box component="form"
-                            sx={{ "& .MuiTextField-root": { m: 1, width: "50ch" } }}
-                            onSubmit={submitForm}>
-                            <TelInputField
-                                values={ input.phones }
-                                onChange={(values) => {
-                                    setInput({...input, phones: values})
-                                }}/>
-                            <Editor 
-                                label={"Description"} 
-                                initData={ input.description }
-                                onEditorChange={(newDescription)=>{
-                                    setInput({...input, description: newDescription})
-                                }}/>
-                            <Button type="submit" variant="contained" color="primary">
-                              {mode === 'new' ? 'CREATE' : 'UPDATE'}  
-                            </Button>
-                        </Box>
-                    </LocalizationProvider>
-                }
+                <div className="page-phone pl-2 pr-2 mb-4">
+                    <div className="MuiBox-root-phoneinss">
+                        {
+                            editValues != null && editValues.loading
+                            ? <div><CircularProgress /></div> 
+                            :<LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <Box component="form"
+                                    sx={{ "& .MuiTextField-root": { m: 1, width: "50ch" } }}
+                                    onSubmit={submitForm}>
+                                    <TelInputField
+                                        values={ input.phones }
+                                        onChange={(values) => {
+                                            setInput({...input, phones: values})
+                                        }}/>
+                                    <Editor 
+                                        label={"Description"} 
+                                        initData={ input.description }
+                                        onEditorChange={(newDescription)=>{
+                                            setInput({...input, description: newDescription})
+                                        }}/>
+                                    <Button type="submit" variant="contained" color="primary">
+                                    {mode === 'new' ? 'CREATE' : 'UPDATE'}  
+                                    </Button>
+                                </Box>
+                            </LocalizationProvider>
+                        }
+                    </div>
+                </div>
             </div>
 }
 

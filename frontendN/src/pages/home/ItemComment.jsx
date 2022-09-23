@@ -53,16 +53,14 @@ const ItemComment = (props) => {
             }
           });
     
-          return  <div>
+          return  <div className="Mui-containNoti-css">
                     <CommentIcon />
-                    <div style={{
+                    <div className="Mui-iconnoti-cSS" style={{
                       position: "absolute",
                       right: "5px",
-                      borderRadius: "5px",
                       borderStyle: "solid",
                       borderColor: "red",
-                      borderWidth: "1px",
-                      fontSize: "10px"
+                      
                     }}>{commentValues.data.comment.data.length + count}</div>
                   </div>
         }
