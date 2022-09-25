@@ -343,14 +343,15 @@ const PostList = (props) => {
               onClose={handleClose}
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
+              
             >
-              <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
+              <DialogTitle id="alert-dialog-title" className="text-center" >Delete</DialogTitle>
+              <DialogContent >
+                <DialogContentText id="alert-dialog-description" >
                   {openDialogDelete.description}
                 </DialogContentText>
               </DialogContent>
-              <DialogActions>
+              <DialogActions className="Mui-dialog-btnszss">
                 <Button
                   variant="outlined"
                   onClick={() => {
