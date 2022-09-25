@@ -447,18 +447,22 @@ const MessagePage =(props)=> {
   }
 
   return (
-    <div style={{ height: "600px", position: "relative", width: "100%" }} >
-      <MainContainer responsive>
-        {onSidebarLeft()}
-        <ChatContainer>
-          {onConversationHeader()}
-          {onMessageList()}
-          {onMessageInput()}
-        </ChatContainer>
-        {/* {onSidebarRight()} */}
+    <div className="pl-2 pr-2">
+      <div className="table-responsive MuiBox-root page-message">
+        <div style={{  position: "relative", width: "100%" }} className="Mui-submess-root" >
+          <MainContainer responsive>
+            {onSidebarLeft()}
+            <ChatContainer>
+              {onConversationHeader()}
+              {onMessageList()}
+              {onMessageInput()}
+            </ChatContainer>
+            {/* {onSidebarRight()} */}
 
-        <input type='file' id='file' ref={inputFile} style={{display: 'none'}}  onChange={onChangeFile} />
-      </MainContainer>
+            <input type='file' id='file' ref={inputFile} style={{display: 'none'}}  onChange={onChangeFile} />
+          </MainContainer>
+        </div>
+      </div>
     </div>
   );
 }

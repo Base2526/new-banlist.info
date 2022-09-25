@@ -57,7 +57,7 @@ body{
   width: 100%;
   @include container();
 }
-.App-content-12{
+main{
   padding-left: 0 !important;
   padding-right: 0 !important;
   padding-bottom: 0 !important;
@@ -101,6 +101,8 @@ body{
 @import 'sass-pages/post';
 @import 'sass-pages/posts';
 @import 'sass-pages/phone';
+@import 'sass-pages/message';
+@import 'sass-components/listtable';
 @import 'sass-components/footer';
 
 

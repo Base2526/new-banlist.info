@@ -1,4 +1,31 @@
-.css-11bfvty-MuiToolbar-root-MuiTablePagination-toolbar {
+// .css-11bfvty-MuiToolbar-root-MuiTablePagination-toolbar {
+//     .MuiTablePagination-actions{
+//         background-color: $white;
+//         border: 1px solid $gray-d;
+//         margin-left: 0 !important;
+//         border-radius: 0 .25rem .25rem 0;
+//         .css-zylse7-MuiButtonBase-root-MuiIconButton-root.Mui-disabled{
+            
+//         }
+//         .MuiButtonBase-root{
+//             border-radius: 0 !important;
+//             -webkit-border-radius: 0 !important;
+//             &:not(:last-child){
+//                 border-right: 1px solid $gray-d;
+//             }
+//         }
+//     }
+// }
+
+.MuiTablePagination-root{
+    .MuiTablePagination-displayedRows{
+        background-color: $white;
+        border: 1px solid $gray-d;
+        padding: .625rem 1.25rem;
+        border-right: 0;
+        border-radius: .25rem 0 0 .25rem;
+    }
+
     .MuiTablePagination-actions{
         background-color: $white;
         border: 1px solid $gray-d;
@@ -15,12 +42,4 @@
             }
         }
     }
-}
-
-.css-levciy-MuiTablePagination-displayedRows{
-    background-color: $white;
-    border: 1px solid $gray-d;
-    padding: .625rem 1.25rem;
-    border-right: 0;
-    border-radius: .25rem 0 0 .25rem;
 }

@@ -24,6 +24,8 @@ import SpeedDialAction from '@mui/material/SpeedDialAction';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import { connect } from "react-redux";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
 
 // import Footer from "../footer";
 import { gqlPhones, gqlDeletePhone } from "../../gqlQuery"
@@ -129,11 +131,11 @@ const PhoneList = (props) => {
             Header: 'Action',
             Cell: props => {
                 let {_id, description} = props.row.original
-                return  <div>
-                            <Link to={`/phone/${_id}/edit`}><button>Edit</button></Link>
+                return  <div className="Btn--posts">
+                            <Link to={`/phone/${_id}/edit`}><button><EditIcon/> Edit</button></Link>
                             <button onClick={(e)=>{
                               setOpenDialogDelete({ isOpen: true, id: _id, description });
-                            }}>Delete</button>
+                            }}><DeleteForeverIcon/> Delete</button>
                         </div>
             }
           },
@@ -181,112 +183,115 @@ const PhoneList = (props) => {
   //////////////////////
 
   return (
-    <Box style={{ flex: 4 }}>
-      {
-        phonesValue.loading
-        ? <div><CircularProgress /></div> 
-        : <Table
-            columns={columns}
-            data={phonesValue.data.phones.data}
-            fetchData={fetchData}
-            rowsPerPage={pageOptions}
-            updateMyData={updateMyData}
-            skipReset={skipResetRef.current}
-            isDebug={false}
-          />
-      }
-
-      {openDialogDelete.isOpen && (
-        <Dialog
-          open={openDialogDelete.isOpen}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              {openDialogDelete.description}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                handleDelete(openDialogDelete.id);
-
-                setOpenDialogDelete({ isOpen: false, id: "", description: "" });
-              }}
-            >
-              Delete
-            </Button>
-            <Button variant="contained" onClick={handleClose} autoFocus>
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
-
-      {lightbox.isOpen && (
-        <Lightbox
-          mainSrc={lightbox.images[lightbox.photoIndex].base64}
-          nextSrc={lightbox.images[(lightbox.photoIndex + 1) % lightbox.images.length].base64}
-          prevSrc={
-            lightbox.images[(lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length].base64
+        <div className="pl-2 pr-2">
+        <Box style={{ flex: 4 }} className="table-responsive">
+          {
+            phonesValue.loading
+            ? <div><CircularProgress /></div> 
+            : <Table
+                columns={columns}
+                data={phonesValue.data.phones.data}
+                fetchData={fetchData}
+                rowsPerPage={pageOptions}
+                updateMyData={updateMyData}
+                skipReset={skipResetRef.current}
+                isDebug={false}
+              />
           }
-          onCloseRequest={() => {
-            setLightbox({ ...lightbox, isOpen: false });
-          }}
-          onMovePrevRequest={() => {
-            setLightbox({
-              ...lightbox,
-              photoIndex:
-                (lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length
-            });
-          }}
-          onMoveNextRequest={() => {
-            setLightbox({
-              ...lightbox,
-              photoIndex: (lightbox.photoIndex + 1) % lightbox.images.length
-            });
-          }}
-        />
-      )}
 
-      <SpeedDial
-        ariaLabel="SpeedDial basic example"
-        sx={{ position: 'absolute', bottom: 16, right: 16 }}
-        icon={<SpeedDialIcon />}>
-        {
-          _.map([
-                  // { icon: <PostAddIcon />, name: 'Post', id: 1 },
-                  { icon: <AddIcCallIcon />, name: 'Phone', id: 2 },
-                ], (action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    icon={action.icon}
-                    tooltipTitle={action.name}
-                    tooltipOpen
-                    onClick={(e)=>{
-                      switch(action.id){
-                        // case 1:{
-                        //   history.push({ pathname: "/post/new", state: {from: "/"} });
-                        //   break;
-                        // }
+          {openDialogDelete.isOpen && (
+            <Dialog
+              open={openDialogDelete.isOpen}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  {openDialogDelete.description}
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  variant="outlined"
+                  onClick={() => {
+                    handleDelete(openDialogDelete.id);
 
-                        case 2:{
-                          history.push({ pathname: "/phone/new", state: {from: "/"} });
-                          break;
-                        }
-                      }
-                    }}
-                  />
-                ))
-        }
-      </SpeedDial>
-      
-      {/* <Footer /> */}
-    </Box>
+                    setOpenDialogDelete({ isOpen: false, id: "", description: "" });
+                  }}
+                >
+                  Delete
+                </Button>
+                <Button variant="contained" onClick={handleClose} autoFocus>
+                  Close
+                </Button>
+              </DialogActions>
+            </Dialog>
+          )}
+
+          {lightbox.isOpen && (
+            <Lightbox
+              mainSrc={lightbox.images[lightbox.photoIndex].base64}
+              nextSrc={lightbox.images[(lightbox.photoIndex + 1) % lightbox.images.length].base64}
+              prevSrc={
+                lightbox.images[(lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length].base64
+              }
+              onCloseRequest={() => {
+                setLightbox({ ...lightbox, isOpen: false });
+              }}
+              onMovePrevRequest={() => {
+                setLightbox({
+                  ...lightbox,
+                  photoIndex:
+                    (lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length
+                });
+              }}
+              onMoveNextRequest={() => {
+                setLightbox({
+                  ...lightbox,
+                  photoIndex: (lightbox.photoIndex + 1) % lightbox.images.length
+                });
+              }}
+            />
+          )}
+
+          <SpeedDial
+            ariaLabel="SpeedDial basic example"
+            sx={{ position: 'absolute', bottom: 16, right: 16 }}
+            icon={<SpeedDialIcon />}>
+            {
+              _.map([
+                      // { icon: <PostAddIcon />, name: 'Post', id: 1 },
+                      { icon: <AddIcCallIcon />, name: 'Phone', id: 2 },
+                    ], (action) => (
+                      <SpeedDialAction
+                        key={action.name}
+                        icon={action.icon}
+                        tooltipTitle={action.name}
+                        tooltipOpen
+                        onClick={(e)=>{
+                          switch(action.id){
+                            // case 1:{
+                            //   history.push({ pathname: "/post/new", state: {from: "/"} });
+                            //   break;
+                            // }
+
+                            case 2:{
+                              history.push({ pathname: "/phone/new", state: {from: "/"} });
+                              break;
+                            }
+                          }
+                        }}
+                      />
+                    ))
+            }
+          </SpeedDial>
+          
+          {/* <Footer /> */}
+        </Box>
+        </div>
+     
   );
 };
 

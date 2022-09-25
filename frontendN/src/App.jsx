@@ -298,6 +298,7 @@ const App = (props) => {
             <Breadcs title={""} />
             <div className="container">
                <div className="row">
+                 
                 <Switch>
                   <Route path="/" exact>
                     <div className="page-home">
@@ -352,9 +353,9 @@ const App = (props) => {
                 <Route path="*">
                   <NoMatch />
                 </Route>     
-              </Switch>
-
-            </div>
+                </Switch>
+              
+               </div>
             </div>
 
             <div className="footer"><Footer /></div>
