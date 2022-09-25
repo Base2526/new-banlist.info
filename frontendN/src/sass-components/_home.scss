@@ -1,4 +1,18 @@
 $sm-600: 600px;
+
+.App-toolbar-11,
+.MuiDrawer-root .jss11{
+    @media (min-width:$sm-600){
+        min-height: 56px !important;
+    }
+}
+
+.MuiDrawer-root{
+    .MuiList-padding{
+        padding-top: 0px;
+    }
+}
+
 .page-home{
     .css-4hc8cj-MuiContainer-root{
         @media (min-width:$sm-600){
@@ -30,24 +44,24 @@ $sm-600: 600px;
         bottom: auto;
         top: 32%;
     }
-    // .MuiCardContent-root{
-    //     button{
-    //         &.MuiButtonBase-root{
-    //             img +{
-    //                 div{
-    //                     min-width: 2rem;
-    //                     height: 2rem;
-    //                     color: $black !important;
-    //                     border: 1px solid $bl-dark-4x;
-    //                     background-color: $white !important;
-    //                     border-radius: 50% !important;
-    //                     display: flex;
-    //                     justify-content: center;
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
+    .MuiCardContent-root{
+        button{
+            &.MuiButtonBase-root{
+                img +{
+                    div{
+                        color: $black !important;
+                        background-color: $white !important;
+                        box-shadow: 0 1px 2px rgba($black, .4);
+                        font-weight: 700;
+                        font-size: 1rem;
+                        line-height: 1;
+                        padding-top: 6px !important;
+                        padding-bottom: 4px !important;
+                    }
+                }
+            }
+        }
+    }
     .Mui-containNoti-css{
         height: 24px;
         .Mui-iconnoti-cSS{
@@ -64,4 +78,104 @@ $sm-600: 600px;
         }
     }
    
+}
+
+// .MuiCardContent-root{
+//     button{
+//         &.MuiButtonBase-root{
+//             img +{
+//                 div{
+//                     color: $black !important;
+//                     background-color: $white !important;
+//                     box-shadow: 0 1px 2px rgba($black, .4);
+//                     font-weight: 700;
+//                     font-size: 1rem;
+//                     line-height: 1;
+//                     padding-top: 6px !important;
+//                     padding-bottom: 4px !important;
+//                 }
+//             }
+//         }
+//     }
+// }
+
+button{
+    &.MuiButtonBase-root{
+        img +{
+            div{
+                color: $black !important;
+                background-color: $white !important;
+                box-shadow: 0 1px 2px rgba($black, .4);
+                font-weight: 700;
+                font-size: 1rem;
+                line-height: 1;
+                padding-top: 6px !important;
+                padding-bottom: 4px !important;
+            }
+        }
+    }
+}
+
+.MuiModal-root{
+    .MuiPaper-root{
+        padding-left: 1rem;
+        padding-right: 1rem;
+        @media (max-width:$sm){
+            left: 10%;
+        }
+    }
+    .commentSection{
+        .displayComments{
+            min-height: 60px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+    }
+    .MuiBox-root{
+        @media (max-width:$sm){   
+            max-width: 400px;
+            width: 100%;
+        }
+    }
+}
+
+ul.MuiList-root{
+    li.MuiButtonBase-root{
+        button{
+            &.react-share__ShareButton{
+                display: flex;
+                align-items: center;
+                svg{
+                    margin-right: .5rem;
+                }
+            }
+        }
+        &:last-child{
+            display: flex;
+            align-items: center;
+            svg{
+                margin-right: .5rem;
+                margin-left: .25rem;
+            }
+        }
+    }
+
+}
+
+.displayComments {
+    .commentsTwo{
+        >div{
+            display: flex;
+            flex-grow: 1;
+            .MuiAvatar-root{
+                margin-right: 4px;
+            } 
+        }
+    }
+    .userInfo{
+       > .MuiTypography-root{
+            color: rgba(0,0,0, .54);
+        }
+    }
+    
 }

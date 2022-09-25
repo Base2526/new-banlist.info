@@ -19,6 +19,8 @@ import Box from "@mui/material/Box";
 import _ from "lodash"
 import LinearProgress from '@mui/material/LinearProgress';
 import { useQuery } from "@apollo/client";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
 
 import {gqlBookmarks, gqlPost, gqlUser} from "../../gqlQuery"
 // import Footer from "../footer";
@@ -137,11 +139,11 @@ const BookmarkList = (props) => {
             // Aggregated: ({ value }) => `${value} Unique Names`,
             Cell: props => {
               console.log("Cell :", props)
-              return  <div>
+              return  <div className="Btn--posts">
                         {/* <Link to={`/bookmark/${props.row.original.id}/edit`}>
                           <button>Edit</button>
                         </Link> */}
-                        <button>Delete</button>
+                        <button><DeleteForeverIcon /> Delete</button>
                       </div>
             }
           },
@@ -191,74 +193,76 @@ const BookmarkList = (props) => {
   //////////////////////
   
     return (
-      <Box style={{
-        flex: 4
-      }}>
-        {
-          bookmarkValues.loading
-          ?   <div><CircularProgress /></div> 
-          :   <Table
+      <div className="pl-2 pr-2">
+        <Box style={{
+          flex: 4
+        }} className="table-responsive">
+          {
+            bookmarkValues.loading
+            ?   <div><CircularProgress /></div> 
+            :   <Table
+                  columns={columns}
+                  data={bookmarkValues.data.Bookmarks.data}
+                  fetchData={fetchData}
+                  rowsPerPage={pageOptions}
+                  updateMyData={updateMyData}
+                  skipReset={skipResetRef.current}
+                  isDebug={false}
+                />
+
+          /*
+              <DataGrid
+                rows={bookmarkValues.data.Bookmarks.data}
                 columns={columns}
-                data={bookmarkValues.data.Bookmarks.data}
-                fetchData={fetchData}
-                rowsPerPage={pageOptions}
-                updateMyData={updateMyData}
-                skipReset={skipResetRef.current}
-                isDebug={false}
-              />
+                rowHeight={80}
 
-        /*
-            <DataGrid
-              rows={bookmarkValues.data.Bookmarks.data}
-              columns={columns}
-              rowHeight={80}
-
-              pageSize={perPage}
-              onPageSizeChange={(newPerPage) => {
-                setPerPage(newPerPage)
-                setPage(0)
-              }}
-              rowsPerPageOptions={pageOptions}
-              page={page}
-              onPageChange={(newPage) =>{
-                setPage(newPage)
-              }}
-            />
-          */
-        }
-          
-        {openDialogDelete.isOpen && (
-          <Dialog
-            open={openDialogDelete.isOpen}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                Delete
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button
-                variant="outlined"
-                onClick={() => {
-                  handleDelete(openDialogDelete.id);
-  
-                  setOpenDialogDelete({ isOpen: false, id: "" });
+                pageSize={perPage}
+                onPageSizeChange={(newPerPage) => {
+                  setPerPage(newPerPage)
+                  setPage(0)
                 }}
-              >
-                Delete
-              </Button>
-              <Button variant="contained" onClick={handleClose} autoFocus>
-                Close
-              </Button>
-            </DialogActions>
-          </Dialog>
-        )}
-        {/* <Footer /> */}
-      </Box>
+                rowsPerPageOptions={pageOptions}
+                page={page}
+                onPageChange={(newPage) =>{
+                  setPage(newPage)
+                }}
+              />
+            */
+          }
+            
+          {openDialogDelete.isOpen && (
+            <Dialog
+              open={openDialogDelete.isOpen}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Delete
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  variant="outlined"
+                  onClick={() => {
+                    handleDelete(openDialogDelete.id);
+    
+                    setOpenDialogDelete({ isOpen: false, id: "" });
+                  }}
+                >
+                  Delete
+                </Button>
+                <Button variant="contained" onClick={handleClose} autoFocus>
+                  Close
+                </Button>
+              </DialogActions>
+            </Dialog>
+          )}
+          {/* <Footer /> */}
+        </Box>
+      </div>
     );
   };
   

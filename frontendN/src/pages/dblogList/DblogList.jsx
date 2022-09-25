@@ -131,55 +131,57 @@ const DblogList = (props) => {
   //////////////////////
 
   return (
-    <Box style={{
-      flex: 4
-    }}>
-      {
-         dblogValues.loading
-         ?  <div><CircularProgress /></div> 
-         :  <Table
-              columns={columns}
-              data={dblogValues.data.Dblog.data}
-              fetchData={fetchData}
-              rowsPerPage={pageOptions}
-              updateMyData={updateMyData}
-              skipReset={skipResetRef.current}
-              isDebug={false}
-            />
-      }
+    <div className="pl-2 pr-2">
+      <Box style={{
+        flex: 4
+      }} className="table-responsive">
+        {
+          dblogValues.loading
+          ?  <div><CircularProgress /></div> 
+          :  <Table
+                columns={columns}
+                data={dblogValues.data.Dblog.data}
+                fetchData={fetchData}
+                rowsPerPage={pageOptions}
+                updateMyData={updateMyData}
+                skipReset={skipResetRef.current}
+                isDebug={false}
+              />
+        }
 
-      {openDialogDelete.isOpen && (
-        <Dialog
-          open={openDialogDelete.isOpen}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Delete
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                handleDelete(openDialogDelete.id);
+        {openDialogDelete.isOpen && (
+          <Dialog
+            open={openDialogDelete.isOpen}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Delete
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  handleDelete(openDialogDelete.id);
 
-                setOpenDialogDelete({ isOpen: false, id: "" });
-              }}
-            >
-              Delete
-            </Button>
-            <Button variant="contained" onClick={handleClose} autoFocus>
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
-      {/* <Footer /> */}
-    </Box>
+                  setOpenDialogDelete({ isOpen: false, id: "" });
+                }}
+              >
+                Delete
+              </Button>
+              <Button variant="contained" onClick={handleClose} autoFocus>
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
+        )}
+        {/* <Footer /> */}
+      </Box>
+    </div>
   );
 };
 

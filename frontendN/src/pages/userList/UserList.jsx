@@ -20,6 +20,8 @@ import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import { useQuery, useMutation } from "@apollo/client";
 import LinearProgress from '@mui/material/LinearProgress';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
 
 import {gqlUsers, gqlPostsByUser, gqlDeleteUser} from "../../gqlQuery"
 // import Footer from "../footer";
@@ -162,13 +164,13 @@ const UserList = (props) => {
               console.log("Cell :", props)
 
               let {_id, displayName} = props.row.original
-              return  <div>
+              return  <div className="Btn--posts">
                         <Link to={`/user/${_id}/edit`}>
-                          <button>Edit</button>
+                          <button><EditIcon/> Edit</button>
                         </Link>
                         <button onClick={(e)=>{
                           setOpenDialogDelete({ isOpen: true, id: _id, description: displayName });
-                        }}>Delete</button>
+                        }}><DeleteForeverIcon/> Delete</button>
                       </div>
             }
           },
@@ -217,62 +219,64 @@ const UserList = (props) => {
   //////////////////////
 
   return (
-    <UserListContainer>
-      {
-        usersValue.loading
-        ? <div><CircularProgress /></div> 
-        : <Table
-            columns={columns}
-            data={usersValue.data.users.data}
-            fetchData={fetchData}
-            rowsPerPage={pageOptions}
-            updateMyData={updateMyData}
-            skipReset={skipResetRef.current}
-            isDebug={false}
-          />
-      }
-    
-      {openDialogDelete.isOpen && (
-        <Dialog
-          open={openDialogDelete.isOpen}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              {openDialogDelete.description}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                handleDelete(openDialogDelete.id);
+    <div className="pl-2 pr-2">
+      <UserListContainer className="table-responsive MuiBox-root">
+        {
+          usersValue.loading
+          ? <div><CircularProgress /></div> 
+          : <Table
+              columns={columns}
+              data={usersValue.data.users.data}
+              fetchData={fetchData}
+              rowsPerPage={pageOptions}
+              updateMyData={updateMyData}
+              skipReset={skipResetRef.current}
+              isDebug={false}
+            />
+        }
+      
+        {openDialogDelete.isOpen && (
+          <Dialog
+            open={openDialogDelete.isOpen}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {openDialogDelete.description}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  handleDelete(openDialogDelete.id);
 
-                setOpenDialogDelete({ isOpen: false, id: "", description: "" });
-              }}
-            >
-              Delete
-            </Button>
-            <Button variant="contained" onClick={handleClose} autoFocus>
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
+                  setOpenDialogDelete({ isOpen: false, id: "", description: "" });
+                }}
+              >
+                Delete
+              </Button>
+              <Button variant="contained" onClick={handleClose} autoFocus>
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
+        )}
 
-      <SpeedDial
-        ariaLabel="SpeedDial basic example"
-        sx={{ position: 'absolute', bottom: 16, right: 16 }}
-        icon={<SpeedDialIcon />}
-        onClick={(e)=>{
-          history.push("/user/new");
-        }}
-      />
-      {/* <Footer /> */}
-    </UserListContainer>
+        <SpeedDial
+          ariaLabel="SpeedDial basic example"
+          sx={{ position: 'absolute', bottom: 16, right: 16 }}
+          icon={<SpeedDialIcon />}
+          onClick={(e)=>{
+            history.push("/user/new");
+          }}
+        />
+        {/* <Footer /> */}
+      </UserListContainer>
+    </div>
   );
 };
 
