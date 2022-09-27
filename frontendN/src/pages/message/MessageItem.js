@@ -48,7 +48,11 @@ const MessageItem = (props) => {
 
     let userValues = useQuery(gqlUser, { variables: {id: senderId}, notifyOnNetworkStatusChange: true });
 
-    // console.log("userValues :", userValues)
+    console.log("userValues :", userValues)
+
+    if(_.isEmpty(userValues.data)){
+        return <div />;
+    }
 
     let direction = senderId == user._id  ? "outgoing" : "incoming"
     
@@ -65,7 +69,7 @@ const MessageItem = (props) => {
                                 direction,
                                 position
                             }}>
-                             { userValues.loading ? <LinearProgress sx={{width:"100px"}} /> : <Avatar src={_.isEmpty(userValues.data.user.data.image) ? "" : userValues.data.user.data.image[0].url} name="Zoe" size="sm" /> }
+                             { userValues.loading ? <LinearProgress sx={{width:"100px"}} /> : <Avatar src={_.isEmpty(userValues.data.user.data) ? "" : userValues.data.user.data.image[0].url} name="Zoe" size="sm" /> }
                             <Message.Footer sentTime={moment.unix(sentTime/1000).format('hh:mm A')} />
                         </Message>
             }
@@ -99,7 +103,7 @@ const MessageItem = (props) => {
                     }}>
                         
                         <Message.HtmlContent html={message} />
-                        { userValues.loading ? <LinearProgress sx={{width:"100px"}} /> : <Avatar src={_.isEmpty(userValues.data.user.data.image) ? "" : userValues.data.user.data.image[0].url} name="Zoe" size="sm" /> }
+                        { userValues.loading ? <LinearProgress sx={{width:"100px"}} /> : <Avatar src={_.isEmpty(userValues.data.user.data) ? "" : userValues.data.user.data.image[0].url} name="Zoe" size="sm" /> }
                         <Message.Footer sentTime={moment.unix(sentTime/1000).format('hh:mm A')} />
                     </Message>
 
@@ -125,7 +129,7 @@ const MessageItem = (props) => {
             switch(direction){
                 case "incoming":{
                     return  <Message model={{direction, position}}>
-                                { userValues.loading ? <LinearProgress sx={{width:"100px"}} /> : <Avatar src={_.isEmpty(userValues.data.user.data.image) ? "" : userValues.data.user.data.image[0].url} name="Zoe" size="sm" /> }
+                                { userValues.loading ? <LinearProgress sx={{width:"100px"}} /> : <Avatar src={_.isEmpty(userValues.data.user.data) ? "" : userValues.data.user.data.image[0].url} name="Zoe" size="sm" /> }
                                 <Message.ImageContent className={"message-image"} src={src} alt={"alt"} width={150} onClick={(event)=>{ console.log("event")}} />
                                 <Message.Footer sentTime={moment.unix(sentTime/1000).format('hh:mm A')} />   
                             </Message>
