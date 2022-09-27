@@ -62,3 +62,24 @@
        
     }
 }
+
+.table-responsive{
+    .pagination{
+        margin: 1rem 0;
+        button,span,
+        select{
+            display: inline-block;
+            border: 1px solid $gray-d;
+            padding: .625rem 1.25rem;
+        }
+        span + span{
+            padding-top: 7px;
+            padding-bottom: 7px;
+        }
+        select{
+            padding-top: 9px;
+            padding-bottom: 9px;
+        }
+     
+    }
+}

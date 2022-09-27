@@ -351,7 +351,7 @@ const PostList = (props) => {
                   {openDialogDelete.description}
                 </DialogContentText>
               </DialogContent>
-              <DialogActions className="Mui-dialog-btnszss">
+              <DialogActions >
                 <Button
                   variant="outlined"
                   onClick={() => {
