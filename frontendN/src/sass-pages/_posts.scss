@@ -82,17 +82,21 @@ table{
 
 }
 
+.css-hz1bth-MuiDialog-container{
+    h2.MuiTypography-root{
+        text-align: center;
+    }
+}
+
 
 .MuiDialogActions-root{
-    &.Mui-dialog-btnszss{
         margin: 1rem 0;
-
+        justify-content: center !important;
         button{
             &:first-child{
                 border-color: $bl-red;
                 color: $bl-red;
             }
         }
-    }
 }
 
