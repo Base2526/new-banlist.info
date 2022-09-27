@@ -175,7 +175,29 @@ ul.MuiList-root{
     .userInfo{
        > .MuiTypography-root{
             color: rgba(0,0,0, .54);
+            margin-left: 1rem;
+            padding: 0 0.5em;
+            border-radius: 0.5em;
+            background-color: $gray-d;
         }
     }
     
+}
+
+.replySection{
+    .userInfo{
+        > .MuiTypography-root{
+            position: relative;
+             &::before{
+                 position: absolute;
+                 content: "";
+                 height: 2px;
+                 width: 38px;
+                 top: 50%;
+                 left: -33px;
+                 background-color: $gray-d;
+ 
+             }
+         }
+     }
 }
