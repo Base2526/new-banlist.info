@@ -1,5 +1,44 @@
 .page-message{
     .Mui-submess-root{
         min-height: 600px;
+        height: 100%;
+        overflow: auto;
+    }
+
+    .cs-main-container{
+        position: absolute;
+        align-items: stretch;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+}
+.cs-main-container>{
+    .cs-sidebar.cs-sidebar--left{
+        border-right: 0 !important;
+    }
+    .cs-chat-container{
+        border-left: 1px solid $gray-light;
+        .scrollbar-container{
+            padding-top: .5em;
+        }
+    }
+}
+
+.scrollbar-container{
+    padding: 0 .5em;
+    ul {
+        li{
+            width: 100%;
+        }
+    }
+    .cs-conversation{
+        border-radius: .7em;
+        -webkit-border-radius: .7em;
+        cursor: pointer;
+        &:hover{
+            background-color: darken($gray-f, 5%);
+        }
     }
 }
