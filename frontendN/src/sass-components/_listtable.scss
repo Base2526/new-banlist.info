@@ -18,11 +18,12 @@
         }
         
         .MuiSpeedDial-root{
+            position: fixed;
             @media (max-width:$md){
-                bottom: -43px;
-                right: 27px;
+                bottom: 30%;
+                right: 20px;
             }
-            bottom: -20px;
+            bottom: 16%;
         }
     }
    

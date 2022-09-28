@@ -4,6 +4,18 @@ header{
         .App-menuButton-4{
             margin-left: 0;
         }
+        h6{
+            &.MuiTypography-root + {
+                div[class |="sc"]{
+                    a{
+                        div[class |="sc"]{
+                            display: flex;
+                            align-items: center;
+                        }
+                    }
+                }
+            }
+        }
      }
      .MuiTypography-h6{
         @media (max-width:$sm){
@@ -29,10 +41,10 @@ header{
     }
 
     // succesful login
-    .sc-gsnTZi {
-        display: flex;
-        align-items: center;
-    }
+    // .sc-gsnTZi {
+    //     display: flex;
+    //     align-items: center;
+    // }
 
    
 }
