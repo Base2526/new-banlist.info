@@ -151,7 +151,7 @@ const DialogLogin = (props) => {
               <div className="d-flex form-input">
                 <label>Username </label>
                 <div className="position-relative wrapper-form">
-                  <input type="text" className="input-bl-form" name="username" value={input.username} onChange={onInputChange} required />
+                  <input type="text" className="input-bl-form" name="username" value={input.username} onChange={onInputChange} required/>
                   <AccountCircle />
                 </div>
                

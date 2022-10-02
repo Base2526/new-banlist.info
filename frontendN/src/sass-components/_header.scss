@@ -40,6 +40,13 @@ header{
         margin-right: .25rem;
     }
 
+    .MuiButtonBase-root{
+        &.MuiButton-root{
+            background-color: darken($primary, 6%);
+        }
+      
+    }
+
     // succesful login
     // .sc-gsnTZi {
     //     display: flex;
