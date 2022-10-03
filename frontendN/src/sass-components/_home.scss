@@ -1,4 +1,10 @@
 $sm-600: 600px;
+.MuiAppBar-colorPrimary{
+    background-color: $primary !important;
+    &.MuiPaper-elevation4{
+        box-shadow: 0px 1px 3px rgba($black, .4);
+    }
+}
 
 .App-toolbar-11,
 .MuiDrawer-root .jss11{
@@ -11,6 +17,34 @@ $sm-600: 600px;
     .MuiList-padding{
         padding-top: 0px;
     }
+}
+
+.MuiList-root{
+    .MuiButtonBase-root{
+        &.Mui-selected{
+            background: rgba(60,67,67, .23);
+        }
+    }
+}
+
+.css-zun73v.Mui-checked,
+.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.Mui-checked{
+    color: $primary !important;
+}
+
+.MuiCardHeader-root{
+    .MuiTypography-colorTextSecondary{
+        color: rgba($black, .54) !important;
+       
+    }
+}
+.MuiTypography-colorTextSecondary{
+    color: rgba($black, 1) !important;
+   
+}
+
+.show-more-text{
+    color: rgba($black, 1) !important;
 }
 
 .page-home{
@@ -39,7 +73,7 @@ $sm-600: 600px;
         max-width: none;
     }
 
-    .css-4reedn-MuiSpeedDial-root{
+    .MuiSpeedDial-root{
         position: fixed;
         bottom: auto;
         top: 32%;
@@ -77,7 +111,45 @@ $sm-600: 600px;
             line-height: 1.45;
         }
     }
+
+    .MuiFormControl-root{
+        .MuiInputBase-root{
+            background-color: $white;
+            border-radius: .5rem;
+            -webkit-border-radius: .5rem;
+            outline: 0 !important;
+            &:hover{
+                fieldset.MuiOutlinedInput-notchedOutline{
+                    border-color: rgba($black, .23);
+                    box-shadow: 0 2px 8px 1px rgba(64,60,67, .24);
+                }
+            }
+           
+    
+            .MuiSvgIcon-root{
+                color: $gray-6;
+            }
+           
+        }
+    }
    
+}
+
+.MuiSpeedDial-root{
+    .MuiButtonBase-root{
+        background-color: $primary;
+        &:hover{
+            background-color: $primary;
+        }
+    }
+    div[class |="css"]{
+        background-color: $primary;
+    }
+    .css-118zhtq-MuiButtonBase-root-MuiFab-root-MuiSpeedDial-fab{
+        &:hover{
+            background-color: $primary;
+        }
+    }
 }
 
 // .MuiCardContent-root{
@@ -145,8 +217,10 @@ ul.MuiList-root{
             &.react-share__ShareButton{
                 display: flex;
                 align-items: center;
+                color: $gray-6 !important;
                 svg{
                     margin-right: .5rem;
+                    
                 }
             }
         }
@@ -156,6 +230,7 @@ ul.MuiList-root{
             svg{
                 margin-right: .5rem;
                 margin-left: .25rem;
+                color: $gray-6 !important;
             }
         }
     }
@@ -179,6 +254,7 @@ ul.MuiList-root{
             padding: 0 0.5em;
             border-radius: 0.5em;
             background-color: $gray-d;
+            align-self:flex-start;
         }
     }
     
@@ -201,3 +277,62 @@ ul.MuiList-root{
          }
      }
 }
+
+
+
+.MuiAutocomplete-root{
+    &.Mui-focused{
+        //border: 3px solid #f00;
+        .MuiInputBase-root{
+            &.Mui-focused{
+                .MuiOutlinedInput-notchedOutline{
+                    border: 0 !important;
+                    box-shadow: 0 2px 8px 1px rgba(64,60,67, .24);
+                }
+            }
+        }
+       
+    }
+}
+
+// .css-1gywuxd-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline{
+//     border: 0 !important;
+// }
+
+.signBox {
+    .loginBtn{
+        border-color: $green !important;
+        color:$green !important;
+    }
+}
+
+.section {
+    .inputActions{
+        .postBtn{
+            background-color: $primary !important;
+        }
+    }
+}
+
+input{
+    &:focus,
+    &:active{
+        //border-color: $gray-d !important;
+        outline: none;
+        color: $bl-dark-4x;
+       
+    }
+    // &:-webkit-autofill{
+    //     &:focus,
+    //     &:active{
+    //         background: none !important;
+    //     }
+    //     background: $black !important;
+    // }
+}
+
+// input:-webkit-autofill,
+// input:-webkit-autofill:hover,
+// input:-webkit-autofill:focus{
+//     background: $black !important;
+// }

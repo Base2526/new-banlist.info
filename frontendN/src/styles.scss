@@ -32,14 +32,26 @@ body {
     font-family: $font-family !important;
   }
   color: $primary-color;
-
+  background-color: $grayf3 !important;
    
 }
 
+// body{
+//   .MuiContainer-root{
+//     .MuiPaper-root *{
+//       @include fontsnotPara()  
+//     }
+//   }
+// }
+
 body{
   .MuiContainer-root{
-    .MuiPaper-root *{
-        @include fontsnotPara()
+    .MuiPaper-root {
+      .read-more-master *{
+         //@include fontsnotPara()
+         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+      }
+        
     }
   }
 }
@@ -75,18 +87,18 @@ main{
   position: relative;
 }
 
-.css-wb57ya-MuiFormControl-root-MuiTextField-root{
-  background-color: $white;
-  // box-shadow: 0 1px 3px rgba($black, 30%);
-  border-radius: .5rem;
-   > .css-1gywuxd-MuiInputBase-root-MuiOutlinedInput-root{
-    border-radius: .5rem;
-    -webkit-border-radius: .5rem;
-    // .css-1d3z3hw-MuiOutlinedInput-notchedOutline{
-    //   border-color: $white;
-    // }
-   }
-}
+// .css-wb57ya-MuiFormControl-root-MuiTextField-root{
+//   background-color: $white;
+//   // box-shadow: 0 1px 3px rgba($black, 30%);
+//   border-radius: .5rem;
+//    > .css-1gywuxd-MuiInputBase-root-MuiOutlinedInput-root{
+//     border-radius: .5rem;
+//     -webkit-border-radius: .5rem;
+//     // .css-1d3z3hw-MuiOutlinedInput-notchedOutline{
+//     //   border-color: $white;
+//     // }
+//    }
+// }
 
 @include createfonts($font-head);
 

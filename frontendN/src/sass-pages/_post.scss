@@ -38,20 +38,24 @@
                         border-radius: .25rem;
                         // box-shadow: 0 1px 3px rgba($black, .3);
                         border: 1px solid rgba(0,0,0,.23);
-                        // margin-bottom: 1rem;
-                    
+                    .MuiTypography-root{
+                        &:first-child{
+                            margin: .25rem .5rem;
+                            display: block;
+                        }
+                    }
                 }
-                &:not(.box){
-                    &.css-e53awj-MuiStack-root{
+                &:not(.box) + {
+                    div[class |="css"]{
                         border: 0;
                     }
                 }
                 
             }
-            .css-wxvrsw-MuiTypography-root{
-                margin: .25rem .5rem;
-                display: block;
-            }
+            // .css-wxvrsw-MuiTypography-root{
+            //     margin: .25rem .5rem;
+            //     display: block;
+            // }
         }
         &.css-0{
             @media (min-width:$sm){
