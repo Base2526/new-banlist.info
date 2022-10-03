@@ -3,6 +3,11 @@
         vertical-align: middle;
         width: .9em;
         height: .9em;
+        color: rgba($black, .8)
+       
+    }
+    .MuiTypography-colorPrimary{
+       color: $gray-6;
     }
 }
 
