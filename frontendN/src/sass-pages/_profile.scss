@@ -1,0 +1,35 @@
+.page-profile{
+    .MuiBox-root{
+        @include card-ui();
+        padding: 0 .5rem 1rem .5rem;
+        @media (min-width:$sm){
+            padding: 1rem ;
+        }
+        max-width: 430px;
+        margin: auto;
+        div[class |="css"]
+        .Mui-avatar{
+            margin-left: 0;
+        }
+
+        .MuiFormControl-root{
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        
+        button[type=submit]{
+            &.MuiButtonBase-root{
+                margin-right: 1rem;
+                box-shadow: 0 1px 2px -1px rgb($black, .2),
+                            0 2px 2px 0px rgb($black, .14),
+                            0 1px 5px 0px rgb($black, .12);
+            }
+        }
+    }
+}
+
+.Mui-wrapbtn{
+    justify-content: center;
+    align-items: center;
+}

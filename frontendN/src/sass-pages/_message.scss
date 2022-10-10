@@ -12,6 +12,7 @@
         bottom: 0;
         left: 0;
         right: 0;
+        border:1px solid $gray-d ;
     }
 
     // .cs-conversation-header{
@@ -29,6 +30,8 @@
         }
     }
 }
+
+
 
 .scrollbar-container{
     padding: 0 .5em;
@@ -71,3 +74,26 @@
 //     }
     
 // }
+
+.cs-message--incoming{
+    .cs-message__content{
+        background-color: darken($gray-f, 5%) !important;
+    }
+}
+
+input.cs-search__input{
+   &::placeholder{
+    color: rgba($black, .38);
+   }
+}
+
+.cs-conversation-header__content{
+    .cs-conversation-header__user-name,
+    .cs-conversation-header__info{
+        background: none !important;
+    }
+} 
+
+.cs-conversation-header{
+    background: none !important;
+}
