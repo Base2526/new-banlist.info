@@ -9,6 +9,17 @@ $primary-color: rgb(218, 10, 10);
   font-size: 16px;
 }
 
+a[href]{
+  color: $gray-6;
+  &:hover,
+  &:active{
+    color: $black;
+  }
+  &:visited{
+    color: $black;
+  }
+}
+
 
 @mixin fontsnotPara() {
   font-family: $noto-san-serifthai !important;
