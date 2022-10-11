@@ -183,7 +183,7 @@ const index = (props) => {
 
           <div className="Mui-title">Profiles</div>
 
-          <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={2} className="Mui-csswrapbox">
             <input type='file' id='file' ref={inputFile} style={{display: 'none'}}  onChange={onChangeFile} />
             <div style={{ position: "relative" }} className="Mui-avatar" >
               <Avatar
