@@ -171,7 +171,7 @@ const index = (props) => {
   }
 
   return (
-    <div>
+    <div className="page-profile pl-2 pr-2 mb-4">
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Box
             component="form"
@@ -181,11 +181,11 @@ const index = (props) => {
             ref={myForm}
             onSubmit={submitForm}>
 
-          <div>Profiles</div>
+          <div className="Mui-title">Profiles</div>
 
-          <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={2} className="Mui-csswrapbox">
             <input type='file' id='file' ref={inputFile} style={{display: 'none'}}  onChange={onChangeFile} />
-            <div style={{ position: "relative" }} >
+            <div style={{ position: "relative" }} className="Mui-avatar" >
               <Avatar
                 className={"user-profile"}
                 sx={{
@@ -235,8 +235,10 @@ const index = (props) => {
           <Typography variant="overline" display="block" gutterBottom>
             Email : {currentUser.email}
           </Typography>
-          <Button disabled={!isUpdate} type="submit" variant="contained" color="primary" id="update"  onClick={ e => myForm.current.buttonId=e.target.id }>UPDATE</Button>
-          <Button type="submit" variant="contained" color="primary" id="logout"  onClick={ e => myForm.current.buttonId=e.target.id }>Logout</Button>
+          <div className="d-flex Mui-wrapbtn">
+            <Button disabled={!isUpdate} type="submit" variant="contained" color="primary" id="update"  onClick={ e => myForm.current.buttonId=e.target.id }>UPDATE</Button>
+            <Button type="submit" variant="contained" color="primary" id="logout"  onClick={ e => myForm.current.buttonId=e.target.id }>Logout</Button>
+          </div>
         </Box>
       </LocalizationProvider>
     </div>

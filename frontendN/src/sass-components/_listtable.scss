@@ -33,6 +33,11 @@
             border: 1px solid $gray-d;
             padding: .25rem;
         }
+        tbody{
+            tr{
+                color: $gray-6;
+            }
+        }
     }
 }
 

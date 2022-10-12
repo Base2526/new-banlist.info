@@ -347,11 +347,11 @@ const UserEdit = (props) => {
                     }}
                     onSubmit={submitForm}
                   >
-                    <div>
+                    <div className="Mui-dblockavatar">
                       <Typography variant="overline" display="block" gutterBottom>
                         Profile
                       </Typography>
-                      <Stack direction="row" spacing={2}>
+                      <Stack direction="row" spacing={2} className="Mui-wrapsrcimg">
                         <Avatar
                           className={"user-profile"}
                           sx={{
@@ -364,26 +364,28 @@ const UserEdit = (props) => {
                         
                           src={ fileProfile != null ? URL.createObjectURL(fileProfile) :  input.profile?.url ? input.profile.url : "" }
                         />
+
+                        <label htmlFor="profile">
+                          <Input
+                            accept="image/*"
+                            id="profile"
+                            name="file"
+                            // multiple
+                            type="file"
+                            onChange={(event) => {
+                              setFileProfile(event.target.files[0])
+                            }}
+                          />
+                          <IconButton
+                            color="primary"
+                            aria-label="upload picture"
+                            component="span"
+                          >
+                            <PhotoCamera />
+                          </IconButton>
+                        </label>
                       </Stack>
-                      <label htmlFor="profile">
-                        <Input
-                          accept="image/*"
-                          id="profile"
-                          name="file"
-                          // multiple
-                          type="file"
-                          onChange={(event) => {
-                            setFileProfile(event.target.files[0])
-                          }}
-                        />
-                        <IconButton
-                          color="primary"
-                          aria-label="upload picture"
-                          component="span"
-                        >
-                          <PhotoCamera />
-                        </IconButton>
-                      </label>
+                      
                     </div>
                     <TextField
                       id="user-username"
@@ -536,12 +538,14 @@ const UserEdit = (props) => {
   }
 
   return (
-    <div>
+    <div className="page-useredit pl-2 pr-2 mb-4">
+      <div className="MuiBox-root-bcss">
       {
         editValues != null && editValues.loading
         ? <div><CircularProgress /></div> 
         : mainView()
       }
+      </div>
     </div>
   );
 };
