@@ -235,7 +235,7 @@ const index = (props) => {
           <Typography variant="overline" display="block" gutterBottom>
             Email : {currentUser.email}
           </Typography>
-          <div className="d-flex Mui-wrapbtn">
+          <div className="d-flex Mui-wrapbtn-update">
             <Button disabled={!isUpdate} type="submit" variant="contained" color="primary" id="update"  onClick={ e => myForm.current.buttonId=e.target.id }>UPDATE</Button>
             <Button type="submit" variant="contained" color="primary" id="logout"  onClick={ e => myForm.current.buttonId=e.target.id }>Logout</Button>
           </div>
