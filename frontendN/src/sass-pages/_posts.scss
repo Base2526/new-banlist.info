@@ -97,6 +97,19 @@ table{
                 border-color: $bl-red;
                 color: $bl-red;
             }
+            &:last-child{
+                border-color: $primary;
+                background-color: $primary;
+            }
         }
 }
+
+.MuiBox-root{
+    .read-more{
+        color: $green;
+        cursor:pointer;
+    }
+}
+
+
 
