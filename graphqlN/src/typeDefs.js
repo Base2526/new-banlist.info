@@ -54,7 +54,7 @@ export default gql`
     image: [FileInput]
   }
 
-  input SeachInput{
+  input SearchInput{
     type: String!
     q: String!
   }
