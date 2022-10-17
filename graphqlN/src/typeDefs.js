@@ -664,7 +664,7 @@ export default gql`
     login(input: LoginInput): JSON
     loginWithSocial(input: LoginWithSocialInput): JSON
 
-    search(input: SeachInput): JSON
+    search(type: String!, q: String!): JSON
 
     createUser(input: UserInput): User
     updateUser(_id: ID!, input: JSON): JSON
