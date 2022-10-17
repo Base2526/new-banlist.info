@@ -1150,6 +1150,8 @@ export default {
 
       let {input} = args
 
+
+      logger.info(JSON.stringify(input));
       
       return {'status': 'OK', input};
     },
