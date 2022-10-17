@@ -1148,10 +1148,11 @@ export default {
         return;
       }
 
-      let {input} = args
+      let {type, q} = args
 
-      logger.info(JSON.stringify(input));      
-      return {'status': 'OK', input};
+      logger.info(args);
+      
+      return {'status': 'OK', args};
     },
 
 
