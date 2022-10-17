@@ -54,7 +54,7 @@ export default gql`
     image: [FileInput]
   }
 
-  input SeachInput{
+  input SearchInput{
     type: String!
     q: String!
   }
@@ -664,7 +664,7 @@ export default gql`
     login(input: LoginInput): JSON
     loginWithSocial(input: LoginWithSocialInput): JSON
 
-    search(input: SeachInput): JSON
+    search(type: String!, q: String!): JSON
 
     createUser(input: UserInput): User
     updateUser(_id: ID!, input: JSON): JSON
