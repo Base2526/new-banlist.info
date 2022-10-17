@@ -1139,6 +1139,22 @@ export default {
 
       return input
     },
+
+    // search
+    async search(parent, args, context, info) {
+      
+      if(_.isEmpty(context)){
+        // logger.error(JSON.stringify(args));
+        return;
+      }
+
+      let {input} = args
+
+      
+      return {'status': 'OK', input};
+    },
+
+
     // user
     async createUser(parent, args, context, info) {
       
