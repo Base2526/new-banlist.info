@@ -54,6 +54,11 @@ export default gql`
     image: [FileInput]
   }
 
+  input SeachInput{
+    type: String!
+    q: String!
+  }
+
   input LoginInput {
     username: String!
     password: String!
@@ -658,6 +663,8 @@ export default gql`
   type Mutation {
     login(input: LoginInput): JSON
     loginWithSocial(input: LoginWithSocialInput): JSON
+
+    search(input: SeachInput): JSON
 
     createUser(input: UserInput): User
     updateUser(_id: ID!, input: JSON): JSON
