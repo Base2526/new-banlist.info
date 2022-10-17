@@ -1151,9 +1151,9 @@ export default {
       let {type, q} = args
 
 
-      logger.info("type : " + type + ", q : " +q);
+      logger.info(args);
       
-      return {'status': 'OK', input};
+      return {'status': 'OK', args};
     },
 
 
