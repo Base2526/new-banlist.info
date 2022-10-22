@@ -43,6 +43,14 @@
         border: 1px solid $gray-d;
         border-radius: .25rem;
         margin-bottom: 1.5rem;
+        z-index: 100;
+        &:hover{
+            background-color: darken($grayf3, 3%)  !important;
+            box-shadow: 1px 1px 5px rgba($black, .25);
+            border: transparent;
+            cursor: pointer !important;
+            
+        }
     }
 
     .d-flex {
@@ -68,6 +76,7 @@
             align-items: center;
             flex-grow: 1;
             border:0;
+            cursor: pointer !important;
             
             &:first-child{
                 @include social-media(var(--bgcolor),var(--bgcolor2));
