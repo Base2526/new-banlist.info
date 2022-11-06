@@ -16,7 +16,7 @@ services:
         REACT_APP_GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
         REACT_APP_GOOGLE_ANALYTICS4: ${REACT_APP_GOOGLE_ANALYTICS4}
     ports:
-      - "80:80"
+      - "8011:80"
       - "443:443"
     volumes:
       - ./frontendN/src:/app/src
