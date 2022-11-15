@@ -14,10 +14,10 @@ import GoogleIcon from '@mui/icons-material/Google';
 import { FacebookLoginButton, GoogleLoginButton } from "react-social-login-buttons";
 import { GoogleLogin, useGoogleLogin  } from "react-google-login";
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
-
+import _ from "lodash";
 import { gapi } from "gapi-script"
 
-import { gqlLogin, gqlConversations, gqlPosts, gqlHomes } from "./gqlQuery"
+import { gqlLogin, gqlConversations, gqlPosts, gqlHomes, gqlLoginWithSocial } from "./gqlQuery"
 
 const DialogLogin = (props) => {
   
@@ -62,6 +62,35 @@ const DialogLogin = (props) => {
     // }
   }
 
+  const [onLoginWithSocial, resultLoginWithSocial] = useMutation(gqlLoginWithSocial, 
+    {
+      update: (cache, {data: {loginWithSocial}}) => {
+
+        console.log("loginWithSocial :", loginWithSocial)
+        // const data1 = cache.readQuery({ query: gqlBanks });
+
+        let {status, data} = loginWithSocial
+
+        if(status){
+            
+        }
+
+        // let newBanks = {...data1.banks}
+        // let newData  = _.map(newBanks.data, bank=>bank._id == updateBank._id ? updateBank : bank)
+
+        // newBanks = {...newBanks, data: newData}
+        // cache.writeQuery({
+        //   query: gqlBanks,
+        //   data: { banks: newBanks },
+        // });
+      },
+      onCompleted({ data }) {
+        history.push("/");
+      }
+    }
+  );
+
+
   useEffect(()=>{
     const initClient = () =>{
       gapi.client.init({
@@ -80,16 +109,23 @@ const DialogLogin = (props) => {
   const callbackFacebook = (response) => {
     console.log( "callbackFacebook :", response);
 
+    if(!_.has(response, "status")){
+      // onLoginWithSocial({ variables: { input: { authType: "GITHUB",  code }} })
+      onLoginWithSocial({ variables: { input: { authType: "FACEBOOK",  data: response  }} })
+    }
+
     // status: "unknown"
     /*
-    accessToken : "EAARcCUiGLAQBADwyeiaZBkcKdwv3vkxvoMoSclv2YRIF2w0LL4i7K6p6s6pZArSgPK8FHtg7ksjfZARFWLTVZA8XPHd2wNvo7xY19kApPOkNbCX1afW1f4LPRQ6Pv71MZB91TS2mUfsCEoYYZA8wvW8Vx64r8GNVjxXUBZB5Wi9PBmgALQXfWEAkdfOofV863PJZCmOkbxJMgYPXRA8jWYvq"
-    data_access_expiration_time :  1670679481
-    expiresIn : 4919
-    graphDomain : "facebook"
-    id : "5031748820263498"
-    name : "AThe Station"
-    signedRequest :  "jD1WOiVhDQn_0K_s0l7iSQd-4mZ403JLybYbzDeyJZo.eyJ1c2VyX2lkIjoiNTAzMTc0ODgyMDI2MzQ5OCIsImNvZGUiOiJBUUROV1dCeVlYdlFOaWo1aFVkeGhzdFEzbUlLdU1KcFRUM21pUDZQVFh3cENHd2F0VTVWc1d5aWQ3bi1yYWtOZUFYNDhmYV9HZkptUDg3Uk9OYnpCY1p4XzREQ2NOMmt4YldSVzdzMWY5ZS10TnR1TW92UERmYy1xNUN5b09scVZXbExUQ25Ielg2X0ZPc0pyTy03YnlqeC1WOE5aN0dkcVFQb0cyOUFkOXVFZl9YQmwyU3Q2bnV5Vm96bzBRTVUwTVhPVS1kazM3eEZRRlNzS0Y3V3JzY1Q4amJjOE8yeUYtYkRTVExMaDEycmRmdTk2b1ZFQW1GTy1KTkxJa2xzQmdCaEc2Q1EtX0F5SjJnM0RJYWRfVzhNMUJqOWd0V05zWDE2UkdOa2hzUzhvdmZkX1lOQlZBU0ZSYzZ4YkQyVG8wSkE2UXpuMEZIVVE4S1lkcG5RVVJLNXNyVnZLQTJSMVdYNnpXMThFUEFfVzVJZFhtUlBWeFhjMmxyR0QwWjZZSGMiLCJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTY2MjkwMzQ4MX0"
-    userID : "5031748820263498"
+    {
+      "name": "Somkid Sim",
+      "id": "5031748820263498",
+      "accessToken": "EAARcCUiGLAQBAA2X9nn4pZCawEx7yJUES2HRrBVuxeGz8sfYs0ZBlrvknmyAOV4YOapZBsdEgbdoszPBUsh2w93ZCQX3RZBzDhnYEILFqfjb3ZBBVOxhJae0X6yCAuHKXBCQCKLyo40FOXeIubO5UEYHGZAtJ6hjCLpkIDJJfuq9RW2r2PUA2NpY38uADHd14NcrS4sm1Hz1grSgM4tsHZA1",
+      "userID": "5031748820263498",
+      "expiresIn": 5270,
+      "signedRequest": "iD2NlLiZWy02HIu-VXNVe9Jn7lg4ccj96pudx1089wg.eyJ1c2VyX2lkIjoiNTAzMTc0ODgyMDI2MzQ5OCIsImNvZGUiOiJBUUFycFJZMDRKWlpZMXV1QjV6X2VMdjU0STFaWFJ2VkpRUkxkRTI0MnJqOXE0aDN4MnZRNV9hTS1KQ0NWUlR6aF9tTzRHcFczcDZOSWgzMWRhVllnMEdSaXBfRHpoSVdCM2s0OThNY0RoalN2WnBGaWRvRlJZUjBCcWdWSTNaX3pWVmxaeURTRzMwS1M1RTJyaHluVjg0S3dXUTFrNWs2NDhOdUkwbHFTSGJabGVuTTd5TWhvMHhEajMtNDZ3eWdHQlFfa1Y3UF9WNTRZYVVkcUhiTDRNdURtVExYTVlWN1IzRzRyd1Axejdub2ZzVERfc2N2Q0FCUzhPMkpEUkYtRmg4MlFnT0tKdUJzaDhEZXFSWmFWNDd6Q0k3eDVLc3Y3dlZjekpuX1lJNjFyLThKTDREZElUWi1wb0Q4LThuOEY1R0F0Y010cnJVbFN5WmZEcHl6ZFdnSTZtLWpKd05URk5vRzNxNVMxTV8xV2xKUTlGN2JybHBueXY1VWZCT2lyek0iLCJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTY2ODQ3OTUzMH0",
+      "graphDomain": "facebook",
+      "data_access_expiration_time": 1676255530
+    }
     */ 
   }
 
@@ -101,8 +137,11 @@ const DialogLogin = (props) => {
     console.log("responseGoogle newAuthRes :", newAuthRes)
     // localStorage.setItem('authToken', newAuthRes.id_token);
 
+    onLoginWithSocial({ variables: { input: { authType: "GOOGLE",  data: {...response, ...newAuthRes}  }} })
+
     // error: "popup_closed_by_user"
     /*
+    --------  response  --------
     accessToken
     googleId
     profileObj {
@@ -125,8 +164,28 @@ const DialogLogin = (props) => {
       scope : "email profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid"
       token_type : "Bearer"
     }
-    */ 
-  };
+    */
+   
+    /*
+    ----------  newAuthRes ----------
+    {
+      "token_type": "Bearer",
+      "access_token": "ya29.a0AeTM1icjWxWZTlNE7aW4I-NxP3VY4f6QG6b4e1aXeGmcqLzKV0yeDvWXy5XannL_LOu0gqwF-HLeeOxoF5BlU3gRyLk0-w_ttsZIigVmwNFn-FGn_0sXDK4LoUk-Y5YefGRsHilAmAAHz7jMgMb6B80xNw5xD2MaCgYKAa0SARASFQHWtWOmmIZpKcbUdv0btmC2gGUpRw0166",
+      "scope": "email profile https://www.googleapis.com/auth/userinfo.profile openid https://www.googleapis.com/auth/userinfo.email",
+      "login_hint": "AJDLj6IwgLvhCVpEzCp3uaFdvrRlobPVw2fzQGnDcVDRIWfEVnCZ5tBvMV9RxH-EeHG6FMgjgi6XG_nZk3EgDid15uEuqyQHKQ",
+      "expires_in": 3599,
+      "id_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjcxM2ZkNjhjOTY2ZTI5MzgwOTgxZWRjMDE2NGEyZjZjMDZjNTcwMmEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiMTA5NDIwMzg2NTg0My1qcWFqOWFtNHRldnRvY2c3NXRkaXJtdGtoOTVrMjdjYi5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsImF1ZCI6IjEwOTQyMDM4NjU4NDMtanFhajlhbTR0ZXZ0b2NnNzV0ZGlybXRraDk1azI3Y2IuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTIzNzg3NTIxNTMxMDE1ODUzNDciLCJlbWFpbCI6ImFuZHJvaWQuc29ta2lkQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiUGFVamZwSVM3d0hFOWV5SlBFcDNWUSIsIm5hbWUiOiJTb21raWQgU2ltYWphcm4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUxtNXd1MzQ0WGlRUkdSOC1yZ2hBX0tyQ1A4djlnbFlRSWE3WFBVSTlSOTk1Zz1zOTYtYyIsImdpdmVuX25hbWUiOiJTb21raWQiLCJmYW1pbHlfbmFtZSI6IlNpbWFqYXJuIiwibG9jYWxlIjoiZW4iLCJpYXQiOjE2Njg0NzkwMDQsImV4cCI6MTY2ODQ4MjYwNCwianRpIjoiYzIzYTg2MTIxMTBkNGI1YWIwNmU5MWFhZmEwMGZiYjMxMWY0ZGM2YyJ9.tAOZq5O1pBUHOz5IwtfK5pmk6PP1I5MYmDm0erAjq5PHRC7JUNddlzTiqpN5zprWVBfjdlbMytwbMWwtrSOd_mCdXaK7ffiMYHi91A4tA0_7JvRErAn8-6ZvzjCMl807BcuyuqFvZEHuYkJTGaSV4kmI4d-NDirtWHA2RJQEscLyktkG3t3GxSwF9axoiMzBNPSi_bZ6xKfTLEcgG7t85Wq1DwLGPHmOuIfgdS-q-mMnklPX5x8sCSTNvitsIjK5v_56c0bWrfWzKbiCfkv2UyVWPKRg01CdnRsgnZeUeLaV3mB5-6HKsTsUE3rmA01iJZVw9F-NzuVFwqx9G5z0lQ",
+      "session_state": {
+          "extraQueryParams": {
+              "authuser": "0"
+          }
+      },
+      "first_issued_at": 1668479006076,
+      "expires_at": 1668482605076,
+      "idpId": "google"
+    }
+    */
+    };
 
   const onGoogleFailure = (response) =>{
     console.log("onGoogleFailure :", response);

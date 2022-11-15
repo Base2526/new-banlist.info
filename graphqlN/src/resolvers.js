@@ -1087,7 +1087,7 @@ export default {
     async loginWithSocial(parent, args, context, info) {
       let {input} = args
 
-      console.log("process.env :", process.env)
+      // console.log("process.env :", process.env)
       console.log("loginWithSocial :", input)
       // input = {...input, displayName: input.username}
       // return await User.create(input);
@@ -1102,15 +1102,15 @@ export default {
 
         case "GITHUB":{
           try{
-            let { code } = input
+            let { data } = input
             
-            const data = new FormData();
-            data.append("client_id", process.env.GITHUB_CLIENT_ID);
-            data.append("client_secret", process.env.GITHUB_CLIENT_SECRET);
-            data.append("code", code);
+            const formData = new FormData();
+            formData.append("client_id", process.env.GITHUB_CLIENT_ID);
+            formData.append("client_secret", process.env.GITHUB_CLIENT_SECRET);
+            formData.append("code", data.code);
 
             // Request to exchange code for an access token
-            let github_user = await fetch(process.env.GITHUB_URL_OAUTH_ACCESS_TOKEN, { method: "POST", body: data })
+            let github_user = await fetch(process.env.GITHUB_URL_OAUTH_ACCESS_TOKEN, { method: "POST", body: formData })
                                         .then((response) => response.text())
                                         .then((paramsString) => {
                                           let params = new URLSearchParams(paramsString);
