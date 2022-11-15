@@ -94,11 +94,11 @@ const DialogLogin = (props) => {
   }
 
   // https://github.com/Sivanesh-S/react-google-authentication/blob/master/src/utils/refreshToken.js
-  const onSuccess = (response) => {
-    console.log("onSuccess :", response);
+  const onGoogleSuccess = async(response) => {
+    console.log("onGoogleSuccess :", response);
 
-    // const newAuthRes = await response.reloadAuthResponse();
-    // console.log("responseGoogle newAuthRes :", newAuthRes)
+    const newAuthRes = await response.reloadAuthResponse();
+    console.log("responseGoogle newAuthRes :", newAuthRes)
     // localStorage.setItem('authToken', newAuthRes.id_token);
 
     // error: "popup_closed_by_user"
@@ -128,8 +128,8 @@ const DialogLogin = (props) => {
     */ 
   };
 
-  const onFailure = (response) =>{
-    console.log("onFailure :", response);
+  const onGoogleFailure = (response) =>{
+    console.log("onGoogleFailure :", response);
   };
 
   const handleSubmit = (event) =>{
@@ -191,8 +191,8 @@ const DialogLogin = (props) => {
                 <button onClick={renderProps.onClick} disabled={renderProps.disabled}><GoogleIcon /> <span> Google</span> </button>
               )}
               buttonText="Login"
-              onSuccess={onSuccess}
-              onFailure={onFailure}
+              onSuccess={onGoogleSuccess}
+              onFailure={onGoogleFailure}
               cookiePolicy={'single_host_origin'}
               isSignedIn={true}
               
