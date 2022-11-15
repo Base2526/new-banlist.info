@@ -59,6 +59,12 @@ const Login = (props) => {
 
             console.log("loginWithSocial :", loginWithSocial)
             // const data1 = cache.readQuery({ query: gqlBanks });
+
+            let {status, data} = loginWithSocial
+
+            if(status){
+
+            }
     
             // let newBanks = {...data1.banks}
             // let newData  = _.map(newBanks.data, bank=>bank._id == updateBank._id ? updateBank : bank)
@@ -95,7 +101,7 @@ const Login = (props) => {
 
         let {code} = response
         if(!_.isEmpty(code)){
-            onLoginWithSocial({ variables: { input: { authType: "GITHUB",  code }} })
+            onLoginWithSocial({ variables: { input: { authType: "GITHUB",  data: response }} })
         }
     }
 

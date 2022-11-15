@@ -73,7 +73,7 @@ export default gql`
 
   input LoginWithSocialInput{
     authType: AuthType!     # 
-    code: String            # for github
+    data: JSON!            # for github
   }
 
   type RoomPayLoad {
