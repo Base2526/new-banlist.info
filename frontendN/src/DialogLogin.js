@@ -109,10 +109,9 @@ const DialogLogin = (props) => {
   const callbackFacebook = (response) => {
     console.log( "callbackFacebook :", response);
 
-    if(!_.has(response, "status")){
-      // onLoginWithSocial({ variables: { input: { authType: "GITHUB",  code }} })
-      onLoginWithSocial({ variables: { input: { authType: "FACEBOOK",  data: response  }} })
-    }
+
+    _.has(response, "status") ? "" : onLoginWithSocial({ variables: { input: { authType: "FACEBOOK",  data: response  }} })
+    
 
     // status: "unknown"
     /*
