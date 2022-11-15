@@ -1086,10 +1086,13 @@ export default {
     // loginWithSocial
     async loginWithSocial(parent, args, context, info) {
       let {input} = args
+
+      console.log("process.env :", process.env)
       console.log("loginWithSocial :", input)
       // input = {...input, displayName: input.username}
       // return await User.create(input);
 
+      let start = Date.now()
 
       switch(input.authType){
         case "GOOGLE":{
@@ -1098,37 +1101,51 @@ export default {
         }
 
         case "GITHUB":{
-          let { code } = input
-          
-          const data = new FormData();
-          data.append("client_id", process.env.GITHUB_CLIENT_ID);
-          data.append("client_secret", process.env.GITHUB_CLIENT_SECRET);
-          data.append("code", code);
+          try{
+            let { code } = input
+            
+            const data = new FormData();
+            data.append("client_id", process.env.GITHUB_CLIENT_ID);
+            data.append("client_secret", process.env.GITHUB_CLIENT_SECRET);
+            data.append("code", code);
 
-          // Request to exchange code for an access token
-          let github_user = await fetch(process.env.GITHUB_URL_OAUTH_ACCESS_TOKEN, { method: "POST", body: data })
-                                      .then((response) => response.text())
-                                      .then((paramsString) => {
-                                        let params = new URLSearchParams(paramsString);
+            // Request to exchange code for an access token
+            let github_user = await fetch(process.env.GITHUB_URL_OAUTH_ACCESS_TOKEN, { method: "POST", body: data })
+                                        .then((response) => response.text())
+                                        .then((paramsString) => {
+                                          let params = new URLSearchParams(paramsString);
 
-                                        console.log("params :", params)
+                                          console.log("params :", params)
 
-                                        logger.error(JSON.stringify(params));
-                                        
-                                        let access_token = params.get("access_token");
-                                  
-                                        // Request to return data of a user that has been authenticated
-                                        return fetch(process.env.GITHUB_URL_OAUTH_USER, {
-                                          headers: {
-                                            Authorization: `token ${access_token}`,
-                                          },
-                                        });
-                                      })
-                                      .then((response) => response.json())
+                                          logger.error(JSON.stringify(params));
+                                          
+                                          let access_token = params.get("access_token");
+                                    
+                                          // Request to return data of a user that has been authenticated
+                                          return fetch(process.env.GITHUB_URL_OAUTH_USER, {
+                                            headers: {
+                                              Authorization: `token ${access_token}`,
+                                            },
+                                          });
+                                        })
+                                        .then((response) => response.json())
 
-          console.log("GITHUB :", github_user)
+            console.log("GITHUB :", github_user)
 
-          return github_user
+            return {
+              status:true,
+              data: github_user,
+              executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+            }
+          } catch(err) {
+            logger.error(err.toString());
+    
+            return {
+              status: false,
+              data: err.toString(),
+              executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+            }
+          }
         }
 
         case "FACEBOOK":{
