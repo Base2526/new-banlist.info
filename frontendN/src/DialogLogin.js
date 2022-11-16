@@ -300,7 +300,6 @@ const DialogLogin = (props) => {
               onFailure={onGoogleFailure}
               cookiePolicy={'single_host_origin'}
               isSignedIn={true}
-              
             />
 
             <FacebookLogin
@@ -310,6 +309,7 @@ const DialogLogin = (props) => {
               // onClick={(e)=>{
               //   console.log("FacebookLogin :", e)
               // }}
+              fields="name,email,picture"
               callback={callbackFacebook} 
               render={renderProps => (
                 <button onClick={renderProps.onClick}><FacebookIcon/> <span>Facebook </span></button>
