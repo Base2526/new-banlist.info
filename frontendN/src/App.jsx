@@ -370,7 +370,7 @@ const App = (props) => {
             onComplete={(data)=>{
               console.log("onComplete :", data)
 
-              // props.login(data)
+              props.login(data)
               setDialogLoginOpen(false);
 
             }}

@@ -38,7 +38,7 @@ const Login = (props) => {
         onCompleted(data) {
             console.log("onCompleted :", data)
     
-            localStorage.setItem('token', data.login.token)
+            // localStorage.setItem('token', data.login.token)
             login(data.login.data)
 
             history.push("/");
