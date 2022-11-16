@@ -45,8 +45,8 @@ services:
       - RA_HOST=${RA_HOST}
       - GRAPHQL_PORT=${GRAPHQL_PORT}
       - JWT_SECRET=${JWT_SECRET}
-      - MONGO_URI=mongodb://${MONGO_INITDB_USERNAME}:${MONGO_INITDB_PASSWORD}@mongo:${MONGO_PORT}/${MONGO_INITDB_DATABASE}?authMechanism=DEFAULT
-    
+      # - MONGO_URI=mongodb://${MONGO_INITDB_USERNAME}:${MONGO_INITDB_PASSWORD}@mongo:${MONGO_PORT}/${MONGO_INITDB_DATABASE}?authMechanism=DEFAULT
+      - MONGO_URI=mongodb://${MONGO_INITDB_USERNAME}:${MONGO_INITDB_PASSWORD}@mongodb:27017/${MONGO_INITDB_DATABASE}
       - GITHUB_URL_OAUTH_ACCESS_TOKEN=${GITHUB_URL_OAUTH_ACCESS_TOKEN}
       - GITHUB_URL_OAUTH_USER=${GITHUB_URL_OAUTH_USER}
       - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
@@ -55,25 +55,57 @@ services:
       - nodejs
   ################################
 
+  
+
   ################################
   #   Setup Api Mongo and mongo-express container
   ################################
-  mongo:
-    container_name: mongo
+  # mongo:
+  #   container_name: mongo
+  #   image: mongo:${MONGO_VERSION}
+  #   command: mongod --port ${MONGO_PORT}
+  #   expose:
+  #     - ${MONGO_PORT}
+  #   ports:
+  #     - "27019:${MONGO_PORT}"
+  #   # volumes:
+  #   #   - ./mongo-single/data:/data/db
+  #   #   - ./mongo-single/restore:/mongo-single/restore
+  #     # - ./mongo-single/mongod.conf:/etc/mongod.conf
+  #   environment:
+  #     - ./mongo-single/data:/data/db
+  #     - ./mongo-single/restore:/mongo-single/restore
+  #     - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+  #     - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_USERNAME}
+  #     - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_PASSWORD}
+  #   restart: always
+  #   networks:
+  #     - nodejs
+
+  mongodb:
+    # image: mongo:4.2.3-bionic
     image: mongo:${MONGO_VERSION}
-    command: mongod --port ${MONGO_PORT}
-    expose:
-      - ${MONGO_PORT}
+    container_name: mongodb
+    # expose:
+    #   - 27018
     ports:
-      - "${MONGO_PORT}:${MONGO_PORT}"
+      - 27018:27017
+    environment:
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_PASSWORD}
     volumes:
+      # seeding scripts
+      - ./mongo-entrypoint:/docker-entrypoint-initdb.d
+      # named volumes
+      # - mongodb:/data/db
+      # - mongoconfig:/data/configdb
+
       - ./mongo-single/data:/data/db
       - ./mongo-single/restore:/mongo-single/restore
-      - ./mongo-single/mongod.conf:/etc/mongod.conf
-    restart: always
+      # - ./mongo-single/mongod.conf:/etc/mongod.conf
     networks:
       - nodejs
-
 networks:
   nodejs:
     external: true 

@@ -116,16 +116,24 @@ const DialogLogin = (props) => {
     // status: "unknown"
     /*
 
-    
     {
       "name": "Somkid Sim",
+      "email": "android.somkid@gmail.com",
+      "picture": {
+          "data": {
+              "height": 50,
+              "is_silhouette": false,
+              "url": "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=5031748820263498&height=50&width=50&ext=1671182329&hash=AeQLQloZ6CBWqqOkPFg",
+              "width": 50
+          }
+      },
       "id": "5031748820263498",
-      "accessToken": "EAARcCUiGLAQBAA2X9nn4pZCawEx7yJUES2HRrBVuxeGz8sfYs0ZBlrvknmyAOV4YOapZBsdEgbdoszPBUsh2w93ZCQX3RZBzDhnYEILFqfjb3ZBBVOxhJae0X6yCAuHKXBCQCKLyo40FOXeIubO5UEYHGZAtJ6hjCLpkIDJJfuq9RW2r2PUA2NpY38uADHd14NcrS4sm1Hz1grSgM4tsHZA1",
+      "accessToken": "EAARcCUiGLAQBAB4mB4GalPuSBMId15c4hEr3CSEYNxQERzKSnExjuQFuxsOif3MbmZCwm5nwwQNh1tFZBiJjCZB5CiKFHShYM3DHGOZB2QkMYFBWbcs6sRClw5BI7YsOLdtJNYHVpBqjvjdbQwWKtiNzZB1HttaVEDvYqUkWkPiKMR2n7IwC2dZCKJ582fkyN5ZCFdN8nBvcsZBTSRYivvFf",
       "userID": "5031748820263498",
-      "expiresIn": 5270,
-      "signedRequest": "iD2NlLiZWy02HIu-VXNVe9Jn7lg4ccj96pudx1089wg.eyJ1c2VyX2lkIjoiNTAzMTc0ODgyMDI2MzQ5OCIsImNvZGUiOiJBUUFycFJZMDRKWlpZMXV1QjV6X2VMdjU0STFaWFJ2VkpRUkxkRTI0MnJqOXE0aDN4MnZRNV9hTS1KQ0NWUlR6aF9tTzRHcFczcDZOSWgzMWRhVllnMEdSaXBfRHpoSVdCM2s0OThNY0RoalN2WnBGaWRvRlJZUjBCcWdWSTNaX3pWVmxaeURTRzMwS1M1RTJyaHluVjg0S3dXUTFrNWs2NDhOdUkwbHFTSGJabGVuTTd5TWhvMHhEajMtNDZ3eWdHQlFfa1Y3UF9WNTRZYVVkcUhiTDRNdURtVExYTVlWN1IzRzRyd1Axejdub2ZzVERfc2N2Q0FCUzhPMkpEUkYtRmg4MlFnT0tKdUJzaDhEZXFSWmFWNDd6Q0k3eDVLc3Y3dlZjekpuX1lJNjFyLThKTDREZElUWi1wb0Q4LThuOEY1R0F0Y010cnJVbFN5WmZEcHl6ZFdnSTZtLWpKd05URk5vRzNxNVMxTV8xV2xKUTlGN2JybHBueXY1VWZCT2lyek0iLCJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTY2ODQ3OTUzMH0",
+      "expiresIn": 6072,
+      "signedRequest": "AKX_cpK80gAe_KXsAIFB3SM8348W2xe9j_PbqPfSNcQ.eyJ1c2VyX2lkIjoiNTAzMTc0ODgyMDI2MzQ5OCIsImNvZGUiOiJBUUM5MTNhVXJHRGRfMVBRWmtpV0VOY0lRckVMRkdVUVo5eldvQkdNUUVxbUhRekd0N1lWSi1aZWRrRHpSY2w2em1udjVQX1ZnZno0UHBYTGJSS0FWZU1GWkpTTzhsVDM3SmNpYkZwWFA3Q3VMelNsVmJ3YXpCT1pjNXI3bFJmMlNGV1JUWUJJbHhDZGN0Q0N6WExzU2dLeTlkRFQ0UGtBV2ZSa1Bpc2dUS21yanRpMi1ELWZ0cjF5dEJ1Y1N3cDZQNVVHa2REaXRYTVgwZU9DYWlmeFVzeS1HbTJ4NWxoR25wczgzWmFrSDZ6TGltcENxdXplVjBPMVFlcEppMmstb2ozc09ueW9KSnE0Vzc4emJ1X1ZvLWhvd3FrZEtsTkxucWVLX09TMDhKUmwxQjhTXzdxcFZHZ243a283TWM1MHg2OGlmQzhPaFgxWURpNjFadDBCVWNaQiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNjY4NTkwMzI4fQ",
       "graphDomain": "facebook",
-      "data_access_expiration_time": 1676255530
+      "data_access_expiration_time": 1676366328
     }
     */ 
   }

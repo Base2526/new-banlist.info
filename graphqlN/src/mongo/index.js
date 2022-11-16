@@ -16,7 +16,8 @@ import {Bank,
         Follow,
         Session,
         Notification,
-        Phone} from '../model'
+        Phone,
+        BasicContent} from '../model'
 
 let logger = require("../utils/logger");
 
@@ -234,6 +235,18 @@ const modelExists =()=>{
       await newPhone.save();
 
       await Phone.deleteMany({})
+    }
+  });
+
+  BasicContent.find({}, async(err, result)=> {
+    if (result.length > 0) {
+      console.log('Found BasicContent');
+    } else {
+      console.log('Not found BasicContent, creating');
+      let newBasicContent = new BasicContent({});
+      await newBasicContent.save();
+
+      await BasicContent.deleteMany({})
     }
   });
 

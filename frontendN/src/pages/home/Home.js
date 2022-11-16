@@ -111,6 +111,10 @@ const Home = (props) => {
 
     console.log("homesValues.data.homes.data :", homesValues, page, rowsPerPage)
 
+    if(_.isEmpty(homesValues.data.homes)){
+      return;
+    }
+
     var keys = _.map(homesValues.data.homes.data, _.property("id"));
 
     let {subscribeToMore} = homesValues
@@ -284,6 +288,96 @@ const Home = (props) => {
             </Menu>
   }
 
+  const main = () =>{
+
+    console.log("homesValues.data :", homesValues.data)
+    return  <div>
+              <Container>
+                <Masonry
+                  breakpointCols={breakpoints}
+                  className="my-masonry-grid"
+                  columnClassName="my-masonry-grid_column"
+                >
+                  {homesValues.data.homes.data.map(
+                    (item, index) => {
+                      return (
+                        <div key={item.id}>
+                          <HomeItem 
+                            {...props}
+                            user={user}
+                            item={item} 
+                            index={index} 
+                            onPanelComment={(data)=>{
+                              setPanelComment(data)
+                            }}
+                            onLightbox={(data)=>{
+                              setLightbox(data)
+                            }}
+                            onAnchorElShareOpen={(index, e)=>{
+                              handleAnchorElShareOpen(index, e)
+                            }}
+                            onAnchorElSettingOpen={(index, e)=>{
+                              handleAnchorElSettingOpen(index, e)
+                            }}
+                            onDialogProfileOpen={(index, e)=>{
+                              setDialogProfile({open:true, id:e.ownerId})
+                            }}
+                            onDialogLogin={(status)=>{
+                              setDialogLoginOpen(status)
+                            }}
+                            onBookmark={(postId, userId, status)=>{
+
+                              console.log("onCreateAndUpdateBookmark :", postId, userId, status)
+                              onCreateAndUpdateBookmark({ variables: { input: {
+                                    postId,
+                                    userId,
+                                    status
+                                  }
+                                }
+                              }); 
+
+                              // addedBookmark({postId, userId, status})
+                            }}
+                            />
+                            {menuShare(item, index)}
+                            {menuSetting(item, index)}
+                        </div>
+                      );
+                    }
+                  )}
+                </Masonry>
+              </Container>
+              <Container sx={{ py: 2 }} maxWidth="xl">
+
+                { 
+                  homesValues.data.homes.total > rowsPerPage 
+                  ? <Pagination
+                      page={page}
+                      onPageChange={(event, newPage) => {
+                        setPage(newPage);
+                        history.push({
+                          pathname: "/",
+                          search: "?page=" + newPage + "&perPage=" + rowsPerPage
+                        });
+                      }}
+                      rowsPerPage={rowsPerPage}
+                      onRowsPerPageChange={(event) => {
+                        setRowsPerPage(parseInt(event.target.value, 10));
+                        setPage(0);
+
+                        history.push({
+                          pathname: "/",
+                          search: "?perPage=" + parseInt(event.target.value, 10)
+                        });
+                      }}
+                      count={homesValues.data.homes.total}
+                    /> 
+                  : <div /> 
+                }
+              </Container>
+            </div>
+  }
+
   return (
     <div style={{flex:1}}>
       <div>
@@ -297,93 +391,9 @@ const Home = (props) => {
 
         <div>
           {
-            homesValues.loading || homesValues.data == undefined
+            homesValues.loading || homesValues.data.homes == undefined
             ? is_connnecting ? <div><CircularProgress /></div> : <div>Server is down</div>
-            : <div>
-                <Container>
-                  <Masonry
-                    breakpointCols={breakpoints}
-                    className="my-masonry-grid"
-                    columnClassName="my-masonry-grid_column"
-                  >
-                    {homesValues.data.homes.data.map(
-                      (item, index) => {
-                        return (
-                          <div key={item.id}>
-                            <HomeItem 
-                              {...props}
-                              user={user}
-                              item={item} 
-                              index={index} 
-                              onPanelComment={(data)=>{
-                                setPanelComment(data)
-                              }}
-                              onLightbox={(data)=>{
-                                setLightbox(data)
-                              }}
-                              onAnchorElShareOpen={(index, e)=>{
-                                handleAnchorElShareOpen(index, e)
-                              }}
-                              onAnchorElSettingOpen={(index, e)=>{
-                                handleAnchorElSettingOpen(index, e)
-                              }}
-                              onDialogProfileOpen={(index, e)=>{
-                                setDialogProfile({open:true, id:e.ownerId})
-                              }}
-                              onDialogLogin={(status)=>{
-                                setDialogLoginOpen(status)
-                              }}
-                              onBookmark={(postId, userId, status)=>{
-
-                                console.log("onCreateAndUpdateBookmark :", postId, userId, status)
-                                onCreateAndUpdateBookmark({ variables: { input: {
-                                      postId,
-                                      userId,
-                                      status
-                                    }
-                                  }
-                                }); 
-
-                                // addedBookmark({postId, userId, status})
-                              }}
-                              />
-                              {menuShare(item, index)}
-                              {menuSetting(item, index)}
-                          </div>
-                        );
-                      }
-                    )}
-                  </Masonry>
-                </Container>
-                <Container sx={{ py: 2 }} maxWidth="xl">
-
-                  { 
-                    homesValues.data.homes.total > rowsPerPage 
-                    ? <Pagination
-                        page={page}
-                        onPageChange={(event, newPage) => {
-                          setPage(newPage);
-                          history.push({
-                            pathname: "/",
-                            search: "?page=" + newPage + "&perPage=" + rowsPerPage
-                          });
-                        }}
-                        rowsPerPage={rowsPerPage}
-                        onRowsPerPageChange={(event) => {
-                          setRowsPerPage(parseInt(event.target.value, 10));
-                          setPage(0);
-
-                          history.push({
-                            pathname: "/",
-                            search: "?perPage=" + parseInt(event.target.value, 10)
-                          });
-                        }}
-                        count={homesValues.data.homes.total}
-                      /> 
-                    : <div /> 
-                  }
-                </Container>
-              </div>
+            : main()
           }
         </div>
         {/* <Footer /> */}

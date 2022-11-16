@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { withFilter } from 'graphql-subscriptions';
 import _ from "lodash";
 import FormData from "form-data";
-// import fetch from "node-fetch";
+import cryptojs from "crypto-js";
 
 import deepdash from "deepdash";
 deepdash(_);
@@ -37,6 +37,7 @@ import pubsub from './pubsub'
 
 import {fileRenamer} from "./utils"
 import { __TypeKind } from 'graphql';
+import e from 'express';
 
 const path = require('path');
 
@@ -49,7 +50,6 @@ const {
 } = require('graphql-upload');
 
 let logger = require("./utils/logger");
-
 
 
 export default {
@@ -1097,20 +1097,120 @@ export default {
       switch(input.authType){
         case "GOOGLE":{
 
-          break;
+          /*
+            --------  response  --------
+            accessToken
+            googleId
+            profileObj {
+              email : "android.somkid@gmail.com"
+              familyName : "Simajarn"
+              givenName : "Somkid"
+              googleId : "112378752153101585347"
+              imageUrl : "https://lh3.googleusercontent.com/a-/AFdZucrsz6tfMhKB87pCWcdwoMikQwlPG8_aa4h6zYz1ng=s96-c"
+              name : "Somkid Simajarn"
+            }
+            tokenId
+            tokenObj {
+              access_token : "ya29.a0AVA9y1uPAzoEGM3joZMmfeWhu_i10ANwgeFmvtcLi8AS1o-TytHHCyrqi4-BSCA6g6hbGX4SVIdLzSuGSsMyFT3tL4_RO99je5YfVqpoji0YIDrnuzVvdKK6_uPaMUmW467bYBR75iCBwaGGUQ2ba8P5IC4MaCgYKATASARISFQE65dr8q10VA-k-brPrO1Y-jVwB0Q0163"
+              expires_at : 1662901232664
+              expires_in : 3599
+              first_issued_at : 1662897633664
+              id_token : "eyJhbGciOiJSUzI1NiIsImtpZCI6ImNhYWJmNjkwODE5MTYxNmE5MDhhMTM4OTIyMGE5NzViM2MwZmJjYTEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiMTA5NDIwMzg2NTg0My1qcWFqOWFtNHRldnRvY2c3NXRkaXJtdGtoOTVrMjdjYi5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsImF1ZCI6IjEwOTQyMDM4NjU4NDMtanFhajlhbTR0ZXZ0b2NnNzV0ZGlybXRraDk1azI3Y2IuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTIzNzg3NTIxNTMxMDE1ODUzNDciLCJlbWFpbCI6ImFuZHJvaWQuc29ta2lkQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoibjhzSmpBbmVTdWptYlJOdWdvSzItQSIsIm5hbWUiOiJTb21raWQgU2ltYWphcm4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EtL0FGZFp1Y3JzejZ0Zk1oS0I4N3BDV2Nkd29NaWtRd2xQRzhfYWE0aDZ6WXoxbmc9czk2LWMiLCJnaXZlbl9uYW1lIjoiU29ta2lkIiwiZmFtaWx5X25hbWUiOiJTaW1hamFybiIsImxvY2FsZSI6ImVuIiwiaWF0IjoxNjYyODk3NjMzLCJleHAiOjE2NjI5MDEyMzMsImp0aSI6ImQ1NDk0YjY1MDliNmYxOTdjYjZhNGQwYTM3MjZiMWRiM2FiZTIxNTUifQ.CAawd4eccCFomK0NBCeMLUEoUM3I8zUJF6zzQoLC-tgZN6EanSOPRECoVU1zFnX002Su0Nwn1ET96c_xq0SS8Wrir0yFXkBDoi7lIEBNvpbcWxa3Jx79V_K1YgVLvmmRyHD_kx15E6zCpbN6g0ItnwpsheSYFK83y062XeAP1RA3_mas0Sa0ubnjRWF3yvpe6CXYhm5s2dIxJMfLbAZ0HECeRkjKclHHwORKO6ZgmYZU92Pk5_760zMedv-sepNCdPAUAaWx6HE8kb6UW-1jYaSo-zH3KuHIYh9j85xJ8lJNII2EI3tC2VcqHLRShiCDGT9kx--utwScg58dsV9QHQ"
+              idpId : "google"
+              login_hint : "AJDLj6IwgLvhCVpEzCp3uaFdvrRlobPVw2fzQGnDcVDRIWfEVnCZ5tBvMV9RxH-EeHG6FMgjgi6XG_nZk3EgDid15uEuqyQHKQ"
+              scope : "email profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid"
+              token_type : "Bearer"
+            }
+ 
+        
+            ----------  newAuthRes ----------
+            {
+              "token_type": "Bearer",
+              "access_token": "ya29.a0AeTM1icjWxWZTlNE7aW4I-NxP3VY4f6QG6b4e1aXeGmcqLzKV0yeDvWXy5XannL_LOu0gqwF-HLeeOxoF5BlU3gRyLk0-w_ttsZIigVmwNFn-FGn_0sXDK4LoUk-Y5YefGRsHilAmAAHz7jMgMb6B80xNw5xD2MaCgYKAa0SARASFQHWtWOmmIZpKcbUdv0btmC2gGUpRw0166",
+              "scope": "email profile https://www.googleapis.com/auth/userinfo.profile openid https://www.googleapis.com/auth/userinfo.email",
+              "login_hint": "AJDLj6IwgLvhCVpEzCp3uaFdvrRlobPVw2fzQGnDcVDRIWfEVnCZ5tBvMV9RxH-EeHG6FMgjgi6XG_nZk3EgDid15uEuqyQHKQ",
+              "expires_in": 3599,
+              "id_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjcxM2ZkNjhjOTY2ZTI5MzgwOTgxZWRjMDE2NGEyZjZjMDZjNTcwMmEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiMTA5NDIwMzg2NTg0My1qcWFqOWFtNHRldnRvY2c3NXRkaXJtdGtoOTVrMjdjYi5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsImF1ZCI6IjEwOTQyMDM4NjU4NDMtanFhajlhbTR0ZXZ0b2NnNzV0ZGlybXRraDk1azI3Y2IuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTIzNzg3NTIxNTMxMDE1ODUzNDciLCJlbWFpbCI6ImFuZHJvaWQuc29ta2lkQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiUGFVamZwSVM3d0hFOWV5SlBFcDNWUSIsIm5hbWUiOiJTb21raWQgU2ltYWphcm4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUxtNXd1MzQ0WGlRUkdSOC1yZ2hBX0tyQ1A4djlnbFlRSWE3WFBVSTlSOTk1Zz1zOTYtYyIsImdpdmVuX25hbWUiOiJTb21raWQiLCJmYW1pbHlfbmFtZSI6IlNpbWFqYXJuIiwibG9jYWxlIjoiZW4iLCJpYXQiOjE2Njg0NzkwMDQsImV4cCI6MTY2ODQ4MjYwNCwianRpIjoiYzIzYTg2MTIxMTBkNGI1YWIwNmU5MWFhZmEwMGZiYjMxMWY0ZGM2YyJ9.tAOZq5O1pBUHOz5IwtfK5pmk6PP1I5MYmDm0erAjq5PHRC7JUNddlzTiqpN5zprWVBfjdlbMytwbMWwtrSOd_mCdXaK7ffiMYHi91A4tA0_7JvRErAn8-6ZvzjCMl807BcuyuqFvZEHuYkJTGaSV4kmI4d-NDirtWHA2RJQEscLyktkG3t3GxSwF9axoiMzBNPSi_bZ6xKfTLEcgG7t85Wq1DwLGPHmOuIfgdS-q-mMnklPX5x8sCSTNvitsIjK5v_56c0bWrfWzKbiCfkv2UyVWPKRg01CdnRsgnZeUeLaV3mB5-6HKsTsUE3rmA01iJZVw9F-NzuVFwqx9G5z0lQ",
+              "session_state": {
+                  "extraQueryParams": {
+                      "authuser": "0"
+                  }
+              },
+              "first_issued_at": 1668479006076,
+              "expires_at": 1668482605076,
+              "idpId": "google"
+            }
+          */
+          try{
+
+            let { data } = input
+
+            let user = await User.findOne({socialId: data.profileObj.googleId, socialType: 'google'});
+            if(_.isEmpty(user)){
+
+              /*
+                email : "android.somkid@gmail.com"
+              familyName : "Simajarn"
+              givenName : "Somkid"
+              googleId : "112378752153101585347"
+              imageUrl : "https://lh3.googleusercontent.com/a-/AFdZucrsz6tfMhKB87pCWcdwoMikQwlPG8_aa4h6zYz1ng=s96-c"
+              name : "Somkid Simajarn"
+              */
+
+              let newInput = {
+                username: data.profileObj.email,
+                password: cryptojs.AES.encrypt( data.profileObj.googleId, process.env.JWT_SECRET).toString(),
+                email: data.profileObj.email,
+                displayName: data.profileObj.givenName +" " + data.profileObj.familyName ,
+                roles: ['62a2ccfbcf7946010d3c74a4', '62a2ccfbcf7946010d3c74a6'], // anonymous, authenticated
+                isActive: 'active',
+                image :[{
+                  url: data.profileObj.imageUrl,
+                  filename: data.profileObj.googleId +".jpeg",
+                  mimetype: 'image/jpeg',
+                  encoding: '7bit',
+                }],
+                lastAccess : Date.now(),
+                isOnline: true,
+                socialType: 'google',
+                socialId: data.profileObj.googleId,
+                socialObject: JSON.stringify(data)
+              }
+              user = await User.create(newInput);
+            }
+            console.log("GOOGLE :", user)
+            return {
+              status:true,
+              data: user,
+              executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+            }
+
+          }catch(err){
+            logger.error(err.toString());
+    
+            return {
+              status: false,
+              data: err.toString(),
+              executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+            }
+          }
         }
 
         case "GITHUB":{
           try{
             let { data } = input
-            
-            const formData = new FormData();
-            formData.append("client_id", process.env.GITHUB_CLIENT_ID);
-            formData.append("client_secret", process.env.GITHUB_CLIENT_SECRET);
-            formData.append("code", data.code);
 
-            // Request to exchange code for an access token
-            let github_user = await fetch(process.env.GITHUB_URL_OAUTH_ACCESS_TOKEN, { method: "POST", body: formData })
+            let user = await User.findOne({socialId: data.code, socialType: 'github'});
+
+            let github_user = null;
+            if(_.isEmpty(user)){
+              const formData = new FormData();
+              formData.append("client_id", process.env.GITHUB_CLIENT_ID);
+              formData.append("client_secret", process.env.GITHUB_CLIENT_SECRET);
+              formData.append("code", data.code);
+
+              // Request to exchange code for an access token
+              github_user = await fetch(process.env.GITHUB_URL_OAUTH_ACCESS_TOKEN, { method: "POST", body: formData })
                                         .then((response) => response.text())
                                         .then((paramsString) => {
                                           let params = new URLSearchParams(paramsString);
@@ -1130,11 +1230,99 @@ export default {
                                         })
                                         .then((response) => response.json())
 
-            console.log("GITHUB :", github_user)
+              
+              /*
+              avatar_url : "https://avatars.githubusercontent.com/u/900211?v=4"
+              bio :  null
+              blog : ""
+              company : null
+              created_at :  "2011-07-07T10:02:34Z"
+              email : "mr.simajarn@gmail.com"
+              events_url:  "https://api.github.com/users/Base2526/events{/privacy}"
+              followers : 2
+              followers_url : "https://api.github.com/users/Base2526/followers"
+              following : 11
+              following_url : "https://api.github.com/users/Base2526/following{/other_user}"
+              gists_url: "https://api.github.com/users/Base2526/gists{/gist_id}"
+              gravatar_id : ""
+              hireable : null
+              html_url : "https://github.com/Base2526"
+              id : 900211
+              location : null
+              login : "Base2526"
+              name : "somkid_haha"
+              node_id : "MDQ6VXNlcjkwMDIxMQ=="
+              organizations_url : "https://api.github.com/users/Base2526/orgs"
+              public_gists: 0
+              public_repos: 118
+              received_events_url: "https://api.github.com/users/Base2526/received_events"
+              repos_url : "https://api.github.com/users/Base2526/repos"
+              site_admin : false
+              starred_url : "https://api.github.com/users/Base2526/starred{/owner}{/repo}"
+              subscriptions_url : "https://api.github.com/users/Base2526/subscriptions"
+              twitter_username : null
+              type : "User"
+              updated_at : "2022-11-14T09:16:18Z"
+              url : "https://api.github.com/users/Base2526"
+              */
 
+              /*
+              save data user
+              
+              input = {...input, displayName: input.username}
+              return await User.create(input);
+              */
+
+              /*
+              username: { type: String },
+              password: { type: String },
+              email: { type: String },
+              displayName: { type: String },
+              roles: [{ type: String }],
+              isActive: { type: String },
+              image :[{
+                url: { type: String },
+                filename: { type: String },
+                mimetype: { type: String },
+                encoding: { type: String },
+              }],
+              lastAccess : { type : Date, default: Date.now },
+              isOnline: {type: Boolean, default: false},
+              socialType:{
+                type: String,
+                enum : ['website','facebook', 'google', 'github'],
+                default: 'website'
+              }, 
+              socialId: { type: String },
+              socialObject: { type: String },
+              */
+
+              let newInput = {
+                username: github_user.email,
+                password: cryptojs.AES.encrypt(data.code, process.env.JWT_SECRET).toString(),
+                email: github_user.email,
+                displayName: github_user.name,
+                roles: ['62a2ccfbcf7946010d3c74a4', '62a2ccfbcf7946010d3c74a6'], // anonymous, authenticated
+                isActive: 'active',
+                image :[{
+                  url: github_user.avatar_url,
+                  filename: data.code +".jpeg",
+                  mimetype: 'image/jpeg',
+                  encoding: '7bit',
+                }],
+                lastAccess : Date.now(),
+                isOnline: true,
+                socialType: 'github',
+                socialId: data.code,
+                socialObject: JSON.stringify(github_user)
+              }
+              user = await User.create(newInput);
+            }
+
+            console.log("GITHUB :", user)
             return {
               status:true,
-              data: github_user,
+              data: user,
               executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
             }
           } catch(err) {
@@ -1149,12 +1337,74 @@ export default {
         }
 
         case "FACEBOOK":{
+          try{
 
-          break;
+            /*
+            {
+              "name": "Somkid Sim",
+              "email": "android.somkid@gmail.com",
+              "picture": {
+                  "data": {
+                      "height": 50,
+                      "is_silhouette": false,
+                      "url": "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=5031748820263498&height=50&width=50&ext=1671182329&hash=AeQLQloZ6CBWqqOkPFg",
+                      "width": 50
+                  }
+              },
+              "id": "5031748820263498",
+              "accessToken": "EAARcCUiGLAQBAB4mB4GalPuSBMId15c4hEr3CSEYNxQERzKSnExjuQFuxsOif3MbmZCwm5nwwQNh1tFZBiJjCZB5CiKFHShYM3DHGOZB2QkMYFBWbcs6sRClw5BI7YsOLdtJNYHVpBqjvjdbQwWKtiNzZB1HttaVEDvYqUkWkPiKMR2n7IwC2dZCKJ582fkyN5ZCFdN8nBvcsZBTSRYivvFf",
+              "userID": "5031748820263498",
+              "expiresIn": 6072,
+              "signedRequest": "AKX_cpK80gAe_KXsAIFB3SM8348W2xe9j_PbqPfSNcQ.eyJ1c2VyX2lkIjoiNTAzMTc0ODgyMDI2MzQ5OCIsImNvZGUiOiJBUUM5MTNhVXJHRGRfMVBRWmtpV0VOY0lRckVMRkdVUVo5eldvQkdNUUVxbUhRekd0N1lWSi1aZWRrRHpSY2w2em1udjVQX1ZnZno0UHBYTGJSS0FWZU1GWkpTTzhsVDM3SmNpYkZwWFA3Q3VMelNsVmJ3YXpCT1pjNXI3bFJmMlNGV1JUWUJJbHhDZGN0Q0N6WExzU2dLeTlkRFQ0UGtBV2ZSa1Bpc2dUS21yanRpMi1ELWZ0cjF5dEJ1Y1N3cDZQNVVHa2REaXRYTVgwZU9DYWlmeFVzeS1HbTJ4NWxoR25wczgzWmFrSDZ6TGltcENxdXplVjBPMVFlcEppMmstb2ozc09ueW9KSnE0Vzc4emJ1X1ZvLWhvd3FrZEtsTkxucWVLX09TMDhKUmwxQjhTXzdxcFZHZ243a283TWM1MHg2OGlmQzhPaFgxWURpNjFadDBCVWNaQiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNjY4NTkwMzI4fQ",
+              "graphDomain": "facebook",
+              "data_access_expiration_time": 1676366328
+            }
+            */
+
+            let { data } = input
+
+            let user = await User.findOne({socialId: data.id, socialType: 'facebook'});
+
+            if(_.isEmpty(user)){
+              let newInput = {
+                username: data.email,
+                password: cryptojs.AES.encrypt(data.id, process.env.JWT_SECRET).toString(),
+                email: data.email,
+                displayName: data.name,
+                roles: ['62a2ccfbcf7946010d3c74a4', '62a2ccfbcf7946010d3c74a6'], // anonymous, authenticated
+                isActive: 'active',
+                image :[{
+                  url: _.isEmpty(data.picture.data) ? "" : data.picture.data.url,
+                  filename: data.id +".jpeg",
+                  mimetype: 'image/jpeg',
+                  encoding: '7bit',
+                }],
+                lastAccess : Date.now(),
+                isOnline: true,
+                socialType: 'github',
+                socialId: data.id,
+                socialObject: JSON.stringify(data)
+              }
+              user = await User.create(newInput);
+            }
+
+          }catch(err){
+            logger.error(err.toString());
+    
+            return {
+              status: false,
+              data: err.toString(),
+              executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+            }
+          }
         }
       }
 
-      return input
+      return {
+        status: false,
+        data: "other case",
+        executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+      }
     },
 
     // search
