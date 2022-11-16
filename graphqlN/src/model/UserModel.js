@@ -16,7 +16,14 @@ const userSchema = new Schema({
     encoding: { type: String },
   }],
   lastAccess : { type : Date, default: Date.now },
-  isOnline: {type: Boolean, default: false}
+  isOnline: {type: Boolean, default: false},
+  socialType:{
+    type: String,
+    enum : ['website','facebook', 'google', 'github'],
+    default: 'website'
+  }, 
+  socialId: { type: String },
+  socialObject: { type: String },
 },
 {
     timestamps: true

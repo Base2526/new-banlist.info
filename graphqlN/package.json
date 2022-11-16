@@ -32,6 +32,7 @@
     "babel-jest": "^28.1.1",
     "body-parser": "^1.20.0",
     "cli-highlight": "^2.1.11",
+    "crypto-js": "^4.1.1",
     "deepdash": "^5.3.9",
     "eiows": "^4.0.1",
     "express": "^4.18.1",
