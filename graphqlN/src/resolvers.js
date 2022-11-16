@@ -1086,16 +1086,11 @@ export default {
     // loginWithSocial
     async loginWithSocial(parent, args, context, info) {
       let {input} = args
-
-      // console.log("process.env :", process.env)
       console.log("loginWithSocial :", input)
-      // input = {...input, displayName: input.username}
-      // return await User.create(input);
 
       let start = Date.now()
-
-      switch(input.authType){
-        case "GOOGLE":{
+      switch(input.authType.toLowerCase()){
+        case "google":{
 
           /*
             --------  response  --------
@@ -1196,7 +1191,7 @@ export default {
           }
         }
 
-        case "GITHUB":{
+        case "github":{
           try{
             let { data } = input
 
@@ -1336,7 +1331,7 @@ export default {
           }
         }
 
-        case "FACEBOOK":{
+        case "facebook":{
           try{
 
             /*
@@ -1405,12 +1400,14 @@ export default {
             }
           }
         }
-      }
 
-      return {
-        status: false,
-        data: "other case",
-        executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        default:{
+          return {
+            status: false,
+            data: "other case",
+            executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+          }
+        }
       }
     },
 

@@ -37,11 +37,11 @@ const DialogLogin = (props) => {
     refetchQueries: [  {query: gqlConversations}, {query: gqlPosts}, {query : gqlHomes} ],
     onCompleted(data) {
 
-      console.log("onCompleted :", data)
+      // console.log("onCompleted :", data)
 
-      localStorage.setItem('token', data.login.token)
-      login(data.login.data)
-      onComplete()
+      // localStorage.setItem('token', data.login.token)
+      // login(data.login.data)
+      // onComplete()
     },
     onError(err){
       console.log("onError :", err)
@@ -69,10 +69,47 @@ const DialogLogin = (props) => {
         console.log("loginWithSocial :", loginWithSocial)
         // const data1 = cache.readQuery({ query: gqlBanks });
 
+        /**
+        {
+          "status": true,
+          "data": {
+              "roles": [
+                  "62a2ccfbcf7946010d3c74a4",
+                  "62a2ccfbcf7946010d3c74a6"
+              ],
+              "isOnline": true,
+              "socialType": "google",
+              "_id": "6374b61fe725361bfd7c648f",
+              "username": "android.somkid@gmail.com",
+              "password": "U2FsdGVkX18sfvgb9HQzYNBWc7BA5jXKtEvfCfsSFu6sOvr/yVJu5t1kQcs95y9f",
+              "email": "android.somkid@gmail.com",
+              "displayName": "Somkid Simajarn",
+              "isActive": "active",
+              "image": [
+                  {
+                      "_id": "6374b61fe7253692ad7c6490",
+                      "url": "https://lh3.googleusercontent.com/a/ALm5wu344XiQRGR8-rghA_KrCP8v9glYQIa7XPUI9R995g=s96-c",
+                      "filename": "112378752153101585347.jpeg",
+                      "mimetype": "image/jpeg",
+                      "encoding": "7bit"
+                  }
+              ],
+              "lastAccess": "2022-11-16T10:06:23.078Z",
+              "socialId": "112378752153101585347",
+              "socialObject": "{\"Ca\":\"112378752153101585347\",\"xc\":{\"token_type\":\"Bearer\",\"access_token\":\"ya29.a0AeTM1id1RGQ7B6lAVG4PgbOeUnkoWfpsuImZieZwzosk4myh7l0ITuu4pKGCuTBSFAuGhR35uwPKTuKlVzyIK0K_XzNCNKokH2WcDgiWmIuohx-V2MaiuqwjOhIYd_5rBETFuUVlGnhJ3QfNo-WIo-k9IzYHakIaCgYKAU0SARASFQHWtWOmXQ2AZUGjbgfxIYeXbkZykQ0166\",\"scope\":\"email profile https://www.googleapis.com/auth/userinfo.profile openid https://www.googleapis.com/auth/userinfo.email\",\"login_hint\":\"AJDLj6IwgLvhCVpEzCp3uaFdvrRlobPVw2fzQGnDcVDRIWfEVnCZ5tBvMV9RxH-EeHG6FMgjgi6XG_nZk3EgDid15uEuqyQHKQ\",\"expires_in\":3599,\"id_token\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjcxM2ZkNjhjOTY2ZTI5MzgwOTgxZWRjMDE2NGEyZjZjMDZjNTcwMmEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiMTA5NDIwMzg2NTg0My1qcWFqOWFtNHRldnRvY2c3NXRkaXJtdGtoOTVrMjdjYi5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsImF1ZCI6IjEwOTQyMDM4NjU4NDMtanFhajlhbTR0ZXZ0b2NnNzV0ZGlybXRraDk1azI3Y2IuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTIzNzg3NTIxNTMxMDE1ODUzNDciLCJlbWFpbCI6ImFuZHJvaWQuc29ta2lkQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiTEx0N3NVSzhzTXlIR2FWSUdxWFRZZyIsIm5hbWUiOiJTb21raWQgU2ltYWphcm4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUxtNXd1MzQ0WGlRUkdSOC1yZ2hBX0tyQ1A4djlnbFlRSWE3WFBVSTlSOTk1Zz1zOTYtYyIsImdpdmVuX25hbWUiOiJTb21raWQiLCJmYW1pbHlfbmFtZSI6IlNpbWFqYXJuIiwibG9jYWxlIjoiZW4iLCJpYXQiOjE2Njg1OTMxODIsImV4cCI6MTY2ODU5Njc4MiwianRpIjoiZDVmYjA1N2RlZDc1ZGZkNTAyYWQxZTY5Y2RkMTM3YTVmN2M5MGZhYSJ9.i39ECcoudJ4o03YRk1MBaQjSY5cWdXqtrU5t6kDQlqPyZghMwVQZUS5gxw2pxyBzAc748ydiEx67SW12vT5Fr78MhDiLn_ea1IQPKfwrwr8Hf_Z0DazLxvAPVFA1VsNAGXplHcPbD0LElwnTytVC7yQanG7LFBJsIpICSLTaV7xpyBoT3NOJ9NJChX5n1Nq3nJSVmNQX7mqjXu4Zj9y0wuPU2K9CJaVi9C7YyZq4hVru4NruXZcxuT0FrLUDdLd7qW31pE1XrZfSHcQskeYhkcTQ3ohW712ViI4DiA18gMjJX4rgqpfdAqT569UdOu0m6Zb6X7Bbx8-d4F7NkS-Uuw\",\"session_state\":{\"extraQueryParams\":{\"authuser\":\"0\"}},\"first_issued_at\":1668593182958,\"expires_at\":1668596781958,\"idpId\":\"google\"},\"wt\":{\"NT\":\"112378752153101585347\",\"Ad\":\"Somkid Simajarn\",\"rV\":\"Somkid\",\"uT\":\"Simajarn\",\"hK\":\"https://lh3.googleusercontent.com/a/ALm5wu344XiQRGR8-rghA_KrCP8v9glYQIa7XPUI9R995g=s96-c\",\"cu\":\"android.somkid@gmail.com\"},\"googleId\":\"112378752153101585347\",\"tokenObj\":{\"token_type\":\"Bearer\",\"access_token\":\"ya29.a0AeTM1iepzhxFZkdmkevfWNrJ1RcymJoNx60ytUDFfPMgviTKx5Dc68sfzMVpCM6CwDw7CHC4DpLFdEj-1fwkgAMr1O1rDCfhvW1ehDr50-MGxQCi8_FUTaryu7rNaY0aBY-v9E3hPjY12bGLhzsQTNvTLRzqyskaCgYKAdcSARASFQHWtWOmXwa3qHwvLkTnwXludF4Txw0166\",\"scope\":\"email profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid\",\"login_hint\":\"AJDLj6IwgLvhCVpEzCp3uaFdvrRlobPVw2fzQGnDcVDRIWfEVnCZ5tBvMV9RxH-EeHG6FMgjgi6XG_nZk3EgDid15uEuqyQHKQ\",\"expires_in\":742,\"id_token\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjcxM2ZkNjhjOTY2ZTI5MzgwOTgxZWRjMDE2NGEyZjZjMDZjNTcwMmEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiMTA5NDIwMzg2NTg0My1qcWFqOWFtNHRldnRvY2c3NXRkaXJtdGtoOTVrMjdjYi5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsImF1ZCI6IjEwOTQyMDM4NjU4NDMtanFhajlhbTR0ZXZ0b2NnNzV0ZGlybXRraDk1azI3Y2IuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTIzNzg3NTIxNTMxMDE1ODUzNDciLCJlbWFpbCI6ImFuZHJvaWQuc29ta2lkQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiUFlXQndRcjZLUjYwMW9Hc3RpQVVJUSIsIm5hbWUiOiJTb21raWQgU2ltYWphcm4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUxtNXd1MzQ0WGlRUkdSOC1yZ2hBX0tyQ1A4djlnbFlRSWE3WFBVSTlSOTk1Zz1zOTYtYyIsImdpdmVuX25hbWUiOiJTb21raWQiLCJmYW1pbHlfbmFtZSI6IlNpbWFqYXJuIiwibG9jYWxlIjoiZW4iLCJpYXQiOjE2Njg1OTAzMjYsImV4cCI6MTY2ODU5MzkyNiwianRpIjoiYzUwZWU2MDY4N2ExZDM2N2I0MThhZjBjNjNjMTAzMjcxMmY0ZDEwNCJ9.Op24r__jHsUpb-mQ-RYM3yQlt5uEmNYCfLm1v-Cj6CZX2UssjsvBMoH2qu7GOQf1ZRjReNcHQkm3HFmGk2tZCqKhQ1LVvzN3Zfj_r4EvFapabDY6Ni_L3VRM7Xgd_1DJ2E2mzTJTN-T3qse9cUpWttixakPRvJpKhILNLCkfpJz5z-Xu-zFzhlgQV-5US48RU9jn-Ovm-Bgcv74h6wGrpNsK5WOQbauWVWRnY4FllMbpoGn85DOVZPnTbh-7K8lfbYZj8NSxyG1_y6NGQxVFmL7XHxsjIY08cuxJB-in5vL8Y3i2eew5HzOBSp9DpFgNoH4FXfw-4sALnC5zRSAP9g\",\"session_state\":{\"extraQueryParams\":{\"authuser\":\"0\"}},\"first_issued_at\":1668590326411,\"expires_at\":1668593925411,\"idpId\":\"google\"},\"tokenId\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjcxM2ZkNjhjOTY2ZTI5MzgwOTgxZWRjMDE2NGEyZjZjMDZjNTcwMmEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiMTA5NDIwMzg2NTg0My1qcWFqOWFtNHRldnRvY2c3NXRkaXJtdGtoOTVrMjdjYi5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsImF1ZCI6IjEwOTQyMDM4NjU4NDMtanFhajlhbTR0ZXZ0b2NnNzV0ZGlybXRraDk1azI3Y2IuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTIzNzg3NTIxNTMxMDE1ODUzNDciLCJlbWFpbCI6ImFuZHJvaWQuc29ta2lkQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiUFlXQndRcjZLUjYwMW9Hc3RpQVVJUSIsIm5hbWUiOiJTb21raWQgU2ltYWphcm4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUxtNXd1MzQ0WGlRUkdSOC1yZ2hBX0tyQ1A4djlnbFlRSWE3WFBVSTlSOTk1Zz1zOTYtYyIsImdpdmVuX25hbWUiOiJTb21raWQiLCJmYW1pbHlfbmFtZSI6IlNpbWFqYXJuIiwibG9jYWxlIjoiZW4iLCJpYXQiOjE2Njg1OTAzMjYsImV4cCI6MTY2ODU5MzkyNiwianRpIjoiYzUwZWU2MDY4N2ExZDM2N2I0MThhZjBjNjNjMTAzMjcxMmY0ZDEwNCJ9.Op24r__jHsUpb-mQ-RYM3yQlt5uEmNYCfLm1v-Cj6CZX2UssjsvBMoH2qu7GOQf1ZRjReNcHQkm3HFmGk2tZCqKhQ1LVvzN3Zfj_r4EvFapabDY6Ni_L3VRM7Xgd_1DJ2E2mzTJTN-T3qse9cUpWttixakPRvJpKhILNLCkfpJz5z-Xu-zFzhlgQV-5US48RU9jn-Ovm-Bgcv74h6wGrpNsK5WOQbauWVWRnY4FllMbpoGn85DOVZPnTbh-7K8lfbYZj8NSxyG1_y6NGQxVFmL7XHxsjIY08cuxJB-in5vL8Y3i2eew5HzOBSp9DpFgNoH4FXfw-4sALnC5zRSAP9g\",\"accessToken\":\"ya29.a0AeTM1iepzhxFZkdmkevfWNrJ1RcymJoNx60ytUDFfPMgviTKx5Dc68sfzMVpCM6CwDw7CHC4DpLFdEj-1fwkgAMr1O1rDCfhvW1ehDr50-MGxQCi8_FUTaryu7rNaY0aBY-v9E3hPjY12bGLhzsQTNvTLRzqyskaCgYKAdcSARASFQHWtWOmXwa3qHwvLkTnwXludF4Txw0166\",\"profileObj\":{\"googleId\":\"112378752153101585347\",\"imageUrl\":\"https://lh3.googleusercontent.com/a/ALm5wu344XiQRGR8-rghA_KrCP8v9glYQIa7XPUI9R995g=s96-c\",\"email\":\"android.somkid@gmail.com\",\"name\":\"Somkid Simajarn\",\"givenName\":\"Somkid\",\"familyName\":\"Simajarn\"},\"token_type\":\"Bearer\",\"access_token\":\"ya29.a0AeTM1id1RGQ7B6lAVG4PgbOeUnkoWfpsuImZieZwzosk4myh7l0ITuu4pKGCuTBSFAuGhR35uwPKTuKlVzyIK0K_XzNCNKokH2WcDgiWmIuohx-V2MaiuqwjOhIYd_5rBETFuUVlGnhJ3QfNo-WIo-k9IzYHakIaCgYKAU0SARASFQHWtWOmXQ2AZUGjbgfxIYeXbkZykQ0166\",\"scope\":\"email profile https://www.googleapis.com/auth/userinfo.profile openid https://www.googleapis.com/auth/userinfo.email\",\"login_hint\":\"AJDLj6IwgLvhCVpEzCp3uaFdvrRlobPVw2fzQGnDcVDRIWfEVnCZ5tBvMV9RxH-EeHG6FMgjgi6XG_nZk3EgDid15uEuqyQHKQ\",\"expires_in\":3599,\"id_token\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjcxM2ZkNjhjOTY2ZTI5MzgwOTgxZWRjMDE2NGEyZjZjMDZjNTcwMmEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiMTA5NDIwMzg2NTg0My1qcWFqOWFtNHRldnRvY2c3NXRkaXJtdGtoOTVrMjdjYi5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsImF1ZCI6IjEwOTQyMDM4NjU4NDMtanFhajlhbTR0ZXZ0b2NnNzV0ZGlybXRraDk1azI3Y2IuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTIzNzg3NTIxNTMxMDE1ODUzNDciLCJlbWFpbCI6ImFuZHJvaWQuc29ta2lkQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiTEx0N3NVSzhzTXlIR2FWSUdxWFRZZyIsIm5hbWUiOiJTb21raWQgU2ltYWphcm4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUxtNXd1MzQ0WGlRUkdSOC1yZ2hBX0tyQ1A4djlnbFlRSWE3WFBVSTlSOTk1Zz1zOTYtYyIsImdpdmVuX25hbWUiOiJTb21raWQiLCJmYW1pbHlfbmFtZSI6IlNpbWFqYXJuIiwibG9jYWxlIjoiZW4iLCJpYXQiOjE2Njg1OTMxODIsImV4cCI6MTY2ODU5Njc4MiwianRpIjoiZDVmYjA1N2RlZDc1ZGZkNTAyYWQxZTY5Y2RkMTM3YTVmN2M5MGZhYSJ9.i39ECcoudJ4o03YRk1MBaQjSY5cWdXqtrU5t6kDQlqPyZghMwVQZUS5gxw2pxyBzAc748ydiEx67SW12vT5Fr78MhDiLn_ea1IQPKfwrwr8Hf_Z0DazLxvAPVFA1VsNAGXplHcPbD0LElwnTytVC7yQanG7LFBJsIpICSLTaV7xpyBoT3NOJ9NJChX5n1Nq3nJSVmNQX7mqjXu4Zj9y0wuPU2K9CJaVi9C7YyZq4hVru4NruXZcxuT0FrLUDdLd7qW31pE1XrZfSHcQskeYhkcTQ3ohW712ViI4DiA18gMjJX4rgqpfdAqT569UdOu0m6Zb6X7Bbx8-d4F7NkS-Uuw\",\"session_state\":{\"extraQueryParams\":{\"authuser\":\"0\"}},\"first_issued_at\":1668593182958,\"expires_at\":1668596781958,\"idpId\":\"google\"}",
+              "createdAt": "2022-11-16T10:06:23.094Z",
+              "updatedAt": "2022-11-16T10:06:23.094Z",
+              "__v": 0
+          },
+          "executionTime": "Time to execute = 0.014 seconds"
+        }  
+        */
+
         let {status, data} = loginWithSocial
 
         if(status){
-            
+          localStorage.setItem('token', data._id)
+          onComplete(data)
         }
 
         // let newBanks = {...data1.banks}
