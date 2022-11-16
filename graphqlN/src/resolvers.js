@@ -1381,7 +1381,7 @@ export default {
                 }],
                 lastAccess : Date.now(),
                 isOnline: true,
-                socialType: 'github',
+                socialType: 'facebook',
                 socialId: data.id,
                 socialObject: JSON.stringify(data)
               }
