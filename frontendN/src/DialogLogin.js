@@ -300,7 +300,6 @@ const DialogLogin = (props) => {
               onFailure={onGoogleFailure}
               cookiePolicy={'single_host_origin'}
               isSignedIn={true}
-              
             />
 
             <FacebookLogin
