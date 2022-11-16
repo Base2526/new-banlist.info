@@ -265,6 +265,7 @@ const DialogLogin = (props) => {
               // onClick={(e)=>{
               //   console.log("FacebookLogin :", e)
               // }}
+              fields="name,email,picture"
               callback={callbackFacebook} 
               render={renderProps => (
                 <button onClick={renderProps.onClick}><FacebookIcon/> <span>Facebook </span></button>
