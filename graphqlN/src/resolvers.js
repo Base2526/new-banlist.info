@@ -1388,6 +1388,13 @@ export default {
               user = await User.create(newInput);
             }
 
+            console.log("FACEBOOK :", user)
+            return {
+              status:true,
+              data: user,
+              executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+            }
+
           }catch(err){
             logger.error(err.toString());
     
