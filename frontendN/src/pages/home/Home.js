@@ -43,7 +43,7 @@ const Home = (props) => {
 
   let params = queryString.parse(history.location.search)
 
-  console.log("Home :", params)
+  // console.log("Home :", params)
 
   let { is_connnecting, user, addedBookmark } = props
 
@@ -105,11 +105,11 @@ const Home = (props) => {
     variables: { userId: "", page, perPage: rowsPerPage, keywordSearch: keywordSearch, category: category.join()},
     notifyOnNetworkStatusChange: true,
   });
-  console.log("homesValues :", homesValues )
+  // console.log("homesValues :", homesValues )
 
   if( is_connnecting && !homesValues.loading){
 
-    console.log("homesValues.data.homes.data :", homesValues, page, rowsPerPage)
+    // console.log("homesValues.data.homes.data :", homesValues, page, rowsPerPage)
 
     if(_.isEmpty(homesValues.data.homes)){
       return;
@@ -290,7 +290,7 @@ const Home = (props) => {
 
   const main = () =>{
 
-    console.log("homesValues.data :", homesValues.data)
+    // console.log("homesValues.data :", homesValues.data)
     return  <div>
               <Container>
                 <Masonry

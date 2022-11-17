@@ -17,6 +17,9 @@ import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props
 import _ from "lodash";
 import { gapi } from "gapi-script"
 
+import utf8 from "utf8";
+import base64 from 'base-64';
+
 import { gqlLogin, gqlConversations, gqlPosts, gqlHomes, gqlLoginWithSocial } from "./gqlQuery"
 
 const DialogLogin = (props) => {
@@ -24,7 +27,14 @@ const DialogLogin = (props) => {
   const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   const facebookAppId =  process.env.REACT_APP_FACEBOOK_APPID
 
-  console.log("DialogLogin :", process.env )
+  // let bytes =  utf8.encode('YOUR_DECODED_STRING');
+  // var encoded = base64.encode(bytes);
+  // console.log(encoded);
+
+  // var text = utf8.decode(base64.decode(encoded));
+  // console.log(text);
+
+  console.log("DialogLogin :", process.env)
 
   let history = useHistory();
 
@@ -105,10 +115,13 @@ const DialogLogin = (props) => {
         }  
         */
 
-        let {status, data} = loginWithSocial
+        let {status, data, token} = loginWithSocial
 
         if(status){
-          localStorage.setItem('token', data._id)
+          localStorage.setItem('token', token)
+
+         
+
           onComplete(data)
         }
 

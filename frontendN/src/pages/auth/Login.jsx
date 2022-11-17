@@ -15,6 +15,8 @@ import axios from "axios";
 import GitHubIcon from '@mui/icons-material/GitHub';
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import LockIcon from '@mui/icons-material/Lock';
+import utf8 from "utf8";
+import base64 from 'base-64';
 
 import { login } from "../../redux/actions/auth"
 
@@ -35,11 +37,18 @@ const Login = (props) => {
     let [input, setInput]   = useState({ username: "",  password: ""});
     const [onLogin, resultLogin] = useMutation(gqlLogin, {
         refetchQueries: [  {query: gqlConversations}, {query: gqlPosts}, {query : gqlHomes} ],
-        onCompleted(data) {
-            console.log("onCompleted :", data)
+        onCompleted(datas) {
+            console.log("onCompleted :", datas)
     
             // localStorage.setItem('token', data.login.token)
-            login(data.login.data)
+            // base64.encode(utf8.encode(data._id))
+
+            let {status, data, token} = datas.login
+
+            if(status){
+                localStorage.setItem('token', token)
+                login(data)
+            }
 
             history.push("/");
         },
