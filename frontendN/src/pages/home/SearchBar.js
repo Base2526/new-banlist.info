@@ -20,7 +20,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import Checkboxs from "./checkboxs";
 
 const SearchBar = (props) => {
-  let { onSearch } = props
+  let { onSearch, label } = props
   let [keyword, setKeyword] = useState("")
 
   const [choiceTopic, setChoiceTopic] = useState([
@@ -65,7 +65,7 @@ const SearchBar = (props) => {
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Input keyword"
+            label={label}
             variant="outlined"
             onChange={ev=>{
               setKeyword(ev.target.value)

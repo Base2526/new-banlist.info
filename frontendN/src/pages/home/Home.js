@@ -22,6 +22,9 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import queryString from 'query-string';
 
+import { useTranslation } from "react-i18next";
+import "../../translations/i18n";
+
 import PanelComment from "./PanelComment";
 import PopupSnackbar from "./PopupSnackbar";
 import SearchBar from "./SearchBar";
@@ -41,9 +44,11 @@ let unsubscribePost = null;
 const Home = (props) => {
   let history = useHistory();
 
+  const { t } = useTranslation();
+
   let params = queryString.parse(history.location.search)
 
-  console.log("Home :", params)
+  // console.log("Home :", params)
 
   let { is_connnecting, user, addedBookmark } = props
 
@@ -105,11 +110,11 @@ const Home = (props) => {
     variables: { userId: "", page, perPage: rowsPerPage, keywordSearch: keywordSearch, category: category.join()},
     notifyOnNetworkStatusChange: true,
   });
-  console.log("homesValues :", homesValues )
+  // console.log("homesValues :", homesValues )
 
   if( is_connnecting && !homesValues.loading){
 
-    console.log("homesValues.data.homes.data :", homesValues, page, rowsPerPage)
+    // console.log("homesValues.data.homes.data :", homesValues, page, rowsPerPage)
 
     if(_.isEmpty(homesValues.data.homes)){
       return;
@@ -290,7 +295,7 @@ const Home = (props) => {
 
   const main = () =>{
 
-    console.log("homesValues.data :", homesValues.data)
+    // console.log("homesValues.data :", homesValues.data)
     return  <div>
               <Container>
                 <Masonry
@@ -382,6 +387,7 @@ const Home = (props) => {
     <div style={{flex:1}}>
       <div>
         <SearchBar
+          label={t("label_keyword_search")}
           keyword={keywordSearch}
           onSearch={(data, topic)=>{
             setCategory(_.filter(topic, (v)=>v.checked).map((v)=>v.key))

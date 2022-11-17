@@ -91,6 +91,8 @@ async function startApolloServer(typeDefs, resolvers) {
                 //   throw new Error('Auth token missing!');
                 // }
                 // 
+                console.log("onConnect : ", ctx.connectionParams.authToken)
+                console.log("onConnect textHeaders : ", ctx.connectionParams.textHeaders)
                 logger.info(ctx.connectionParams);
 
                 if (ctx.connectionParams.authToken) {
@@ -115,6 +117,7 @@ async function startApolloServer(typeDefs, resolvers) {
             },
             onDisconnect: async (ctx, code, reason) =>{
                 logger.info(ctx.connectionParams);
+                console.log("onDisconnect")
                 if (ctx.connectionParams.authToken) {
                     try {
                         let userId  = jwt.verify(ctx.connectionParams.authToken, process.env.JWT_SECRET);
@@ -185,12 +188,14 @@ async function startApolloServer(typeDefs, resolvers) {
                 var bearer  = parts[0];
                 var token   = parts[1];
 
+                console.log("context  userId >> #1 " )
                 if (bearer == "Bearer") {
                     // let decode = jwt.verify(token, process.env.JWT_SECRET);
 
                     try {
                         let userId  = jwt.verify(token, process.env.JWT_SECRET);
 
+                        console.log("context  userId >> #2" , userId)
                         // code
                         // -1 : foce logout
                         //  0 : anonymums
@@ -200,7 +205,7 @@ async function startApolloServer(typeDefs, resolvers) {
 
                         let currentUser = await User.findById(userId)
                         
-                        // console.log("context >> " , data._id)
+                        
                         return {...req, currentUser} 
                     } catch(err) {
                         logger.error( err.toString() );
@@ -240,12 +245,17 @@ async function startApolloServer(typeDefs, resolvers) {
         next();
     });
 
+    // Requests to `http://localhost:4000/health` now return "Okay!"
+    app.get('/health', (req, res) => {
+        res.status(200).send('Okay!');
+    });
+
     // Now that our HTTP server is fully set up, actually listen.
     httpServer.listen(PORT, () => {
         console.log(`🚀 Query endpoint ready at http://localhost:${PORT}${server.graphqlPath}`);
         console.log(`🚀 Subscription endpoint ready at ws://localhost:${PORT}${server.graphqlPath}`);
 
-        console.log("process.env :", process.env)
+        // console.log("process.env :", process.env)
     });
 }
 

@@ -122,6 +122,11 @@ export default {
     async homes(parent, args, context, info) {
       try{
 
+        let {currentUser} = context 
+
+        console.log("#1 homes : ", args)
+        console.log("#2 homes : ", currentUser)
+
         let { userId, page, perPage, keywordSearch, category } = args
         let start = Date.now()
 
@@ -129,7 +134,7 @@ export default {
           
         // }
 
-        // let {currentUser} = context 
+        // 
         // currentUser._id.toString()
         // console.log("homes :", currentUser)
 
@@ -1177,6 +1182,7 @@ export default {
             return {
               status:true,
               data: user,
+              token: jwt.sign(user._id.toString(), process.env.JWT_SECRET),
               executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
             }
 
@@ -1318,6 +1324,7 @@ export default {
             return {
               status:true,
               data: user,
+              token: jwt.sign(user._id.toString(), process.env.JWT_SECRET),
               executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
             }
           } catch(err) {
@@ -1387,12 +1394,11 @@ export default {
             return {
               status:true,
               data: user,
+              token: jwt.sign(user._id.toString(), process.env.JWT_SECRET),
               executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
             }
-
           }catch(err){
             logger.error(err.toString());
-    
             return {
               status: false,
               data: err.toString(),

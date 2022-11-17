@@ -33,9 +33,10 @@ import Store from "./Store";
 import Detail from "./pages/detail/Detail"
 import _ from "lodash";
 
-import { useQuery } from "@apollo/client";
+import { useQuery, useApolloClient } from "@apollo/client";
 
 import ReactGA4 from "react-ga4";
+
 
 import Breadcs from "./components/breadcrumbs/Breadcs";
 import Home from "./pages/home/Home";
@@ -152,6 +153,8 @@ const App = (props) => {
   const history = useHistory();
   const [open, setOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
+
+  const client = useApolloClient();
 
   const [dialogLoginOpen, setDialogLoginOpen] = useState(false);
 
@@ -367,12 +370,18 @@ const App = (props) => {
           <DialogLogin
             {...props}
             open={dialogLoginOpen}
-            onComplete={(data)=>{
+            onComplete={async(data)=>{
               console.log("onComplete :", data)
 
-              props.login(data)
               setDialogLoginOpen(false);
 
+              props.login(data)
+              // await client.cache.reset();
+
+              await client.resetStore();
+              
+              window.location.reload();
+              history.push("/")
             }}
             onClose={() => {
 
@@ -401,7 +410,7 @@ const App = (props) => {
 // export default withStyles(styles, { withTheme: true })(App);
 
 const mapStateToProps = (state, ownProps) => {
-  console.log("mapStateToProps :", state)
+  // console.log("mapStateToProps :", state)
   return {
     user: state.auth.user,
     is_connnecting: state.ws.is_connnecting,

@@ -80,20 +80,20 @@ import {ls_connecting} from "./redux/actions/ws"
 // console.log("process.env :: ", process.env)
 
 
-const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
+// const authLink = setContext((_, { headers }) => {
+//   // get the authentication token from local storage if it exists
 
-  let token = localStorage.getItem('token');
+//   let token = localStorage.getItem('token');
 
-  // return the headers to the context so httpLink can read them
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : "",
-      textHeaders: "axxxx1"
-    }
-  }
-});
+//   // return the headers to the context so httpLink can read them
+//   return {
+//     headers: {
+//       ...headers,
+//       authorization: token ? `Bearer ${token}` : "",
+//       textHeaders: "axxxx1"
+//     }
+//   }
+// });
 
 
 /////////////////////////
@@ -119,6 +119,7 @@ const wsLink = new GraphQLWsLink(createClient({
   connectionAckWaitTimeout: 0,
   retryAttempts: 5,
   keepAlive: 10_000,
+  reconnect: true,
   retryWait: async function randomisedExponentialBackoff(retries) {
 
     console.log("wsLink retryWait")
@@ -176,10 +177,23 @@ const wsLink = new GraphQLWsLink(createClient({
 
       //   console.log("gracefullyRestart #2")
       // }
+
+      gracefullyRestart = () => {
+        if (socket.readyState === WebSocket.OPEN) {
+          socket.close(4205, 'Client Restart');
+        }
+      };
+
+      // just in case you were eager to restart
+      if (restartRequestedBeforeConnected) {
+        restartRequestedBeforeConnected = false;
+        gracefullyRestart();
+      }
+    
     },
     keepAlive: 10, // ping server every 10 seconds
     ping: (received) => {
-      console.log("wsLink #0")
+      console.log("ping #0")
 
       if (!received){
         console.log("#1")
@@ -192,7 +206,7 @@ const wsLink = new GraphQLWsLink(createClient({
       } // sent
     },
     pong: (received) => {
-      console.log("wsLink #4")
+      console.log("pong #1")
 
       if (received){
         clearTimeout(timedOut); // pong is received, clear connection close timeout
@@ -200,6 +214,11 @@ const wsLink = new GraphQLWsLink(createClient({
     },
   },
 }));
+
+const uploadLink =  createUploadLink({  
+                                        uri: (process.env.REACT_APP_NODE_ENV === "development" ? "http://" : "https://") + process.env.REACT_APP_HOST_GRAPHAL +'/graphql', 
+                                        headers:{ authorization: localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : "", } 
+                                      })
 
 // The split function takes three parameters:
 //
@@ -217,8 +236,7 @@ const splitLink = split(
   wsLink,
   // httpLink,
   // authLink.concat(httpLink),
-  createUploadLink({ uri: (process.env.REACT_APP_NODE_ENV === "development" ? "http://" : "https://") + process.env.REACT_APP_HOST_GRAPHAL +'/graphql', 
-                    headers:{ authorization: localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : "", } })
+  uploadLink,
 );
 
 // const link = createUploadLink({ uri: "http://localhost:4000/graphql" });

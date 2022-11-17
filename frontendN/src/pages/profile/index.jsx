@@ -15,6 +15,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import Box from "@mui/material/Box";
 
+
 import _ from "lodash";
 import deepdash from "deepdash";
 deepdash(_);
@@ -28,6 +29,8 @@ let initValues = { displayName: "",  files: null }
 const index = (props) => {
   let history = useHistory();
   let inputFile = useRef(null) 
+
+  // const client = useApolloClient();
 
   let myForm = useRef();
 
@@ -161,8 +164,11 @@ const index = (props) => {
       }
 
       case "logout":{
+          await client.resetStore();
+
+          // await client.cache.reset();
           logout()
-          await client.refetchQueries({ include: "all" });
+          // await client.refetchQueries({ include: "all" });
           window.location.reload();
           history.push("/")
         break;
