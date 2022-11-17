@@ -4,7 +4,13 @@ import { Link, useRouteMatch } from "react-router-dom";
 import MuiLink from "@material-ui/core/Link";
 import HomeIcon from '@mui/icons-material/Home';
 
+import { useTranslation } from "react-i18next";
+import "../../translations/i18n";
+
 const Breadcs = ({ title }) => {
+
+  const { t } = useTranslation();
+
   const homeMatches = useRouteMatch("/");
   const postsMatches = useRouteMatch("/posts");
   const newPostMatches = useRouteMatch("/post/new");
@@ -68,7 +74,7 @@ const Breadcs = ({ title }) => {
         <Breadcrumbs aria-label="breadcrumb" >
           {homeMatches && (
             <MuiLink component={Link} to="/">
-            <HomeIcon /> Home 
+            <HomeIcon /> {t("home")} 
             </MuiLink>
           )}
           {postsMatches && (

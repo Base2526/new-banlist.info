@@ -22,6 +22,9 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import queryString from 'query-string';
 
+import { useTranslation } from "react-i18next";
+import "../../translations/i18n";
+
 import PanelComment from "./PanelComment";
 import PopupSnackbar from "./PopupSnackbar";
 import SearchBar from "./SearchBar";
@@ -40,6 +43,8 @@ let unsubscribePost = null;
 
 const Home = (props) => {
   let history = useHistory();
+
+  const { t } = useTranslation();
 
   let params = queryString.parse(history.location.search)
 
@@ -382,6 +387,7 @@ const Home = (props) => {
     <div style={{flex:1}}>
       <div>
         <SearchBar
+          label={t("label_keyword_search")}
           keyword={keywordSearch}
           onSearch={(data, topic)=>{
             setCategory(_.filter(topic, (v)=>v.checked).map((v)=>v.key))
