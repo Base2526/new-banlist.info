@@ -20,3 +20,6 @@ i18n
  });
  
 i18n.changeLanguage("th");
+
+export default i18n;
+

@@ -16,6 +16,8 @@ import Menu from "@material-ui/core/Menu";
 import { connect } from "react-redux";
 import _ from "lodash"
 
+import i18n from './translations/i18n';
+
 // import { isAuth, logout} from "./AuthProvider"
 
 export const TopRight = styled.div`
@@ -47,6 +49,8 @@ export const TopIconBadge = styled.span`
 
 const MyAppBar = (props) =>{
 
+  const [language, setLanguage] = useState('en');
+
   let {conversations, classes, onDrawerOpen, onDialogLogin, user, notifications} = props
 
   let history = useHistory();
@@ -66,6 +70,12 @@ const MyAppBar = (props) =>{
 
   const handleClose = () =>{
     setAnchorEl(null)
+  }
+
+  const handleChangeLanguage=(e)=>{
+    e.preventDefault();
+    setLanguage(e.target.value);
+    i18n.changeLanguage(e.target.value);
   }
 
   return  <AppBar
@@ -96,6 +106,12 @@ const MyAppBar = (props) =>{
                 onClick={(e)=>history.push("/")}>
                 BANLIST.INFO (alpha)
               </Typography>
+
+              <div>
+                <button value='en' onClick={handleChangeLanguage}> EN </button>
+                <button value='th' onClick={handleChangeLanguage}> TH </button>
+              </div>
+              
               {
                 !_.isEmpty(user)
                 ? <TopRight>
