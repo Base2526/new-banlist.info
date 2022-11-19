@@ -16,7 +16,7 @@ import _ from "lodash"
 
 import {gqlBanks} from "../../gqlQuery"
 
-const BankInputField = ({ values, onChange }) => {
+const BankInputField = ({ label, values, onChange }) => {
   const [inputList, setInputList] = useState(values);
 
   let valueBanks = useQuery(gqlBanks, { notifyOnNetworkStatusChange: true, });
@@ -77,7 +77,7 @@ const BankInputField = ({ values, onChange }) => {
         : <Box sx={{ p: 1 }} component="footer">
             <div>
               <Typography variant="overline" display="block" gutterBottom>
-                Bank.
+                {label}
               </Typography>
               <IconButton
                 color="primary"

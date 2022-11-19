@@ -8,6 +8,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import CircularProgress from '@mui/material/CircularProgress';
 import _ from "lodash";
+import { useTranslation } from "react-i18next";
 
 import TelInputField from "../post/TelInputField";
 import Editor from "../../components/editor/Editor";
@@ -18,7 +19,8 @@ let editValues = undefined;
 let initValues = { phones: [''] , description: "", ownerId:""}
 
 const Phone = (props) => {
-    let history = useHistory();
+    const history = useHistory();
+    const { t } = useTranslation();
 
     let { user } = props
 
@@ -161,18 +163,19 @@ const Phone = (props) => {
                                     sx={{ "& .MuiTextField-root": { m: 1, width: "50ch" } }}
                                     onSubmit={submitForm}>
                                     <TelInputField
+                                        label={t("search_by_tel")} 
                                         values={ input.phones }
                                         onChange={(values) => {
                                             setInput({...input, phones: values})
                                         }}/>
                                     <Editor 
-                                        label={"Description"} 
+                                        label={t("detail")} 
                                         initData={ input.description }
                                         onEditorChange={(newDescription)=>{
                                             setInput({...input, description: newDescription})
                                         }}/>
                                     <Button type="submit" variant="contained" color="primary">
-                                    {mode === 'new' ? 'CREATE' : 'UPDATE'}  
+                                    {mode === 'new' ? t("create") : t("update")}  
                                     </Button>
                                 </Box>
                             </LocalizationProvider>

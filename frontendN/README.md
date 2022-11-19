@@ -55,3 +55,4 @@ https://levelup.gitconnected.com/how-to-implement-login-with-github-in-a-react-a
 
 // react js : i18next
 https://lokalise.com/blog/how-to-internationalize-react-application-using-i18next/
+https://stackoverflow.com/questions/49745508/react-native-create-dynamic-string-related-to-i18n

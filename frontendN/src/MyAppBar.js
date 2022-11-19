@@ -16,9 +16,14 @@ import Menu from "@material-ui/core/Menu";
 import { connect } from "react-redux";
 import _ from "lodash"
 
+import { useTranslation } from "react-i18next";
+
 import i18n from './translations/i18n';
 
 // import { isAuth, logout} from "./AuthProvider"
+
+
+// import "./translations/i18n";
 
 export const TopRight = styled.div`
   display: flex;
@@ -49,6 +54,8 @@ export const TopIconBadge = styled.span`
 
 const MyAppBar = (props) =>{
 
+  const { t } = useTranslation();
+
   const [language, setLanguage] = useState('en');
 
   let {conversations, classes, onDrawerOpen, onDialogLogin, user, notifications} = props
@@ -76,6 +83,8 @@ const MyAppBar = (props) =>{
     e.preventDefault();
     setLanguage(e.target.value);
     i18n.changeLanguage(e.target.value);
+
+    localStorage.setItem('i18n', e.target.value);
   }
 
   return  <AppBar
@@ -188,7 +197,7 @@ const MyAppBar = (props) =>{
                       // }
                     }}>
                       <AccountCircle  />
-                      Login 
+                      {t("login")} 
                     </Button>
               }
             </Toolbar>

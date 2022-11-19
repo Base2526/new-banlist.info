@@ -25,6 +25,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { DeleteOutline } from "@material-ui/icons";
 import Typography from "@mui/material/Typography";
 import { connect } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 import BankInputField from "./BankInputField";
 import AttackFileField from "./AttackFileField";
@@ -41,6 +42,8 @@ import {  gqlPost, gqlCreatePost, gqlUpdatePost,
 import _ from "lodash";
 import deepdash from "deepdash";
 deepdash(_);
+
+import "../../translations/i18n";
 
 import {convertFileToBase64} from "../../util"
 
@@ -189,6 +192,8 @@ const shcolumns = [
 
 const Post = (props) => {
   let history = useHistory();
+
+  const { t } = useTranslation();
 
   // props.location.state
   console.log("props.location.state :", history)
@@ -470,7 +475,7 @@ const Post = (props) => {
                       <TextField
                         id="post-title"
                         name="title"
-                        label="Title"
+                        label={t("search_by_title")}
                         variant="filled"
                         required
                         value={input.title}
@@ -482,7 +487,7 @@ const Post = (props) => {
                       <TextField
                         id="post-name-subname"
                         name="nameSubname"
-                        label="Name Subname"
+                        label={t("search_by_name_surname")}
                         variant="filled"
                         required
                         value={input.nameSubname}
@@ -494,7 +499,7 @@ const Post = (props) => {
                       <TextField
                         id="post-idcard"
                         name="idCard"
-                        label="ID Card"
+                        label={t("search_by_card_id")}
                         variant="filled"
                         // required
                         value={input.idCard}
@@ -506,7 +511,7 @@ const Post = (props) => {
                       <TextField
                         id="post-amount"
                         name="amount"
-                        label="Amount"
+                        label={t("amount")}
                         variant="filled"
                         type="number"
                         required
@@ -517,7 +522,7 @@ const Post = (props) => {
                         error={_.isEmpty(error.amount) ? false : true}
                       />
                       <DesktopDatePicker
-                        label="Date"
+                        label={t("date_tranfer")}
                         inputFormat="dd/MM/yyyy"
                         value={ input.dateTranfer }
                         onChange={(newDate) => {
@@ -526,6 +531,7 @@ const Post = (props) => {
                         renderInput={(params) => <TextField {...params} required={input.dateTranfer === null ? true: false} />}
                       />
                       <TelInputField
+                        label={t("search_by_tel")}
                         values={input.tels}
                         onChange={(values) => {
                           console.log("Tel onChange >> :", values);
@@ -534,6 +540,7 @@ const Post = (props) => {
                         }}
                       />
                       <BankInputField
+                        label={t("search_by_id_bank")}
                         values={input.banks}
                         onChange={(values) => {
                           console.log("BankInputField : ", values)
@@ -541,13 +548,14 @@ const Post = (props) => {
                         }}
                       />
                       <Editor 
-                        label={"Description"} 
+                        label={t("detail")} 
                         initData={ input.description }
                         onEditorChange={(newDescription)=>{
                           setInput({...input, description: newDescription})
                         }} />
 
                       <AttackFileField
+                        label={t("attack_file")}
                         values={input.attackFiles}
                         onChange={(values) => {
                           console.log("AttackFileField :", values)
@@ -560,7 +568,7 @@ const Post = (props) => {
 
                     </div>
                     <Button type="submit" variant="contained" color="primary">
-                      Create
+                      {t("create")}
                     </Button>
                   </Box>
                 </LocalizationProvider>

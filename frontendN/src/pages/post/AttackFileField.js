@@ -18,7 +18,7 @@ const Input = styled("input")({
   display: "none"
 });
 
-const AttackFileField = ({ values, onChange, onSnackbar }) => {
+const AttackFileField = ({ label, values, onChange, onSnackbar }) => {
   const [inputList, setInputList] = useState(values);
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const AttackFileField = ({ values, onChange, onSnackbar }) => {
     <Box sx={{ p: 1 }} component="footer">
       <div>
         <Typography variant="overline" display="block" gutterBottom>
-          Attack file
+          {label}
         </Typography>
         <label htmlFor="contained-button-file">
           <Input

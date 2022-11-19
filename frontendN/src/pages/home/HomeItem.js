@@ -33,7 +33,8 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useQuery, useMutation } from "@apollo/client";
 import { useHistory } from "react-router-dom";
 import _ from "lodash"
-import { connect } from "react-redux";
+import { useTranslation } from "react-i18next";
+
 import ReadMoreMaster from "../../utils/ReadMoreMaster"
 import ItemComment from "./ItemComment"
 import ItemBookmark from "./ItemBookmark"
@@ -68,7 +69,9 @@ const HomeItem =(props) => {
   let { user, item, bookmarks, onLightbox, onBookmark } = props
 
   const classes = useStyles(item);
-  let history = useHistory();
+  const history = useHistory();
+
+  const { t } = useTranslation();
 
   const [expand, setExpand] = useState(false);
 
@@ -143,7 +146,7 @@ const HomeItem =(props) => {
                   id="panel1a-header">
                   <div>
                     <Typography variant="subtitle2" color="textSecondary">
-                        หัวข้อร้องเรียน : {item.title}
+                        {t("search_by_title")} : {item.title}
                     </Typography>
                     
                     <Typography
@@ -151,30 +154,31 @@ const HomeItem =(props) => {
                       variant="subtitle2"
                       color="textSecondary"
                     >
-                      ชื่อ-นามสกุล : {item.nameSubname}
+                      {t("search_by_name_surname")} : {item.nameSubname}
                     </Typography>
               
                     <Typography variant="subtitle2" color="textSecondary">
-                      ยอดเงิน : {item.amount}
+                      {t("amount")} : {item.amount}
                     </Typography>
 
                   
                     <Typography variant="subtitle2" color="textSecondary">
-                      วันที่โอน : {moment(item.dateTranfer).format('MMMM Do YYYY')}
+                      {t("date_tranfer")} : {moment(item.dateTranfer).format('MMMM Do YYYY')}
                     </Typography>
                         
                     <ReadMoreMaster
+                      label= {t("detail")}
                       parentClass={"read-more-master"}
                       byWords={true}
                       length={15}
                       readMore="See More"
                       readLess="See less" 
-                      ellipsis="...">{"รายละเอียด :" + item.description}</ReadMoreMaster>
+                      ellipsis="...">{item.description}</ReadMoreMaster>
                   </div>
                 </AccordionSummary>
                 <AccordionDetails>
 
-                  <Typography variant="subtitle2" color="textSecondary">เบอร์โทร : 
+                  <Typography variant="subtitle2" color="textSecondary">{t("search_by_tel")} : 
                     <ul>
                       {
                         _.map(item.tels, (v)=>{
@@ -184,7 +188,7 @@ const HomeItem =(props) => {
                     </ul>
                   </Typography>
 
-                  <Typography variant="subtitle2" color="textSecondary">ธนาคาร : 
+                  <Typography variant="subtitle2" color="textSecondary">{t('search_by_id_bank')} : 
                     <ul>
                       {
                         _.map(item.banks, (v)=>{
