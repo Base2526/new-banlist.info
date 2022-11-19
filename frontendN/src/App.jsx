@@ -15,10 +15,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-
 import { connect } from "react-redux";
 import { bindActionCreators, compose } from 'redux';
-
 import {
   BrowserRouter as Router,
   Switch,
@@ -27,43 +25,29 @@ import {
   Link,
   useLocation
 } from "react-router-dom";
-import styled from "styled-components";
-
 import Store from "./Store";
 import Detail from "./pages/detail/Detail"
 import _ from "lodash";
-
 import { useQuery, useApolloClient } from "@apollo/client";
-
 import ReactGA4 from "react-ga4";
-
 
 import Breadcs from "./components/breadcrumbs/Breadcs";
 import Home from "./pages/home/Home";
-// import { socket } from "./SocketioClient";
-
 import MyAppBar from "./MyAppBar";
 import LeftMenu from "./LeftMenu"
-
 import PrivateRoute from "./PrivateRoute"
 import PrivatePage from "./PrivatePage"
 import UserView from "./pages/user/UserView";
 import DialogLogin from "./DialogLogin";
-
 import Help from "./pages/help"
-
 import PrivacyPage from "./pages/basicContent/Privacy"
 import DeveloperPage from "./pages/basicContent/Developer"
 import TermsPage from "./pages/basicContent/Terms"
-
 import LoginPage from "./pages/auth/Login"
-
-import Footer from "./pages/footer";
-
+import Footer from "./pages/footer"
 import DialogTermsAndConditions from "./DialogTermsAndConditions"
-
+import i18n from './translations/i18n';
 import { login, addedConversations, addedConversation, addedNotifications, addedNotification, termsAndConditions } from "./redux/actions/auth"
-
 import { gqlConversations, gqlBookmarksByUserId, subConversation, subBookmark, gqlNotifications, subNotification } from "./gqlQuery"
 
 let unsubscribeConversation = null;
@@ -167,6 +151,8 @@ const App = (props) => {
   // react-ga4
   ReactGA4.send({ hitType: "pageview", page: window.location.pathname });
 
+
+  i18n.changeLanguage( _.isEmpty(localStorage.getItem('i18n')) ? "en" : localStorage.getItem('i18n') );
 
   if(  is_connnecting && !conversationValues.loading && conversationValues.data.conversations){
     let { status, data } = conversationValues.data.conversations  

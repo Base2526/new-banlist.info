@@ -1,9 +1,10 @@
 import React, {useState, useCallback, useEffect} from 'react';
 import truncate from "truncate-html";
+import { IconButton, Typography, makeStyles } from "@material-ui/core";
 
 // refer : https://stackoverflow.com/questions/71472309/read-show-more-or-less-of-html-content-or-normal-text-using-single-reusable-reac
 const ReadMoreMaster = (props) => {
-    let {byWords,parentClass, readLess, readMore, length, ellipsis, spaceBefore} = props;
+    let {byWords,parentClass, readLess, readMore, length, ellipsis, spaceBefore, label} = props;
     const [showMore, setShowMore] = useState(false);
 
     truncate.setup({
@@ -36,6 +37,7 @@ const ReadMoreMaster = (props) => {
 
     return (
         <div className={parentClass}>
+            <Typography> {label} : </Typography>
             <div
                 className="show-more-text"
                 dangerouslySetInnerHTML={{

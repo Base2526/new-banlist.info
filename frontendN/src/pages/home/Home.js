@@ -23,7 +23,6 @@ import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import queryString from 'query-string';
 
 import { useTranslation } from "react-i18next";
-import "../../translations/i18n";
 
 import PanelComment from "./PanelComment";
 import PopupSnackbar from "./PopupSnackbar";
@@ -45,6 +44,8 @@ const Home = (props) => {
   let history = useHistory();
 
   const { t } = useTranslation();
+
+  console.log("Home :", localStorage. getItem('i18n') )
 
   let params = queryString.parse(history.location.search)
 
@@ -510,8 +511,8 @@ const Home = (props) => {
             icon={<SpeedDialIcon />}>
             {
               _.map([
-                      { icon: <PostAddIcon />, name: 'Post', id: 1 },
-                      { icon: <AddIcCallIcon />, name: 'Phone', id: 2 },
+                      { icon: <PostAddIcon />, name: t("new_post"), id: 1 },
+                      { icon: <AddIcCallIcon />, name: t("new_phone"), id: 2 },
                     ], (action) => (
                       <SpeedDialAction
                         key={action.name}

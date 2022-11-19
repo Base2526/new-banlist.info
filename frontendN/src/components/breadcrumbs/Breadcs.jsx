@@ -5,7 +5,6 @@ import MuiLink from "@material-ui/core/Link";
 import HomeIcon from '@mui/icons-material/Home';
 
 import { useTranslation } from "react-i18next";
-import "../../translations/i18n";
 
 const Breadcs = ({ title }) => {
 
@@ -79,12 +78,12 @@ const Breadcs = ({ title }) => {
           )}
           {postsMatches && (
             <MuiLink component={Link} to="/posts">
-              Posts
+              {t("posts")} 
             </MuiLink>
           )}
           {newPostMatches && (
             <MuiLink component={Link} to="/post/new">
-              New post
+              {t("new_post")}
             </MuiLink>
           )}
           {postMatches && (
@@ -292,7 +291,7 @@ const Breadcs = ({ title }) => {
             <MuiLink 
               component={Link} 
               to="/phone/new">
-              New phone
+              {t("new_phone")}
             </MuiLink>
           )}
           {phoneMatches && (

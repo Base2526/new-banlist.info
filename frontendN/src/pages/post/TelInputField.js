@@ -7,7 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import Typography from "@mui/material/Typography";
 
-const TelInputField = ({ values, onChange }) => {
+const TelInputField = ({ label, values, onChange }) => {
   const [inputList, setInputList] = useState(values);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const TelInputField = ({ values, onChange }) => {
     <Box sx={{ /*bgcolor: "background.paper",*/ p: 1 }} component="footer">
       <div>
         <Typography variant="overline" display="block" gutterBottom>
-          Tel.
+          {label}
         </Typography>
         <IconButton
           color="primary"
@@ -55,7 +55,7 @@ const TelInputField = ({ values, onChange }) => {
             <TextField
               id="filled-basic"
               name="tel"
-              label="Tel"
+              label={label}
               variant="filled"
               value={tel}
               required
