@@ -64,6 +64,9 @@
             --bgfb:#4b66a0;
             --bgfb2:#3b5998;
 
+            --bggithub: #a6a8ad;
+            --bggithub2: #989898;
+
             position: relative;
             height: calc(1.5em + 1rem + 2px);
             padding: .375rem .75rem .375rem ;
@@ -78,22 +81,36 @@
             border:0;
             cursor: pointer !important;
             
-            &:first-child{
+            // &:first-child{
+            //     @include social-media(var(--bgcolor),var(--bgcolor2));
+            // }
+            // &:last-child{
+            //     @include social-media(var(--bgfb),var(--bgfb2));
+            // }
+
+            &:nth-child(1){
                 @include social-media(var(--bgcolor),var(--bgcolor2));
             }
-            &:last-child{
+            &:nth-child(2){
                 @include social-media(var(--bgfb),var(--bgfb2));
             }
+            &:nth-child(3){
+                @include social-media(var(--bggithub),var(--bggithub2));
+            }
+      
+            // .facebookLogin{
+            //     @include social-media(var(--bgfb),var(--bgfb2));
+            // }
             @media (max-width:$md){
                 width: 100%;
             }
 
             @media (min-width:$md){
                 &:first-child{
-                    margin-right: .5rem;
+                    // margin-right: .5rem;
                 }
                 &:last-child{
-                    margin-left: .5rem;
+                    // margin-left: .5rem;
                 }
             }
             span{
