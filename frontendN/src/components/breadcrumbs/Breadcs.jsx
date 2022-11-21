@@ -253,7 +253,7 @@ const Breadcs = ({ title }) => {
           )}
           {helpMatches && (
             <MuiLink component={Link} to="/help">
-              Help 
+              {t("help")} 
             </MuiLink>
           )}
 
@@ -385,7 +385,7 @@ const Breadcs = ({ title }) => {
 
           {privacyAndtermsMatche && (
             <MuiLink component={Link} to="/privacy+terms">
-              Privacy & terms
+              {t("privacy_and_terms")}
             </MuiLink>
           )}
 

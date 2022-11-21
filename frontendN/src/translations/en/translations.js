@@ -26,5 +26,9 @@ export const TRANSLATIONS_EN = {
     new_phone: "New phone",
 
     create: "Create",
-    update: "Update"
+    update: "Update",
+
+    help: "Help",
+
+    privacy_and_terms : "Privacy & terms"
 };

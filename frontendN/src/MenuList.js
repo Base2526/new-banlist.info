@@ -32,11 +32,12 @@ import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import BugReportIcon from '@mui/icons-material/BugReport';
 
 import DeveloperModeIcon from '@mui/icons-material/DeveloperMode';
+import { useTranslation } from "react-i18next";
 
 const MenuAdministrator = [
   {
     Id: 1,
-    Name: "Home",
+    Name: "home",
     Icon: <HomeIcon className="icon" />,
     Path: "/"
   },
@@ -144,7 +145,7 @@ const MenuAdministrator = [
   // },
   {
     Id: 9,
-    Name: "Privacy+terms",
+    Name:  "privacy_and_terms",
     Icon: <SecurityIcon className="icon" />,
     Path: "/privacy+terms"
   },
@@ -156,7 +157,7 @@ const MenuAdministrator = [
   },
   {
     Id: 12,
-    Name: "Help",
+    Name: "help",
     Icon: <HelpIcon className="icon" />,
     Path: "/help"
   }
@@ -165,7 +166,7 @@ const MenuAdministrator = [
 const MenuAuthenticated = [
   {
     Id: 1,
-    Name: "Home",
+    Name: "home",
     Icon: <HomeIcon className="icon" />,
     Path: "/"
   },
@@ -195,7 +196,7 @@ const MenuAuthenticated = [
   // },
   {
     Id: 4,
-    Name: "Privacy+terms",
+    Name:  "privacy_and_terms",
     Icon: <SecurityIcon className="icon" />,
     Path: "/privacy+terms"
   },
@@ -207,7 +208,7 @@ const MenuAuthenticated = [
   },
   {
     Id: 6,
-    Name: "Help",
+    Name: "help",
     Icon: <HelpIcon className="icon" />,
     Path: "/help"
   }
@@ -216,31 +217,19 @@ const MenuAuthenticated = [
 const MenuAnonymous = [
   {
     Id: 1,
-    Name: "Home",
+    Name: "home",
     Icon: <HomeIcon className="icon" />,
     Path: "/"
   },
-  // {
-  //   Id: 2,
-  //   Name: "Terms",
-  //   Icon: <GavelIcon className="icon" />,
-  //   Path: "/terms"
-  // },
-  // {
-  //   Id: 3,
-  //   Name: "Privacy",
-  //   Icon: <SecurityIcon className="icon" />,
-  //   Path: "/privacy"
-  // },
   {
     Id: 2,
-    Name: "Privacy+terms",
+    Name: "privacy_and_terms",
     Icon: <SecurityIcon className="icon" />,
     Path: "/privacy+terms"
   },
   {
     Id: 3,
-    Name: "Help",
+    Name: "help",
     Icon: <HelpIcon className="icon" />,
     Path: "/help"
   },

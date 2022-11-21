@@ -26,5 +26,9 @@ export const TRANSLATIONS_TH = {
     new_phone: "ใส่เบอร์โทรใหม่",
     
     create: "สร้าง",
-    update: "แก้ไข"
+    update: "แก้ไข",
+
+    help: "ช่วยเหลือ",
+
+    privacy_and_terms : "ความเป็นส่วนตัวและข้อกำหนด"
 };
