@@ -37,7 +37,7 @@ const ReadMoreMaster = (props) => {
 
     return (
         <div className={parentClass}>
-            <Typography> {label} : </Typography>
+            <Typography variant="subtitle2" color="textSecondary"> {label} : </Typography>
             <div
                 className="show-more-text"
                 dangerouslySetInnerHTML={{

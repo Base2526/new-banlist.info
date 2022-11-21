@@ -35,12 +35,16 @@ import { useHistory } from "react-router-dom";
 import _ from "lodash"
 import { useTranslation } from "react-i18next";
 
+import i18n from '../../translations/i18n';
+
 import ReadMoreMaster from "../../utils/ReadMoreMaster"
 import ItemComment from "./ItemComment"
 import ItemBookmark from "./ItemBookmark"
 import ItemShare from "./ItemShare"
 import ItemHeader from "./ItemHeader"
 import ItemBank from "./ItemBank"
+
+import {convertDate} from "../../util"
 
 const useStyles = makeStyles({
   avatar: {
@@ -72,6 +76,8 @@ const HomeItem =(props) => {
   const history = useHistory();
 
   const { t } = useTranslation();
+
+  console.log("t.language :", i18n)
 
   const [expand, setExpand] = useState(false);
 
@@ -163,7 +169,7 @@ const HomeItem =(props) => {
 
                   
                     <Typography variant="subtitle2" color="textSecondary">
-                      {t("date_tranfer")} : {moment(item.dateTranfer).format('MMMM Do YYYY')}
+                      {t("date_tranfer")} : {convertDate(moment(item.dateTranfer).format('MMMM Do YYYY'))}
                     </Typography>
                         
                     <ReadMoreMaster

@@ -130,17 +130,23 @@ const MenuAdministrator = [
     Icon: <AdbIcon className="icon" />,
     Path: "/dblog"
   },
+  // {
+  //   Id: 9,
+  //   Name: "Terms",
+  //   Icon: <GavelIcon className="icon" />,
+  //   Path: "/terms"
+  // },
+  // {
+  //   Id: 10,
+  //   Name: "Privacy",
+  //   Icon: <SecurityIcon className="icon" />,
+  //   Path: "/privacy"
+  // },
   {
     Id: 9,
-    Name: "Terms",
-    Icon: <GavelIcon className="icon" />,
-    Path: "/terms"
-  },
-  {
-    Id: 10,
-    Name: "Privacy",
+    Name: "Privacy+terms",
     Icon: <SecurityIcon className="icon" />,
-    Path: "/privacy"
+    Path: "/privacy+terms"
   },
   {
     Id: 11,
@@ -175,17 +181,23 @@ const MenuAuthenticated = [
     Icon: <LocalPhoneIcon className="icon" />,
     Path: "/phones"
   },
+  // {
+  //   Id: 4,
+  //   Name: "Terms",
+  //   Icon: <GavelIcon className="icon" />,
+  //   Path: "/terms"
+  // },
+  // {
+  //   Id: 5,
+  //   Name: "Privacy",
+  //   Icon: <SecurityIcon className="icon" />,
+  //   Path: "/privacy"
+  // },
   {
     Id: 4,
-    Name: "Terms",
-    Icon: <GavelIcon className="icon" />,
-    Path: "/terms"
-  },
-  {
-    Id: 5,
-    Name: "Privacy",
+    Name: "Privacy+terms",
     Icon: <SecurityIcon className="icon" />,
-    Path: "/privacy"
+    Path: "/privacy+terms"
   },
   {
     Id: 11,
@@ -208,24 +220,31 @@ const MenuAnonymous = [
     Icon: <HomeIcon className="icon" />,
     Path: "/"
   },
+  // {
+  //   Id: 2,
+  //   Name: "Terms",
+  //   Icon: <GavelIcon className="icon" />,
+  //   Path: "/terms"
+  // },
+  // {
+  //   Id: 3,
+  //   Name: "Privacy",
+  //   Icon: <SecurityIcon className="icon" />,
+  //   Path: "/privacy"
+  // },
   {
     Id: 2,
-    Name: "Terms",
-    Icon: <GavelIcon className="icon" />,
-    Path: "/terms"
+    Name: "Privacy+terms",
+    Icon: <SecurityIcon className="icon" />,
+    Path: "/privacy+terms"
   },
   {
     Id: 3,
-    Name: "Privacy",
-    Icon: <SecurityIcon className="icon" />,
-    Path: "/privacy"
-  },
-  {
-    Id: 4,
     Name: "Help",
     Icon: <HelpIcon className="icon" />,
     Path: "/help"
-  }
+  },
+  
 ];
 
 export {

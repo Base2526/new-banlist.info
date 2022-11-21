@@ -52,9 +52,11 @@ const Breadcs = ({ title }) => {
   const phoneMatches = useRouteMatch("/phone/:jobid/edit");
   const phonesMatches = useRouteMatch("/phones");
 
-  const privacyMatche = useRouteMatch("/privacy");
+  // const privacyMatche = useRouteMatch("/privacy");
   const developerMatche = useRouteMatch("/developer");
-  const termsMatche = useRouteMatch("/terms");
+  // const termsMatche = useRouteMatch("/terms");
+
+  const privacyAndtermsMatche = useRouteMatch("/privacy+terms");
 
   const newContactUsMatches = useRouteMatch("/contact-us/new");
   const contactUsMatches = useRouteMatch("/contact-us/:id/edit");
@@ -369,7 +371,7 @@ const Breadcs = ({ title }) => {
             )
           }
 
-          {privacyMatche && (
+          {/* {privacyMatche && (
             <MuiLink component={Link} to="/privacy">
               Privacy
             </MuiLink>
@@ -378,6 +380,12 @@ const Breadcs = ({ title }) => {
           {termsMatche && (
             <MuiLink component={Link} to="/terms">
               Terms
+            </MuiLink>
+          )} */}
+
+          {privacyAndtermsMatche && (
+            <MuiLink component={Link} to="/privacy+terms">
+              Privacy & terms
             </MuiLink>
           )}
 
