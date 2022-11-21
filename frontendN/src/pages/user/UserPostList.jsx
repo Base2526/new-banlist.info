@@ -31,6 +31,8 @@ import ItemBookmark from "../home/ItemBookmark"
 import ItemShare from "../home/ItemShare"
 import PanelComment from "../home/PanelComment";
 
+import {convertDate} from "../../util"
+
 const UserPostList = (props) => {
     let history = useHistory();
     let {id, user, onReport} = props
@@ -231,7 +233,7 @@ const UserPostList = (props) => {
                                                         <MoreVertIcon />
                                                     </IconButton>
                                                     }
-                                                    subheader={moment(item.createdAt).format('MMMM Do YYYY')}/>
+                                                    subheader={convertDate(moment(item.createdAt).format('MMMM Do YYYY'))}/>
                                                 <CardContent>
                                                     <div style={{ position: "relative", paddingBottom: "10px" }}>
                                                         <IconButton

@@ -171,7 +171,6 @@ const PrivatePage =(props) => {
                 <Route path="/phones">
                     <PhoneList />
                 </Route>
-
                 <Route path="/contact-us/:id/:mode">
                     <ContactUs />
                 </Route>

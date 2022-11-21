@@ -40,9 +40,11 @@ import PrivatePage from "./PrivatePage"
 import UserView from "./pages/user/UserView";
 import DialogLogin from "./DialogLogin";
 import Help from "./pages/help"
-import PrivacyPage from "./pages/basicContent/Privacy"
+// import PrivacyPage from "./pages/basicContent/Privacy"
 import DeveloperPage from "./pages/basicContent/Developer"
-import TermsPage from "./pages/basicContent/Terms"
+// import TermsPage from "./pages/basicContent/Terms"
+// 
+import PrivacyAndTermsPage from "./pages/basicContent/PrivacyAndTerms"
 import LoginPage from "./pages/auth/Login"
 import Footer from "./pages/footer"
 import DialogTermsAndConditions from "./DialogTermsAndConditions"
@@ -315,11 +317,17 @@ const App = (props) => {
                     </div>
                   </Route>
 
-                  <Route path="/privacy">
+                  {/* <Route path="/privacy">
                     <div className="page-privacy pl-2 pr-2">
                       <PrivacyPage />
                     </div>
-                  </Route>
+                  </Route> */}
+
+                <Route path="/privacy+terms">
+                  <div className="page-terms pl-2 pr-2">
+                    <PrivacyAndTermsPage />
+                  </div>
+                </Route>
 
                 <Route path="/developer">
                   <div className="page-dev pl-2 pr-2">
@@ -330,11 +338,13 @@ const App = (props) => {
                 <Route path="/developer">
                   <DeveloperPage />
                 </Route>
-                <Route path="/terms">
+                {/* <Route path="/terms">
                   <div className="page-terms pl-2 pr-2">
                     <TermsPage />
                   </div>
-                </Route>
+                </Route> */}
+
+                
                 <PrivateRoute path="/">
                   <PrivatePage />
                 </PrivateRoute>   

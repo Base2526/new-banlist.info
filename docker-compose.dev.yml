@@ -21,7 +21,7 @@ services:
 
       - REACT_APP_FACEBOOK_APPID=448400870781752
     ports:
-      - "3000:3000"
+      - "3001:3000"
     volumes:
       - ./frontendN/src:/app/src
       - ./uploads:/var/storage

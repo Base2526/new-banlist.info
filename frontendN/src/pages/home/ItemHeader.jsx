@@ -20,6 +20,8 @@ import { Avatar } from "@chatscope/chat-ui-kit-react";
 
 import { gqlUser } from "../../gqlQuery"
 
+import {convertDate} from "../../util"
+
 const ItemHeader = (props) => {
     let history = useHistory();
 
@@ -53,7 +55,7 @@ const ItemHeader = (props) => {
                         history.push("/user/" + user._id +"/view");
                     }} 
                     variant="subtitle2" gutterBottom component="div">{user.displayName}</Typography> }
-                    subheader={moment(item.createdAt).format('MMMM Do YYYY')}
+                    subheader={convertDate(moment(item.createdAt).format('MMMM Do YYYY'))}
                 />
     }
 
