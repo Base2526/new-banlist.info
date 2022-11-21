@@ -17,6 +17,9 @@ import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props
 import _ from "lodash";
 import { gapi } from "gapi-script"
 
+import LoginGithub from 'react-login-github';
+import GitHubIcon from '@mui/icons-material/GitHub';
+
 import utf8 from "utf8";
 import base64 from 'base-64';
 
@@ -244,7 +247,7 @@ const DialogLogin = (props) => {
       "idpId": "google"
     }
     */
-    };
+  };
 
   const onGoogleFailure = (response) =>{
     console.log("onGoogleFailure :", response);
@@ -285,6 +288,19 @@ const DialogLogin = (props) => {
             </form>
   }
 
+  const onGithubSuccess = async(response) =>{
+    console.log("onGithubSuccess :", response)
+
+    let {code} = response
+    if(!_.isEmpty(code)){
+      onLoginWithSocial({ variables: { input: { authType: "GITHUB",  data: response }} })
+    }
+  }
+
+  const onGithubFailure = (response) =>{
+      console.log("onGithubFailure :", response)
+  }
+
   return (
     <Dialog 
     onClose={(e)=>{
@@ -316,6 +332,7 @@ const DialogLogin = (props) => {
             />
 
             <FacebookLogin
+              className={"facebookLogin"}
               appId={facebookAppId}
               autoLoad={false}
               // fields="name,email,picture"
@@ -327,6 +344,14 @@ const DialogLogin = (props) => {
               render={renderProps => (
                 <button onClick={renderProps.onClick}><FacebookIcon/> <span>Facebook </span></button>
               )}/>
+
+            <LoginGithub 
+              clientId={process.env.REACT_APP_GITHUB_CLIENT_ID}
+              onSuccess={onGithubSuccess}
+              onFailure={onGithubFailure}
+              className={"login-github"}
+              children={<React.Fragment><i className="left"><GitHubIcon /></i><span>Github</span></React.Fragment>}/>
+              
           </div>
         </DialogContentText>
         </DialogContent>
