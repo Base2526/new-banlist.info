@@ -233,7 +233,7 @@ const UserPostList = (props) => {
                                                         <MoreVertIcon />
                                                     </IconButton>
                                                     }
-                                                    subheader={convertDate(moment(item.createdAt).format('MMMM Do YYYY'))}/>
+                                                    subheader={convertDate(moment(item.createdAt).format('D MMM YYYY'))}/>
                                                 <CardContent>
                                                     <div style={{ position: "relative", paddingBottom: "10px" }}>
                                                         <IconButton
