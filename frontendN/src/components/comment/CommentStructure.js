@@ -15,6 +15,7 @@ import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar'
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery, useMutation } from "@apollo/client";
+import moment from "moment";
 
 import { ActionContext } from './ActionContext'
 
@@ -149,11 +150,14 @@ const CommentStructure = (props) => {
           {onProfile()}
           {
             actions.user 
-            ? <IconButton aria-label="reply" className={"replyBtn"}
-                onClick={() => actions.handleAction(i.comId)}
-                disabled={!actions.user}>
-                <ReplyIcon/>Reply
-              </IconButton>
+            ? <div>
+                <IconButton aria-label="reply" className={"replyBtn"}
+                  onClick={() => actions.handleAction(i.comId)}
+                  disabled={!actions.user}>
+                  <ReplyIcon/>Reply
+                </IconButton>
+                <Typography variant="subtitle2" gutterBottom component="div">{moment.unix(i.updated / 1000).fromNow()}</Typography>
+              </div>
             : <div />
           }
           
