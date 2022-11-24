@@ -177,7 +177,7 @@ const HomeItem =(props) => {
                       parentClass={"read-more-master"}
                       byWords={true}
                       length={15}
-                      readMore="See More"
+                      readMore={t("see_more")}
                       readLess="See less" 
                       ellipsis="...">{item.description}</ReadMoreMaster>
                   </div>

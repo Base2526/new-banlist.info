@@ -20,6 +20,9 @@ import _ from "lodash";
 import deepdash from "deepdash";
 deepdash(_);
 
+
+import { useTranslation } from "react-i18next";
+
 import { logout } from "../../redux/actions/auth"
 
 import { gqlUser ,gqlUpdateUser } from "../../gqlQuery"
@@ -29,6 +32,8 @@ let initValues = { displayName: "",  files: null }
 const index = (props) => {
   let history = useHistory();
   let inputFile = useRef(null) 
+
+  const { t } = useTranslation();
 
   // const client = useApolloClient();
 
@@ -187,7 +192,7 @@ const index = (props) => {
             ref={myForm}
             onSubmit={submitForm}>
 
-          <div className="Mui-title">Profiles</div>
+          <div className="Mui-title">{t("profile")}</div>
 
           <Stack direction="row" spacing={2} className="Mui-csswrapbox">
             <input type='file' id='file' ref={inputFile} style={{display: 'none'}}  onChange={onChangeFile} />
@@ -239,11 +244,11 @@ const index = (props) => {
             error={_.isEmpty(error.displayName) ? false : true}
           />
           <Typography variant="overline" display="block" gutterBottom>
-            Email : {currentUser.email}
+            {t("email")} : {currentUser.email}
           </Typography>
           <div className="d-flex Mui-wrapbtn-update">
-            <Button disabled={!isUpdate} type="submit" variant="contained" color="primary" id="update"  onClick={ e => myForm.current.buttonId=e.target.id }>UPDATE</Button>
-            <Button type="submit" variant="contained" color="primary" id="logout"  onClick={ e => myForm.current.buttonId=e.target.id }>Logout</Button>
+            <Button disabled={!isUpdate} type="submit" variant="contained" color="primary" id="update"  onClick={ e => myForm.current.buttonId=e.target.id }>{t("update")}</Button>
+            <Button type="submit" variant="contained" color="primary" id="logout"  onClick={ e => myForm.current.buttonId=e.target.id }>{t("logout")}</Button>
           </div>
         </Box>
       </LocalizationProvider>

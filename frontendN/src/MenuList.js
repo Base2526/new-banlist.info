@@ -43,31 +43,31 @@ const MenuAdministrator = [
   },
   {
     Id: 2,
-    Name: "Posts",
+    Name: "posts",
     Icon: <Timeline className="icon" />,
     Path: "/posts"
   },
   {
     Id: 3,
-    Name: "Phones",
+    Name: "phones",
     Icon: <LocalPhoneIcon className="icon" />,
     Path: "/phones"
   },
   {
     Id: 4,
-    Name: "Bookmarks",
+    Name: "bookmarks",
     Icon: <BookmarksIcon className="icon" />,
     Path: "/bookmarks"
   },
   {
     Id: 5,
-    Name: "Users",
+    Name: "users",
     Icon: <Group className="icon" />,
     Path: "/users"
   },
   {
     Id: 6,
-    Name: "Taxonomy",
+    Name: "taxonomy",
     Icon: <AssistantPhotoIcon className="icon" />,
     // Path: "/devel",
     Sheets: [
@@ -121,7 +121,7 @@ const MenuAdministrator = [
   },
   {
     Id: 7,
-    Name: "Reports",
+    Name: "reports",
     Icon: <BugReportIcon className="icon" />,
     Path: "/report"
   },
@@ -151,7 +151,7 @@ const MenuAdministrator = [
   },
   {
     Id: 11,
-    Name: "Developer",
+    Name: "developer",
     Icon: <DeveloperModeIcon className="icon" />,
     Path: "/developer"
   },
@@ -172,13 +172,13 @@ const MenuAuthenticated = [
   },
   {
     Id: 2,
-    Name: "Posts",
+    Name: "posts",
     Icon: <Timeline className="icon" />,
     Path: "/posts"
   },
   {
     Id: 3,
-    Name: "Phones",
+    Name: "phones",
     Icon: <LocalPhoneIcon className="icon" />,
     Path: "/phones"
   },

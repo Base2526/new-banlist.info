@@ -22,6 +22,7 @@ export const TRANSLATIONS_TH = {
 
     posts: "โพส",
     new_post: "สร้างโพสใหม่",
+    edit_post: "แก้ไขโพส",
 
     new_phone: "ใส่เบอร์โทรใหม่",
     
@@ -30,5 +31,27 @@ export const TRANSLATIONS_TH = {
 
     help: "ช่วยเหลือ",
 
-    privacy_and_terms : "ความเป็นส่วนตัวและข้อกำหนด"
+    privacy_and_terms : "ความเป็นส่วนตัวและข้อกำหนด",
+
+    phones: "โทรศัพท์",
+
+    bookmarks: "บุ๊คมาร์ค",
+
+    users: "บุคคล",
+
+    taxonomy: "หมวดหมู่",
+
+    reports: "รายงาน",
+
+    developer: "นักพัฒนาระบบ",
+
+    notification: "แจ้งเตือน",
+
+    profile: "โปรไฟล์",
+
+    see_more: "อ่านต่อ...",
+
+    logout: "ออกจากระบบ",
+
+    email: "อีเมลล์"
 };
