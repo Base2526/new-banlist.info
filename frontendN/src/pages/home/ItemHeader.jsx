@@ -55,7 +55,7 @@ const ItemHeader = (props) => {
                         history.push("/user/" + user._id +"/view");
                     }} 
                     variant="subtitle2" gutterBottom component="div">{user.displayName}</Typography> }
-                    subheader={convertDate(moment(item.createdAt).format('MMMM Do YYYY'))}
+                    subheader={convertDate(moment(item.createdAt).format('D MMM YYYY'))}
                 />
     }
 

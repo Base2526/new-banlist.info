@@ -44,7 +44,7 @@ import ItemShare from "./ItemShare"
 import ItemHeader from "./ItemHeader"
 import ItemBank from "./ItemBank"
 
-import {convertDate} from "../../util"
+import {convertDate, numberCurrency} from "../../util"
 
 const useStyles = makeStyles({
   avatar: {
@@ -164,12 +164,12 @@ const HomeItem =(props) => {
                     </Typography>
               
                     <Typography variant="subtitle2" color="textSecondary">
-                      {t("amount")} : {item.amount}
+                      {t("amount")} : {numberCurrency(item.amount)}
                     </Typography>
 
                   
                     <Typography variant="subtitle2" color="textSecondary">
-                      {t("date_tranfer")} : {convertDate(moment(item.dateTranfer).format('MMMM Do YYYY'))}
+                      {t("date_tranfer")} : {convertDate(moment(item.dateTranfer).format('D MMM YYYY'))}
                     </Typography>
                         
                     <ReadMoreMaster

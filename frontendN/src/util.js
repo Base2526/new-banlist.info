@@ -24,22 +24,36 @@ new Promise((resolve, reject) => {
 });
 
 export const convertDate = (date) =>{
-    const monthNamesThai = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน", "กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤษจิกายน","ธันวาคม"];
-    const monthNameEnglish = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const monthNamesThai = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.", "ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+    const monthNameEnglish = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 
     if(i18n.language.toLowerCase() == 'th'){
 
         date = date.split(" ")
-        let x = date[0];
+        let x = date[1];
         let vx = _.findIndex(monthNameEnglish, (month) => {
           return x.toLowerCase() == month.toLowerCase();
         });
       
-        date[0] = monthNamesThai[vx];
-        date[2] = parseInt(date[2]) + 543;  
-      
+        date[1] = monthNamesThai[vx];
+
+        let year = ( parseInt(date[2]) + 543 ).toString();
+        date[2] = year.substring(year.length-2, year.length);  
+
         return date.join(" ")
     }
 
-    return date;
+    date = date.split(" ")
+    let year = date[2].toString();
+    date[2] = year.substring(year.length-2, year.length);  
+
+    return date.join(" ");
+}
+
+export const numberCurrency = (number) =>{
+    let THBBaht = new Intl.NumberFormat("th-TH", {
+        minimumFractionDigits: 2
+    });
+
+    return THBBaht.format(number)
 }
