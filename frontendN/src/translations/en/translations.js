@@ -30,5 +30,27 @@ export const TRANSLATIONS_EN = {
 
     help: "Help",
 
-    privacy_and_terms : "Privacy & terms"
+    privacy_and_terms : "Privacy & terms",
+
+    phones: "Phones",
+
+    bookmarks: "Bookmarks",
+
+    users: "Users",
+
+    taxonomy: "Taxonomy",
+
+    reports: "Reports",
+
+    developer: "Developer",
+
+    notification: "Notification",
+
+    profile: "Profile",
+
+    see_more: "See more...",
+
+    logout: "Logout",
+
+    email: "Email"
 };

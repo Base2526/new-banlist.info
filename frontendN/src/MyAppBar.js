@@ -168,7 +168,7 @@ const MyAppBar = (props) =>{
                           <MenuItem onClick={()=>{
                             history.push("/me")
                             handleClose()
-                          }}>Profiles</MenuItem>
+                          }}>{t("profile")}</MenuItem>
                           {/* <MenuItem onClick={()=>{
                             logout()
                             history.push("/")

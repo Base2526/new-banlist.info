@@ -93,7 +93,7 @@ const Breadcs = ({ title }) => {
               component={Link}
               to={`/post/${postMatches.params.jobid}/edit`}
             >
-              Edit post {/*({postMatches.params.jobid}) */}
+              {t("edit_post")}
             </MuiLink>
           )}
           {commentsMatches && (
@@ -116,7 +116,7 @@ const Breadcs = ({ title }) => {
           )}
           {usersMatches && (
             <MuiLink component={Link} to="/users">
-              users
+              {t("users")}
             </MuiLink>
           )}
           {newUserMatches && (
@@ -208,7 +208,7 @@ const Breadcs = ({ title }) => {
           )}
           {notificationMatches && (
             <MuiLink component={Link} to="/notification">
-              Notification
+              {t("notification")}
             </MuiLink>
           )}
           {messengerMatches && (
@@ -218,7 +218,7 @@ const Breadcs = ({ title }) => {
           )}
           {bookmarksMatches && (
             <MuiLink component={Link} to="/bookmarks">
-              Bookmarks
+              {t("bookmarks")}
             </MuiLink>
           )}
           {/* {reportsMatches && (
@@ -233,7 +233,7 @@ const Breadcs = ({ title }) => {
           )}
           {reportMatches && (
             <MuiLink component={Link} to="/report">
-              Report
+              {t("reports")}
             </MuiLink>
           )}
           {treportListMatches && (
@@ -285,7 +285,7 @@ const Breadcs = ({ title }) => {
               component={Link}
               to={`/me`}
             >
-              Profile
+              {t("profile")}
             </MuiLink>
           )}
 
@@ -307,7 +307,7 @@ const Breadcs = ({ title }) => {
 
           {phonesMatches && (
             <MuiLink component={Link} to="/phones">
-              Phones
+              {t("phones")}
             </MuiLink>
           )}
 
@@ -366,7 +366,7 @@ const Breadcs = ({ title }) => {
           {
             developerMatche && (
               <MuiLink component={Link} to="/developer">
-                Developer
+                {t("developer")}
               </MuiLink>
             )
           }
