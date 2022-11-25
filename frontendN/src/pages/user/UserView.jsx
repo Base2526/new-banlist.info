@@ -15,6 +15,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useHistory, useLocation } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { connect } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 import {  gqlUser, 
           gqlConversations, 
@@ -32,10 +33,9 @@ import ItemFollowing from "./ItemFollowing"
 
 import ReportDialog from "../../components/report"
 
-
-
 const UserView = (props) => {
   let history = useHistory();
+  const { t } = useTranslation();
   let { pathname } = useLocation();
   let { id } = useParams();
   let { user } = props
@@ -177,9 +177,7 @@ const UserView = (props) => {
     console.log("userValue :", userValue, user)
 
     return  <div>
-              <Typography variant="overline" display="block" gutterBottom>
-                Profile
-              </Typography>
+              <Typography variant="overline" display="block" gutterBottom>{t("profile")}</Typography>
               <Stack direction="row" spacing={2}>
                 <Avatar
                   className={"user-profile"}
@@ -194,10 +192,10 @@ const UserView = (props) => {
                 />
               </Stack>
               <Typography variant="overline" display="block" gutterBottom>
-                Name : {userValue.displayName}
+                {t("name")} : {userValue.displayName}
               </Typography>
               <Typography variant="overline" display="block" gutterBottom>
-                Email : {userValue.email}
+                {t("email")} : {userValue.email}
               </Typography>
 
               <ItemFollower id={id} onFollower={(e)=>setDialogFollower(true)} />

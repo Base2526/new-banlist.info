@@ -25,6 +25,7 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import deepdash from "deepdash";
 deepdash(_);
+import { useTranslation } from "react-i18next";
 
 import { gqlPost, gqlCreateAndUpdateBookmark, 
         gqlIsBookmark, gqlCreateAndUpdateComment, 
@@ -44,6 +45,7 @@ import ReportDialog from "../../components/report"
 let unsubscribe =null
 const Detail = (props) => {
     let history = useHistory();
+    const { t } = useTranslation();
 
     let { pathname } = useLocation();
     let { id } = useParams();
@@ -172,13 +174,7 @@ const Detail = (props) => {
         });
     }
 
-    /*
-    shareValues.data.shareByPostId.data
-    */
-
     const menuShare = (item) =>{
-
-        console.log("window.location.href :", window.location)
         return  <Menu
                   anchorEl={anchorElShare}
                   keepMounted
@@ -200,49 +196,6 @@ const Detail = (props) => {
                       role: "listbox"
                   }}
                   >
-                  {/* <MenuItem onClose={(e)=>{
-                    setAnchorElShare(null);
-                  }}>
-                    <div onClick={(e)=>{
-                        if(_.isEmpty(user)){
-                            setDialogLoginOpen(true)
-                        }else{
-                            onCreateShare({ variables: { input: {
-                                    postId: item._id,
-                                    userId: user._id,
-                                    destination: "facebook"
-                                }
-                                }
-                            });  
-                        }
-                        setAnchorElShare(null);
-                    }}>
-                        <FacebookIcon size={32} round /> Facebook
-                    </div>
-                  </MenuItem>{" "}
-                  <MenuItem onClose={(e)=>{
-                    setAnchorElShare(null);
-                  }}>
-
-                    <div onClick={(e)=>{
-
-                        if(_.isEmpty(user)){
-                            setDialogLoginOpen(true)
-                        }else{
-                            onCreateShare({ variables: { input: {
-                                    postId: item._id,
-                                    userId: user._id,
-                                    destination: "twitter"
-                                }
-                                }
-                            });  
-                        }
-                        setAnchorElShare(null);
-                    }}>
-                        <TwitterIcon size={32} round />Twitter
-                    </div>
-                  </MenuItem> */}
-
                     <MenuItem onClose={(e)=>setAnchorElShare(null)}>
                     <FacebookShareButton
                         url={ window.location.origin + "/detail/" + item._id}
@@ -402,20 +355,20 @@ const Detail = (props) => {
                                     </div>
                                 </div>
                                 <Typography variant="subtitle2" color="textSecondary">
-                                    หัวข้อร้องเรียน : {post.title}
+                                    {t("search_by_title")} : {post.title}
                                 </Typography>
                                 <Typography
                                     style={{ cursor: "pointer" }}
                                     variant="subtitle2"
                                     color="textSecondary">
-                                    ชื่อ-นามสกุล : {post.nameSubname}
+                                    {t("search_by_name_surname")} : {post.nameSubname}
                                 </Typography>
                         
                                 <Typography variant="subtitle2" color="textSecondary">
-                                    ยอดเงิน : {post.amount}
+                                    {t("amount")} : {post.amount}
                                 </Typography>
 
-                                <Typography variant="subtitle2" color="textSecondary">เบอร์โทร : 
+                                <Typography variant="subtitle2" color="textSecondary">{t("search_by_tel")} : 
                                     <ul>
                                         {
                                             _.map(post.tels, (v)=>{
@@ -425,19 +378,13 @@ const Detail = (props) => {
                                     </ul>
                                 </Typography>
 
-                                <Typography variant="subtitle2" color="textSecondary">ธนาคาร : 
-                                    <ul>
-                                        {
-                                            _.map(post.banks, (v)=><ItemBank item={v}/>)
-                                        }
-                                    </ul>
+                                <Typography variant="subtitle2" color="textSecondary">{t("search_by_id_bank")} : 
+                                    <ul>{_.map(post.banks, (v)=><ItemBank item={v}/>)}</ul>
                                 </Typography>
-
-                                {/* TEL. */}
                                 <Typography variant="subtitle2" color="textSecondary">
-                                    วันที่โอน : {moment(post.dateTranfer).format('MMMM Do YYYY')}
+                                    {t("date_tranfer")} : {moment(post.dateTranfer).format('MMMM Do YYYY')}
                                 </Typography>
-                                <Typography variant="subtitle2" color="textSecondary">{"รายละเอียด :" + post.description}</Typography>
+                                <Typography variant="subtitle2" color="textSecondary">{t("detail")} : {post.description}</Typography>
                             </div>
                             <div className="col4">
                                 <ItemComment 
@@ -525,9 +472,7 @@ const Detail = (props) => {
     );
 };
 
-// export default Detail;
 const mapStateToProps = (state, ownProps) => {
-    console.log("mapStateToProps  :", state)
     return {
       user: state.auth.user,
     }

@@ -21,13 +21,15 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { useQuery } from "@apollo/client";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
+import { useTranslation } from "react-i18next";
 
 import {gqlBookmarks, gqlPost, gqlUser} from "../../gqlQuery"
-// import Footer from "../footer";
+
 import Table from "../../TableContainer"
   
 const BookmarkList = (props) => {
   let history = useHistory();
+  const { t } = useTranslation();
 
   const [pageOptions, setPageOptions] = useState([30, 50, 100]);  
   const [pageIndex, setPageIndex] = useState(0);  
@@ -68,87 +70,82 @@ const BookmarkList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: 'Bookmark list',
-        columns: [
-          {
-            Header: 'Username',
-            accessor: 'userId',
-            // Use a two-stage aggregator here to first
-            // count the total rows being aggregated,
-            // then sum any of those counts if they are
-            // aggregated further
-            // aggregate: 'count',
-            // Aggregated: ({ value }) => `${value} Names`,
-            Cell: props =>{
+        Header: 'Username',
+        accessor: 'userId',
+        // Use a two-stage aggregator here to first
+        // count the total rows being aggregated,
+        // then sum any of those counts if they are
+        // aggregated further
+        // aggregate: 'count',
+        // Aggregated: ({ value }) => `${value} Names`,
+        Cell: props =>{
 
-              let value = useQuery(gqlUser, {
-                variables: {id: props.row.original.userId},
-                notifyOnNetworkStatusChange: true,
-              });
-    
-              // console.log("value.data.user.data :", value.loading ? "" : value.data.user.data)
-              return  value.loading 
-                      ? <LinearProgress sx={{width:"100px"}} />
-                      : <Typography variant="overline" display="block" gutterBottom>
-                          { value.data.user.data === null ? "" : value.data.user.data.displayName}
-                        </Typography>
-            }
-          },
-          {
-            Header: 'Post name',
-            accessor: 'postId',
-            // Use our custom `fuzzyText` filter on this column
-            // filter: 'fuzzyText',
-            // // Use another two-stage aggregator here to
-            // // first count the UNIQUE values from the rows
-            // // being aggregated, then sum those counts if
-            // // they are aggregated further
-            // aggregate: 'uniqueCount',
-            // Aggregated: ({ value }) => `${value} Unique Names`,
-            Cell: props => {
-              let postValue = useQuery(gqlPost, {
-                variables: {id: props.row.original.postId},
-                notifyOnNetworkStatusChange: true,
-              });
+          let value = useQuery(gqlUser, {
+            variables: {id: props.row.original.userId},
+            notifyOnNetworkStatusChange: true,
+          });
 
-              console.log("postValue :", postValue, props.row.original.postId)
+          // console.log("value.data.user.data :", value.loading ? "" : value.data.user.data)
+          return  value.loading 
+                  ? <LinearProgress sx={{width:"100px"}} />
+                  : <Typography variant="overline" display="block" gutterBottom>
+                      { value.data.user.data === null ? "" : value.data.user.data.displayName}
+                    </Typography>
+        }
+      },
+      {
+        Header: 'Post name',
+        accessor: 'postId',
+        // Use our custom `fuzzyText` filter on this column
+        // filter: 'fuzzyText',
+        // // Use another two-stage aggregator here to
+        // // first count the UNIQUE values from the rows
+        // // being aggregated, then sum those counts if
+        // // they are aggregated further
+        // aggregate: 'uniqueCount',
+        // Aggregated: ({ value }) => `${value} Unique Names`,
+        Cell: props => {
+          let postValue = useQuery(gqlPost, {
+            variables: {id: props.row.original.postId},
+            notifyOnNetworkStatusChange: true,
+          });
 
-              return  postValue.loading 
-                      ? <LinearProgress sx={{width:"100px"}} />
-                      : <Link to={`/detail/${props.row.original.postId}`}>
-                        { _.isEmpty(postValue.data.post.data) ? "" : postValue.data.post.data.title}
-                      </Link>
-      
-              // return  postValue.loading 
-              //         ? <LinearProgress sx={{width:"100px"}} />
-              //         : <Typography variant="overline" display="block" gutterBottom>
-              //             { _.isEmpty(postValue.data.post.data) ? "" : postValue.data.post.data.title}
-              //           </Typography>
-            }
-          },
-          {
-            Header: 'Action',
-            // accessor: 'id',
-            // Use our custom `fuzzyText` filter on this column
-            // filter: 'fuzzyText',
-            // // Use another two-stage aggregator here to
-            // // first count the UNIQUE values from the rows
-            // // being aggregated, then sum those counts if
-            // // they are aggregated further
-            // aggregate: 'uniqueCount',
-            // Aggregated: ({ value }) => `${value} Unique Names`,
-            Cell: props => {
-              console.log("Cell :", props)
-              return  <div className="Btn--posts">
-                        {/* <Link to={`/bookmark/${props.row.original.id}/edit`}>
-                          <button>Edit</button>
-                        </Link> */}
-                        <button><DeleteForeverIcon /> Delete</button>
-                      </div>
-            }
-          },
-        ],
-      }
+          console.log("postValue :", postValue, props.row.original.postId)
+
+          return  postValue.loading 
+                  ? <LinearProgress sx={{width:"100px"}} />
+                  : <Link to={`/detail/${props.row.original.postId}`}>
+                    { _.isEmpty(postValue.data.post.data) ? "" : postValue.data.post.data.title}
+                  </Link>
+  
+          // return  postValue.loading 
+          //         ? <LinearProgress sx={{width:"100px"}} />
+          //         : <Typography variant="overline" display="block" gutterBottom>
+          //             { _.isEmpty(postValue.data.post.data) ? "" : postValue.data.post.data.title}
+          //           </Typography>
+        }
+      },
+      {
+        Header: 'Action',
+        // accessor: 'id',
+        // Use our custom `fuzzyText` filter on this column
+        // filter: 'fuzzyText',
+        // // Use another two-stage aggregator here to
+        // // first count the UNIQUE values from the rows
+        // // being aggregated, then sum those counts if
+        // // they are aggregated further
+        // aggregate: 'uniqueCount',
+        // Aggregated: ({ value }) => `${value} Unique Names`,
+        Cell: props => {
+          console.log("Cell :", props)
+          return  <div className="Btn--posts">
+                    {/* <Link to={`/bookmark/${props.row.original.id}/edit`}>
+                      <button>Edit</button>
+                    </Link> */}
+                    <button><DeleteForeverIcon /> Delete</button>
+                  </div>
+        }
+      },
     ],
     []
   )
@@ -209,25 +206,6 @@ const BookmarkList = (props) => {
                   skipReset={skipResetRef.current}
                   isDebug={false}
                 />
-
-          /*
-              <DataGrid
-                rows={bookmarkValues.data.Bookmarks.data}
-                columns={columns}
-                rowHeight={80}
-
-                pageSize={perPage}
-                onPageSizeChange={(newPerPage) => {
-                  setPerPage(newPerPage)
-                  setPage(0)
-                }}
-                rowsPerPageOptions={pageOptions}
-                page={page}
-                onPageChange={(newPage) =>{
-                  setPage(newPage)
-                }}
-              />
-            */
           }
             
           {openDialogDelete.isOpen && (
@@ -237,10 +215,10 @@ const BookmarkList = (props) => {
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
             >
-              <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
+              <DialogTitle id="alert-dialog-title">{t("confirm_delete")}</DialogTitle>
               <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                  Delete
+                {openDialogDelete.description}
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
@@ -251,12 +229,8 @@ const BookmarkList = (props) => {
     
                     setOpenDialogDelete({ isOpen: false, id: "" });
                   }}
-                >
-                  Delete
-                </Button>
-                <Button variant="contained" onClick={handleClose} autoFocus>
-                  Close
-                </Button>
+                >{t("delete")}</Button>
+                <Button variant="contained" onClick={handleClose} autoFocus>{t("close")}</Button>
               </DialogActions>
             </Dialog>
           )}

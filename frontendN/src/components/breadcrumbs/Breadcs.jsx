@@ -19,7 +19,7 @@ const Breadcs = ({ title }) => {
   const commentMatches = useRouteMatch("/comment/:jobid/edit");
   const usersMatches = useRouteMatch("/users");
   const newUserMatches = useRouteMatch("/user/new");
-  const userMatches = useRouteMatch("/user/:jobid/:mode");
+  const userMatches = useRouteMatch("/user/:uid/:mode");
   const socketsMatches = useRouteMatch("/sockets");
   const newSocketMatches = useRouteMatch("/newSocket");
   const socketMatches = useRouteMatch("/socket/:jobid");
@@ -110,27 +110,19 @@ const Breadcs = ({ title }) => {
             <MuiLink
               component={Link}
               to={`/comment/${commentMatches.params.jobid}/edit`}
-            >
-              Edit comment {/*({commentMatches.params.jobid}) */}
-            </MuiLink>
+            >Edit comment</MuiLink>
           )}
           {usersMatches && (
-            <MuiLink component={Link} to="/users">
-              {t("users")}
-            </MuiLink>
+            <MuiLink component={Link} to="/users">{t("users")}</MuiLink>
           )}
           {newUserMatches && (
-            <MuiLink component={Link} to="/user/new">
-              New user
-            </MuiLink>
+            <MuiLink component={Link} to="/user/new">{t("new_user")}</MuiLink>
           )}
           {userMatches && (
             <MuiLink
               component={Link}
-              to={`/user/${userMatches.params.jobid}/${userMatches.params.mode}`}
-            >
-              {userMatches.params.mode.slice(0,1).toUpperCase() + userMatches.params.mode.slice(1, userMatches.params.mode.length)} user  {/*({userMatches.params.jobid})*/}
-            </MuiLink>
+              to={`/user/${userMatches.params.uid}/${userMatches.params.mode}`}
+            >{ userMatches.params.mode == "view" ? t("view_profile") : t("edit_profile")}</MuiLink>
           )}
           {socketsMatches && (
             <MuiLink component={Link} to="/sockets">
@@ -151,14 +143,10 @@ const Breadcs = ({ title }) => {
             </MuiLink>
           )}
           {rolesMatches && (
-            <MuiLink component={Link} to="/roles">
-              Roles
-            </MuiLink>
+            <MuiLink component={Link} to="/roles">Roles</MuiLink>
           )}
           {newRoleMatches && (
-            <MuiLink component={Link} to="/role/new">
-              New role
-            </MuiLink>
+            <MuiLink component={Link} to="/role/new">New role</MuiLink>
           )}
           {roleMatches && (
             <MuiLink component={Link} to={`/role/${roleMatches.params.jobid}`}>
@@ -332,14 +320,6 @@ const Breadcs = ({ title }) => {
               Contact us list
             </MuiLink>
           )}
-
-          {/* 
-          
-            const newTopicMatches = useRouteMatch("/topic/new");
-  const topicMatches = useRouteMatch("/topic/:id/edit");
-  const topicsMatches = useRouteMatch("/topics");
-          */}
-
           {newTopicMatches && (
             <MuiLink 
               component={Link} 
@@ -362,59 +342,17 @@ const Breadcs = ({ title }) => {
             </MuiLink>
           )}
 
-          
-          {
-            developerMatche && (
+          {developerMatche && (
               <MuiLink component={Link} to="/developer">
                 {t("developer")}
               </MuiLink>
-            )
-          }
-
-          {/* {privacyMatche && (
-            <MuiLink component={Link} to="/privacy">
-              Privacy
-            </MuiLink>
-          )}
-
-          {termsMatche && (
-            <MuiLink component={Link} to="/terms">
-              Terms
-            </MuiLink>
-          )} */}
+            )}
 
           {privacyAndtermsMatche && (
             <MuiLink component={Link} to="/privacy+terms">
               {t("privacy_and_terms")}
             </MuiLink>
           )}
-
-          {/*<Link
-            underline="hover"
-            sx={{ display: "flex", alignItems: "center" }}
-            color="inherit"
-            href="/"
-          >
-            <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-            MUI
-          </Link>
-          <Link
-            underline="hover"
-            sx={{ display: "flex", alignItems: "center" }}
-            color="inherit"
-            href="/material-ui/getting-started/installation/"
-          >
-            <WhatshotIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-            Core
-          </Link>
-          <Typography
-            sx={{ display: "flex", alignItems: "center" }}
-            color="text.primary"
-          >
-            <GrainIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-            Breadcrumb
-          </Typography>
-          */}
         </Breadcrumbs>
       </div>
     </div>

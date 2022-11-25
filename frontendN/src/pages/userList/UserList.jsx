@@ -22,13 +22,14 @@ import { useQuery, useMutation } from "@apollo/client";
 import LinearProgress from '@mui/material/LinearProgress';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
+import { useTranslation } from "react-i18next";
 
 import {gqlUsers, gqlPostsByUser, gqlDeleteUser} from "../../gqlQuery"
-// import Footer from "../footer";
 import Table from "../../TableContainer"
 
 const UserList = (props) => {
   let history = useHistory();
+  const { t } = useTranslation();
 
   const [pageOptions, setPageOptions] = useState([30, 50, 100]);  
   const [pageIndex, setPageIndex] = useState(0);  
@@ -93,89 +94,84 @@ const UserList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: 'User list',
-        columns: [
-          {
-            Header: 'Image',
-            accessor: 'image',
-            Cell: props =>{
-              if(props.row.original.image.length < 1){
-                return <Avatar
-                        sx={{
-                          height: 100,
-                          width: 100
-                        }}>A</Avatar>
-              }
-              return (
-                <div style={{ position: "relative" }}>
-                  <Avatar
+        Header: 'Image',
+        accessor: 'image',
+        Cell: props =>{
+          if(props.row.original.image.length < 1){
+            return <Avatar
                     sx={{
                       height: 100,
                       width: 100
-                    }}
-                    variant="rounded"
-                    alt="Example Alt"
-                    src={props.row.original.image[0].url}
-                  />
-                </div>
-              );
-            }
-          },
-          {
-            Header: 'Display name',
-            accessor: 'displayName',
-            Cell: props => {
-              return  <Link to={`/user/${props.row.original._id}/view`}>
-                        {props.row.original.displayName}
-                      </Link>
-            }
-          },
-          {
-            Header: 'Email',
-            accessor: 'email',
-          },
-          {
-            Header: 'Posts',
-            accessor: 'posts',
-            Cell: props => {
-              const postsByUser = useQuery(gqlPostsByUser, {
-                variables: { userId: props.row.original.id },
-                notifyOnNetworkStatusChange: true,
-              });
+                    }}>A</Avatar>
+          }
+          return (
+            <div style={{ position: "relative" }}>
+              <Avatar
+                sx={{
+                  height: 100,
+                  width: 100
+                }}
+                variant="rounded"
+                alt="Example Alt"
+                src={props.row.original.image[0].url}
+              />
+            </div>
+          );
+        }
+      },
+      {
+        Header: 'Display name',
+        accessor: 'displayName',
+        Cell: props => {
+          return  <Link to={`/user/${props.row.original._id}/view`}>
+                    {props.row.original.displayName}
+                  </Link>
+        }
+      },
+      {
+        Header: 'Email',
+        accessor: 'email',
+      },
+      {
+        Header: 'Posts',
+        accessor: 'posts',
+        Cell: props => {
+          const postsByUser = useQuery(gqlPostsByUser, {
+            variables: { userId: props.row.original.id },
+            notifyOnNetworkStatusChange: true,
+          });
 
-              console.log("postsByUser :", postsByUser.data)
+          console.log("postsByUser :", postsByUser.data)
 
-              if(postsByUser.data == null || postsByUser.data.postsByUser.data == null){
-                return <></>
-              }
+          if(postsByUser.data == null || postsByUser.data.postsByUser.data == null){
+            return <></>
+          }
 
-              return postsByUser.loading
-                    ? <LinearProgress sx={{width:"100px"}} />
-                    : <>{postsByUser.data.postsByUser.data.length }</>  
-            }
-          },
-          {
-            Header: 'Last access',
-            accessor: 'lastAccess',
-          },
-          {
-            Header: 'Action',
-            Cell: props => {
-              console.log("Cell :", props)
+          return postsByUser.loading
+                ? <LinearProgress sx={{width:"100px"}} />
+                : <>{postsByUser.data.postsByUser.data.length }</>  
+        }
+      },
+      {
+        Header: 'Last access',
+        accessor: 'lastAccess',
+      },
+      {
+        Header: 'Action',
+        Cell: props => {
+          console.log("Cell :", props)
 
-              let {_id, displayName} = props.row.original
-              return  <div className="Btn--posts">
-                        <Link to={`/user/${_id}/edit`}>
-                          <button><EditIcon/> Edit</button>
-                        </Link>
-                        <button onClick={(e)=>{
-                          setOpenDialogDelete({ isOpen: true, id: _id, description: displayName });
-                        }}><DeleteForeverIcon/> Delete</button>
-                      </div>
-            }
-          },
-        ],
-      }
+          let {_id, displayName} = props.row.original
+          return  <div className="Btn--posts">
+                    <Link to={`/user/${_id}/edit`}>
+                      <button><EditIcon/>{t("edit")}</button>
+                    </Link>
+                    <button onClick={(e)=>{
+                      setOpenDialogDelete({ isOpen: true, id: _id, description: displayName });
+                    }}><DeleteForeverIcon/>{t("delete")}</button>
+                  </div>
+        }
+      },
     ],
     []
   )
@@ -242,7 +238,7 @@ const UserList = (props) => {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
+            <DialogTitle id="alert-dialog-title">{t("confirm_delete")}</DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
                 {openDialogDelete.description}
@@ -256,12 +252,8 @@ const UserList = (props) => {
 
                   setOpenDialogDelete({ isOpen: false, id: "", description: "" });
                 }}
-              >
-                Delete
-              </Button>
-              <Button variant="contained" onClick={handleClose} autoFocus>
-                Close
-              </Button>
+              >{t("delete")}</Button>
+              <Button variant="contained" onClick={handleClose} autoFocus>{t("close")}</Button>
             </DialogActions>
           </Dialog>
         )}

@@ -21,14 +21,14 @@ import _ from "lodash"
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import { useQuery, useMutation } from "@apollo/client";
+import { useTranslation } from "react-i18next";
 
 import {gqlBanks, gqlDeleteBank} from "../../gqlQuery"
-// import Footer from "../footer";
-
 import Table from "../../TableContainer"
 
 const BankList = (props) => {
   let history = useHistory();
+  const { t } = useTranslation();
 
   const [pageOptions, setPageOptions] = useState([30, 50, 100]);  
   const [pageIndex, setPageIndex] = useState(0);  
@@ -85,56 +85,49 @@ const BankList = (props) => {
   ///////////////////////
   const columns = useMemo(
     () => [
-      {
-        Header: 'Bank list',
-        columns: [
-          {
-            Header: 'Name',
-            accessor: 'name',
-          },
-          {
-            Header: 'Description',
-            accessor: 'description',
-            Cell: props => {
+        {
+          Header: 'Name',
+          accessor: 'name',
+        },
+        {
+          Header: 'Description',
+          accessor: 'description',
+          Cell: props => {
 
-              return (
-                <Box
-                  sx={{
-                    maxHeight: "inherit",
-                    width: "100%",
-                    whiteSpace: "initial",
-                    lineHeight: "16px"
+            return (
+              <Box
+                sx={{
+                  maxHeight: "inherit",
+                  width: "100%",
+                  whiteSpace: "initial",
+                  lineHeight: "16px"
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  gutterBottom
+                  dangerouslySetInnerHTML={{
+                    __html: props.row.original.description
                   }}
-                >
-                  <Typography
-                    variant="body1"
-                    gutterBottom
-                    dangerouslySetInnerHTML={{
-                      __html: props.row.original.description
-                    }}
-                  />
-                </Box>
-              );
-            }
-          },
-          {
-            Header: 'Action',
-            Cell: props => {
-              console.log("Cell :", props)
+                />
+              </Box>
+            );
+          }
+        },
+        {
+          Header: 'Action',
+          Cell: props => {
+            console.log("Cell :", props)
 
-              let {_id, name} = props.row.original
-              return  <div>
-                        <Link to={`/bank/${_id}/edit`}>
-                          <button>Edit</button>
-                        </Link>
-                        <button onClick={(e)=>{
-                          setOpenDialogDelete({ isOpen: true, id: _id, description: name })
-                        }}>Delete</button>
-                      </div>
-            }
-          },
-        ],
-      }
+            let {_id, name} = props.row.original
+            return  <div>
+                      <Link to={`/bank/${_id}/edit`}><button>{t("edit")}</button></Link>
+                      <button onClick={(e)=>{
+                        setOpenDialogDelete({ isOpen: true, id: _id, description: name })
+                      }}>{t("delete")}</button>
+                    </div>
+          }
+        },
     ],
     []
   )
@@ -165,16 +158,6 @@ const BankList = (props) => {
     //   })
     // )
   }
-
-  // After data changes, we turn the flag back off
-  // so that if data actually changes when we're not
-  // editing it, the page is reset
-  // useEffect(() => {
-  //   skipResetRef.current = false
-
-  //   console.log("data :", data)
-  // }, [data])
-
   //////////////////////
 
   return (
@@ -201,11 +184,9 @@ const BankList = (props) => {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
+          <DialogTitle id="alert-dialog-title">{t("confirm_delete")}</DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              {openDialogDelete.description}
-            </DialogContentText>
+            <DialogContentText id="alert-dialog-description">{openDialogDelete.description}</DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button
@@ -215,12 +196,8 @@ const BankList = (props) => {
 
                 setOpenDialogDelete({ isOpen: false, id: "", description: "" });
               }}
-            >
-              Delete
-            </Button>
-            <Button variant="contained" onClick={handleClose} autoFocus>
-              Close
-            </Button>
+            >{t("delete")}</Button>
+            <Button variant="contained" onClick={handleClose} autoFocus>{t("close")}</Button>
           </DialogActions>
         </Dialog>
       )}
@@ -233,8 +210,6 @@ const BankList = (props) => {
           history.push("/bank/new");
         }}
       />
-
-      {/* <Footer /> */}
     </UserListContainer>
   );
 };

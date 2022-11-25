@@ -18,13 +18,14 @@ import Avatar from "@mui/material/Avatar";
 import _ from "lodash"
 import LinearProgress from '@mui/material/LinearProgress';
 import { useQuery } from "@apollo/client";
+import { useTranslation } from "react-i18next";
 
 import {gqlReport, gqlPost, gqlUser, gqlTReport} from "../../gqlQuery"
-// import Footer from "../footer";
 import Table from "../../TableContainer"
   
 const ReportList = (props) => {
     let history = useHistory();
+    const { t } = useTranslation();
   
     const [pageOptions, setPageOptions] = useState([30, 50, 100]);  
     const [pageIndex, setPageIndex] = useState(0);  
@@ -67,69 +68,63 @@ const ReportList = (props) => {
 
      const columns = useMemo(
       () => [
-        // 
         {
-          Header: 'Reports',
-          columns: [
-            {
-              Header: 'Name',
-              accessor: 'userId',
-              Cell: props =>{
-                let value = useQuery(gqlUser, {
-                  variables: {id: props.value},
-                  notifyOnNetworkStatusChange: true,
-                });
-      
-                return  value.loading 
-                        ? <LinearProgress sx={{width:"100px"}} />
-                        : <Typography variant="overline" display="block" gutterBottom>
-                            {value.data.user.data.displayName}
-                          </Typography>
-              }
-            },
-            {
-              Header: 'Category name',
-              accessor: 'categoryId',
-              Cell: props =>{
-                let value = useQuery(gqlTReport, {
-                  variables: {id: props.value},
-                  notifyOnNetworkStatusChange: true,
-                });
+          Header: 'Name',
+          accessor: 'userId',
+          Cell: props =>{
+            let value = useQuery(gqlUser, {
+              variables: {id: props.value},
+              notifyOnNetworkStatusChange: true,
+            });
+  
+            return  value.loading 
+                    ? <LinearProgress sx={{width:"100px"}} />
+                    : <Typography variant="overline" display="block" gutterBottom>
+                        {value.data.user.data.displayName}
+                      </Typography>
+          }
+        },
+        {
+          Header: 'Category name',
+          accessor: 'categoryId',
+          Cell: props =>{
+            let value = useQuery(gqlTReport, {
+              variables: {id: props.value},
+              notifyOnNetworkStatusChange: true,
+            });
 
-                return  value.loading 
-                        ? <LinearProgress sx={{width:"100px"}} />
-                        : <Typography variant="overline" display="block" gutterBottom>
-                            {value.data.TReport.data.name}
-                          </Typography>
-              } 
-            },
-            {
-              Header: 'Post name',
-              accessor: 'postId',
-              Cell: props =>{
-                  let value = useQuery(gqlPost, {
-                    variables: {id:  props.value},
-                    notifyOnNetworkStatusChange: true,
-                  });
+            return  value.loading 
+                    ? <LinearProgress sx={{width:"100px"}} />
+                    : <Typography variant="overline" display="block" gutterBottom>
+                        {value.data.TReport.data.name}
+                      </Typography>
+          } 
+        },
+        {
+          Header: 'Post name',
+          accessor: 'postId',
+          Cell: props =>{
+              let value = useQuery(gqlPost, {
+                variables: {id:  props.value},
+                notifyOnNetworkStatusChange: true,
+              });
 
-                  console.log("postId :", value)
-                  return  value.loading 
-                          ? <LinearProgress sx={{width:"100px"}} />
-                          : <Typography variant="overline" display="block" gutterBottom>
-                              { _.isEmpty(value.data.post.data) ? "" : value.data.post.data.title }
-                            </Typography>
-              }
-            },
-            {
-              Header: 'Description',
-              accessor: 'message',
-              Cell: props => <Typography dangerouslySetInnerHTML={{ __html: props.value }} />
-            },
-            {
-              Header: 'Created At',
-              accessor: 'createdAt',
-            }
-          ],
+              console.log("postId :", value)
+              return  value.loading 
+                      ? <LinearProgress sx={{width:"100px"}} />
+                      : <Typography variant="overline" display="block" gutterBottom>
+                          { _.isEmpty(value.data.post.data) ? "" : value.data.post.data.title }
+                        </Typography>
+          }
+        },
+        {
+          Header: 'Description',
+          accessor: 'message',
+          Cell: props => <Typography dangerouslySetInnerHTML={{ __html: props.value }} />
+        },
+        {
+          Header: 'Created At',
+          accessor: 'createdAt',
         }
       ],
       []
@@ -177,7 +172,6 @@ const ReportList = (props) => {
     return (
       <div className="pl-2 pr-2">
         <UserListContainer className="table-responsive MuiBox-root">
-
           {
             reportValues.loading
             ?  <div><CircularProgress /></div> 
@@ -191,7 +185,6 @@ const ReportList = (props) => {
                   isDebug={false}
                 />
           }
-            
           {openDialogDelete.isOpen && (
             <Dialog
               open={openDialogDelete.isOpen}
@@ -199,10 +192,10 @@ const ReportList = (props) => {
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
             >
-              <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
+              <DialogTitle id="alert-dialog-title">{t("confirm_delete")}</DialogTitle>
               <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                  Delete
+                {openDialogDelete.description}
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
@@ -213,16 +206,11 @@ const ReportList = (props) => {
     
                     setOpenDialogDelete({ isOpen: false, id: "" });
                   }}
-                >
-                  Delete
-                </Button>
-                <Button variant="contained" onClick={handleClose} autoFocus>
-                  Close
-                </Button>
+                >{t('delete')}</Button>
+                <Button variant="contained" onClick={handleClose} autoFocus>{t("close")}</Button>
               </DialogActions>
             </Dialog>
           )}
-          {/* <Footer /> */}
         </UserListContainer>
       </div>
     );
