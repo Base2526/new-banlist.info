@@ -282,11 +282,11 @@ import App from "./App";
 /////////////////////////////////
 
 // replace console.* for disable log on production
-// if (process.env.REACT_APP_NODE_ENV === 'production') {
-//   console.log = () => {}
-//   console.error = () => {}
-//   console.debug = () => {}
-// }
+if (process.env.REACT_APP_NODE_ENV === 'production') {
+  console.log = () => {}
+  console.error = () => {}
+  console.debug = () => {}
+}
 
 ReactGA4.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS4)
 
