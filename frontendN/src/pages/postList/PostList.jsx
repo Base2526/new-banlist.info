@@ -26,14 +26,15 @@ import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import { connect } from "react-redux";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
+import { useTranslation } from "react-i18next";
 
-// import Footer from "../footer";
 import {gqlPosts, gqlBookmarksByPostId, gqlShareByPostId, gqlComment, gqlDeletePost} from "../../gqlQuery"
 import ReadMoreMaster from "../../utils/ReadMoreMaster"
 import Table from "../../TableContainer"
 
 const PostList = (props) => {
   let history = useHistory();
+  const { t } = useTranslation();
 
   let { user } = props
 
@@ -85,11 +86,6 @@ const PostList = (props) => {
   })
   ///////////////
 
-
-  const handleClickOpen = () => {
-    setOpenDialogDelete({ ...openDialogDelete, isOpen: true });
-  };
-
   const handleClose = (event, reason) => {
     if (reason && reason == "backdropClick") 
         return;
@@ -104,11 +100,6 @@ const PostList = (props) => {
   ///////////////////////
   const columns = useMemo(
     () => [
-      // 
-      {
-        Header: 'Post list',
-        accessor: 'id',
-        columns: [
           {
             Header: 'Profile',
             accessor: 'files',
@@ -175,20 +166,6 @@ const PostList = (props) => {
                     </Box>
             }
           },
-          // {
-          //   Header: 'Owner',
-          //   accessor: 'ownerId',
-          //   Cell: props =>{
-          //     let userValue = useQuery(gqlUser, {
-          //       variables: {id: props.value},
-          //       notifyOnNetworkStatusChange: true,
-          //     });
-      
-          //     return userValue.loading 
-          //           ? <LinearProgress sx={{width:"100px"}} />
-          //           : userValue.data.user.data != null ? <Link to={`/user/${userValue.data.user.data.id}/view`}>{userValue.data.user.data.displayName}</Link> : <div />
-          //   } 
-          // },
           {
             Header: 'Comments',
             Cell: props =>{
@@ -262,23 +239,18 @@ const PostList = (props) => {
           {
             Header: 'Action',
             Cell: props => {
-
-              console.log("action :", props.row.original)
-
               let {_id, title}  = props.row.original
               return  <div className="Btn--posts">
                         <Link to={`/post/${_id}/edit`}>
-                          <button><EditIcon/> Edit </button>
+                          <button><EditIcon/>{t("edit")}</button>
                         </Link>
                         <button onClick={(e)=>{
                           setOpenDialogDelete({ isOpen: true, id: _id, description: title });
-                        }}><DeleteForeverIcon/> Delete</button>
+                        }}><DeleteForeverIcon/>{t("delete")}</button>
                       </div>
             }
           },
-        ],
-      }
-    ],
+      ],
     []
   )
 
@@ -309,14 +281,6 @@ const PostList = (props) => {
     // )
   }
 
-  // After data changes, we turn the flag back off
-  // so that if data actually changes when we're not
-  // editing it, the page is reset
-  // useEffect(() => {
-  //   skipResetRef.current = false
-
-  //   console.log("data :", data)
-  // }, [data])
   //////////////////////
 
   return (
@@ -345,7 +309,7 @@ const PostList = (props) => {
               aria-describedby="alert-dialog-description"
               
             >
-              <DialogTitle id="alert-dialog-title" className="text-center" >Delete</DialogTitle>
+              <DialogTitle id="alert-dialog-title" className="text-center" >{t("confirm_delete")}</DialogTitle>
               <DialogContent >
                 <DialogContentText id="alert-dialog-description" >
                   {openDialogDelete.description}
@@ -360,10 +324,10 @@ const PostList = (props) => {
                     setOpenDialogDelete({ isOpen: false, id: "" });
                   }}
                 >
-                  Delete
+                {t("delete")}
                 </Button>
                 <Button variant="contained" onClick={handleClose} autoFocus>
-                  Close
+                {t("close")}
                 </Button>
               </DialogActions>
             </Dialog>

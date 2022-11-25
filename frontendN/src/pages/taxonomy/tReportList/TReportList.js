@@ -79,54 +79,48 @@ const TReportList = (props) => {
 
     const columns = useMemo(
     () => [
-        // 
         {
-        Header: 'Taxonomy Report list',
-        columns: [
-            {
-            Header: 'Name',
-            accessor: 'name',
-            },
-            {
-            Header: 'Description',
-            accessor: 'message',
-            Cell: props => {
+        Header: 'Name',
+        accessor: 'name',
+        },
+        {
+        Header: 'Description',
+        accessor: 'message',
+        Cell: props => {
 
-                return (
-                    <Box
-                        sx={{
-                        maxHeight: "inherit",
-                        width: "100%",
-                        whiteSpace: "initial",
-                        lineHeight: "16px"
-                        }}
+            return (
+                <Box
+                    sx={{
+                    maxHeight: "inherit",
+                    width: "100%",
+                    whiteSpace: "initial",
+                    lineHeight: "16px"
+                    }}
+                >
+                    <Typography
+                    variant="body1"
+                    gutterBottom
+                    dangerouslySetInnerHTML={{
+                        __html: props.row.original.description
+                    }}
                     >
-                        <Typography
-                        variant="body1"
-                        gutterBottom
-                        dangerouslySetInnerHTML={{
-                            __html: props.row.original.description
-                        }}
-                        >
-                        </Typography>
-                    </Box>
-                    );
-            }
-            },
-            {
-            Header: 'Action',
-            Cell: props => {
-                console.log("Cell :", props)
-                return  <div>
-                        <Link to={`/treport/${props.row.original.id}/edit`}>
-                            <button>Edit</button>
-                        </Link>
-                        <button>Delete</button>
-                        </div>
-            }
-            },
-        ],
+                    </Typography>
+                </Box>
+                );
         }
+        },
+        {
+        Header: 'Action',
+        Cell: props => {
+            console.log("Cell :", props)
+            return  <div>
+                    <Link to={`/treport/${props.row.original.id}/edit`}>
+                        <button>Edit</button>
+                    </Link>
+                    <button>Delete</button>
+                    </div>
+        }
+        },
     ],
     []
     )

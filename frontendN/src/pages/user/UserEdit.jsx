@@ -33,6 +33,8 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { useHistory, useLocation } from "react-router-dom";
 
 import { useQuery, useMutation } from "@apollo/client";
+import { useTranslation } from "react-i18next";
+
 import {  gqlUser, 
           gqlRoles, 
           gqlUpdateUser, 
@@ -69,6 +71,8 @@ let initValues =  {
 
 const UserEdit = (props) => {
   let history = useHistory();
+  const { t } = useTranslation();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showCofirmPassword, setShowCofirmPassword] = useState(false);
   const [input, setInput] = useState(initValues);

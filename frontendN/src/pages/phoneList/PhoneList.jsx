@@ -26,14 +26,15 @@ import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import { connect } from "react-redux";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
+import { useTranslation } from "react-i18next";
 
-// import Footer from "../footer";
 import { gqlPhones, gqlDeletePhone } from "../../gqlQuery"
 import ReadMoreMaster from "../../utils/ReadMoreMaster"
 import Table from "../../TableContainer"
 
 const PhoneList = (props) => {
   let history = useHistory();
+  const { t } = useTranslation();
 
   let { user } = props
 
@@ -76,9 +77,7 @@ const PhoneList = (props) => {
   console.log("phonesValue :", phonesValue)
 
   ///////////////
-  const fetchData = useCallback(
-    ({ pageSize, pageIndex }) => {
-
+  const fetchData = useCallback(({ pageSize, pageIndex }) => {
     setPageSize(pageSize)
     setPageIndex(pageIndex)
   })
@@ -95,10 +94,6 @@ const PhoneList = (props) => {
   ///////////////////////
   const columns = useMemo(
     () => [
-      {
-        Header: 'Phone List',
-        accessor: 'id',
-        columns: [
           {
             Header: 'Phones',
             accessor: 'phones',
@@ -132,15 +127,13 @@ const PhoneList = (props) => {
             Cell: props => {
                 let {_id, description} = props.row.original
                 return  <div className="Btn--posts">
-                            <Link to={`/phone/${_id}/edit`}><button><EditIcon/> Edit</button></Link>
+                            <Link to={`/phone/${_id}/edit`}><button><EditIcon/>{t("edit")}</button></Link>
                             <button onClick={(e)=>{
                               setOpenDialogDelete({ isOpen: true, id: _id, description });
-                            }}><DeleteForeverIcon/> Delete</button>
+                            }}><DeleteForeverIcon/>{t("delete")}</button>
                         </div>
             }
           },
-        ],
-      }
     ],
     []
   )
@@ -171,136 +164,113 @@ const PhoneList = (props) => {
     //   })
     // )
   }
-
-  // After data changes, we turn the flag back off
-  // so that if data actually changes when we're not
-  // editing it, the page is reset
-  // useEffect(() => {
-  //   skipResetRef.current = false
-
-  //   console.log("data :", data)
-  // }, [data])
   //////////////////////
 
-  return (
-        <div className="pl-2 pr-2">
-        <Box style={{ flex: 4 }} className="table-responsive">
-          {
-            phonesValue.loading
-            ? <div><CircularProgress /></div> 
-            : <Table
-                columns={columns}
-                data={phonesValue.data.phones.data}
-                fetchData={fetchData}
-                rowsPerPage={pageOptions}
-                updateMyData={updateMyData}
-                skipReset={skipResetRef.current}
-                isDebug={false}
-              />
-          }
-
-          {openDialogDelete.isOpen && (
-            <Dialog
-              open={openDialogDelete.isOpen}
-              onClose={handleClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  {openDialogDelete.description}
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  variant="outlined"
-                  onClick={() => {
-                    handleDelete(openDialogDelete.id);
-
-                    setOpenDialogDelete({ isOpen: false, id: "", description: "" });
-                  }}
-                >
-                  Delete
-                </Button>
-                <Button variant="contained" onClick={handleClose} autoFocus>
-                  Close
-                </Button>
-              </DialogActions>
-            </Dialog>
-          )}
-
-          {lightbox.isOpen && (
-            <Lightbox
-              mainSrc={lightbox.images[lightbox.photoIndex].base64}
-              nextSrc={lightbox.images[(lightbox.photoIndex + 1) % lightbox.images.length].base64}
-              prevSrc={
-                lightbox.images[(lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length].base64
+  return (<div className="pl-2 pr-2">
+            <Box style={{ flex: 4 }} className="table-responsive">
+              {
+                phonesValue.loading
+                ? <div><CircularProgress /></div> 
+                : <Table
+                    columns={columns}
+                    data={phonesValue.data.phones.data}
+                    fetchData={fetchData}
+                    rowsPerPage={pageOptions}
+                    updateMyData={updateMyData}
+                    skipReset={skipResetRef.current}
+                    isDebug={false}
+                  />
               }
-              onCloseRequest={() => {
-                setLightbox({ ...lightbox, isOpen: false });
-              }}
-              onMovePrevRequest={() => {
-                setLightbox({
-                  ...lightbox,
-                  photoIndex:
-                    (lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length
-                });
-              }}
-              onMoveNextRequest={() => {
-                setLightbox({
-                  ...lightbox,
-                  photoIndex: (lightbox.photoIndex + 1) % lightbox.images.length
-                });
-              }}
-            />
-          )}
 
-          <SpeedDial
-            ariaLabel="SpeedDial basic example"
-            sx={{ position: 'absolute', bottom: 16, right: 16 }}
-            icon={<SpeedDialIcon />}>
-            {
-              _.map([
-                      // { icon: <PostAddIcon />, name: 'Post', id: 1 },
-                      { icon: <AddIcCallIcon />, name: 'Phone', id: 2 },
-                    ], (action) => (
-                      <SpeedDialAction
-                        key={action.name}
-                        icon={action.icon}
-                        tooltipTitle={action.name}
-                        tooltipOpen
-                        onClick={(e)=>{
-                          switch(action.id){
-                            // case 1:{
-                            //   history.push({ pathname: "/post/new", state: {from: "/"} });
-                            //   break;
-                            // }
+              {openDialogDelete.isOpen && (
+                <Dialog
+                  open={openDialogDelete.isOpen}
+                  onClose={handleClose}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">{t("confirm_delete")}</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      {openDialogDelete.description}
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      variant="outlined"
+                      onClick={() => {
+                        handleDelete(openDialogDelete.id);
 
-                            case 2:{
-                              history.push({ pathname: "/phone/new", state: {from: "/"} });
-                              break;
-                            }
-                          }
-                        }}
-                      />
-                    ))
-            }
-          </SpeedDial>
-          
-          {/* <Footer /> */}
-        </Box>
-        </div>
-     
-  );
+                        setOpenDialogDelete({ isOpen: false, id: "", description: "" });
+                      }}
+                    >{t("delete")}</Button>
+                    <Button variant="contained" onClick={handleClose} autoFocus>{t("close")}</Button>
+                  </DialogActions>
+                </Dialog>
+              )}
+
+              {lightbox.isOpen && (
+                <Lightbox
+                  mainSrc={lightbox.images[lightbox.photoIndex].base64}
+                  nextSrc={lightbox.images[(lightbox.photoIndex + 1) % lightbox.images.length].base64}
+                  prevSrc={
+                    lightbox.images[(lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length].base64
+                  }
+                  onCloseRequest={() => {
+                    setLightbox({ ...lightbox, isOpen: false });
+                  }}
+                  onMovePrevRequest={() => {
+                    setLightbox({
+                      ...lightbox,
+                      photoIndex:
+                        (lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length
+                    });
+                  }}
+                  onMoveNextRequest={() => {
+                    setLightbox({
+                      ...lightbox,
+                      photoIndex: (lightbox.photoIndex + 1) % lightbox.images.length
+                    });
+                  }}
+                />
+              )}
+
+              <SpeedDial
+                ariaLabel="SpeedDial basic example"
+                sx={{ position: 'absolute', bottom: 16, right: 16 }}
+                icon={<SpeedDialIcon />}>
+                {
+                  _.map([
+                          { icon: <AddIcCallIcon />, name: 'Phone', id: 2 },
+                        ], (action) => (
+                          <SpeedDialAction
+                            key={action.name}
+                            icon={action.icon}
+                            tooltipTitle={action.name}
+                            tooltipOpen
+                            onClick={(e)=>{
+                              switch(action.id){
+                                // case 1:{
+                                //   history.push({ pathname: "/post/new", state: {from: "/"} });
+                                //   break;
+                                // }
+
+                                case 2:{
+                                  history.push({ pathname: "/phone/new", state: {from: "/"} });
+                                  break;
+                                }
+                              }
+                            }}
+                          />
+                        ))
+                }
+              </SpeedDial>
+            </Box>
+          </div>);
 };
 
-// export default PhoneList;
-
 const mapStateToProps = (state, ownProps) => {
-  return {
-    user: state.auth.user,
-  }
+  return {user: state.auth.user}
 };
 
 export default connect( mapStateToProps, null )(PhoneList);

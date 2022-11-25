@@ -43,6 +43,8 @@ export const TRANSLATIONS_EN = {
     bookmarks: "Bookmarks",
 
     users: "Users",
+    edit_user: "Edit",
+    new_user: "New user",
 
     taxonomy: "Taxonomy",
 
@@ -53,6 +55,8 @@ export const TRANSLATIONS_EN = {
     notification: "Notification",
 
     profile: "Profile",
+    view_profile: "View profile",
+    edit_profile: "Edit profile",
 
     see_more: "See more...",
 
@@ -60,8 +64,13 @@ export const TRANSLATIONS_EN = {
 
     email: "Email",
 
+    name: "Name",
     username: "Username",
     password: "Password",
 
-    login_or_sign_up_to_leave_a_comment : "Log in or sign up to leave a comment"
+    confirm_delete: "Confirm delete",
+    close: "Close",
+
+    login_or_sign_up_to_leave_a_comment : "Log in or sign up to leave a comment",
+
 };

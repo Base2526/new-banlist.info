@@ -25,13 +25,14 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import _ from "lodash"
 import { useQuery } from "@apollo/client";
-import { gqlDblog } from "../../gqlQuery"
-// import Footer from "../footer";
+import { useTranslation } from "react-i18next";
 
+import { gqlDblog } from "../../gqlQuery"
 import Table from "../../TableContainer"
 
 const DblogList = (props) => {
   let history = useHistory();
+  const { t } = useTranslation();
 
   const [pageOptions, setPageOptions] = useState([100, 500, 1000]);  
   const [pageIndex, setPageIndex] = useState(0);  
@@ -74,18 +75,13 @@ const DblogList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: 'DbLog list',
-        columns: [
-          {
-            Header: 'Name',
-            accessor: 'level',
-          },
-          {
-            Header: 'Description',
-            accessor: 'message',
-            Cell: props => <Typography dangerouslySetInnerHTML={{ __html: props.value }} />
-          }
-        ],
+        Header: 'Name',
+        accessor: 'level',
+      },
+      {
+        Header: 'Description',
+        accessor: 'message',
+        Cell: props => <Typography dangerouslySetInnerHTML={{ __html: props.value }} />
       }
     ],
     []
@@ -156,11 +152,9 @@ const DblogList = (props) => {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
+            <DialogTitle id="alert-dialog-title">{t("confirm_delete")}</DialogTitle>
             <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                Delete
-              </DialogContentText>
+              <DialogContentText id="alert-dialog-description">{openDialogDelete.description}</DialogContentText>
             </DialogContent>
             <DialogActions>
               <Button
@@ -170,16 +164,11 @@ const DblogList = (props) => {
 
                   setOpenDialogDelete({ isOpen: false, id: "" });
                 }}
-              >
-                Delete
-              </Button>
-              <Button variant="contained" onClick={handleClose} autoFocus>
-                Close
-              </Button>
+              >{t("delete")}</Button>
+              <Button variant="contained" onClick={handleClose} autoFocus>{t("close")}</Button>
             </DialogActions>
           </Dialog>
         )}
-        {/* <Footer /> */}
       </Box>
     </div>
   );

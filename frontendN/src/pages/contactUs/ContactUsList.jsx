@@ -20,13 +20,14 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { useQuery } from "@apollo/client";
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import { useTranslation } from "react-i18next";
 
 import {gqlReport, gqlPost, gqlUser, gqlTReport} from "../../gqlQuery"
-// import Footer from "../footer";
 import Table from "../../TableContainer"
   
 const ContactUsList = (props) => {
     let history = useHistory();
+    const { t } = useTranslation();
   
     const [pageOptions, setPageOptions] = useState([30, 50, 100]);  
     const [pageIndex, setPageIndex] = useState(0);  
@@ -69,10 +70,6 @@ const ContactUsList = (props) => {
 
      const columns = useMemo(
       () => [
-        // 
-        {
-          Header: 'Contact us list',
-          columns: [
             {
               Header: 'Name',
               accessor: 'userId',
@@ -131,8 +128,6 @@ const ContactUsList = (props) => {
               Header: 'Created At',
               accessor: 'createdAt',
             }
-          ],
-        }
       ],
       []
     )

@@ -44,6 +44,8 @@ export const TRANSLATIONS_TH = {
     bookmarks: "บุ๊คมาร์ค",
 
     users: "บุคคล",
+    edit_user: "แก้ไข",
+    new_user: "เพิ่มสมาชิกใหม่",
 
     taxonomy: "หมวดหมู่",
 
@@ -54,6 +56,8 @@ export const TRANSLATIONS_TH = {
     notification: "แจ้งเตือน",
 
     profile: "โปรไฟล์",
+    view_profile: "ดูโปรไฟล์",
+    edit_profile: "แก้ไขโปรไฟล์",
 
     see_more: "อ่านต่อ...",
 
@@ -61,8 +65,12 @@ export const TRANSLATIONS_TH = {
 
     email: "อีเมลล์",
 
+    name: "ชื่อ",
     username: "ชื่อผู้ใช้งาน",
     password: "รหัสผ่าน",
+
+    confirm_delete: "ยืนยันการลบ",
+    close: "ปิด",
 
     login_or_sign_up_to_leave_a_comment : "เข้าสู่ระบบก่อน สามารถคอมเม้นต์ได้"
 };

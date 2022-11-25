@@ -687,7 +687,7 @@ const Post = (props) => {
 
                           </div>
                           <Button type="submit" variant="contained" color="primary">
-                            Update
+                            {t("update")}
                           </Button>
                         </Box>
                       </LocalizationProvider>
@@ -747,12 +747,7 @@ const Post = (props) => {
   return (
     <div className="page-post pl-2 pr-2 mb-4">
       <div className="MuiBox-root-postinss">
-      {
-        
-        mainView()
-       
-      }
-     
+      { mainView() }
       {snackbar.open && (
         <PopupSnackbar
           isOpen={snackbar.open}
@@ -762,8 +757,6 @@ const Post = (props) => {
           }}
         />
       )}
-
-      {/* <Footer /> */}
       </div>
     </div>
   );

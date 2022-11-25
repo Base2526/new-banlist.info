@@ -68,67 +68,62 @@ const ShareList = (props) => {
   ///////////////////////
   const columns = useMemo(
     () => [
-      {
-        Header: 'Share list',
-        columns: [
-          {
-            Header: 'Username',
-            Cell: props => {
-              let value = useQuery(gqlUser, {
-                variables: {id: props.row.original.userId},
-                notifyOnNetworkStatusChange: true,
-              });
-      
-              return  value.loading 
-                      ? <LinearProgress sx={{width:"100px"}} />
-                      : <Typography variant="overline" display="block" gutterBottom>
-                          {value.data.user.data.displayName}
-                        </Typography>
-            }
-          },
-          {
-            Header: 'Post name',
-            accessor: 'postId',
-            Cell: props => {
-              let postValue = useQuery(gqlPost, {
-                variables: {id: props.value},
-                notifyOnNetworkStatusChange: true,
-              });
-      
-              return  postValue.loading 
-                      ? <LinearProgress sx={{width:"100px"}} />
-                      : <Typography variant="overline" display="block" gutterBottom>
-                          {_.isEmpty(postValue.data.post.data) ? "" : postValue.data.post.data.title}
-                        </Typography>
-              
-            }
-          },
-          {
-            Header: 'Description',
-            accessor: 'description',
-            Cell: props => {  
-              return  <Typography>
-                        {props.value}
+        {
+          Header: 'Username',
+          Cell: props => {
+            let value = useQuery(gqlUser, {
+              variables: {id: props.row.original.userId},
+              notifyOnNetworkStatusChange: true,
+            });
+    
+            return  value.loading 
+                    ? <LinearProgress sx={{width:"100px"}} />
+                    : <Typography variant="overline" display="block" gutterBottom>
+                        {value.data.user.data.displayName}
                       </Typography>
-            }
-          },
-          {
-            Header: 'Action',
-            Cell: props => {
-              return (
-                <ButtonWrapper>
-                  <DeleteOutline
-                    className="deleteBtn"
-                    onClick={() => {
-                      setOpenDialogDelete({ isOpen: true, id: props.row.original.id });
-                    }}
-                  />
-                </ButtonWrapper>
-              );
-            }
           }
-        ],
-      }
+        },
+        {
+          Header: 'Post name',
+          accessor: 'postId',
+          Cell: props => {
+            let postValue = useQuery(gqlPost, {
+              variables: {id: props.value},
+              notifyOnNetworkStatusChange: true,
+            });
+    
+            return  postValue.loading 
+                    ? <LinearProgress sx={{width:"100px"}} />
+                    : <Typography variant="overline" display="block" gutterBottom>
+                        {_.isEmpty(postValue.data.post.data) ? "" : postValue.data.post.data.title}
+                      </Typography>
+            
+          }
+        },
+        {
+          Header: 'Description',
+          accessor: 'description',
+          Cell: props => {  
+            return  <Typography>
+                      {props.value}
+                    </Typography>
+          }
+        },
+        {
+          Header: 'Action',
+          Cell: props => {
+            return (
+              <ButtonWrapper>
+                <DeleteOutline
+                  className="deleteBtn"
+                  onClick={() => {
+                    setOpenDialogDelete({ isOpen: true, id: props.row.original.id });
+                  }}
+                />
+              </ButtonWrapper>
+            );
+          }
+        }
     ],
     []
   )

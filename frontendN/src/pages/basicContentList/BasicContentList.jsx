@@ -24,13 +24,14 @@ import _ from "lodash"
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import { useQuery, useMutation } from "@apollo/client";
+import { useTranslation } from "react-i18next";
 
 import {gqlBasicContents, gqlDeleteBasicContent} from "../../gqlQuery"
-// import Footer from "../footer";
 import Table from "../../TableContainer"
 
 const BasicContentList = (props) => {
   let history = useHistory();
+  const { t } = useTranslation();
 
   const [pageOptions, setPageOptions] = useState([30, 50, 100]);  
   const [pageIndex, setPageIndex] = useState(0);  
@@ -87,57 +88,52 @@ const BasicContentList = (props) => {
 
   const columns = useMemo(
     () => [
-      {
-        Header: 'Basic content list',
-        columns: [
-          {
-            Header: 'Name',
-            accessor: 'name',
-            // Use a two-stage aggregator here to first
-            // count the total rows being aggregated,
-            // then sum any of those counts if they are
-            // aggregated further
-            // aggregate: 'count',
-            // Aggregated: ({ value }) => `${value} Names`,
-          },
-          {
-            Header: 'Description',
-            accessor: 'description',
-            // Use our custom `fuzzyText` filter on this column
-            // filter: 'fuzzyText',
-            // // Use another two-stage aggregator here to
-            // // first count the UNIQUE values from the rows
-            // // being aggregated, then sum those counts if
-            // // they are aggregated further
-            // aggregate: 'uniqueCount',
-            // Aggregated: ({ value }) => `${value} Unique Names`,
-            Cell: props => <Typography dangerouslySetInnerHTML={{ __html: props.value }} />
-          },
-          {
-            Header: 'Action',
-            // accessor: '_id',
-            // Use our custom `fuzzyText` filter on this column
-            // filter: 'fuzzyText',
-            // // Use another two-stage aggregator here to
-            // // first count the UNIQUE values from the rows
-            // // being aggregated, then sum those counts if
-            // // they are aggregated further
-            // aggregate: 'uniqueCount',
-            // Aggregated: ({ value }) => `${value} Unique Names`,
-            Cell: props => {
-              let {_id, name} = props.row.original
-              return  <div>
-                        <Link to={`/basic-content/${_id}/edit`}>
-                          <button>Edit</button>
-                        </Link>
-                        <button onClick={(e)=>{
-                          setOpenDialogDelete({ isOpen: true, id: _id, description: name })
-                        }}>Delete</button>
-                      </div>
-            }
-          },
-        ],
-      }
+        {
+          Header: 'Name',
+          accessor: 'name',
+          // Use a two-stage aggregator here to first
+          // count the total rows being aggregated,
+          // then sum any of those counts if they are
+          // aggregated further
+          // aggregate: 'count',
+          // Aggregated: ({ value }) => `${value} Names`,
+        },
+        {
+          Header: 'Description',
+          accessor: 'description',
+          // Use our custom `fuzzyText` filter on this column
+          // filter: 'fuzzyText',
+          // // Use another two-stage aggregator here to
+          // // first count the UNIQUE values from the rows
+          // // being aggregated, then sum those counts if
+          // // they are aggregated further
+          // aggregate: 'uniqueCount',
+          // Aggregated: ({ value }) => `${value} Unique Names`,
+          Cell: props => <Typography dangerouslySetInnerHTML={{ __html: props.value }} />
+        },
+        {
+          Header: 'Action',
+          // accessor: '_id',
+          // Use our custom `fuzzyText` filter on this column
+          // filter: 'fuzzyText',
+          // // Use another two-stage aggregator here to
+          // // first count the UNIQUE values from the rows
+          // // being aggregated, then sum those counts if
+          // // they are aggregated further
+          // aggregate: 'uniqueCount',
+          // Aggregated: ({ value }) => `${value} Unique Names`,
+          Cell: props => {
+            let {_id, name} = props.row.original
+            return  <div>
+                      <Link to={`/basic-content/${_id}/edit`}>
+                        <button>{t("edit")}</button>
+                      </Link>
+                      <button onClick={(e)=>{
+                        setOpenDialogDelete({ isOpen: true, id: _id, description: name })
+                      }}>{t("delete")}</button>
+                    </div>
+          }
+        },
     ],
     []
   )
@@ -309,7 +305,7 @@ const BasicContentList = (props) => {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
+          <DialogTitle id="alert-dialog-title">{t("confirm_delete")}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               {openDialogDelete.description}
@@ -323,12 +319,8 @@ const BasicContentList = (props) => {
 
                 setOpenDialogDelete({ isOpen: false, id: "", description: "" });
               }}
-            >
-              Delete
-            </Button>
-            <Button variant="contained" onClick={handleClose} autoFocus>
-              Close
-            </Button>
+            >{t("delete")}</Button>
+            <Button variant="contained" onClick={handleClose} autoFocus>{t("close")}</Button>
           </DialogActions>
         </Dialog>
       )}
@@ -341,7 +333,6 @@ const BasicContentList = (props) => {
           history.push("/basic-content/new");
         }}
       />
-      {/* <Footer /> */}
     </UserListContainer>
   );
 };
