@@ -1,5 +1,7 @@
 export const TRANSLATIONS_EN = {
     welcome:"Welcome to the tutorial",
+
+    welcome_to_banlist: "Welcome to Banlist",
     label_keyword_search: "Keyword search",
 
     home: "Home",
@@ -26,7 +28,11 @@ export const TRANSLATIONS_EN = {
     new_phone: "New phone",
 
     create: "Create",
+    edit: "Edit",
     update: "Update",
+    delete: "Delete",
+
+    cancel: "Cancel",
 
     help: "Help",
 
@@ -52,5 +58,10 @@ export const TRANSLATIONS_EN = {
 
     logout: "Logout",
 
-    email: "Email"
+    email: "Email",
+
+    username: "Username",
+    password: "Password",
+
+    login_or_sign_up_to_leave_a_comment : "Log in or sign up to leave a comment"
 };

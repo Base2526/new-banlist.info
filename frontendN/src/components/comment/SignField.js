@@ -1,8 +1,12 @@
 import React, { useContext } from 'react'
+import { useTranslation } from "react-i18next";
+
 import { ActionContext } from './ActionContext'
 
 const SignField = ({onSignin}) => {
   const actions = useContext(ActionContext)
+
+  const { t } = useTranslation();
 
   const handleDivClick = (e) => {
     onSignin(e)
@@ -15,16 +19,14 @@ const SignField = ({onSignin}) => {
 
   return (
     <div className={"signBox"}>
-      <div className={"signLine"}>
-        Log in or sign up to leave a comment
-      </div>
+      <div className={"signLine"}>{t("login_or_sign_up_to_leave_a_comment")}</div>
       <div>
         <button
           className={"loginBtn"}
           name='login'
           onClick={(e) => handleDivClick(e)}
         >
-          Log In
+          {t("login")}
         </button>
         {/* <button
           className={"signBtn"}

@@ -16,11 +16,13 @@ import Avatar from '@mui/material/Avatar'
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery, useMutation } from "@apollo/client";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
 
 import { ActionContext } from './ActionContext'
 
 import { gqlUser } from "../../gqlQuery"
 import _ from 'lodash';
+import { t } from 'i18next';
 
 const useStyles = makeStyles({
   link: {
@@ -53,7 +55,7 @@ const useStyles = makeStyles({
 const CommentStructure = (props) => {
   let { i, reply, parentId } = props
 
-  
+  const { t } = useTranslation();
 
   const classes = useStyles();
 
@@ -156,9 +158,9 @@ const CommentStructure = (props) => {
                   disabled={!actions.user}>
                   <ReplyIcon/>Reply
                 </IconButton>
-                <Typography variant="subtitle2" gutterBottom component="div">{moment.unix(i.updated / 1000).fromNow()}</Typography>
+                <Typography variant="caption" gutterBottom component="div">{moment.unix(i.updated / 1000).fromNow()}</Typography>
               </div>
-            : <div />
+            : <Typography variant="caption" gutterBottom component="div" style={{ marginLeft: '.5rem' }}>{' '}{moment.unix(i.updated / 1000).fromNow()}</Typography>
           }
           
         </div>
@@ -201,14 +203,14 @@ const CommentStructure = (props) => {
                 actions.handleAction(i.comId, edit)
                 handleAnchorClose()
               }}>
-                Edit
+                {t("edit")}
               </MenuItem>
               <MenuItem onClick={(ev)=>{
                 // actions.handleAction(i.comId, edit)
                 handleClickOpenDialog(ev)
                 handleAnchorClose()
               }}>
-                Delete
+                {t("delete")}
               </MenuItem>
             </Menu>
             

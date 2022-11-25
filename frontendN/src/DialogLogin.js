@@ -23,9 +23,13 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import utf8 from "utf8";
 import base64 from 'base-64';
 
+import { useTranslation } from "react-i18next";
+
 import { gqlLogin, gqlConversations, gqlPosts, gqlHomes, gqlLoginWithSocial } from "./gqlQuery"
 
 const DialogLogin = (props) => {
+
+  const { t } = useTranslation();
   
   const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   const facebookAppId =  process.env.REACT_APP_FACEBOOK_APPID
@@ -270,7 +274,7 @@ const DialogLogin = (props) => {
   const formUserLogin = () =>{
     return  <form onSubmit={handleSubmit}>
               <div className="d-flex form-input">
-                <label>Username </label>
+                <label>{t("username")}</label>
                 <div className="position-relative wrapper-form">
                   <input type="text" className="input-bl-form" name="username" value={input.username} onChange={onInputChange} required/>
                   <AccountCircle />
@@ -278,13 +282,13 @@ const DialogLogin = (props) => {
                
               </div>
               <div className="d-flex form-input">
-                <label>Password </label>
+                <label>{t("password")}</label>
                 <div className="position-relative wrapper-form">
                   <input type="password" className="input-bl-form" name="password" value={input.password} onChange={onInputChange} required />
                   <LockIcon />
                 </div>
               </div>
-              <button type="submit" >Login </button>
+              <button type="submit">{t("login")}</button>
             </form>
   }
 
@@ -308,12 +312,10 @@ const DialogLogin = (props) => {
     }} 
     open={open}>
       
-      <DialogTitle className="text-center">เข้าสู่ระบบ Banlist</DialogTitle>
+      <DialogTitle className="text-center">{t("welcome_to_banlist")}</DialogTitle>
 
       <DialogContent>
-        <DialogContentText id="alert-dialog-description" className="text-center">
-          Get a free account, no credit card required
-        </DialogContentText>
+        <DialogContentText id="alert-dialog-description" className="text-center">Get a free account, no credit card required</DialogContentText>
       </DialogContent>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
@@ -328,9 +330,8 @@ const DialogLogin = (props) => {
               onSuccess={onGoogleSuccess}
               onFailure={onGoogleFailure}
               cookiePolicy={'single_host_origin'}
-              isSignedIn={true}
+              // isSignedIn={true}
             />
-
             <FacebookLogin
               className={"facebookLogin"}
               appId={facebookAppId}
@@ -344,14 +345,12 @@ const DialogLogin = (props) => {
               render={renderProps => (
                 <button onClick={renderProps.onClick}><FacebookIcon/> <span>Facebook </span></button>
               )}/>
-
             <LoginGithub 
               clientId={process.env.REACT_APP_GITHUB_CLIENT_ID}
               onSuccess={onGithubSuccess}
               onFailure={onGithubFailure}
               className={"login-github"}
               children={<React.Fragment><i className="left"><GitHubIcon /></i><span>Github</span></React.Fragment>}/>
-              
           </div>
         </DialogContentText>
         </DialogContent>
