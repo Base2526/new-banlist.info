@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { CKEditor } from "ckeditor4-react";
+import { useTranslation } from "react-i18next";
 
 import { ActionContext } from "./ActionContext";
 
@@ -10,6 +11,8 @@ let cke = null;
 const InputField = (props) => {
   let { cancellor, parentId, child, value, edit, main } = props
   
+  const { t } = useTranslation();
+
   const [text, setText] = useState(value);
 
   const handleChange = (e) => {
@@ -106,7 +109,7 @@ const InputField = (props) => {
             CKEDITORClearData()
           }}
         >
-          Post
+          {t("posts")}
         </Button>
         {(text || parentId) && (
           <Button
@@ -120,7 +123,7 @@ const InputField = (props) => {
               CKEDITORClearData()
             }}
           >
-            Cancel
+            {t("cancel")}
           </Button>
         )}
       </div>

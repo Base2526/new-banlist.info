@@ -1,5 +1,7 @@
 export const TRANSLATIONS_TH = {
     welcome:"สวัสดีชาวโลก",
+
+    welcome_to_banlist: "เข้าสู่ระบบ Banlist",
     label_keyword_search: "คำค้น",
 
     home: "หน้าหลัก",
@@ -27,7 +29,11 @@ export const TRANSLATIONS_TH = {
     new_phone: "ใส่เบอร์โทรใหม่",
     
     create: "สร้าง",
-    update: "แก้ไข",
+    edit: "แก้ไข",
+    update: "ปรับปรุง",
+    delete: "ลบ",
+
+    cancel: "ยกเลิก",
 
     help: "ช่วยเหลือ",
 
@@ -53,5 +59,10 @@ export const TRANSLATIONS_TH = {
 
     logout: "ออกจากระบบ",
 
-    email: "อีเมลล์"
+    email: "อีเมลล์",
+
+    username: "ชื่อผู้ใช้งาน",
+    password: "รหัสผ่าน",
+
+    login_or_sign_up_to_leave_a_comment : "เข้าสู่ระบบก่อน สามารถคอมเม้นต์ได้"
 };

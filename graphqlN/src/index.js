@@ -15,6 +15,8 @@ import typeDefs from "./typeDefs";
 import resolvers from "./resolvers";
 import pubsub from './pubsub'
 
+require('../cron-jobs.js');
+
 const path = require('path');
 
 const {
