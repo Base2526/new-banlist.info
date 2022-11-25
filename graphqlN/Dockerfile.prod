@@ -15,6 +15,7 @@ COPY package*.json ./
 RUN npm i --save --legacy-peer-deps --production
 COPY --from=builder /app/dist ./dist
 COPY .env .
+COPY cron-jobs.js cron-jobs.js
 
 # COPY uploads uploads
 RUN mkdir uploads && chmod -R 777 uploads
