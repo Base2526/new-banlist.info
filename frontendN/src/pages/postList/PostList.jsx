@@ -45,7 +45,7 @@ const PostList = (props) => {
   const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "", description: "" });
 
   const postsValue = useQuery(gqlPosts, {
-    variables: {userId: _.isEmpty(user) ? "" : user._id, page: pageIndex, perPage: pageSize},
+    variables: { page: pageIndex, perPage: pageSize },
     notifyOnNetworkStatusChange: true,
   });
   console.log("postsValue :", postsValue)

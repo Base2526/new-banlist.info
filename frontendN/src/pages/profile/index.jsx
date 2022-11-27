@@ -27,6 +27,8 @@ import { logout } from "../../redux/actions/auth"
 
 import { gqlUser ,gqlUpdateUser } from "../../gqlQuery"
 
+// import {wsLink} from "../../Apollo"
+
 let initValues = { displayName: "",  files: null }
 
 const index = (props) => {
@@ -34,8 +36,6 @@ const index = (props) => {
   let inputFile = useRef(null) 
 
   const { t } = useTranslation();
-
-  // const client = useApolloClient();
 
   let myForm = useRef();
 
@@ -169,12 +169,12 @@ const index = (props) => {
       }
 
       case "logout":{
-          await client.resetStore();
-
-          // await client.cache.reset();
+        
           logout()
-          // await client.refetchQueries({ include: "all" });
-          window.location.reload();
+          
+          await client.resetStore();
+          await client.cache.reset();
+
           history.push("/")
         break;
       }
@@ -259,7 +259,6 @@ const index = (props) => {
 // export default index;
 
 const mapStateToProps = (state, ownProps) => {
-  console.log("mapStateToProps  :", state)
   return {
     user: state.auth.user,
   }

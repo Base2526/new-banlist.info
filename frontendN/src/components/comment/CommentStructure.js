@@ -122,7 +122,7 @@ const CommentStructure = (props) => {
       notifyOnNetworkStatusChange: true,
     });
   
-    console.log("CommentStructure > userValue :", userValue)
+    // console.log("CommentStructure > userValue :", userValue)
 
     if(!userValue.loading){
       if(userValue.data.user.data == null){

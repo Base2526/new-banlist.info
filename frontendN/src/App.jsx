@@ -1,6 +1,6 @@
 import "./styles.css";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef} from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
@@ -50,7 +50,15 @@ import Footer from "./pages/footer"
 import DialogTermsAndConditions from "./DialogTermsAndConditions"
 import i18n from './translations/i18n';
 import { login, addedConversations, addedConversation, addedNotifications, addedNotification, termsAndConditions } from "./redux/actions/auth"
-import { gqlConversations, gqlBookmarksByUserId, subConversation, subBookmark, gqlNotifications, subNotification } from "./gqlQuery"
+import { gqlConversations, 
+        gqlBookmarksByUserId, 
+        subConversation, 
+        subBookmark, 
+        gqlNotifications, 
+        subNotification,
+        gqlPing } from "./gqlQuery"
+
+// import {wsLink} from "./Apollo"
 
 let unsubscribeConversation = null;
 let unsubscribeNotification = null;
@@ -134,17 +142,24 @@ const styles = (theme) => ({
 });
 
 const App = (props) => {
+  // /gracefullyRestart
+ 
   let {is_connnecting, user, terms_and_conditions, addedConversations, addedConversation, addedNotifications, addedNotification, termsAndConditions} = props
 
   const history = useHistory();
   const [open, setOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
-
   const client = useApolloClient();
+  const intervalPing = useRef(null);
 
   const [dialogLoginOpen, setDialogLoginOpen] = useState(false);
 
   const [dialogTermsAndConditions, setDialogTermsAndConditions] = useState(false);
+
+  /////////////////////// ping ///////////////////////////////////
+  const pingValues =useQuery(gqlPing, {notifyOnNetworkStatusChange: true});
+
+  
   ////////////////////// conversation ////////////////////////////
   const conversationValues =useQuery(gqlConversations, { variables: { userId: ""}, notifyOnNetworkStatusChange: true });
 
@@ -207,14 +222,22 @@ const App = (props) => {
   //////////////////////  notifications //////////////////////////////////
 
   const [onlineIndicator, setOnlineIndicator] = useState(0);
-  const worker = () => {
+  const worker = (user) => {
+    if(!_.isEmpty(user)){
+      pingValues && pingValues.refetch()
+
+      console.log("ping : auth")
+    }else{
+      console.log("ping : not auth")
+    }
+    
     console.log("worker :", new Date().toISOString())
   }
 
   useEffect(async () => {
-    worker()
+    // worker(user)
 
-    setOnlineIndicator(setInterval(() => worker(), 20000));
+    // setOnlineIndicator(setInterval(() => worker(user), 20000, user));
 
     return () => {
       // Clean up
@@ -230,7 +253,22 @@ const App = (props) => {
     conversationValues.refetch({userId: _.isEmpty(user) ? "" : user._id})
 
     notificationValues.refetch({userId: _.isEmpty(user) ? "" : user._id})
+
+    // setOnlineIndicator(setInterval(() => worker(user), 20000, user));
   }, [user])
+
+  useEffect(()=> {
+    intervalPing.current = setInterval(() => {
+      if(!_.isEmpty(user)){
+        pingValues && pingValues.refetch()
+  
+        console.log("ping : auth")
+      }else{
+        console.log("ping : not auth")
+      }
+    }, 20000);
+    return ()=> clearInterval(intervalPing.current);
+  }, [user]);
 
   const handleDrawerOpen = () => {
     setOpen(!open)
@@ -289,14 +327,12 @@ const App = (props) => {
             <Breadcs title={""} />
             <div className="container">
                <div className="row">
-                 
                 <Switch>
                   <Route path="/" exact>
                     <div className="page-home">
                       <Home />
                     </div>
                   </Route>
-
                   <Route path="/user/login">
                     <LoginPage />
                   </Route>
@@ -304,7 +340,6 @@ const App = (props) => {
                     <div className="page-detail">
                       <Detail/>
                     </div>
-                    
                   </Route>
                   <Route path="/user/:id/view">
                     <div className="page-view">
@@ -316,47 +351,28 @@ const App = (props) => {
                       <Help />
                     </div>
                   </Route>
-
-                  {/* <Route path="/privacy">
-                    <div className="page-privacy pl-2 pr-2">
-                      <PrivacyPage />
+                  <Route path="/privacy+terms">
+                    <div className="page-terms pl-2 pr-2">
+                      <PrivacyAndTermsPage />
                     </div>
-                  </Route> */}
-
-                <Route path="/privacy+terms">
-                  <div className="page-terms pl-2 pr-2">
-                    <PrivacyAndTermsPage />
-                  </div>
-                </Route>
-
-                <Route path="/developer">
-                  <div className="page-dev pl-2 pr-2">
+                  </Route>
+                  <Route path="/developer">
+                    <div className="page-dev pl-2 pr-2">
+                      <DeveloperPage />
+                    </div>
+                  </Route>
+                  <Route path="/developer">
                     <DeveloperPage />
-                  </div>
-
-                </Route>
-                <Route path="/developer">
-                  <DeveloperPage />
-                </Route>
-                {/* <Route path="/terms">
-                  <div className="page-terms pl-2 pr-2">
-                    <TermsPage />
-                  </div>
-                </Route> */}
-
-                
-                <PrivateRoute path="/">
-                  <PrivatePage />
-                </PrivateRoute>   
-                
-                <Route path="*">
-                  <NoMatch />
-                </Route>     
+                  </Route>
+                  <PrivateRoute path="/">
+                    <PrivatePage />
+                  </PrivateRoute>   
+                  <Route path="*">
+                    <NoMatch />
+                  </Route>     
                 </Switch>
-              
                </div>
             </div>
-
             <div className="footer"><Footer /></div>
           </main>
         </div>
@@ -367,16 +383,11 @@ const App = (props) => {
             {...props}
             open={dialogLoginOpen}
             onComplete={async(data)=>{
-              console.log("onComplete :", data)
-
               setDialogLoginOpen(false);
-
               props.login(data)
-              // await client.cache.reset();
 
+              await client.cache.reset();
               await client.resetStore();
-              
-              window.location.reload();
               history.push("/")
             }}
             onClose={() => {
@@ -404,9 +415,7 @@ const App = (props) => {
 }
 
 // export default withStyles(styles, { withTheme: true })(App);
-
 const mapStateToProps = (state, ownProps) => {
-  // console.log("mapStateToProps :", state)
   return {
     user: state.auth.user,
     is_connnecting: state.ws.is_connnecting,
@@ -418,10 +427,8 @@ const mapDispatchToProps = {
   login,
   addedConversations,
   addedConversation,
-
   addedNotifications, 
   addedNotification,
-
   termsAndConditions
 }
 

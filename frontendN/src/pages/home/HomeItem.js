@@ -77,28 +77,7 @@ const HomeItem =(props) => {
 
   const { t } = useTranslation();
 
-  console.log("t.language :", i18n)
-
   const [expand, setExpand] = useState(false);
-
-  const onItemBookmark = () =>{
-    let bookmark = _.find(bookmarks, (bookmark)=>bookmark.userId === user._id && bookmark.postId === item._id)
-    if(_.isEmpty(bookmark)){
-      return  <IconButton onClick={(e) =>{
-                  _.isEmpty(user) ?  onDialogLogin(true) : onBookmark( item._id, user._id, true)
-                }}> 
-                <BookmarkIcon style={{ color:"" }} />
-              </IconButton>
-    }else{
-      let color = bookmark.status == null ? "" : bookmark.status ? "blue" : ""
-  
-      return  <IconButton onClick={(e) =>{
-                _.isEmpty(user) ?  onDialogLogin(true) : onBookmark( item._id, user._id, !bookmark.status)
-              }}>
-                <BookmarkIcon style={{ color }} /> 
-              </IconButton>
-    }
-  }
 
   const renderMedia = (m) =>{
     if( !_.isEmpty(m.files) ){

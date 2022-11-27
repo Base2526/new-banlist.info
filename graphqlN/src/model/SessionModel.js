@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema
 
-
 const sessionSchema = new Schema({
   // sessionId: { type: String },
   token: { type: String },

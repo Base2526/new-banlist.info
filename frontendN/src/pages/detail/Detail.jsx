@@ -42,6 +42,8 @@ import ItemBookmark from "./ItemBookmark"
 
 import ReportDialog from "../../components/report"
 
+// import {wsLink} from "../../Apollo"
+
 let unsubscribe =null
 const Detail = (props) => {
     let history = useHistory();
@@ -443,16 +445,15 @@ const Detail = (props) => {
                 <DialogLogin
                 {...props}
                 open={dialogLoginOpen}
-                onComplete={(data)=>{
-                    console.log("onComplete :", data)
-      
-                    login(data)
+                onComplete={async(data)=>{
                     setDialogLoginOpen(false);
+                    login(data)
+                    
+                    await client.cache.reset();
+                    await client.resetStore();
                 }}
                 onClose={() => {
                     setDialogLoginOpen(false);
-
-                    // history.push("/")
                 }}
                 />
             )}

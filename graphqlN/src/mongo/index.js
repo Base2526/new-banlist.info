@@ -24,9 +24,9 @@ let logger = require("../utils/logger");
 const modelExists =()=>{
   Bank.find({}, async(err, result) => {
     if (result.length > 0) {
-      console.log('Found Bank');
+      // console.log('Found Bank');
     } else {
-      console.log('Not found Bank, creating');
+      // console.log('Not found Bank, creating');
       let newSettings = new Bank({});
       await newSettings.save();
 
@@ -36,9 +36,9 @@ const modelExists =()=>{
 
   Post.find({}, async(err, result) => {
     if (result.length > 0) {
-      console.log('Found Post');
+      // console.log('Found Post');
     } else {
-      console.log('Not found Post, creating');
+      // console.log('Not found Post, creating');
       let newSettings = new Post({});
       await newSettings.save();
 
@@ -48,9 +48,9 @@ const modelExists =()=>{
 
   Role.find({},async(err, result) =>{
     if (result.length > 0) {
-      console.log('Found Role');
+      // console.log('Found Role');
     } else {
-      console.log('Not found Role, creating');
+      // console.log('Not found Role, creating');
       let newSettings = new Role({});
       newSettings.save();
 
@@ -60,9 +60,9 @@ const modelExists =()=>{
 
   Socket.find({}, async(err, result)=> {
     if (result.length > 0) {
-      console.log('Found Socket');
+      // console.log('Found Socket');
     } else {
-      console.log('Not found Socket, creating');
+      // console.log('Not found Socket, creating');
       let newSettings = new Socket({});
       await newSettings.save();
 
@@ -72,9 +72,9 @@ const modelExists =()=>{
 
   User.find({}, async(err, result)=> {
     if (result.length > 0) {
-      console.log('Found User');
+      // console.log('Found User');
     } else {
-      console.log('Not found User, creating');
+      // console.log('Not found User, creating');
       let newSettings = new User({});
       await newSettings.save();
 
@@ -84,9 +84,9 @@ const modelExists =()=>{
 
   Comment.find({}, async(err, result)=> {
     if (result.length > 0) {
-      console.log('Found Comment');
+      // console.log('Found Comment');
     } else {
-      console.log('Not found Comment, creating');
+      // console.log('Not found Comment, creating');
       let newComments = new Comment({});
       await newComments.save();
 
@@ -96,9 +96,9 @@ const modelExists =()=>{
 
   Mail.find({}, async(err, result)=> {
     if (result.length > 0) {
-      console.log('Found Mail');
+      // console.log('Found Mail');
     } else {
-      console.log('Not found Mail, creating');
+      // console.log('Not found Mail, creating');
       let newMails = new Mail({});
       await newMails.save();
 
@@ -108,9 +108,9 @@ const modelExists =()=>{
 
   Bookmark.find({}, async(err, result)=> {
     if (result.length > 0) {
-      console.log('Found Bookmark');
+      // console.log('Found Bookmark');
     } else {
-      console.log('Not found Bookmark, creating');
+      // console.log('Not found Bookmark, creating');
       let newBookmarks = new Bookmark({});
       await newBookmarks.save();
 
@@ -120,9 +120,9 @@ const modelExists =()=>{
 
   Report.find({}, async(err, result)=> {
     if (result.length > 0) {
-      console.log('Found Report');
+      // console.log('Found Report');
     } else {
-      console.log('Not found Report, creating');
+      // console.log('Not found Report, creating');
       let newReport = new Report({});
       await newReport.save();
 
@@ -132,9 +132,9 @@ const modelExists =()=>{
 
   tReport.find({}, async(err, result)=> {
     if (result.length > 0) {
-      console.log('Found tReport');
+      // console.log('Found tReport');
     } else {
-      console.log('Not found tReport, creating');
+      // console.log('Not found tReport, creating');
       let newTReport = new tReport({});
       await newTReport.save();
 
@@ -144,9 +144,9 @@ const modelExists =()=>{
 
   Share.find({}, async(err, result)=> {
     if (result.length > 0) {
-      console.log('Found Share');
+      // console.log('Found Share');
     } else {
-      console.log('Not found Share, creating');
+      // console.log('Not found Share, creating');
       let newShare = new Share({});
       await newShare.save();
 
@@ -156,9 +156,9 @@ const modelExists =()=>{
 
   Dblog.find({}, async(err, result)=> {
     if (result.length > 0) {
-      console.log('Found Dblog');
+      // console.log('Found Dblog');
     } else {
-      console.log('Not found Dblog, creating');
+      // console.log('Not found Dblog, creating');
       let newDblog = new Dblog({});
       await newDblog.save();
 
@@ -168,9 +168,9 @@ const modelExists =()=>{
 
   Conversation.find({}, async(err, result)=> {
     if (result.length > 0) {
-      console.log('Found Conversation');
+      // console.log('Found Conversation');
     } else {
-      console.log('Not found Conversation, creating');
+      // console.log('Not found Conversation, creating');
       let newConversation = new Conversation({});
       await newConversation.save();
 
@@ -180,9 +180,9 @@ const modelExists =()=>{
 
   Message.find({}, async(err, result)=> {
     if (result.length > 0) {
-      console.log('Found Message');
+      // console.log('Found Message');
     } else {
-      console.log('Not found Message, creating');
+      // console.log('Not found Message, creating');
       let newMessage = new Message({_id: mongoose.Types.ObjectId()});
       await newMessage.save();
 
@@ -192,9 +192,9 @@ const modelExists =()=>{
 
   Follow.find({}, async(err, result)=> {
     if (result.length > 0) {
-      console.log('Found Follow');
+      // console.log('Found Follow');
     } else {
-      console.log('Not found Follow, creating');
+      // console.log('Not found Follow, creating');
       let newFollow = new Follow({});
       await newFollow.save();
 
@@ -204,9 +204,9 @@ const modelExists =()=>{
 
   Session.find({}, async(err, result)=> {
     if (result.length > 0) {
-      console.log('Found Session');
+      // console.log('Found Session');
     } else {
-      console.log('Not found Session, creating');
+      // console.log('Not found Session, creating');
       let newSession = new Session({});
       await newSession.save();
 
@@ -216,9 +216,9 @@ const modelExists =()=>{
 
   Notification.find({}, async(err, result)=> {
     if (result.length > 0) {
-      console.log('Found Notification');
+      // console.log('Found Notification');
     } else {
-      console.log('Not found Notification, creating');
+      // console.log('Not found Notification, creating');
       let newNotification = new Notification({});
       await newNotification.save();
 
@@ -228,9 +228,9 @@ const modelExists =()=>{
 
   Phone.find({}, async(err, result)=> {
     if (result.length > 0) {
-      console.log('Found Phone');
+      // console.log('Found Phone');
     } else {
-      console.log('Not found Phone, creating');
+      // console.log('Not found Phone, creating');
       let newPhone = new Phone({});
       await newPhone.save();
 
@@ -240,9 +240,9 @@ const modelExists =()=>{
 
   BasicContent.find({}, async(err, result)=> {
     if (result.length > 0) {
-      console.log('Found BasicContent');
+      // console.log('Found BasicContent');
     } else {
-      console.log('Not found BasicContent, creating');
+      // console.log('Not found BasicContent, creating');
       let newBasicContent = new BasicContent({});
       await newBasicContent.save();
 

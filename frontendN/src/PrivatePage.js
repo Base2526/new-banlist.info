@@ -46,6 +46,8 @@ import PhoneList from "./pages/phoneList/PhoneList"
 import ContactUs from "./pages/contactUs/ContactUs"
 import ContactUsList from "./pages/contactUs/ContactUsList"
 
+import LoginPage from "./pages/auth/Login"
+
 // import { isAuth } from "./AuthProvider";
 import { connect } from "react-redux";
 import _ from "lodash"

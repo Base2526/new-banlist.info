@@ -1,11 +1,13 @@
 import { gql } from "@apollo/client";
 
+export const gqlPing = gql`query ping{ ping }`;
+
 export const gqlHomes = gql`
-    query Homes( $userId: ID,  $page: Long, $perPage: Long, $keywordSearch: String, $category: String) {
-        homes( userId: $userId page: $page perPage: $perPage keywordSearch: $keywordSearch category: $category )
+    query Homes($page: Long, $perPage: Long, $keywordSearch: String, $category: String) {
+        homes( page: $page perPage: $perPage keywordSearch: $keywordSearch category: $category )
     }`;
 
-export const gqlPosts = gql`query Posts( $userId: ID, $page: Int, $perPage: Int ) { posts( userId: $userId page: $page perPage: $perPage ) }`;
+export const gqlPosts = gql`query Posts( $page: Int, $perPage: Int ) { posts( page: $page perPage: $perPage ) }`;
 
 export const gqlPost = gql`query Post($id: ID!) { post(_id: $id) }`;
 
