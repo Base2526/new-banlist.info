@@ -84,7 +84,7 @@ const InputField = (props) => {
             editorplaceholder: "Start typing here..."
           }}
           onInstanceReady={ editor => {
-            console.log("onInstanceReady", editor)
+            // console.log("onInstanceReady", editor)
           }}
           onChange={handleChange}
           initData={text}

@@ -51,9 +51,7 @@ import DialogTermsAndConditions from "./DialogTermsAndConditions"
 import i18n from './translations/i18n';
 import { login, addedConversations, addedConversation, addedNotifications, addedNotification, termsAndConditions } from "./redux/actions/auth"
 import { gqlConversations, 
-        gqlBookmarksByUserId, 
         subConversation, 
-        subBookmark, 
         gqlNotifications, 
         subNotification,
         gqlPing } from "./gqlQuery"

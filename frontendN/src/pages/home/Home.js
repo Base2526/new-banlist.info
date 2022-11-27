@@ -38,10 +38,7 @@ import {gqlHomes, gqlCreateReport,
 
 import { login, addedBookmark } from "../../redux/actions/auth"
 
-// import {wsLink} from "../../Apollo"
-
 let unsubscribePost = null;
-
 const Home = (props) => {
   let history = useHistory();
 
@@ -87,10 +84,10 @@ const Home = (props) => {
   const [onCreateAndUpdateBookmark, resultCreateAndUpdateBookmarkValues] = useMutation(gqlCreateAndUpdateBookmark
     , {
         update: (cache, {data: {createAndUpdateBookmark}}) => {
-          let {userId, postId} = createAndUpdateBookmark
+          let { postId } = createAndUpdateBookmark
           const data1 = cache.readQuery({
               query: gqlIsBookmark,
-              variables: { userId, postId }
+              variables: { postId }
           });
 
           let newData = {...data1.isBookmark}
@@ -101,7 +98,7 @@ const Home = (props) => {
               data: {
                 isBookmark: newData
               },
-              variables: {userId, postId }
+              variables: { postId }
           });     
         },
         onCompleted({ data }) { },
@@ -124,8 +121,10 @@ const Home = (props) => {
 
     var keys = _.map(homesValues.data.homes.data, _.property("id"));
 
-    let {subscribeToMore} = homesValues
-    unsubscribePost && unsubscribePost()
+    let {subscribeToMore, networkStatus} = homesValues
+
+    // console.log("networkStatus :", networkStatus)
+    // unsubscribePost && unsubscribePost()
     unsubscribePost =  subscribeToMore({
 			document: subPost,
       variables: { postIDs: JSON.stringify(keys) },
@@ -333,12 +332,11 @@ const Home = (props) => {
                             onDialogLogin={(status)=>{
                               setDialogLoginOpen(status)
                             }}
-                            onBookmark={(postId, userId, status)=>{
+                            onBookmark={(postId, status)=>{
 
-                              console.log("onCreateAndUpdateBookmark :", postId, userId, status)
+                              console.log("onCreateAndUpdateBookmark :", postId, status)
                               onCreateAndUpdateBookmark({ variables: { input: {
                                     postId,
-                                    userId,
                                     status
                                   }
                                 }

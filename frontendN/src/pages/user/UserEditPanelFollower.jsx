@@ -17,7 +17,7 @@ deepdash(_);
 
 import ReadMoreMaster from "../../utils/ReadMoreMaster"
 import Table from "../../TableContainer"
-import { gqlCreateAndUpdateBookmark, gqlUser} from "../../gqlQuery"
+import { gqlUser} from "../../gqlQuery"
 
 const UserEditPanelFollower = ({followers}) => {
 
@@ -25,6 +25,7 @@ const UserEditPanelFollower = ({followers}) => {
     const [pageIndex, setPageIndex] = useState(0);  
     const [pageSize, setPageSize] = useState(pageOptions[0])
 
+    /*
     const [onCreateBookmark, resultCreateBookmarkValues] = useMutation(gqlCreateAndUpdateBookmark
         , {
             update: (cache, {data: {createBookmark}}) => {
@@ -59,6 +60,7 @@ const UserEditPanelFollower = ({followers}) => {
     );
 
     console.log("resultCreateBookmarkValues :", resultCreateBookmarkValues)
+    */
 
     ///////////////////////
     const columns = useMemo(

@@ -55,7 +55,7 @@ const UserPostList = (props) => {
           // history.push("/");
         }
     });
-    console.log("resultCreateShare :", resultCreateShare)
+    // console.log("resultCreateShare :", resultCreateShare)
 
     const postsByUser = useQuery(gqlPostsByUser, {
         variables: { userId: id },

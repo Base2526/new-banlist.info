@@ -650,22 +650,29 @@ export default {
     },
 
     async isBookmark(parent, args, context, info) {
-      let start = Date.now()
+      try{
+        let start = Date.now()
+        let { postId } = args
+        let { status, code, currentUser } = context 
 
-      let { userId, postId } = args
-
-      if(_.isEmpty(userId)){
-        return ;
-      }
-
-      let data =await Bookmark.findOne({ userId, postId });
-
-      return {
-        status:true,
-        data,
-        executionTime: `Time to execute = ${
-          (Date.now() - start) / 1000
-        } seconds`
+        if(!_.isEmpty(currentUser)){
+          console.log("ping :", currentUser?._id)
+    
+          return {
+            status:true,
+            data: await Bookmark.findOne({ userId: currentUser?._id, postId }),
+            executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+          }
+        }else{
+          return {
+            status:false,
+            executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+          }
+        }
+      } catch(err) {
+        logger.error(err.toString());
+        console.log("isBookmark err :", args, err.toString())
+        return;
       }
     },
 
@@ -2056,56 +2063,77 @@ export default {
     // comment
     
     async createAndUpdateBookmark(parent, args, context, info) {
+      try{
+        // if(_.isEmpty(context)){
+        //   // logger.error(JSON.stringify(args));
+        //   return;
+        // }
 
-      if(_.isEmpty(context)){
-        // logger.error(JSON.stringify(args));
+        let { status, code, currentUser } = context 
+
+        let {input} = args
+
+        /**
+         * validate data
+        */
+        if(_.isEmpty(await Post.findById(input.postId))){
+          // logger.error("Post id empty :", input.postId)
+          return;
+        } 
+
+        // if(_.isEmpty(await User.findById(input.userId))){
+        //   // logger.error("User id empty :", input.userId)
+        //   return;
+        // } 
+        /**
+         * validate data
+        */
+
+        //  try{
+        //   let { status, code, currentUser } = context 
+        //   console.log("ping :", currentUser?._id)
+
+        //   return { status:true }
+        // } catch(err) {
+        //   logger.error(err.toString());
+        //   console.log("homes err :", args, err.toString())
+        //   return;
+        // }
+
+        input = {...input, userId: currentUser?._id}
+
+        let result = await Bookmark.findOneAndUpdate({
+          postId: input.postId
+        }, input, {
+          new: true
+        })
+      
+        if(result === null){
+          result = await Bookmark.create(input);
+
+          pubsub.publish("BOOKMARK", {
+            bookmark: {
+              mutation: "CREATED",
+              data: result,
+            },
+          });
+        }else{
+
+          pubsub.publish("BOOKMARK", {
+            bookmark: {
+              mutation: "UPDATED",
+              data: result,
+            },
+          });
+        }
+
+        return result;
+
+      } catch(err) {
+        logger.error(err.toString());
+        console.log("createAndUpdateBookmark err :", args, err.toString())
         return;
       }
-
-      let {input} = args
-
-      /**
-       * validate data
-      */
-      if(_.isEmpty(await Post.findById(input.postId))){
-        // logger.error("Post id empty :", input.postId)
-        return;
-      } 
-
-      if(_.isEmpty(await User.findById(input.userId))){
-        // logger.error("User id empty :", input.userId)
-        return;
-      } 
-      /**
-       * validate data
-      */
-
-      let result = await Bookmark.findOneAndUpdate({
-        postId: input.postId
-      }, input, {
-        new: true
-      })
-     
-      if(result === null){
-        result = await Bookmark.create(input);
-
-        pubsub.publish("BOOKMARK", {
-          bookmark: {
-            mutation: "CREATED",
-            data: result,
-          },
-        });
-      }else{
-
-        pubsub.publish("BOOKMARK", {
-          bookmark: {
-            mutation: "UPDATED",
-            data: result,
-          },
-        });
-      }
-
-      return result;
     },
     async createAndUpdateFollow(parent, args, context, info) {
 
@@ -2717,7 +2745,7 @@ export default {
           //       break;
           //     }
           // }
-          return data.postId == variables.postId && data.userId == variables.userId;
+          return data.postId == variables.postId;// && data.userId == variables.userId;
         }
       )
     },

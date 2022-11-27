@@ -472,7 +472,7 @@ export default gql`
 
     Bookmarks(page: Int, perPage: Int): BookmarksPayLoad
     bookmarksByPostId( postId: ID! ): BookmarksPayLoad
-    isBookmark(userId: ID, postId: ID!): BookmarkPayLoad
+    isBookmark(postId: ID!): BookmarkPayLoad
     bookmarksByUserId( userId: ID! ): BookmarksPayLoad
 
     ReportList(page: Int, perPage: Int): ReportListPayLoad
@@ -652,7 +652,6 @@ export default gql`
 
   input BookmarkInput {
     postId: ID!
-    userId: ID!
     status: Boolean
   }
 
@@ -736,7 +735,7 @@ export default gql`
 
     subPost(postIDs: String): JSON!
     subComment(commentID: String): JSON!
-    subBookmark(userId: ID!, postId: ID!): JSON!
+    subBookmark( postId: ID!): JSON!
     subShare(postId: ID!): JSON!
 
     subConversation(userId: ID): JSON

@@ -85,7 +85,6 @@ const Detail = (props) => {
               const data1 = cache.readQuery({
                 query: gqlIsBookmark,
                 variables: {
-                  userId: user._id,
                   postId: id
                 }
               });
@@ -99,7 +98,6 @@ const Detail = (props) => {
                   isBookmark: newData
                 },
                 variables: {
-                  userId: user._id,
                   postId: id
                 }
               });
@@ -143,7 +141,7 @@ const Detail = (props) => {
           // history.push("/");
         }
       });
-      console.log("resultCreateShare :", resultCreateShare)
+    //   console.log("resultCreateShare :", resultCreateShare)
     
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -159,7 +157,7 @@ const Detail = (props) => {
         variables: {postId: id},
         notifyOnNetworkStatusChange: true,
     });
-    console.log("shareValues :", shareValues)
+    // console.log("shareValues :", shareValues)
 
     if(!shareValues.loading){
         let {subscribeToMore} = shareValues
