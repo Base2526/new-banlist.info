@@ -33,6 +33,8 @@ import ItemFollowing from "./ItemFollowing"
 
 import ReportDialog from "../../components/report"
 
+// import {wsLink} from "../../Apollo"
+
 const UserView = (props) => {
   let history = useHistory();
   const { t } = useTranslation();
@@ -238,11 +240,16 @@ const UserView = (props) => {
         <DialogLogin
           {...props}
           open={dialogLoginOpen}
-          onComplete={(data)=>{
+          onComplete={async(data)=>{
             console.log("onComplete :", data)
 
             // props.login(data)
+            // setDialogLoginOpen(false);
+
             setDialogLoginOpen(false);
+            props.login(data)
+            await client.cache.reset();
+            await client.resetStore();
           }}
           onClose={() => {
             setDialogLoginOpen(false);

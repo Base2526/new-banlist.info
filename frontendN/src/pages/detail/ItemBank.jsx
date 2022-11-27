@@ -23,7 +23,7 @@ const ItemBank = (props) => {
         return <div />
     }
 
-    console.log("valueBanks :", valueBanks)
+    // console.log("valueBanks :", valueBanks)
 
     let bank = _.find(valueBanks.data.banks.data, (v) => v._id === item.bankId)
     return <li><Typography variant="subtitle2" color="textSecondary">{item.bankAccountName} [{bank === null ? "" : bank.name}]</Typography></li>

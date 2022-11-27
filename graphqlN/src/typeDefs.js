@@ -434,7 +434,9 @@ export default gql`
   }
 
   type Query {
-    homes( userId: ID, page: Long, perPage: Long, keywordSearch: String, category: String ): JSON
+    ping: JSON
+
+    homes( page: Long, perPage: Long, keywordSearch: String, category: String ): JSON
 
     user(_id: ID): JSON
     users(page: Int, perPage: Int): JSON
@@ -457,7 +459,7 @@ export default gql`
     getManySockets(_ids: [ID!]!): SocketsPayLoad
 
     post( _id: ID! ): JSON
-    posts( userId: ID, page: Int, perPage: Int ): JSON
+    posts( page: Int, perPage: Int ): JSON
     _allPostsMeta(page: Int, perPage: Int, sortField: String, sortOrder: String, filter: PostFilter): ListMetadata
     getManyPosts(_ids: [ID!]!): PostsPayLoad
 

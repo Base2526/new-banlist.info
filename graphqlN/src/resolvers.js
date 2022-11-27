@@ -38,6 +38,7 @@ import pubsub from './pubsub'
 import {fileRenamer} from "./utils"
 import { __TypeKind } from 'graphql';
 import e from 'express';
+import { async } from 'regenerator-runtime';
 
 const path = require('path');
 
@@ -51,9 +52,23 @@ const {
 
 let logger = require("./utils/logger");
 
+import {getSessionId} from "./utils"
 
 export default {
   Query: {
+    // ping
+    async ping(parent, args, context, info){
+      try{
+        let { status, code, currentUser } = context 
+        console.log("ping :", currentUser?._id)
+
+        return { status:true }
+      } catch(err) {
+        logger.error(err.toString());
+        console.log("homes err :", args, err.toString())
+        return;
+      }
+    },
     // user
     async user(parent, args, context, info) {
       let start = Date.now()
@@ -122,31 +137,16 @@ export default {
     async homes(parent, args, context, info) {
       try{
 
-        let {currentUser} = context 
+        let { status, code, currentUser } = context 
 
-        console.log("#1 homes : ", args)
-        console.log("#2 homes : ", currentUser)
+        console.log("homes : ", args, status, code)
 
-        let { userId, page, perPage, keywordSearch, category } = args
+        let { page, perPage, keywordSearch, category } = args
         let start = Date.now()
 
-        // if(_.isEmpty(userId)){
-          
-        // }
-
-        // 
-        // currentUser._id.toString()
-        // console.log("homes :", currentUser)
-
-        // console.log("Homes: page : ", page,
-        //             ", perPage : ", perPage, 
-        //             ", keywordSearch : ", keywordSearch,
-        //             ", category : ", category , 
-        //             `Time to execute = ${
-        //               (Date.now() - start) / 1000
-        //             } seconds` )
-
-        
+        if(!_.isEmpty(currentUser)){
+          // console.log("#3 : ", currentUser._id)
+        }
 
         /*
         0 : ชื่อเรื่อง | title
@@ -155,10 +155,6 @@ export default {
         3 : บัญชีธนาคาร | banks[]
         4 : เบอร์โทรศัพท์ | tels[]
         */
-
-        if(!context.status){
-          // foce logout
-        }
 
         let data = null;
         let total = 0;
@@ -231,19 +227,11 @@ export default {
     // post
     async post(parent, args, context, info) {
       try{
-        // if(!context.status){
-        //   // foce logout
-        // }
+        console.log("post, args :", args)
 
         let start = Date.now()
-
         let { _id } = args
-        
-        console.log("args :", args)
-
         let data = await Post.findById(_id);
-
-        console.log("post :", data, _id)
         return {
           status:true,
           executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`,
@@ -255,28 +243,33 @@ export default {
       }
     },
     async posts(parent, args, context, info) {
+      try{
+        console.log("posts, args :", args)
 
-      // let {currentUser} = context 
-      
-      // console.log("posts currentUser :", currentUser, args)
-      let { userId, page, perPage } = args
+        let start = Date.now()
+        let { status, code, currentUser } = context 
+        if(!_.isEmpty(currentUser)){
+          let { page, perPage } = args
+          let data = await  Post.find({ownerId: currentUser._id}).limit(perPage).skip(page); 
+          let total = (await Post.find({ownerId: currentUser._id}).lean().exec()).length;
+          return {
+            status:true,
+            data,
+            total,
+            executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+          }
+        }
 
-      let start = Date.now()
-
-      console.log("Posts: page : ", page,
-                  ", perPage : ", perPage, 
-                  `Time to execute = ${
-                    (Date.now() - start) / 1000
-                  } seconds` )
-
-      let data = await  Post.find({ownerId: userId}).limit(perPage).skip(page); 
-      let total = (await Post.find({ownerId: userId}).lean().exec()).length;
-
-      return {
-        status:true,
-        data,
-        total,
-        executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        return {
+          status:true,
+          data:[],
+          total: 0,
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
+      } catch(err) {
+        logger.error(err.toString());
+        console.log("posts err :", args, err.toString())
+        return;
       }
     },
     async postsByUser(root, {
@@ -1068,16 +1061,21 @@ export default {
         // user = { ...user._doc,  roles }
         // console.log("Login #2: ", user )
 
-        let token = jwt.sign(user._id.toString(), process.env.JWT_SECRET)
+        // let token = jwt.sign(user._id.toString(), process.env.JWT_SECRET)
+        // input = {...input, token}
+        // let session = await Session.findOne({deviceAgent: input.deviceAgent})
+        // if(_.isEmpty(session)){
+        //   session = await Session.create(input);
+        // }
 
-        input = {...input, token}
-        await Session.create(input);
-
+        let sessionId = await getSessionId(user._id.toString(), input)
+        
         return {
           status: true,
-          messages: "", 
-          token,
+          // messages: "", 
+          // token,
           data: user,
+          sessionId,
           executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
         }
 
@@ -1088,6 +1086,7 @@ export default {
         return;
       }
     },
+
     // loginWithSocial
     async loginWithSocial(parent, args, context, info) {
       let {input} = args
@@ -1179,10 +1178,14 @@ export default {
               user = await User.create(newInput);
             }
             console.log("GOOGLE :", user)
+
+            let sessionId = await getSessionId(user._id.toString(), input)
+
             return {
               status:true,
               data: user,
-              token: jwt.sign(user._id.toString(), process.env.JWT_SECRET),
+              // token: jwt.sign(user._id.toString(), process.env.JWT_SECRET),
+              sessionId,
               executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
             }
 
@@ -1321,10 +1324,13 @@ export default {
             }
 
             console.log("GITHUB :", user)
+
+            let sessionId = await getSessionId(user._id.toString(), input)
             return {
               status:true,
               data: user,
-              token: jwt.sign(user._id.toString(), process.env.JWT_SECRET),
+              // token: jwt.sign(user._id.toString(), process.env.JWT_SECRET),
+              sessionId,
               executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
             }
           } catch(err) {
@@ -1391,10 +1397,13 @@ export default {
             }
 
             console.log("FACEBOOK :", user)
+
+            let sessionId = await getSessionId(user._id.toString(), input)
             return {
               status:true,
               data: user,
-              token: jwt.sign(user._id.toString(), process.env.JWT_SECRET),
+              // token: jwt.sign(user._id.toString(), process.env.JWT_SECRET),
+              sessionId,
               executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
             }
           }catch(err){

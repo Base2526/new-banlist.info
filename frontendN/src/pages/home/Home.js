@@ -12,7 +12,7 @@ import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
 import _ from "lodash";
 import CircularProgress from '@mui/material/CircularProgress';
-import { useQuery, useMutation, useSubscription } from "@apollo/client";
+import { useQuery, useMutation, useApolloClient } from "@apollo/client";
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import { connect } from "react-redux";
@@ -38,6 +38,8 @@ import {gqlHomes, gqlCreateReport,
 
 import { login, addedBookmark } from "../../redux/actions/auth"
 
+// import {wsLink} from "../../Apollo"
+
 let unsubscribePost = null;
 
 const Home = (props) => {
@@ -45,13 +47,12 @@ const Home = (props) => {
 
   const { t } = useTranslation();
 
-  console.log("Home :", localStorage. getItem('i18n') )
-
   let params = queryString.parse(history.location.search)
 
-  // console.log("Home :", params)
+  let { is_connnecting, user } = props
 
-  let { is_connnecting, user, addedBookmark } = props
+  const client = useApolloClient();
+
 
   const [keywordSearch, setKeywordSearch] = useState("");
   const [category, setCategory] = useState([0,1]);
@@ -108,7 +109,7 @@ const Home = (props) => {
   );
   
   const homesValues =useQuery(gqlHomes, {
-    variables: { userId: "", page, perPage: rowsPerPage, keywordSearch: keywordSearch, category: category.join()},
+    variables: { page, perPage: rowsPerPage, keywordSearch: keywordSearch, category: category.join()},
     notifyOnNetworkStatusChange: true,
   });
   // console.log("homesValues :", homesValues )
@@ -147,7 +148,7 @@ const Home = (props) => {
 
   useEffect(()=>{
     if(is_connnecting){
-      homesValues && homesValues.refetch({userId: _.isEmpty(user) ? "" : user._id, page, perPage: rowsPerPage, keywordSearch: keywordSearch, category: category.join()})
+      homesValues && homesValues.refetch({page, perPage: rowsPerPage, keywordSearch: keywordSearch, category: category.join()})
     }
   }, [user, is_connnecting])
 
@@ -464,11 +465,12 @@ const Home = (props) => {
         <DialogLogin
           {...props}
           open={dialogLoginOpen}
-          onComplete={(data)=>{
-            console.log("onComplete :", data)
-
-            // props.login(data)
+          onComplete={async(data)=>{
             setDialogLoginOpen(false);
+            props.login(data)
+            
+            await client.cache.reset();
+            await client.resetStore();
           }}
           onClose={() => {
             setDialogLoginOpen(false);

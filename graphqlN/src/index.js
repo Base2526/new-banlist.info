@@ -9,12 +9,13 @@ import { useServer } from "graphql-ws/lib/use/ws";
 import jwt from 'jsonwebtoken';
 import * as fs from "fs";
 
-import {User} from './model'
-import connection from './mongo' 
+import {User, Session} from './model'
+// import connection from './mongo' 
 import typeDefs from "./typeDefs";
 import resolvers from "./resolvers";
 import pubsub from './pubsub'
 
+require('./mongo');
 require('../cron-jobs.js');
 
 const path = require('path');
@@ -48,29 +49,29 @@ async function startApolloServer(typeDefs, resolvers) {
 
     const getDynamicContext = async (ctx, msg, args) => {
         // ctx is the graphql-ws Context where connectionParams live
-       if (ctx.connectionParams.authToken) {
-            //   const currentUser = await findUser(connectionParams.authentication);
-            //   return { currentUser };
+    //    if (ctx.connectionParams.authToken) {
+    //         //   const currentUser = await findUser(connectionParams.authentication);
+    //         //   return { currentUser };
 
-            try {
-                let userId  = jwt.verify(ctx.connectionParams.authToken, process.env.JWT_SECRET);
+    //         try {
+    //             let userId  = jwt.verify(ctx.connectionParams.authToken, process.env.JWT_SECRET);
 
-                // code
-                // -1 : foce logout
-                //  0 : anonymums
-                //  1 : OK
+    //             // code
+    //             // -1 : foce logout
+    //             //  0 : anonymums
+    //             //  1 : OK
 
-                // {status: true, code: 1, data}
+    //             // {status: true, code: 1, data}
 
-                let currentUser = await User.findById(userId)
+    //             let currentUser = await User.findById(userId)
                 
-                // console.log("currentUser >> " , currentUser._id)
-                return {...ctx, currentUser} 
-            } catch(err) {
-                // logger.error(err.toString());
-                console.log(">> ", err.toString())
-            }
-        }
+    //             // console.log("currentUser >> " , currentUser._id)
+    //             return {...ctx, currentUser} 
+    //         } catch(err) {
+    //             // logger.error(err.toString());
+    //             console.log(">> ", err.toString())
+    //         }
+    //     }
         // Otherwise let our resolvers know we don't have a current user
 
         // console.log("getDynamicContext :", ctx.connectionParams.authToken)
@@ -84,60 +85,63 @@ async function startApolloServer(typeDefs, resolvers) {
                 // Returning an object will add that information to our
                 // GraphQL context, which all of our resolvers have access to.
 
+                // console.log("serverCleanup :", ctx, msg, args)
+
                 return getDynamicContext(ctx, msg, args);
             },
             onConnect: async (ctx) => {
-                // Check authentication every time a client connects.
-                // if (tokenIsNotValid(ctx.connectionParams)) {
-                //   // You can return false to close the connection  or throw an explicit error
-                //   throw new Error('Auth token missing!');
-                // }
-                // 
-                console.log("onConnect : ", ctx.connectionParams.authToken)
-                console.log("onConnect textHeaders : ", ctx.connectionParams.textHeaders)
-                logger.info(ctx.connectionParams);
+                console.log("onConnect :", ctx.connectionParams)
+            //     // Check authentication every time a client connects.
+            //     // if (tokenIsNotValid(ctx.connectionParams)) {
+            //     //   // You can return false to close the connection  or throw an explicit error
+            //     //   throw new Error('Auth token missing!');
+            //     // }
+            //     // 
+            //     // console.log("onConnect : ", ctx.connectionParams.authToken)
+            //     // console.log("onConnect textHeaders : ", ctx.connectionParams.textHeaders)
+            //     // logger.info(ctx.connectionParams);
 
-                if (ctx.connectionParams.authToken) {
-                    try {
-                        let userId  = jwt.verify(ctx.connectionParams.authToken, process.env.JWT_SECRET);
+            //     if (ctx.connectionParams.authToken) {
+            //         try {
+            //             let userId  = jwt.verify(ctx.connectionParams.authToken, process.env.JWT_SECRET);
         
-                        let result = await User.updateOne({ _id: userId }, { $set: { isOnline: true }})
+            //             let result = await User.updateOne({ _id: userId }, { $set: { isOnline: true }})
 
-                        if(result.ok){
-                            pubsub.publish("CONVERSATION", {
-                                conversation:{
-                                  mutation: 'CONNECTED',
-                                  data: userId
-                                }
-                            });
-                        }
+            //             if(result.ok){
+            //                 pubsub.publish("CONVERSATION", {
+            //                     conversation:{
+            //                       mutation: 'CONNECTED',
+            //                       data: userId
+            //                     }
+            //                 });
+            //             }
                         
-                    } catch(err) {
-                        logger.error(err.toString());
-                    } 
-                }
+            //         } catch(err) {
+            //             logger.error(err.toString());
+            //         } 
+            //     }
             },
             onDisconnect: async (ctx, code, reason) =>{
-                logger.info(ctx.connectionParams);
+                // logger.info(ctx.connectionParams);
                 console.log("onDisconnect")
-                if (ctx.connectionParams.authToken) {
-                    try {
-                        let userId  = jwt.verify(ctx.connectionParams.authToken, process.env.JWT_SECRET);
+            //     if (ctx.connectionParams.authToken) {
+            //         try {
+            //             let userId  = jwt.verify(ctx.connectionParams.authToken, process.env.JWT_SECRET);
         
-                        let result =  await User.updateOne({ _id: userId }, { $set: { isOnline: false } })
+            //             let result =  await User.updateOne({ _id: userId }, { $set: { isOnline: false } })
 
-                        if(result.ok){
-                            pubsub.publish("CONVERSATION", {
-                                conversation:{
-                                mutation: 'DISCONNECTED',
-                                data: ""
-                                }
-                            });
-                        }
-                    } catch(err) {
-                        logger.error(err.toString());
-                    }
-                }
+            //             if(result.ok){
+            //                 pubsub.publish("CONVERSATION", {
+            //                     conversation:{
+            //                     mutation: 'DISCONNECTED',
+            //                     data: ""
+            //                     }
+            //                 });
+            //             }
+            //         } catch(err) {
+            //             logger.error(err.toString());
+            //         }
+            //     }
             }
         }, 
         wsServer);
@@ -157,7 +161,7 @@ async function startApolloServer(typeDefs, resolvers) {
                 async serverWillStart() {
                 return {
                     async drainServer() {
-                    await serverCleanup.dispose();
+                        await serverCleanup.dispose();
                     },
                 };
                 },
@@ -166,55 +170,61 @@ async function startApolloServer(typeDefs, resolvers) {
             ApolloServerPluginLandingPageLocalDefault({ embed: true }),
         ],
 
-        // subscriptions: {
-        //     // path: "/subscriptions",
-        //     onConnect: () => {
-        //       console.log("Client connected for subscriptions");
-        //     },
-        //     onDisconnect: () => {
-        //       console.log("Client disconnected from subscriptions");
-        //     },
-        // },
-
         context: async ({ req }) => {
-            // console.log("ApolloServer context ", req.headers)
+            // console.log("ApolloServer context :", req.headers.authorization)
 
             // https://daily.dev/blog/authentication-and-authorization-in-graphql
             // throw Error("throw Error(user.msg);");
 
             // const decode = jwt.verify(token, 'secret');
+            try {
+                if (req.headers && req.headers.authorization) {
+                    var auth    = req.headers.authorization;
+                    var parts   = auth.split(" ");
+                    var bearer  = parts[0];
+                    var sessionId   = parts[1];
 
-            if (req.headers && req.headers.authorization) {
-                var auth    = req.headers.authorization;
-                var parts   = auth.split(" ");
-                var bearer  = parts[0];
-                var token   = parts[1];
+                    if (bearer == "Bearer") {
+                        // let decode = jwt.verify(token, process.env.JWT_SECRET);
+                        let session = await Session.findById(sessionId)   
+                        
+                        var expiredDays = parseInt((session.expired - new Date())/ (1000 * 60 * 60 * 24));
 
-                console.log("context  userId >> #1 " )
-                if (bearer == "Bearer") {
-                    // let decode = jwt.verify(token, process.env.JWT_SECRET);
+                        // console.log("session expired :", session.expired, expiredDays, req)
 
-                    try {
-                        let userId  = jwt.verify(token, process.env.JWT_SECRET);
-
-                        console.log("context  userId >> #2" , userId)
                         // code
-                        // -1 : foce logout
+                        // -1 : force logout
                         //  0 : anonymums
                         //  1 : OK
+                        if(expiredDays >= 0){
+                            let userId  = jwt.verify(session.token, process.env.JWT_SECRET);
+    
+                            // return {...req, currentUser: await User.findById(userId)} 
 
-                        // {status: true, code: 1, data}
+                            return {
+                                status: true,
+                                code: 1,
+                                currentUser: await User.findById(userId),
+                                req
+                            }
+                        }
 
-                        let currentUser = await User.findById(userId)
-                        
-                        
-                        return {...req, currentUser} 
-                    } catch(err) {
-                        logger.error( err.toString() );
+                        // force logout
+                        return {
+                            status: false,
+                            code: -1,
+                            req
+                        }
                     }
                 }
+            } catch(err) {
+                logger.error( err.toString() );
             }
-            return {...req, currentUser: null}
+            return {
+                status: true,
+                code: 0,
+                req
+            }
         }
     });
   

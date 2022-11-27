@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useHistory, useParams } from "react-router-dom";
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation, useApolloClient } from "@apollo/client";
 import CircularProgress from '@mui/material/CircularProgress';
 import LinearProgress from '@mui/material/LinearProgress';
 import { useDeviceData } from "react-device-detect";
@@ -22,9 +22,13 @@ import { login } from "../../redux/actions/auth"
 
 import { gqlLogin, gqlLoginWithSocial, gqlConversations, gqlPosts, gqlHomes } from "../../gqlQuery"
 
+// import {wsLink} from "../../Apollo"
+
 const Login = (props) => {
     let history = useHistory();
     let deviceData = useDeviceData();
+
+    const client = useApolloClient();
 
     // localStorage.clear()
 
@@ -37,18 +41,30 @@ const Login = (props) => {
     let [input, setInput]   = useState({ username: "",  password: ""});
     const [onLogin, resultLogin] = useMutation(gqlLogin, {
         refetchQueries: [  {query: gqlConversations}, {query: gqlPosts}, {query : gqlHomes} ],
-        onCompleted(datas) {
-            console.log("onCompleted :", datas)
-    
-            // localStorage.setItem('token', data.login.token)
-            // base64.encode(utf8.encode(data._id))
+        // onCompleted(datas) {
+        // // onComplete={async(data)=>{
+        //     console.log("onCompleted :", datas)
 
-            let {status, data, token} = datas.login
+        //     let {status, data, sessionId} = datas.login
+        //     if(status){
+        //         localStorage.setItem('token', sessionId)
+        //         login(data)
+        //     }
 
+        //     client.cache.reset();
+        //     client.resetStore();
+
+        //     history.push("/");
+        // },
+        onCompleted: async(datas)=>{
+            let {status, data, sessionId} = datas.login
             if(status){
-                localStorage.setItem('token', token)
+                localStorage.setItem('token', sessionId)
                 login(data)
             }
+
+            await client.cache.reset();
+            await client.resetStore();
 
             history.push("/");
         },
@@ -110,7 +126,7 @@ const Login = (props) => {
 
         let {code} = response
         if(!_.isEmpty(code)){
-            onLoginWithSocial({ variables: { input: { authType: "GITHUB",  data: response }} })
+            onLoginWithSocial({ variables: { input: { authType: "GITHUB",  data: response, deviceAgent: JSON.stringify(deviceData) }} })
         }
     }
 

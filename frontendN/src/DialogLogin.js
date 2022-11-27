@@ -27,8 +27,8 @@ import { useTranslation } from "react-i18next";
 
 import { gqlLogin, gqlConversations, gqlPosts, gqlHomes, gqlLoginWithSocial } from "./gqlQuery"
 
-const DialogLogin = (props) => {
 
+const DialogLogin = (props) => {
   const { t } = useTranslation();
   
   const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -122,12 +122,10 @@ const DialogLogin = (props) => {
         }  
         */
 
-        let {status, data, token} = loginWithSocial
+        let {status, data, sessionId} = loginWithSocial
 
         if(status){
-          localStorage.setItem('token', token)
-
-         
+          localStorage.setItem('token', sessionId)
 
           onComplete(data)
         }
@@ -167,7 +165,7 @@ const DialogLogin = (props) => {
     console.log( "callbackFacebook :", response);
 
 
-    _.has(response, "status") ? "" : onLoginWithSocial({ variables: { input: { authType: "FACEBOOK",  data: response  }} })
+    _.has(response, "status") ? "" : onLoginWithSocial({ variables: { input: { authType: "FACEBOOK",  data: response, deviceAgent: JSON.stringify(deviceData)  }} })
     
 
     // status: "unknown"
@@ -203,7 +201,7 @@ const DialogLogin = (props) => {
     console.log("responseGoogle newAuthRes :", newAuthRes)
     // localStorage.setItem('authToken', newAuthRes.id_token);
 
-    onLoginWithSocial({ variables: { input: { authType: "GOOGLE",  data: {...response, ...newAuthRes}  }} })
+    onLoginWithSocial({ variables: { input: { authType: "GOOGLE",  data: {...response, ...newAuthRes}, deviceAgent: JSON.stringify(deviceData)  }} })
 
     // error: "popup_closed_by_user"
     /*
@@ -297,7 +295,7 @@ const DialogLogin = (props) => {
 
     let {code} = response
     if(!_.isEmpty(code)){
-      onLoginWithSocial({ variables: { input: { authType: "GITHUB",  data: response }} })
+      onLoginWithSocial({ variables: { input: { authType: "GITHUB",  data: response, deviceAgent: JSON.stringify(deviceData)}} })
     }
   }
 

@@ -21,7 +21,7 @@ const BankInputField = ({ label, values, onChange }) => {
 
   let valueBanks = useQuery(gqlBanks, { notifyOnNetworkStatusChange: true, });
 
-  console.log("valueBanks :", valueBanks)
+  // console.log("valueBanks :", valueBanks)
 
   useEffect(() => {
     onChange(inputList);
