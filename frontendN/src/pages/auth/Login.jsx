@@ -20,7 +20,7 @@ import base64 from 'base-64';
 
 import { login } from "../../redux/actions/auth"
 
-import { gqlLogin, gqlLoginWithSocial, gqlConversations, gqlPosts, gqlHomes } from "../../gqlQuery"
+import { gqlLogin, gqlLoginWithSocial, gqlPosts, gqlHomes } from "../../gqlQuery"
 
 // import {wsLink} from "../../Apollo"
 
@@ -40,7 +40,7 @@ const Login = (props) => {
 
     let [input, setInput]   = useState({ username: "",  password: ""});
     const [onLogin, resultLogin] = useMutation(gqlLogin, {
-        refetchQueries: [  {query: gqlConversations}, {query: gqlPosts}, {query : gqlHomes} ],
+        refetchQueries: [ {query: gqlPosts}, {query : gqlHomes} ],
         // onCompleted(datas) {
         // // onComplete={async(data)=>{
         //     console.log("onCompleted :", datas)

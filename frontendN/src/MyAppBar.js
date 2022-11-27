@@ -116,7 +116,7 @@ const MyAppBar = (props) =>{
                 BANLIST.INFO (alpha)
               </Typography>
 
-              <div style={{"margin-right": "10px"}}>
+              <div style={{"marginRight": "10px"}}>
                 <button value='en' onClick={handleChangeLanguage}> EN </button>
                 <button value='th' onClick={handleChangeLanguage}> TH </button>
               </div>
