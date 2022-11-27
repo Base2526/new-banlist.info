@@ -38,7 +38,7 @@ const ShareList = (props) => {
     notifyOnNetworkStatusChange: true,
   });
 
-  console.log("shareValues :", shareValues)
+  // console.log("shareValues :", shareValues)
 
   const [openDialogDelete, setOpenDialogDelete] = useState({
     isOpen: false,

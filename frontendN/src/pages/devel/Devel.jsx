@@ -128,7 +128,7 @@ const Devel = (props) => {
       taskId: 1,
     }
   });
-  console.log("resultCreateShare :", resultCreateShare)
+  // console.log("resultCreateShare :", resultCreateShare)
   
   const makeText = (length) => {
       var result           = '';

@@ -191,9 +191,8 @@ export const gqlBookmarksByUserId = gql`
     }`;
 
 export const gqlIsBookmark = gql`
-    query IsBookmark($userId: ID, $postId: ID!){
+    query IsBookmark($postId: ID!){
         isBookmark(
-            userId: $userId
             postId: $postId
         ){
             status
@@ -499,7 +498,7 @@ export const subPost = gql`subscription subPost($postIDs: String) { subPost(post
 
 export const subComment = gql`subscription subComment($commentID: String) { subComment(commentID: $commentID) } `;
 
-export const subBookmark = gql`subscription subBookmark($userId: ID!, $postId: ID!){ subBookmark(userId: $userId, postId: $postId) }`;
+export const subBookmark = gql`subscription subBookmark( $postId: ID! ){ subBookmark(postId: $postId) }`;
 
 export const subShare = gql`subscription subShare( $postId: ID! ) { subShare( postId: $postId ) }`;
 

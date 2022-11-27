@@ -315,7 +315,7 @@ const Post = (props) => {
         variables: {postId: id},
         notifyOnNetworkStatusChange: true,
       });
-      console.log("shareValues : ", shareValues)
+      // console.log("shareValues : ", shareValues)
     
       editValues = useQuery(gqlPost, {
         variables: {id},

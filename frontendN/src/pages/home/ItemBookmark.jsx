@@ -5,7 +5,7 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import _ from "lodash"
 import { connect } from "react-redux";
 
-import { gqlIsBookmark, gqlCreateAndUpdateBookmark, subBookmark } from "../../gqlQuery"
+import { gqlIsBookmark, subBookmark } from "../../gqlQuery"
 
 let unsubscribe =null
 const ItemBookmark = (props) => {
@@ -13,16 +13,12 @@ const ItemBookmark = (props) => {
 
   
   let bmValus = useQuery(gqlIsBookmark, {
-    variables: {userId: "", postId: ""},
+    variables: { postId: ""},
     notifyOnNetworkStatusChange: true,
   });
 
   useEffect(()=>{
-    if(!_.isEmpty(user)){
-      bmValus.refetch({userId: user._id, postId: item._id});
-    }else{
-      bmValus.refetch({userId: "", postId: item._id});
-    }
+    bmValus.refetch({ postId: item._id});
   }, [user])
 
   
@@ -34,7 +30,7 @@ const ItemBookmark = (props) => {
       let {subscribeToMore} = bmValus
       unsubscribe =  subscribeToMore({
         document: subBookmark,
-        variables: { userId: user._id, postId: item._id },
+        variables: { postId: item._id },
         updateQuery: (prev, {subscriptionData}) => {
           if (!subscriptionData.data) return prev;
   
