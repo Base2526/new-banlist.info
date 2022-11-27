@@ -12,8 +12,7 @@ const index = (props) => {
         notifyOnNetworkStatusChange: true,
     });
     
-    console.log("basicContentValue :", basicContentValue)
-
+    // console.log("basicContentValue :", basicContentValue)
 
     return (
         <div>

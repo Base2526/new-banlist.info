@@ -262,9 +262,9 @@ export const gqlDblog = gql`
         }
     }`;
 
-export const gqlConversations = gql`query conversations($userId: ID){ conversations(userId: $userId) }`;
+export const gqlConversations = gql`query conversations{ conversations }`;
 
-export const gqlNotifications = gql`query notifications($userId: ID){ notifications(userId: $userId) }`;
+export const gqlNotifications = gql`query notifications{ notifications }`;
 
 export const gqlBasicContent =  gql`query BasicContent($id: ID!){ basicContent(_id: $id) }`;
 

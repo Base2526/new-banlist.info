@@ -161,7 +161,7 @@ const App = (props) => {
 
   
   ////////////////////// conversation ////////////////////////////
-  const conversationValues =useQuery(gqlConversations, { variables: { userId: ""}, notifyOnNetworkStatusChange: true });
+  const conversationValues =useQuery(gqlConversations, { notifyOnNetworkStatusChange: true });
 
   // console.log("conversationValues :", conversationValues )
     
@@ -178,7 +178,7 @@ const App = (props) => {
     let {subscribeToMore} = conversationValues
     unsubscribeConversation = subscribeToMore({
       document: subConversation,
-      variables: { userId: user._id },
+      // variables: { userId: user._id },
       updateQuery: (prev, {subscriptionData}) => {
         if (!subscriptionData.data) return prev;
 
@@ -193,7 +193,7 @@ const App = (props) => {
   ////////////////////// conversation ////////////////////////////
 
   //////////////////////  notifications //////////////////////////////////
-  const notificationValues =useQuery(gqlNotifications, { variables: { userId: ""}, notifyOnNetworkStatusChange: true });
+  const notificationValues =useQuery(gqlNotifications, { notifyOnNetworkStatusChange: true });
 
   // console.log("notificationValues :", notificationValues )
 
@@ -205,7 +205,7 @@ const App = (props) => {
     let {subscribeToMore} = notificationValues
     unsubscribeNotification = subscribeToMore({
       document: subNotification,
-      variables: { userId: user._id },
+      // variables: { userId: user._id },
       updateQuery: (prev, {subscriptionData}) => {
 
            
@@ -250,9 +250,9 @@ const App = (props) => {
   }, [])
 
   useEffect(()=>{
-    conversationValues.refetch({userId: _.isEmpty(user) ? "" : user._id})
+    conversationValues.refetch()
 
-    notificationValues.refetch({userId: _.isEmpty(user) ? "" : user._id})
+    notificationValues.refetch()
 
     // setOnlineIndicator(setInterval(() => worker(user), 20000, user));
   }, [user])

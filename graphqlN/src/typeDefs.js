@@ -488,8 +488,8 @@ export default gql`
 
     Dblog(page: Int, perPage: Int): DblogPayLoad
 
-    conversations(userId: ID): JSON
-    notifications(userId: ID): JSON
+    conversations: JSON
+    notifications: JSON
     
     basicContent(_id: ID!): JSON
     basicContents(page: Int, perPage: Int): JSON

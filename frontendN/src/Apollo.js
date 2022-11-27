@@ -41,121 +41,124 @@ let gracefullyRestart = () => {
 };
 
 const wsLink = new GraphQLWsLink(createClient({
-url: (process.env.REACT_APP_NODE_ENV === "development" ? "ws://" + process.env.REACT_APP_HOST_GRAPHAL +'/graphql' :  "wss://" + process.env.REACT_APP_HOST_GRAPHAL +'/subscription' ) ,
-// reconnect: true,
-disablePong: false,
-connectionAckWaitTimeout: 0,
-retryAttempts: 5,
-keepAlive: 10_000,
-reconnect: true,
-retryWait: async function randomisedExponentialBackoff(retries) {
+    url: (process.env.REACT_APP_NODE_ENV === "development" ? "ws://" + process.env.REACT_APP_HOST_GRAPHAL +'/graphql' :  "wss://" + process.env.REACT_APP_HOST_GRAPHAL +'/subscription' ) ,
+    // reconnect: true,
+    disablePong: false,
+    connectionAckWaitTimeout: 0,
+    retryAttempts: 5,
+    keepAlive: 10_000,
+    reconnect: true,
+    retryWait: async function randomisedExponentialBackoff(retries) {
 
-    console.log("wsLink retryWait")
-    let retryDelay = 1000; // start with 1s delay
-    for (let i = 0; i < retries; i++) {
-    retryDelay *= 2;
-    }
-    await new Promise((resolve) =>
-    setTimeout(
-        resolve,
-        retryDelay +
-        // add random timeout from 300ms to 3s
-        Math.floor(Math.random() * (3000 - 300) + 300),
-    ),
-    );
-},
-shouldRetry: (errOrCloseEvent) => {
-    console.log("wsLink shouldRetry :")
-    return true;
-},
-// connectionParams: {
-//   authToken: localStorage.getItem('token'),
-//   textHeaders: "axxxx2",
-//   options:{ reconnect: true }
-// },
-connectionParams: () => {
-    // Note: getSession() is a placeholder function created by you
-    const session = localStorage.getItem('token');
-    if (!session) {
-    return {};
-    }
-    console.log("")
-    return {
-    // Authorization: `Bearer ${session.token}`,
-    authToken: localStorage.getItem('token'),
-    options:{ reconnect: true }
-    };
-},
-on: {
-    // connected: () => console.log("connected client"),
-    connecting: () => {
-    // this.setState({ socketStatus: 'connecting' });
-    // console.log("wsLink connecting");
-
-    connecting(true)
-    },
-    closed: () =>{
-    // console.log("wsLink closed");
-    activeSocket =null
-    connecting(false)
-    } ,
-    connected: (socket) =>{
-    activeSocket = socket
-
-    // console.log("wsLink connected client", socket);
-
-    // gracefullyRestart = () => {
-    //   if (socket.readyState === WebSocket.OPEN) {
-    //     socket.close(4205, 'Client Restart');
-
-    //     console.log("gracefullyRestart #1")
-    //   }
-    // };
-
-    // // just in case you were eager to restart
-    // if (restartRequestedBeforeConnected) {
-    //   restartRequestedBeforeConnected = false;
-    //   gracefullyRestart();
-
-    //   console.log("gracefullyRestart #2")
-    // }
-
-    gracefullyRestart = () => {
-        if (socket.readyState === WebSocket.OPEN) {
-        socket.close(4205, 'Client Restart');
+        console.log("wsLink retryWait")
+        let retryDelay = 1000; // start with 1s delay
+        for (let i = 0; i < retries; i++) {
+            retryDelay *= 2;
         }
-    };
-
-    // just in case you were eager to restart
-    if (restartRequestedBeforeConnected) {
-        restartRequestedBeforeConnected = false;
-        gracefullyRestart();
-    }
-    
+        await new Promise((resolve) =>
+            setTimeout(
+                resolve,
+                retryDelay +
+                // add random timeout from 300ms to 3s
+                Math.floor(Math.random() * (3000 - 300) + 300),
+            ),
+        );
     },
-    keepAlive: 10, // ping server every 10 seconds
-    ping: (received) => {
-    console.log("ping #0")
-
-    if (!received){
-        console.log("#1")
-        timedOut = setTimeout(() => {
-        console.log("timedOut")
-        if (activeSocket.readyState === WebSocket.OPEN){
-            activeSocket.close(4408, 'Request Timeout');
+    shouldRetry: (errOrCloseEvent) => {
+        console.log("wsLink shouldRetry :")
+        return true;
+    },
+    // connectionParams: {
+    //   authToken: localStorage.getItem('token'),
+    //   textHeaders: "axxxx2",
+    //   options:{ reconnect: true }
+    // },
+    connectionParams: () => {
+        // Note: getSession() is a placeholder function created by you
+        const session = localStorage.getItem('token');
+        if (!session) {
+            return {};
         }
+        console.log("")
+        return {
+            // Authorization: `Bearer ${session.token}`,
+            authToken: localStorage.getItem('token'),
+            options:{ reconnect: true }
+        };
+    },
+    on: {
+        error: (err) => {
+            console.log("Apollo :", err); // 👈 does this log?
+        },
+        // connected: () => console.log("connected client"),
+        connecting: () => {
+            // this.setState({ socketStatus: 'connecting' });
+            // console.log("wsLink connecting");
+
+            connecting(true)
+        },
+        closed: () =>{
+                // console.log("wsLink closed");
+                activeSocket =null
+                connecting(false)
+        } ,
+        connected: (socket) =>{
+            activeSocket = socket
+
+            // console.log("wsLink connected client", socket);
+
+            // gracefullyRestart = () => {
+            //   if (socket.readyState === WebSocket.OPEN) {
+            //     socket.close(4205, 'Client Restart');
+
+            //     console.log("gracefullyRestart #1")
+            //   }
+            // };
+
+            // // just in case you were eager to restart
+            // if (restartRequestedBeforeConnected) {
+            //   restartRequestedBeforeConnected = false;
+            //   gracefullyRestart();
+
+            //   console.log("gracefullyRestart #2")
+            // }
+
+            gracefullyRestart = () => {
+                if (socket.readyState === WebSocket.OPEN) {
+                socket.close(4205, 'Client Restart');
+                }
+            };
+
+            // just in case you were eager to restart
+            if (restartRequestedBeforeConnected) {
+                restartRequestedBeforeConnected = false;
+                gracefullyRestart();
+            }
             
-        }, 5); // wait 5 seconds for the pong and then close the connection
-    } // sent
-    },
-    pong: (received) => {
-    console.log("pong #1")
+        },
+        keepAlive: 10, // ping server every 10 seconds
+        ping: (received) => {
+        console.log("ping #0")
 
-    if (received){
-        clearTimeout(timedOut); // pong is received, clear connection close timeout
-    } 
+            if (!received){
+                console.log("#1")
+                timedOut = setTimeout(() => {
+                console.log("timedOut")
+                if (activeSocket.readyState === WebSocket.OPEN){
+                    activeSocket.close(4408, 'Request Timeout');
+                }
+                    
+                }, 5); // wait 5 seconds for the pong and then close the connection
+            } // sent
+        },
+        pong: (received) => {
+            console.log("pong #1")
+
+            if (received){
+                clearTimeout(timedOut); // pong is received, clear connection close timeout
+            } 
+        },
     },
-},
 }));
   
 const uploadLink =  createUploadLink({  

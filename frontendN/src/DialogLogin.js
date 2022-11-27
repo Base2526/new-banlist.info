@@ -25,7 +25,7 @@ import base64 from 'base-64';
 
 import { useTranslation } from "react-i18next";
 
-import { gqlLogin, gqlConversations, gqlPosts, gqlHomes, gqlLoginWithSocial } from "./gqlQuery"
+import { gqlLogin, gqlPosts, gqlHomes, gqlLoginWithSocial } from "./gqlQuery"
 
 
 const DialogLogin = (props) => {
@@ -51,7 +51,7 @@ const DialogLogin = (props) => {
 
   const [input, setInput]   = useState({ username: "",  password: ""});
   const [onLogin, resultLogin] = useMutation(gqlLogin, {
-    refetchQueries: [  {query: gqlConversations}, {query: gqlPosts}, {query : gqlHomes} ],
+    refetchQueries: [ {query: gqlPosts}, {query : gqlHomes} ],
     onCompleted(data) {
 
       // console.log("onCompleted :", data)

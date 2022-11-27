@@ -190,7 +190,6 @@ const HomeItem =(props) => {
           <div>
 
             <ItemBookmark {...props} />
-            {/* {onItemBookmark()} */}
             <ItemShare {...props} />
             <ItemComment {...props}/>
 

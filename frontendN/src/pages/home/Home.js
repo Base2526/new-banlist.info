@@ -308,8 +308,9 @@ const Home = (props) => {
                   {homesValues.data.homes.data.map(
                     (item, index) => {
                       return (
-                        <div key={item.id}>
+                        <div key={index}>
                           <HomeItem 
+                            key={index}
                             {...props}
                             user={user}
                             item={item} 
@@ -342,8 +343,6 @@ const Home = (props) => {
                                   }
                                 }
                               }); 
-
-                              // addedBookmark({postId, userId, status})
                             }}
                             />
                             {menuShare(item, index)}
@@ -355,7 +354,6 @@ const Home = (props) => {
                 </Masonry>
               </Container>
               <Container sx={{ py: 2 }} maxWidth="xl">
-
                 { 
                   homesValues.data.homes.total > rowsPerPage 
                   ? <Pagination

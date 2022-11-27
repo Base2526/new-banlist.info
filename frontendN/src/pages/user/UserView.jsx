@@ -59,12 +59,7 @@ const UserView = (props) => {
           // Update the cache as an approximation of server-side mutation effects
           // console.log("update > createConversation", createConversation)
 
-          const data = cache.readQuery({
-            query: gqlConversations,
-            variables: {
-              userId: user._id
-            }
-          });
+          const data = cache.readQuery({ query: gqlConversations });
 
           if(data != null){
             if(_.find(data.conversations.data, (v)=>v._id === createConversation._id) == null){
@@ -75,12 +70,7 @@ const UserView = (props) => {
   
               cache.writeQuery({
                 query: gqlConversations,
-                data: {
-                  conversations: new_conversations
-                },
-                variables: {
-                  userId: user._id
-                }
+                data: { conversations: new_conversations }
               });
             }
 

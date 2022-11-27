@@ -884,42 +884,46 @@ export default {
     async conversations(parent, args, context, info) {
 
       let start = Date.now()
-      // let { currentUser } = context
+      let { status, code, currentUser } = context 
 
-      // console.log("conversations :", currentUser)
-
-      // if(_.isEmpty(currentUser) ){
-      //   return;
-      // }
-
-      let { userId } = args
-
-      let data=  await Conversation.find({
-        "members.userId": { $all: [ userId ] }
-      });
-    
-      return {
-        status:true,
-        data,
-        executionTime: `Time to execute = ${
-          (Date.now() - start) / 1000
-        } seconds`
-      }
-    },
-
-    async notifications(parent, args, context, info) {
-      try{
-        let start = Date.now()
-        let { userId } = args
-
-        let data=  await Notification.find({ user_to_notify: userId });
-
+      if(!_.isEmpty(currentUser) ){
+        let data=  await Conversation.find({
+          "members.userId": { $all: [ currentUser?._id ] }
+        });
+      
         return {
           status:true,
           data,
           executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
         }
+      }
+      return {
+        status:true,
+        data: [],
+        executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+      }
+      
+    },
 
+    async notifications(parent, args, context, info) {
+      try{
+        let start = Date.now()
+        let { status, code, currentUser } = context 
+
+        if(!_.isEmpty(currentUser) ){
+
+          return {
+            status: true,
+            data: await Notification.find({ user_to_notify: currentUser?._id }),
+            executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+          }
+        }
+
+        return {
+          status:true,
+          data:[],
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
       } catch(err) {
         logger.error(err.toString());
         return;
