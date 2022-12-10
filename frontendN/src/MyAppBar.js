@@ -122,7 +122,7 @@ const MyAppBar = (props) =>{
 
               
               <div style={{"marginRight": "10px"}} className="lang-contain">
-                <button value='en' onClick={handleChangeLanguage} className={(getCurrentLanguage() == "en" ? "lang-en active" : "lang-en ")}> EN </button>
+                <button value='en' onClick={handleChangeLanguage} className={(getCurrentLanguage() == "en" ? "lang-en active" : "lang-en")}> EN </button>
                 <button value='th' onClick={handleChangeLanguage} className={(getCurrentLanguage() == "th" ? "lang-en active" : "lang-en")}> TH </button>
               </div>
               
