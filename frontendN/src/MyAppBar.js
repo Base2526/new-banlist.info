@@ -22,6 +22,8 @@ import i18n from './translations/i18n';
 
 // import { isAuth, logout} from "./AuthProvider"
 
+import {getCurrentLanguage} from "./util"
+
 
 // import "./translations/i18n";
 
@@ -79,6 +81,8 @@ const MyAppBar = (props) =>{
     setAnchorEl(null)
   }
 
+  
+
   const handleChangeLanguage=(e)=>{
     e.preventDefault();
     setLanguage(e.target.value);
@@ -117,8 +121,8 @@ const MyAppBar = (props) =>{
               </Typography>
 
               <div style={{"marginRight": "10px"}}>
-                <button value='en' onClick={handleChangeLanguage}> EN </button>
-                <button value='th' onClick={handleChangeLanguage}> TH </button>
+                <button value='en' className={(getCurrentLanguage() == "th" ? "" : "active")} onClick={handleChangeLanguage}> EN </button>
+                <button value='th' className={(getCurrentLanguage() == "th" ? "active" : "")} onClick={handleChangeLanguage}> TH </button>
               </div>
               
               {

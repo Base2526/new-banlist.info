@@ -57,3 +57,5 @@ export const numberCurrency = (number) =>{
 
     return THBBaht.format(number)
 }
+
+export const getCurrentLanguage = () => i18n.language || localStorage.getItem("i18n")
