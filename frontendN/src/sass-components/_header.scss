@@ -3,6 +3,8 @@ header{
         justify-content: space-between;
         .App-menuButton-4{
             margin-left: 0;
+            padding-left: 0;
+            margin-right: 14px;
         }
         h6{
             &.MuiTypography-root + {
@@ -16,7 +18,18 @@ header{
                 }
             }
         }
+
+        div[class |="sc"]{
+            a{
+                div[class |="sc"]{
+                    display: flex;
+                    align-items: center;
+                }
+            }
+        }
      }
+
+
      .MuiTypography-h6{
         @media (max-width:$sm){
             line-height: 1.3;
@@ -69,6 +82,29 @@ header{
             background-color: $white;
             right: 14px;
             top: -3px;
+        }
+    }
+}
+
+.lang-contain{
+    button{
+        font-size: .7rem;
+        color: rgba($black, .6);
+        border: none;
+        background: $white;
+        margin-top: 6px;
+        cursor: pointer;
+        @media (min-width:576px){
+            margin: 0 5px;
+        }
+
+        @media (min-width:768px){
+            border: 1px solid $white;
+            height: 2rem;
+            width: 2rem;
+            border-radius:50%;
+            background: none;
+            color: $white;
         }
     }
 }
