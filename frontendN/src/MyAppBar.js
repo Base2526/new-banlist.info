@@ -120,9 +120,10 @@ const MyAppBar = (props) =>{
                 BANLIST.INFO (alpha)
               </Typography>
 
-              <div style={{"marginRight": "10px"}}>
-                <button value='en' className={(getCurrentLanguage() == "th" ? "" : "active")} onClick={handleChangeLanguage}> EN </button>
-                <button value='th' className={(getCurrentLanguage() == "th" ? "active" : "")} onClick={handleChangeLanguage}> TH </button>
+              
+              <div style={{"marginRight": "10px"}} className="lang-contain">
+                <button value='en' onClick={handleChangeLanguage} className={(getCurrentLanguage() == "th" ? "lang-en active" : "lang-en")}> EN </button>
+                <button value='th' onClick={handleChangeLanguage} className={(getCurrentLanguage() == "th" ? "lang-en" : "lang-en active")}> TH </button>
               </div>
               
               {

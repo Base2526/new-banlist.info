@@ -1,3 +1,23 @@
 .d-flex{
     display: grid;
 }
+
+.d-flex-fx{
+    display: flex;
+}
+
+.flex-column{
+    flex-direction: column;
+}
+
+.flex-md-row{
+    @media (min-width:768px){
+        flex-direction: row;
+    }
+}
+
+
+.flex-grow-1{
+    flex-grow: 1;
+}
+

@@ -168,7 +168,8 @@ const UserView = (props) => {
 
     console.log("userValue :", userValue, user)
 
-    return  <div>
+    return  <div className="pl-2 pr-2">
+              <div className="profile-bxv bg-white rounded border">
               <Typography variant="overline" display="block" gutterBottom>{t("profile")}</Typography>
               <Stack direction="row" spacing={2}>
                 <Avatar
@@ -190,31 +191,42 @@ const UserView = (props) => {
                 {t("email")} : {userValue.email}
               </Typography>
 
-              <ItemFollower id={id} onFollower={(e)=>setDialogFollower(true)} />
-          
-              <div>
-                <ItemFollowing 
+                <div className="d-flex-fx flex-column flex-md-row row-pf">
+                  <div className="btn-bxv w-100 flex-grow-1">
+                    <ItemFollower id={id} onFollower={(e)=>setDialogFollower(true)}  />
+                  </div>
+              
+                  <div className="btn-bxv w-100 flex-grow-1">
+                    <ItemFollowing 
+                      {...props} 
+                      id={id}
+                      onFollowing={(input)=>{
+                        onCreateAndUpdateFollow({ variables: { input } })
+                      }}
+                      onDialogLogin={(status)=>{
+                        setDialogLoginOpen(true)
+                      }}
+                      
+                      />
+                  </div>
+                  <div className="btn-bxv w-100 flex-grow-1"> { onButtonChat() } </div>
+                </div>
+              </div>
+              
+              <div className="lists-views">
+                <UserPostList 
                   {...props} 
                   id={id}
-                  onFollowing={(input)=>{
-                    onCreateAndUpdateFollow({ variables: { input } })
-                  }}
                   onDialogLogin={(status)=>{
                     setDialogLoginOpen(true)
+                  }}
+                  onReport={(id)=>{
+                    _.isEmpty(user)
+                      ? setDialogLoginOpen(true)    
+                      : setReport({open: true, postId:id})
                   }}/>
-              </div>
-              <div> { onButtonChat() } </div>
-              <UserPostList 
-                {...props} 
-                id={id}
-                onDialogLogin={(status)=>{
-                  setDialogLoginOpen(true)
-                }}
-                onReport={(id)=>{
-                  _.isEmpty(user)
-                    ? setDialogLoginOpen(true)    
-                    : setReport({open: true, postId:id})
-                }}/>
+                </div>
+             
             </div>
   }
 
