@@ -89,17 +89,22 @@ header{
 .lang-contain{
     button{
         font-size: .7rem;
-        color: rgba($black, .6);
         border: none;
-        background: $white;
+        background: none;
         margin-top: 6px;
         cursor: pointer;
+        border: 1px solid $white;
+        color: $white;
+        &.active{
+            background: $white;
+            color: rgba($black, .6);
+        }
         @media (min-width:576px){
             margin: 0 5px;
         }
 
         @media (min-width:768px){
-            border: 1px solid $white;
+           
             height: 2rem;
             width: 2rem;
             border-radius:50%;
