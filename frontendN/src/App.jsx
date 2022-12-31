@@ -1,20 +1,8 @@
-import "./styles.css";
-
 import React, { useState, useEffect, useRef} from "react";
-import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
 import { connect } from "react-redux";
 import { bindActionCreators, compose } from 'redux';
 import {
@@ -32,7 +20,7 @@ import { useQuery, useApolloClient } from "@apollo/client";
 import ReactGA4 from "react-ga4";
 
 import Breadcs from "./components/breadcrumbs/Breadcs";
-import Home from "./pages/home/Home";
+import HomePage from "./pages/home/HomePage";
 import MyAppBar from "./MyAppBar";
 import LeftMenu from "./LeftMenu"
 import PrivateRoute from "./PrivateRoute"
@@ -40,23 +28,20 @@ import PrivatePage from "./PrivatePage"
 import UserView from "./pages/user/UserView";
 import DialogLogin from "./DialogLogin";
 import Help from "./pages/help"
-// import PrivacyPage from "./pages/basicContent/Privacy"
 import DeveloperPage from "./pages/basicContent/Developer"
-// import TermsPage from "./pages/basicContent/Terms"
-// 
 import PrivacyAndTermsPage from "./pages/basicContent/PrivacyAndTerms"
 import LoginPage from "./pages/auth/Login"
 import Footer from "./pages/footer"
 import DialogTermsAndConditions from "./DialogTermsAndConditions"
 import i18n from './translations/i18n';
 import { login, addedConversations, addedConversation, addedNotifications, addedNotification, termsAndConditions } from "./redux/actions/auth"
-import { gqlConversations, 
-        subConversation, 
-        gqlNotifications, 
-        subNotification,
-        gqlPing } from "./gqlQuery"
+import {  gqlConversations, 
+          subConversation, 
+          gqlNotifications, 
+          subNotification,
+          gqlPing } from "./gqlQuery"
 
-// import {wsLink} from "./Apollo"
+import { getHeaders } from "./util"
 
 let unsubscribeConversation = null;
 let unsubscribeNotification = null;
@@ -140,7 +125,6 @@ const styles = (theme) => ({
 });
 
 const App = (props) => {
-  // /gracefullyRestart
  
   let {is_connnecting, user, terms_and_conditions, addedConversations, addedConversation, addedNotifications, addedNotification, termsAndConditions} = props
 
@@ -155,11 +139,11 @@ const App = (props) => {
   const [dialogTermsAndConditions, setDialogTermsAndConditions] = useState(false);
 
   /////////////////////// ping ///////////////////////////////////
-  const pingValues =useQuery(gqlPing, {notifyOnNetworkStatusChange: true});
+  const pingValues =useQuery(gqlPing, { context: { headers: getHeaders() }, notifyOnNetworkStatusChange: true});
 
   
   ////////////////////// conversation ////////////////////////////
-  const conversationValues =useQuery(gqlConversations, { notifyOnNetworkStatusChange: true });
+  const conversationValues =useQuery(gqlConversations, { context: { headers: getHeaders() },  notifyOnNetworkStatusChange: true });
 
   // console.log("conversationValues :", conversationValues )
     
@@ -191,7 +175,7 @@ const App = (props) => {
   ////////////////////// conversation ////////////////////////////
 
   //////////////////////  notifications //////////////////////////////////
-  const notificationValues =useQuery(gqlNotifications, { notifyOnNetworkStatusChange: true });
+  const notificationValues =useQuery(gqlNotifications, { context: { headers: getHeaders() },  notifyOnNetworkStatusChange: true });
 
   // console.log("notificationValues :", notificationValues )
 
@@ -291,6 +275,7 @@ const App = (props) => {
           <CssBaseline />
           <MyAppBar 
             classes={props.classes} 
+            open={open}
             onDrawerOpen={
               handleDrawerOpen
             }
@@ -328,7 +313,7 @@ const App = (props) => {
                 <Switch>
                   <Route path="/" exact>
                     <div className="page-home">
-                      <Home />
+                      <HomePage />
                     </div>
                   </Route>
                   <Route path="/user/login">
@@ -358,9 +343,6 @@ const App = (props) => {
                     <div className="page-dev pl-2 pr-2">
                       <DeveloperPage />
                     </div>
-                  </Route>
-                  <Route path="/developer">
-                    <DeveloperPage />
                   </Route>
                   <PrivateRoute path="/">
                     <PrivatePage />
@@ -392,9 +374,6 @@ const App = (props) => {
 
               console.log(">>>> ")
               setDialogLoginOpen(false);
-
-              // DialogLogin
-              // history.push("/")
             }}
           />
         }

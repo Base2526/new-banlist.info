@@ -27,25 +27,17 @@ import CommentList from "./pages/commentList/CommentList";
 import Comment from "./pages/comment/Comment";
 import SocketList from "./pages/socketList/SocketList";
 import Socket from "./pages/socket/Socket";
-
 import UserList from "./pages/userList/UserList";
 import UserNew from "./pages/user/UserNew";
 import UserEdit from "./pages/user/UserEdit";
-
 import BasicContentList from "./pages/basicContentList/BasicContentList"
 import BasicContent from "./pages/basicContent/BasicContent"
-
 import Profile from "./pages/profile"
-
 import Upload from "./pages/test/Upload"
-
 import Phone from "./pages/phone/Phone"
-
 import PhoneList from "./pages/phoneList/PhoneList"
-
 import ContactUs from "./pages/contactUs/ContactUs"
 import ContactUsList from "./pages/contactUs/ContactUsList"
-
 import LoginPage from "./pages/auth/Login"
 
 // import { isAuth } from "./AuthProvider";

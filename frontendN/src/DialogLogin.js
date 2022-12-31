@@ -16,35 +16,18 @@ import { GoogleLogin, useGoogleLogin  } from "react-google-login";
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import _ from "lodash";
 import { gapi } from "gapi-script"
-
 import LoginGithub from 'react-login-github';
 import GitHubIcon from '@mui/icons-material/GitHub';
-
-import utf8 from "utf8";
-import base64 from 'base-64';
-
 import { useTranslation } from "react-i18next";
 
 import { gqlLogin, gqlPosts, gqlHomes, gqlLoginWithSocial } from "./gqlQuery"
-
 
 const DialogLogin = (props) => {
   const { t } = useTranslation();
   
   const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   const facebookAppId =  process.env.REACT_APP_FACEBOOK_APPID
-
-  // let bytes =  utf8.encode('YOUR_DECODED_STRING');
-  // var encoded = base64.encode(bytes);
-  // console.log(encoded);
-
-  // var text = utf8.decode(base64.decode(encoded));
-  // console.log(text);
-
-  console.log("DialogLogin :", process.env)
-
   let history = useHistory();
-
   let deviceData = useDeviceData();
 
   const { login, onComplete, onClose, selectedValue, open } = props;
@@ -141,10 +124,12 @@ const DialogLogin = (props) => {
       },
       onCompleted({ data }) {
         history.push("/");
+      },
+      onError({error}){
+        console.log("onError :")
       }
     }
   );
-
 
   useEffect(()=>{
     const initClient = () =>{
@@ -163,10 +148,12 @@ const DialogLogin = (props) => {
 
   const callbackFacebook = (response) => {
     console.log( "callbackFacebook :", response);
-
-
-    _.has(response, "status") ? "" : onLoginWithSocial({ variables: { input: { authType: "FACEBOOK",  data: response, deviceAgent: JSON.stringify(deviceData)  }} })
     
+    if(!_.has(response, "status")){
+      onLoginWithSocial({ variables: { input: { authType: "FACEBOOK",  data: response, deviceAgent: JSON.stringify(deviceData)  }} })
+    }else{
+      console.log("")
+    }
 
     // status: "unknown"
     /*

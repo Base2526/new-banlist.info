@@ -35,7 +35,7 @@ import {Bank,
 import {emailValidate} from './utils'
 import pubsub from './pubsub'
 
-import {fileRenamer} from "./utils"
+import {fileRenamer, checkAuthorization} from "./utils"
 import { __TypeKind } from 'graphql';
 import e from 'express';
 import { async } from 'regenerator-runtime';
@@ -59,8 +59,21 @@ export default {
     // ping
     async ping(parent, args, context, info){
       try{
-        let { status, code, currentUser } = context 
-        console.log("ping :", currentUser?._id)
+        // let { status, code, currentUser } = context 
+        // console.log("ping :", currentUser?._id)
+
+        let { req } = context
+
+        ///////////////////////////
+        let authorization = await checkAuthorization(req);
+        let { status, code, current_user } =  authorization
+        //////////////////////////
+
+        if(status && code == 1){
+          console.log("ping ok : ", current_user?._id)
+        }else{
+          console.log("ping other")
+        }
 
         return { status:true }
       } catch(err) {
@@ -137,16 +150,16 @@ export default {
     async homes(parent, args, context, info) {
       try{
 
-        let { status, code, currentUser } = context 
+        let { req } = context
 
-        console.log("homes : ", args, status, code)
+        ///////////////////////////
+        let authorization = await checkAuthorization(req);
+        // console.log("homes : authorization :", authorization)
+        //////////////////////////
+
 
         let { page, perPage, keywordSearch, category } = args
         let start = Date.now()
-
-        if(!_.isEmpty(currentUser)){
-          // console.log("#3 : ", currentUser._id)
-        }
 
         /*
         0 : ชื่อเรื่อง | title
@@ -972,12 +985,19 @@ export default {
     async phones(parent, args, context, info) {
       try{
         let start = Date.now()        
-        let { userId, page, perPage } = args
+        let { page, perPage } = args
 
-        let roles = (await User.findById(userId)).roles
+        let { req } = context
 
-        let data = await  Phone.find({ownerId: userId}).limit(perPage).skip(page); 
-        let total = (await Phone.find({ownerId: userId}).lean().exec()).length;
+        ///////////////////////////
+        let authorization = await checkAuthorization(req);
+        let { status, code, current_user } =  authorization
+        //////////////////////////
+
+        let roles = (await User.findById(current_user?._id)).roles
+
+        let data = await  Phone.find({ownerId: current_user?._id}).limit(perPage).skip(page); 
+        let total = (await Phone.find({ownerId: current_user?._id}).lean().exec()).length;
 
         //  62a2ccfbcf7946010d3c74a2 :: administrator
         //  62a2ccfbcf7946010d3c74a6 :: authenticated
@@ -1626,6 +1646,10 @@ export default {
       
       try{
         let { _id, input } = args
+
+
+        console.log("updatePost :", _id , input)
+
         let newFiles = [];
         if(!_.isEmpty(input.files)){
 
@@ -1687,7 +1711,7 @@ export default {
           new: true
         });
 
-        // console.log("updatePost :", _id , post)
+        // 
 
         pubsub.publish("POST", {
           post: {
@@ -2549,13 +2573,19 @@ export default {
       try{
         let start = Date.now()
 
-        // let { currentUser } = context
+        let { req } = context
+
+        ///////////////////////////
+        let authorization = await checkAuthorization(req);
+        console.log("authorization :", authorization)
+        //////////////////////////
+
 
         let { input } = args
 
-        console.log("input :", input )
+        console.log("createPhone > input : args : ", args)
 
-        // input = {...input, ownerId: currentUser._id}
+        input = {...input, ownerId: current_user?._id}
 
         let data = await Phone.create(input);
         return {
@@ -2564,6 +2594,8 @@ export default {
           executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds` }
       } catch(err) {
         logger.error(err.toString());
+
+        console.log(err.toString())
         return;
       }
     },

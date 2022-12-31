@@ -45,7 +45,7 @@ deepdash(_);
 
 import "../../translations/i18n";
 
-import {convertFileToBase64} from "../../util"
+import { getHeaders } from "../../util"
 
 import Tabs from "../../components/tab/Tabs";
 import Panel from "../../components/tab/Panel";
@@ -73,7 +73,8 @@ const bmColumns = [
     width: 150,
     renderCell: (params) => {
       let value = useQuery(gqlUser, {
-        variables: {id: params.row.userId},
+        context: { headers: getHeaders() },
+        variables: { id: params.row.userId },
         notifyOnNetworkStatusChange: true,
       });
 
@@ -93,6 +94,7 @@ const bmColumns = [
     width: 400, 
     renderCell: (params) => {
       let postValue = useQuery(gqlPost, {
+        context: { headers: getHeaders() },
         variables: {id: params.row.postId},
         notifyOnNetworkStatusChange: true,
       });
@@ -131,6 +133,7 @@ const shcolumns = [
     width: 150,
     renderCell: (params) => {
       let value = useQuery(gqlUser, {
+        context: { headers: getHeaders() },
         variables: {id: params.row.userId},
         notifyOnNetworkStatusChange: true,
       });
@@ -149,6 +152,7 @@ const shcolumns = [
     width: 400, 
     renderCell: (params) => {
       let postValue = useQuery(gqlPost, {
+        context: { headers: getHeaders() },
         variables: {id: params.row.postId},
         notifyOnNetworkStatusChange: true,
       });
@@ -215,6 +219,7 @@ const Post = (props) => {
   const [bmPerPage, setBmPerPage] = useState(bmPageOptions[0])
 
   const [onCreatePost, resultCreatePost] = useMutation(gqlCreatePost, {
+    context: { headers: getHeaders() },
     update: (cache, {data: {createPost}}) => {
 
       // let {state} = history.location
@@ -254,49 +259,41 @@ const Post = (props) => {
       //   }
       // }
     },
-    context: {
-      headers: {
-        'apollo-require-preflight': true,
-      },
-    },
     onCompleted({ data }) {
-      // console.log("bookmark :::: onCompleted")
-
       history.push("/posts")
     },
+    onError({error}){
+      console.log("onError :")
+    }
   });
   console.log("resultCreatePost :", resultCreatePost)
 
-  const [onUpdatePost, resultUpdatePost] = useMutation(gqlUpdatePost, 
-    {
-      update: (cache, {data: {updatePost}}) => {
-        // let {state} = history.location
-        const data1 = cache.readQuery({
-          query: gqlPost,
-          variables: {id}
-        });
+  const [onUpdatePost, resultUpdatePost] = useMutation(gqlUpdatePost, {
+    context: { headers: getHeaders() },
+    update: (cache, {data: {updatePost}}) => {
+      // let {state} = history.location
+      const data1 = cache.readQuery({
+        query: gqlPost,
+        variables: {id}
+      });
 
-        let newPost = {...data1.post}
-        newPost = {...newPost, data: updatePost}
+      let newPost = {...data1.post}
+      newPost = {...newPost, data: updatePost}
 
-        cache.writeQuery({
-          query: gqlPost,
-          data: { post: newPost },
-          variables: {id}
-        });
-      },
-      context: {
-        headers: {
-          'apollo-require-preflight': true,
-        },
-      },
-      onCompleted({ data }) {
-        history.push("/posts");
-      }
+      cache.writeQuery({
+        query: gqlPost,
+        data: { post: newPost },
+        variables: {id}
+      });
+    },
+    onCompleted({ data }) {
+      history.push("/posts");
+    },
+    onError({error}){
+      console.log("onError :")
     }
-  );
+  });
   console.log("resultUpdatePost :", resultUpdatePost)
-
 
   switch(mode){
     case "new":{
@@ -306,18 +303,21 @@ const Post = (props) => {
    
     case "edit":{
       bookmarksByPostIdValues = useQuery(gqlBookmarksByPostId, {
+        context: { headers: getHeaders() },
         variables: { postId: id },
         notifyOnNetworkStatusChange: true,
       });
       console.log("bookmarksByPostIdValues : ", bookmarksByPostIdValues)
     
       shareValues = useQuery(gqlShareByPostId, {
+        context: { headers: getHeaders() },
         variables: {postId: id},
         notifyOnNetworkStatusChange: true,
       });
       // console.log("shareValues : ", shareValues)
     
       editValues = useQuery(gqlPost, {
+        context: { headers: getHeaders() },
         variables: {id},
         notifyOnNetworkStatusChange: true,
       });
@@ -450,7 +450,7 @@ const Post = (props) => {
                       ownerId: user._id
                     }
 
-        console.log("newInput : ", editValues.data.post.data._id, _.omitDeep(newInput, ['__typename']), input.attackFiles)
+        console.log("newInput : ", editValues.data.post.data._id, _.omitDeep(newInput, ['__typename']), input.attackFiles, newInput)
 
         onUpdatePost({ variables: { 
           id: editValues.data.post.data._id,

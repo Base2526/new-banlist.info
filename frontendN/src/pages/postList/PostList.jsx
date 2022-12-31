@@ -28,7 +28,8 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import { useTranslation } from "react-i18next";
 
-import {gqlPosts, gqlBookmarksByPostId, gqlShareByPostId, gqlComment, gqlDeletePost} from "../../gqlQuery"
+import { getHeaders } from "../../util"
+import { gqlPosts, gqlBookmarksByPostId, gqlShareByPostId, gqlComment, gqlDeletePost } from "../../gqlQuery"
 import ReadMoreMaster from "../../utils/ReadMoreMaster"
 import Table from "../../TableContainer"
 
@@ -45,35 +46,35 @@ const PostList = (props) => {
   const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "", description: "" });
 
   const postsValue = useQuery(gqlPosts, {
+    context: { headers: getHeaders() },
     variables: { page: pageIndex, perPage: pageSize },
     notifyOnNetworkStatusChange: true,
   });
   console.log("postsValue :", postsValue)
 
-  const [onDeletePost, resultDeletePost] = useMutation(gqlDeletePost, 
-    {
-      update: (cache, {data: {deletePost}}) => {
+  const [onDeletePost, resultDeletePost] = useMutation(gqlDeletePost, {
+    context: { headers: getHeaders() },
+    update: (cache, {data: {deletePost}}) => {
 
-        const data1 = cache.readQuery({
-          query: gqlPosts,
-          variables:  {userId: _.isEmpty(user) ? "" : user._id, page: pageIndex, perPage: pageSize},
-        });
+      const data1 = cache.readQuery({
+        query: gqlPosts,
+        variables:  {userId: _.isEmpty(user) ? "" : user._id, page: pageIndex, perPage: pageSize},
+      });
 
-        let newPosts = {...data1.posts}
-        let newData   = _.filter(data1.posts.data, post => post._id !== deletePost._id)
-        newPosts = {...newPosts, total: newData.length, data:newData }
+      let newPosts = {...data1.posts}
+      let newData   = _.filter(data1.posts.data, post => post._id !== deletePost._id)
+      newPosts = {...newPosts, total: newData.length, data:newData }
 
-        cache.writeQuery({
-          query: gqlPosts,
-          data: { posts: newPosts },
-          variables:  {userId: _.isEmpty(user) ? "" : user._id, page: pageIndex, perPage: pageSize},
-        });
-      },
-      onCompleted({ data }) {
-        history.push("/posts");
-      }
+      cache.writeQuery({
+        query: gqlPosts,
+        data: { posts: newPosts },
+        variables:  {userId: _.isEmpty(user) ? "" : user._id, page: pageIndex, perPage: pageSize},
+      });
+    },
+    onCompleted({ data }) {
+      history.push("/posts");
     }
-  );
+  });
   console.log("resultDeletePost :", resultDeletePost)
 
   ///////////////
@@ -109,6 +110,7 @@ const PostList = (props) => {
               }
 
               console.log("files :", props.value)
+              
               return (
                 <div style={{ position: "relative" }}>
                   <CardActionArea style={{ position: "relative", paddingBottom: "10px" }}>
@@ -135,7 +137,7 @@ const PostList = (props) => {
                           backgroundColor: "#e1dede",
                           color: "#919191"
                       }}
-                      >{props.value.length}</div>
+                      >{(_.filter(props.value, (v)=>v.url)).length}</div>
                 </div>
               );
             }

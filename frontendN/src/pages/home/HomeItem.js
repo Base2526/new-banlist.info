@@ -96,6 +96,7 @@ const HomeItem =(props) => {
             }}
           />
           
+          {/*  */}
             {m.files.length > 1 ?
               <div
                   style={{
@@ -108,7 +109,7 @@ const HomeItem =(props) => {
                       margin: "5px",
                       color: "#919191"
                   }}
-                  >{m.files.length}</div>
+                  >{(_.filter(m.files, (v)=>v.url)).length}</div>
               : <div />}
         
         </CardActionArea>

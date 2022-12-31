@@ -5,7 +5,8 @@ import {
     createHttpLink,
     split, 
     HttpLink,
-    ApolloLink
+    ApolloLink,
+    concat
 } from "@apollo/client";
 import { relayStylePagination, getMainDefinition } from "@apollo/client/utilities"
 import { setContext } from '@apollo/client/link/context';
@@ -192,7 +193,7 @@ const authLink = new ApolloLink((operation, forward) => {
     // Use the setContext method to set the HTTP headers.
     operation.setContext({
         headers: {
-        authorization: token ? `Bearer ${token}` : ''
+            authorization: token ? `Bearer ${token}` : ''
         }
     });
 
@@ -200,12 +201,14 @@ const authLink = new ApolloLink((operation, forward) => {
     return forward(operation);
 });
   
+
   // const link = createUploadLink({ uri: "http://localhost:4000/graphql" });
 export const client = new ApolloClient({
     // uri: 'http://localhost:4040/graphql',
-    // link: splitLink,
+    link: splitLink,
     // link: ApolloLink.from([splitLink]),
-    link: authLink.concat(splitLink),
+    // link: authLink.concat(splitLink),
+
     request: (operation) => {
       console.log("request >>>>>>>  ", operation)
     },

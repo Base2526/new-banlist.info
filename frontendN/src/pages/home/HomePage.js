@@ -24,6 +24,7 @@ import queryString from 'query-string';
 
 import { useTranslation } from "react-i18next";
 
+import { getHeaders } from "../../util"
 import PanelComment from "./PanelComment";
 import PopupSnackbar from "./PopupSnackbar";
 import SearchBar from "./SearchBar";
@@ -39,7 +40,7 @@ import {gqlHomes, gqlCreateReport,
 import { login, addedBookmark } from "../../redux/actions/auth"
 
 let unsubscribePost = null;
-const Home = (props) => {
+const HomePage = (props) => {
   let history = useHistory();
 
   const { t } = useTranslation();
@@ -66,46 +67,38 @@ const Home = (props) => {
   const [dialogProfile, setDialogProfile] = useState({open: false, id:""});
   const breakpoints = { default: 3, 1100: 2, 700: 1 };
 
-  const [onCreateReport, resultCreateReportValues] = useMutation(gqlCreateReport
-    , {
-        onCompleted({ data }) {
-          history.push("/");
-        }
-      }
-  );
-
-  const [onCreateShare, resultCreateShare] = useMutation(gqlCreateShare, {
+  const [onCreateReport, resultCreateReportValues] = useMutation(gqlCreateReport, {
+    context: { headers: getHeaders() },
     onCompleted({ data }) {
-      // history.push("/");
+      history.push("/");
     }
   });
-  // console.log("resultCreateShare :", resultCreateShare)
     
-  const [onCreateAndUpdateBookmark, resultCreateAndUpdateBookmarkValues] = useMutation(gqlCreateAndUpdateBookmark
-    , {
-        update: (cache, {data: {createAndUpdateBookmark}}) => {
-          let { postId } = createAndUpdateBookmark
-          const data1 = cache.readQuery({
-              query: gqlIsBookmark,
-              variables: { postId }
-          });
+  const [onCreateAndUpdateBookmark, resultCreateAndUpdateBookmarkValues] = useMutation(gqlCreateAndUpdateBookmark,{
+    context: { headers: getHeaders() },
+    update: (cache, {data: {createAndUpdateBookmark}}) => {
+      let { postId } = createAndUpdateBookmark
+      const data1 = cache.readQuery({
+          query: gqlIsBookmark,
+          variables: { postId }
+      });
 
-          let newData = {...data1.isBookmark}
-          newData = {...newData, data: createAndUpdateBookmark}
+      let newData = {...data1.isBookmark}
+      newData = {...newData, data: createAndUpdateBookmark}
 
-          cache.writeQuery({
-              query: gqlIsBookmark,
-              data: {
-                isBookmark: newData
-              },
-              variables: { postId }
-          });     
-        },
-        onCompleted({ data }) { },
-      },  
-  );
+      cache.writeQuery({
+          query: gqlIsBookmark,
+          data: {
+            isBookmark: newData
+          },
+          variables: { postId }
+      });     
+    },
+    onCompleted({ data }) { },
+  });
   
   const homesValues =useQuery(gqlHomes, {
+    context: { headers: getHeaders() },
     variables: { page, perPage: rowsPerPage, keywordSearch: keywordSearch, category: category.join()},
     notifyOnNetworkStatusChange: true,
   });
@@ -554,4 +547,4 @@ const mapDispatchToProps = {
   addedBookmark
 }
 
-export default connect( mapStateToProps, mapDispatchToProps )(Home);
+export default connect( mapStateToProps, mapDispatchToProps )(HomePage);

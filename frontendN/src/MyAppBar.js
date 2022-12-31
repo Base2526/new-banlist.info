@@ -1,31 +1,17 @@
 import React, { useEffect, useState } from "react";
-
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import Typography from "@material-ui/core/Typography";
+import { Menu as MenuIcon, MenuOpen as MenuOpenIcon } from '@mui/icons-material';
 import styled from "styled-components";
 import classNames from "classnames";
 import Button from "@mui/material/Button";
-import { NotificationsNone, Language, Settings, Comment as CommentIcon } from "@material-ui/icons";
+import { NotificationsNone, AccountCircle, Comment as CommentIcon } from "@material-ui/icons";
 import { Link, useHistory } from "react-router-dom";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
+import { AppBar, Toolbar, IconButton, Typography, MenuItem, Menu} from "@material-ui/core";
 import { connect } from "react-redux";
 import _ from "lodash"
-
 import { useTranslation } from "react-i18next";
 
 import i18n from './translations/i18n';
-
-// import { isAuth, logout} from "./AuthProvider"
-
 import {getCurrentLanguage} from "./util"
-
-
-// import "./translations/i18n";
 
 export const TopRight = styled.div`
   display: flex;
@@ -60,15 +46,13 @@ const MyAppBar = (props) =>{
 
   const [language, setLanguage] = useState('en');
 
-  let {conversations, classes, onDrawerOpen, onDialogLogin, user, notifications} = props
+  let {conversations, classes, onDrawerOpen, onDialogLogin, user, notifications, open} = props
 
   let history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null)
   let [conversationsBadge, setConversationsBadge] = useState(0)
 
   useEffect(()=>{
-    // console.log("conversations :", conversations)
-
     let countBadge = 0;
     _.map(conversations, conversation=>{
       let member = _.find( conversation.members, member => member.userId === user._id );
@@ -80,8 +64,6 @@ const MyAppBar = (props) =>{
   const handleClose = () =>{
     setAnchorEl(null)
   }
-
-  
 
   const handleChangeLanguage=(e)=>{
     e.preventDefault();
@@ -104,13 +86,19 @@ const MyAppBar = (props) =>{
                 onClick={onDrawerOpen}
                 className={classes.menuButton}
               >
-                <MenuIcon
+                {/* <MenuIcon
                   classes={{
                     root: Boolean(anchorEl)
                       ? classes.menuButtonIconOpen
                       : classes.menuButtonIconClosed
                   }}
-                />
+                /> */}
+
+                {
+                  open
+                  ? <MenuOpenIcon classes={{ root: classes.menuButtonIconOpen }} />
+                  : <MenuIcon classes={{ root: classes.menuButtonIconClosed }} />
+                }
               </IconButton>
               <Typography
                 variant="h6"
@@ -209,10 +197,7 @@ const MyAppBar = (props) =>{
           </AppBar>
 }
 
-// export default MyAppBar;
-
 const mapStateToProps = (state, ownProps) => {
-  // console.log("mapStateToProps  :", state)
   return {
     user: state.auth.user,
     conversations: state.auth.conversations,

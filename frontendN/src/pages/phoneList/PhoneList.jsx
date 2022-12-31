@@ -28,6 +28,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import { useTranslation } from "react-i18next";
 
+import { getHeaders } from "../../util"
 import { gqlPhones, gqlDeletePhone } from "../../gqlQuery"
 import ReadMoreMaster from "../../utils/ReadMoreMaster"
 import Table from "../../TableContainer"
@@ -44,33 +45,33 @@ const PhoneList = (props) => {
   const [lightbox, setLightbox]       = useState({ isOpen: false, photoIndex: 0, images: [] });
   const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "", description: "" });
 
-  const [onDeletePhone, resultDeletePhone] = useMutation(gqlDeletePhone, 
-    {
-      update: (cache, {data: {deletePhone}}) => {
-        const data1 = cache.readQuery({
-          query: gqlPhones,
-          variables: {userId: _.isEmpty(user) ? "" : user._id, page: pageIndex, perPage: pageSize},
-        });
+  const [onDeletePhone, resultDeletePhone] = useMutation(gqlDeletePhone, {
+    context: { headers: getHeaders() },
+    update: (cache, {data: {deletePhone}}) => {
+      const data1 = cache.readQuery({
+        query: gqlPhones,
+        variables: {userId: _.isEmpty(user) ? "" : user._id, page: pageIndex, perPage: pageSize},
+      });
 
-        let newPhones = {...data1.phones}
-        let newData   = _.filter(data1.phones.data, phone => phone._id !== deletePhone._id)
-        newPhones = {...newPhones, total: newData.length, data:newData }
+      let newPhones = {...data1.phones}
+      let newData   = _.filter(data1.phones.data, phone => phone._id !== deletePhone._id)
+      newPhones = {...newPhones, total: newData.length, data:newData }
 
-        cache.writeQuery({
-          query: gqlPhones,
-          data: { phones: newPhones },
-          variables: {userId: _.isEmpty(user) ? "" : user._id, page: pageIndex, perPage: pageSize},
-        });
-      },
-      onCompleted({ data }) {
-        history.push("/phones");
-      }
+      cache.writeQuery({
+        query: gqlPhones,
+        data: { phones: newPhones },
+        variables: {userId: _.isEmpty(user) ? "" : user._id, page: pageIndex, perPage: pageSize},
+      });
+    },
+    onCompleted({ data }) {
+      history.push("/phones");
     }
-  );
+  });
   console.log("resultDeletePhone :", resultDeletePhone)
 
   const phonesValue = useQuery(gqlPhones, {
-    variables: {userId: _.isEmpty(user) ? "" : user._id, page: pageIndex, perPage: pageSize},
+    context: { headers: getHeaders() },
+    variables: { page: pageIndex, perPage: pageSize },
     notifyOnNetworkStatusChange: true,
   });
 

@@ -20,7 +20,7 @@ import { Avatar } from "@chatscope/chat-ui-kit-react";
 
 import { gqlUser } from "../../gqlQuery"
 
-import {convertDate} from "../../util"
+import { convertDate, getHeaders } from "../../util"
 
 const ItemHeader = (props) => {
     let history = useHistory();
@@ -28,6 +28,7 @@ const ItemHeader = (props) => {
     let { index, item, onAnchorElSettingOpen} = props 
     
     let userValue = useQuery(gqlUser, {
+        context: { headers: getHeaders() }, 
         variables: {id: item.ownerId},
         notifyOnNetworkStatusChange: true,
     });

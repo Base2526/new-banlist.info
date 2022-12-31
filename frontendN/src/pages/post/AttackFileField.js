@@ -71,46 +71,52 @@ const AttackFileField = ({ label, values, onChange, onSnackbar }) => {
         {_.map(
           _.filter(inputList, (v, key) => !v.delete),
           (file, index) => {
-            // console.log("Stack :", file);
+            console.log("Stack :", !file.url, file.url);
 
             if (!file.url) {
               // new file
-              return (
-                <div style={{ position: "relative" }} key={index}>
-                  <Avatar
-                    sx={{
-                      height: 80,
-                      width: 80,
-                      border: "1px solid #cccccc",
-                      padding: "5px"
-                    }}
-                    variant="rounded"
-                    alt="Example Alt"
-                    src={URL.createObjectURL(file)}
-                  />
-                   <IconButton
-                    style={{
-                      position: "absolute",
-                      right: 0,
-                      top:0
-                    }}
-                    color="primary"
-                    aria-label="upload picture"
-                    component="span"
-                    onClick={() => {
-                      let newInputList = [
-                        ...inputList.slice(0, index),
-                        ...inputList.slice(index + 1, inputList.length)
-                      ];
-
-                      setInputList(newInputList);
-                      onSnackbar({open:true, message:"Delete image"});
-                    }}
-                  >
-                    <RemoveCircleIcon />
-                  </IconButton>
-                </div>
-              );
+              try {
+                return (
+                  <div style={{ position: "relative" }} key={index}>
+                    <Avatar
+                      sx={{
+                        height: 80,
+                        width: 80,
+                        border: "1px solid #cccccc",
+                        padding: "5px"
+                      }}
+                      variant="rounded"
+                      alt="Example Alt"
+                      src={URL.createObjectURL(file)}
+                    />
+                     <IconButton
+                      style={{
+                        position: "absolute",
+                        right: 0,
+                        top:0
+                      }}
+                      color="primary"
+                      aria-label="upload picture"
+                      component="span"
+                      onClick={() => {
+                        let newInputList = [
+                          ...inputList.slice(0, index),
+                          ...inputList.slice(index + 1, inputList.length)
+                        ];
+  
+                        setInputList(newInputList);
+                        onSnackbar({open:true, message:"Delete image"});
+                      }}
+                    >
+                      <RemoveCircleIcon />
+                    </IconButton>
+                  </div>
+                );
+              } catch (e) {
+                console.log('Error :', e)
+                return ""
+              }
+              
             } else {
               // old file
               return (
