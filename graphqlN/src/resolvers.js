@@ -277,11 +277,17 @@ export default {
         console.log("posts, args :", args)
 
         let start = Date.now()
-        let { status, code, currentUser } = context 
-        if(!_.isEmpty(currentUser)){
+        // let { status, code, currentUser } = context 
+
+        let { req } = context
+
+        let authorization = await checkAuthorization(req);
+        let { status, code, current_user } =  authorization
+
+        if(!_.isEmpty(current_user?._id)){
           let { page, perPage } = args
-          let data = await  Post.find({ownerId: currentUser._id}).limit(perPage).skip(page); 
-          let total = (await Post.find({ownerId: currentUser._id}).lean().exec()).length;
+          let data = await  Post.find({ownerId: current_user?._id}).limit(perPage).skip(page); 
+          let total = (await Post.find({ownerId: current_user?._id}).lean().exec()).length;
           return {
             status:true,
             data,
