@@ -1,26 +1,13 @@
 import {
     ApolloClient,
     InMemoryCache,
-    ApolloProvider,
-    createHttpLink,
-    split, 
-    HttpLink,
+    split,
     ApolloLink,
-    concat
 } from "@apollo/client";
 import { relayStylePagination, getMainDefinition } from "@apollo/client/utilities"
-import { setContext } from '@apollo/client/link/context';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
-
-// import { WebSocketLink } from "@apollo/client/link/ws";
-
 import { createClient } from 'graphql-ws';
-
 import { createUploadLink } from 'apollo-upload-client' // v15.0.0
-
-
-// import { WebSocketLink } from "@apollo/client/link/ws";
-// import { SubscriptionClient } from "subscriptions-transport-ws";
 
 import {ls_connecting} from "./redux/actions/ws"
 import {store, persistor } from "./Redux"

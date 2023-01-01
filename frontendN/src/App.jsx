@@ -13,12 +13,13 @@ import {
   Link,
   useLocation
 } from "react-router-dom";
-import Store from "./Store";
-import Detail from "./pages/detail/Detail"
+
 import _ from "lodash";
 import { useQuery, useApolloClient } from "@apollo/client";
 import ReactGA4 from "react-ga4";
 
+import Store from "./Store";
+import Detail from "./pages/detail/Detail"
 import Breadcs from "./components/breadcrumbs/Breadcs";
 import HomePage from "./pages/home/HomePage";
 import MyAppBar from "./MyAppBar";

@@ -1,16 +1,9 @@
-import jwt from 'jsonwebtoken';
 import { withFilter } from 'graphql-subscriptions';
 import _ from "lodash";
 import FormData from "form-data";
 import cryptojs from "crypto-js";
-
 import deepdash from "deepdash";
 deepdash(_);
-
-// const {
-//   GraphQLUpload,
-//   graphqlUploadExpress, // A Koa implementation is also exported.
-// } = require('graphql-upload');
 import * as fs from "fs";
 
 import {Bank, 
@@ -37,11 +30,7 @@ import pubsub from './pubsub'
 
 import {fileRenamer, checkAuthorization} from "./utils"
 import { __TypeKind } from 'graphql';
-import e from 'express';
-import { async } from 'regenerator-runtime';
-
 const path = require('path');
-
 const fetch = require("node-fetch");
 
 // const GraphQLUpload = require('graphql-upload/GraphQLUpload.js');
@@ -82,6 +71,34 @@ export default {
         return;
       }
     },
+
+    // profile 
+    async profile(parent, args, context, info) {
+      let start = Date.now()
+
+      ///////////////////////////
+      let { req } = context
+
+      let authorization = await checkAuthorization(req);
+      let { status, code, current_user } =  authorization
+      //////////////////////////
+
+      
+      //////////////////////////
+
+      let data = await User.findById(current_user?._id);
+
+      console.log("profile :",  current_user?._id, data)
+      return {
+        status:true,
+        messages: "", 
+        data,
+        executionTime: `Time to execute = ${
+          (Date.now() - start) / 1000
+        } seconds`
+      }
+    },
+
     // user
     async user(parent, args, context, info) {
       let start = Date.now()
@@ -993,6 +1010,8 @@ export default {
         let authorization = await checkAuthorization(req);
         let { status, code, current_user } =  authorization
         //////////////////////////
+
+        console.log("phones :", authorization,  current_user?._id)
 
         let roles = (await User.findById(current_user?._id)).roles
 
@@ -2346,6 +2365,7 @@ export default {
         return;
       }
     },
+
     async updateConversation(parent, args, context, info) {
       try{
         let {_id, input} = args
@@ -2371,6 +2391,7 @@ export default {
         return;
       }
     },
+
     async addMessage(parent, args, context, info) {
       // let { currentUser } = context
 
@@ -2481,6 +2502,7 @@ export default {
 
       return result;
     },
+
     async updateMessageRead(parent, args, context, info) {
       let { userId, conversationId } = args
 
@@ -2578,6 +2600,8 @@ export default {
         ///////////////////////////
         let authorization = await checkAuthorization(req);
         console.log("authorization :", authorization)
+
+        let { status, code, current_user } =  authorization
         //////////////////////////
 
 
@@ -2599,12 +2623,22 @@ export default {
         return;
       }
     },
+
     async updatePhone(parent, args, context, info){
       try{
         let start = Date.now()
         let { _id, input } = args
 
-        let data = await Phone.findOneAndUpdate({ _id }, input, { new: true })
+       
+        ///////////////////////////
+        let { req } = context
+        let authorization = await checkAuthorization(req);
+        console.log("authorization :", authorization)
+
+        let { status, code, current_user } =  authorization
+        //////////////////////////
+ 
+        let data = await Phone.findOneAndUpdate({ _id, ownerId: current_user?._id }, input, { new: true })
 
         return {
           status: true,
@@ -2616,6 +2650,7 @@ export default {
         return;
       }
     },
+
     async deletePhone(parent, args, context, info) {
       try{
         let { _id } = args

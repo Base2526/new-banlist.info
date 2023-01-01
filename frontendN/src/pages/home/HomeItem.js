@@ -1,41 +1,21 @@
 import React, {useEffect, useState} from "react";
 import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 import { IconButton, Typography, makeStyles } from "@material-ui/core";
-import { DeleteOutlineOutlined } from "@material-ui/icons";
-import AbcOutlinedIcon from "@mui/icons-material/AbcOutlined";
-import Avatar from "@material-ui/core/Avatar";
 import { yellow, green, pink, blue } from "@material-ui/core/colors";
 import CardMedia from "@mui/material/CardMedia";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CardActionArea from "@material-ui/core/CardActionArea";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
 import Divider from "@material-ui/core/Divider";
-import ShareIcon from "@mui/icons-material/Share";
-import CommentIcon from "@mui/icons-material/Comment";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import moment from "moment";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import { FacebookShareButton, TwitterShareButton } from "react-share";
-import { FacebookIcon, TwitterIcon } from "react-share";
-import CircularProgress from '@mui/material/CircularProgress';
-import ShowMoreText from "react-show-more-text";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import Masonry from "react-masonry-css";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import { useQuery, useMutation } from "@apollo/client";
 import { useHistory } from "react-router-dom";
 import _ from "lodash"
 import { useTranslation } from "react-i18next";
-
-import i18n from '../../translations/i18n';
 
 import ReadMoreMaster from "../../utils/ReadMoreMaster"
 import ItemComment from "./ItemComment"

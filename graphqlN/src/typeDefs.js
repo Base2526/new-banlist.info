@@ -437,6 +437,8 @@ export default gql`
   type Query {
     ping: JSON
 
+    profile: JSON
+
     homes( page: Long, perPage: Long, keywordSearch: String, category: String ): JSON
 
     user(_id: ID): JSON

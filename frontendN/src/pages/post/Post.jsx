@@ -1,18 +1,6 @@
-import {
-  NewUserContainer,
-  NewUserForm,
-  FormItem,
-  GenderContainer,
-  NewUserButton,
-  ButtonWrapper
-} from "./NewPost.styled";
-
-import "./Post.css";
-
 import React, { useEffect, useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -26,33 +14,51 @@ import { DeleteOutline } from "@material-ui/icons";
 import Typography from "@mui/material/Typography";
 import { connect } from "react-redux";
 import { useTranslation } from "react-i18next";
-
-import BankInputField from "./BankInputField";
-import AttackFileField from "./AttackFileField";
-import RadioGroupField from "./RadioGroupField";
-import TelInputField from "./TelInputField";
-import PopupSnackbar from "../home/PopupSnackbar";
-// import Footer from "../footer";
-import Editor from "../../components/editor/Editor";
+import styled from "styled-components";
 
 import { useQuery, useMutation } from "@apollo/client";
-import {  gqlPost, gqlCreatePost, gqlUpdatePost, 
-          gqlUser, gqlShareByPostId, gqlBookmarksByPostId,
-          gqlPosts } from "../../gqlQuery"
 import _ from "lodash";
 import deepdash from "deepdash";
 deepdash(_);
 
+import {  gqlPost, gqlCreatePost, gqlUpdatePost, 
+          gqlUser, gqlShareByPostId, gqlBookmarksByPostId,
+          gqlPosts } from "../../gqlQuery"
+
 import "../../translations/i18n";
-
 import { getHeaders } from "../../util"
-
 import Tabs from "../../components/tab/Tabs";
 import Panel from "../../components/tab/Panel";
+import BankInputField from "./BankInputField";
+import AttackFileField from "./AttackFileField";
+import TelInputField from "./TelInputField";
+import PopupSnackbar from "../home/PopupSnackbar";
+import Editor from "../../components/editor/Editor";
 
 let editValues = undefined;
 let bookmarksByPostIdValues = undefined;
 let shareValues = undefined;
+
+const ButtonWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  .editBtn {
+    border: none;
+    border-radius: 10px;
+    padding: 3px 10px;
+    background-color: #dbffee;
+    color: #078f4e;
+    cursor: pointer;
+  }
+
+  .deleteBtn {
+    color: red;
+    cursor: pointer;
+  }
+`;
 
 let initValues = {
   title: "", 

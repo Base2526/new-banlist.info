@@ -13,8 +13,9 @@ import TextField from "@mui/material/TextField";
 import { useHistory, useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import CircularProgress from '@mui/material/CircularProgress';
-import LinearProgress from '@mui/material/LinearProgress';
+import { useTranslation } from "react-i18next";
 
+import { getHeaders } from "../../util"
 import Editor from "../../components/editor/Editor";
 
 import { gqlBasicContent, gqlCreateBasicContent, gqlUpdateBasicContent } from "../../gqlQuery"
@@ -27,8 +28,11 @@ const BasicContent = (props) => {
   let { id, mode } = useParams();
   let [input, setInput] = useState(initValues)
 
+  const { t } = useTranslation();
+
   const [onCreateBasicContent, resultCreateBasicContent] = useMutation(gqlCreateBasicContent
     , {
+        context: { headers: getHeaders() },
         onCompleted({ data }) {
           history.push("/basic-contents");
         }
@@ -39,6 +43,7 @@ const BasicContent = (props) => {
 
   const [onUpdateBasicContent, resultUpdateBasicContent] = useMutation(gqlUpdateBasicContent, 
     {
+      context: { headers: getHeaders() },
       update: (cache, {data: {updateBasicContent}}) => {
 
         const data1 = cache.readQuery({
@@ -64,8 +69,6 @@ const BasicContent = (props) => {
 
   console.log("resultUpdateBasicContent : ", resultUpdateBasicContent)
 
-  
-
   switch(mode){
     case "new":{
       editValues = undefined
@@ -73,7 +76,7 @@ const BasicContent = (props) => {
     }
 
     case "edit":{
-      editValues = useQuery(gqlBasicContent, { variables: {id}, notifyOnNetworkStatusChange: true });
+      editValues = useQuery(gqlBasicContent, { context: { headers: getHeaders() }, variables: {id}, notifyOnNetworkStatusChange: true });
      
       console.log("editValues : ", editValues, input)
 
@@ -144,9 +147,7 @@ const BasicContent = (props) => {
                       setInput({...input, description:newValue})
                     }}/>
 
-                  <Button type="submit" variant="contained" color="primary">
-                    CREATE
-                  </Button>
+                  <Button type="submit" variant="contained" color="primary">{t("create")}</Button>
                 </div>
       }
   
@@ -174,9 +175,7 @@ const BasicContent = (props) => {
                       setInput({...input, description:newValue})
                     }}/>
 
-                  <Button type="submit" variant="contained" color="primary">
-                    UPDATE
-                  </Button>
+                  <Button type="submit" variant="contained" color="primary">{t("update")}</Button>
                 </div>
       }
     }

@@ -9,11 +9,13 @@ import LinearProgress from '@mui/material/LinearProgress';
 
 import Typography from "@material-ui/core/Typography";
 import {gqlBasicContent} from "../../gqlQuery"
+import { getHeaders } from "../../util"
 
 const Privacy = (props) => {
     let history = useHistory();
 
     const basicContentValue = useQuery(gqlBasicContent, {
+        context: { headers: getHeaders() },
         variables: {id: "631cb30fcc23758543a59ab8"},
         notifyOnNetworkStatusChange: true,
     });

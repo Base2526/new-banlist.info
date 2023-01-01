@@ -1,29 +1,17 @@
 import React, {useEffect, useState} from "react";
 import Button from "@mui/material/Button";
-import Avatar from "@mui/material/Avatar";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
-import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { useQuery, useMutation } from "@apollo/client";
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemButton from '@mui/material/ListItemButton';
-import CircularProgress from '@mui/material/CircularProgress';
 import DialogActions from '@mui/material/DialogActions';
-
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from '@mui/material/FormControlLabel';
-
-
-
 import _ from "lodash"
+import { useQuery, useMutation } from "@apollo/client";
+import CircularProgress from '@mui/material/CircularProgress';
+import Typography from "@material-ui/core/Typography";
 
-import { login } from "./redux/actions/auth"
-import { gqlFollower } from "./gqlQuery"
+import { gqlBasicContent } from "./gqlQuery"
+import { getHeaders } from "./util"
 
 const DialogTermsAndConditions = (props) => {
   let history = useHistory();
@@ -44,10 +32,17 @@ const DialogTermsAndConditions = (props) => {
   //   }
   // }
 
+  const basicContentValue = useQuery(gqlBasicContent, {
+    context: { headers: getHeaders() },
+    variables: {id: "631cb30fcc23758543a59ab8"},
+    notifyOnNetworkStatusChange: true,
+  });
+
   return (
     <Dialog 
       fullWidth
       maxWidth="sm"
+      scroll={"body"}
       onClose={(e)=>{
         // onClose(false)
         
@@ -55,7 +50,11 @@ const DialogTermsAndConditions = (props) => {
       open={open}>
       <DialogTitle>Terms and conditions</DialogTitle>
       <DialogContent>
-       คำเตือน! อยู่ในช่วงทดสอบระบบ ข้อมูลทั้งหมดนี้ เป็นข้อมูลเพื่อทดสอบระบบไม่สามารถนําไปอ้างอิงใดๆ ได้ทั้งสิ้น
+      {
+          basicContentValue.loading
+          ? <CircularProgress />
+          : <Typography dangerouslySetInnerHTML={{ __html: basicContentValue.data.basicContent.data.description }} />
+      }
       </DialogContent>
       <DialogActions>
         {/* <FormControlLabel

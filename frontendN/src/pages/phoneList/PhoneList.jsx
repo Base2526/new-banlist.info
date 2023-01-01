@@ -1,6 +1,5 @@
-import { ButtonWrapper } from "./PhoneList.styled";
 import { Link } from "react-router-dom";
-import { useState, useCallback, useEffect, useMemo, useRef  } from "react";
+import { useState, useCallback, useMemo, useRef  } from "react";
 import Box from "@mui/material/Box";
 import { useQuery, useMutation } from "@apollo/client";
 import { useHistory } from "react-router-dom";
@@ -10,18 +9,13 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Typography from "@mui/material/Typography";
 import CircularProgress from '@mui/material/CircularProgress';
 import _ from "lodash"
-import Avatar from "@mui/material/Avatar";
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import LinearProgress from '@mui/material/LinearProgress';
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
-import CardActionArea from "@material-ui/core/CardActionArea";
 import SpeedDialAction from '@mui/material/SpeedDialAction';
-import PostAddIcon from '@mui/icons-material/PostAdd';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import { connect } from "react-redux";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
@@ -36,9 +30,7 @@ import Table from "../../TableContainer"
 const PhoneList = (props) => {
   let history = useHistory();
   const { t } = useTranslation();
-
   let { user } = props
-
   const [pageOptions, setPageOptions] = useState([30, 50, 100]);  
   const [pageIndex, setPageIndex]     = useState(0);  
   const [pageSize, setPageSize]       = useState(pageOptions[0])

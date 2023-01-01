@@ -16,12 +16,10 @@ import { useQuery, useMutation, useApolloClient } from "@apollo/client";
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import { connect } from "react-redux";
-import IconButton from "@mui/material/IconButton";
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import queryString from 'query-string';
-
 import { useTranslation } from "react-i18next";
 
 import { getHeaders } from "../../util"
@@ -47,10 +45,9 @@ const HomePage = (props) => {
 
   let params = queryString.parse(history.location.search)
 
-  let { is_connnecting, user } = props
+  let { user } = props
 
   const client = useApolloClient();
-
 
   const [keywordSearch, setKeywordSearch] = useState("");
   const [category, setCategory] = useState([0,1]);
@@ -104,7 +101,7 @@ const HomePage = (props) => {
   });
   // console.log("homesValues :", homesValues )
 
-  if( is_connnecting && !homesValues.loading){
+  if( !homesValues.loading){
 
     // console.log("homesValues.data.homes.data :", homesValues, page, rowsPerPage)
 
@@ -139,10 +136,8 @@ const HomePage = (props) => {
   }
 
   useEffect(()=>{
-    if(is_connnecting){
-      homesValues && homesValues.refetch({page, perPage: rowsPerPage, keywordSearch: keywordSearch, category: category.join()})
-    }
-  }, [user, is_connnecting])
+    homesValues && homesValues.refetch({page, perPage: rowsPerPage, keywordSearch: keywordSearch, category: category.join()})
+  }, [user])
 
   const handleAnchorElSettingOpen = (index, event) => {
     setAnchorElSetting({ [index]: event.currentTarget });
@@ -288,90 +283,93 @@ const HomePage = (props) => {
   }
 
   const main = () =>{
+    if(homesValues.data.homes.data.length > 0){
+      return  <div>
+                <Container>
+                  <Masonry
+                    breakpointCols={breakpoints}
+                    className="my-masonry-grid"
+                    columnClassName="my-masonry-grid_column"
+                  >
+                    {homesValues.data.homes.data.map(
+                      (item, index) => {
+                        return (
+                          <div key={index}>
+                            <HomeItem 
+                              key={index}
+                              {...props}
+                              user={user}
+                              item={item} 
+                              index={index} 
+                              onPanelComment={(data)=>{
+                                setPanelComment(data)
+                              }}
+                              onLightbox={(data)=>{
+                                setLightbox(data)
+                              }}
+                              onAnchorElShareOpen={(index, e)=>{
+                                handleAnchorElShareOpen(index, e)
+                              }}
+                              onAnchorElSettingOpen={(index, e)=>{
+                                handleAnchorElSettingOpen(index, e)
+                              }}
+                              onDialogProfileOpen={(index, e)=>{
+                                setDialogProfile({open:true, id:e.ownerId})
+                              }}
+                              onDialogLogin={(status)=>{
+                                setDialogLoginOpen(status)
+                              }}
+                              onBookmark={(postId, status)=>{
 
-    // console.log("homesValues.data :", homesValues.data)
-    return  <div>
-              <Container>
-                <Masonry
-                  breakpointCols={breakpoints}
-                  className="my-masonry-grid"
-                  columnClassName="my-masonry-grid_column"
-                >
-                  {homesValues.data.homes.data.map(
-                    (item, index) => {
-                      return (
-                        <div key={index}>
-                          <HomeItem 
-                            key={index}
-                            {...props}
-                            user={user}
-                            item={item} 
-                            index={index} 
-                            onPanelComment={(data)=>{
-                              setPanelComment(data)
-                            }}
-                            onLightbox={(data)=>{
-                              setLightbox(data)
-                            }}
-                            onAnchorElShareOpen={(index, e)=>{
-                              handleAnchorElShareOpen(index, e)
-                            }}
-                            onAnchorElSettingOpen={(index, e)=>{
-                              handleAnchorElSettingOpen(index, e)
-                            }}
-                            onDialogProfileOpen={(index, e)=>{
-                              setDialogProfile({open:true, id:e.ownerId})
-                            }}
-                            onDialogLogin={(status)=>{
-                              setDialogLoginOpen(status)
-                            }}
-                            onBookmark={(postId, status)=>{
-
-                              console.log("onCreateAndUpdateBookmark :", postId, status)
-                              onCreateAndUpdateBookmark({ variables: { input: {
-                                    postId,
-                                    status
+                                console.log("onCreateAndUpdateBookmark :", postId, status)
+                                onCreateAndUpdateBookmark({ variables: { input: {
+                                      postId,
+                                      status
+                                    }
                                   }
-                                }
-                              }); 
-                            }}
-                            />
-                            {menuShare(item, index)}
-                            {menuSetting(item, index)}
-                        </div>
-                      );
-                    }
-                  )}
-                </Masonry>
-              </Container>
-              <Container sx={{ py: 2 }} maxWidth="xl">
-                { 
-                  homesValues.data.homes.total > rowsPerPage 
-                  ? <Pagination
-                      page={page}
-                      onPageChange={(event, newPage) => {
-                        setPage(newPage);
-                        history.push({
-                          pathname: "/",
-                          search: "?page=" + newPage + "&perPage=" + rowsPerPage
-                        });
-                      }}
-                      rowsPerPage={rowsPerPage}
-                      onRowsPerPageChange={(event) => {
-                        setRowsPerPage(parseInt(event.target.value, 10));
-                        setPage(0);
+                                }); 
+                              }}
+                              />
+                              {menuShare(item, index)}
+                              {menuSetting(item, index)}
+                          </div>
+                        );
+                      }
+                    )}
+                  </Masonry>
+                </Container>
+                <Container sx={{ py: 2 }} maxWidth="xl">
+                  { 
+                    homesValues.data.homes.total > rowsPerPage 
+                    ? <Pagination
+                        page={page}
+                        onPageChange={(event, newPage) => {
+                          setPage(newPage);
+                          history.push({
+                            pathname: "/",
+                            search: "?page=" + newPage + "&perPage=" + rowsPerPage
+                          });
+                        }}
+                        rowsPerPage={rowsPerPage}
+                        onRowsPerPageChange={(event) => {
+                          setRowsPerPage(parseInt(event.target.value, 10));
+                          setPage(0);
 
-                        history.push({
-                          pathname: "/",
-                          search: "?perPage=" + parseInt(event.target.value, 10)
-                        });
-                      }}
-                      count={homesValues.data.homes.total}
-                    /> 
-                  : <div /> 
-                }
-              </Container>
-            </div>
+                          history.push({
+                            pathname: "/",
+                            search: "?perPage=" + parseInt(event.target.value, 10)
+                          });
+                        }}
+                        count={homesValues.data.homes.total}
+                      /> 
+                    : <div /> 
+                  }
+                </Container>
+              </div>
+    }else{
+      return <div>Empty data</div>
+    }
+ 
   }
 
   return (
@@ -389,7 +387,7 @@ const HomePage = (props) => {
         <div>
           {
             homesValues.loading || homesValues.data.homes == undefined
-            ? is_connnecting ? <div><CircularProgress /></div> : <div>Server is down</div>
+            ? <div><CircularProgress /></div>
             : main()
           }
         </div>
@@ -538,7 +536,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     user: state.auth.user,
     bookmarks: state.auth.bookmarks,
-    is_connnecting: state.ws.is_connnecting
+    // is_connnecting: state.ws.is_connnecting
   }
 };
 

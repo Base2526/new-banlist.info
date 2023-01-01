@@ -17,6 +17,8 @@ export const gqlUsers = gql`query users($page: Int, $perPage: Int){ users( page:
 
 export const gqlUser = gql`query User($id: ID){ user(_id: $id) }`;
 
+export const gqlProfile = gql`query Profile{ profile }`;
+
 export const gqlRoles = gql`
     query roles{
         roles{
