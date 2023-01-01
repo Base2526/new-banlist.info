@@ -172,6 +172,7 @@ const PostList = (props) => {
             Header: 'Comments',
             Cell: props =>{
               let commentValues = useQuery(gqlComment, {
+                context: { headers: getHeaders() },
                 variables: {postId: props.row.original._id},
                 notifyOnNetworkStatusChange: true,
               });
@@ -200,6 +201,7 @@ const PostList = (props) => {
             Header: 'Bookmark',
             Cell: props =>{
               const bmValus = useQuery(gqlBookmarksByPostId, {
+                context: { headers: getHeaders() },
                 variables: { postId: props.row.original._id},
                 notifyOnNetworkStatusChange: true, 
               });
@@ -221,6 +223,7 @@ const PostList = (props) => {
             Header: 'Share',
             Cell: props =>{
               const shareValus = useQuery(gqlShareByPostId, {
+                context: { headers: getHeaders() },
                 variables: {postId: props.row.original._id},
                 notifyOnNetworkStatusChange: true,
               });
