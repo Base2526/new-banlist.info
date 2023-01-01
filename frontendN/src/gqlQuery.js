@@ -17,6 +17,8 @@ export const gqlUsers = gql`query users($page: Int, $perPage: Int){ users( page:
 
 export const gqlUser = gql`query User($id: ID){ user(_id: $id) }`;
 
+export const gqlProfile = gql`query Profile{ profile }`;
+
 export const gqlRoles = gql`
     query roles{
         roles{
@@ -336,15 +338,14 @@ export const gqlFollowingByUserId = gql`
     }`;
 
 export const gqlFetchMessage = gql`query fetchMessage( $conversationId: ID ){ fetchMessage( conversationId: $conversationId ) }`;
-export const gqlPhones = gql`query phones($userId: ID, $page: Int, $perPage: Int) { phones(userId: $userId, page: $page, perPage: $perPage) }`;
+export const gqlPhones = gql`query phones( $page: Int, $perPage: Int) { phones( page: $page, perPage: $perPage ) }`;
 export const gqlPhone = gql`query phone($id: ID!){ phone(_id: $id) }`;
 
 //////////////////  mutation  ///////////////////
 
 export const gqlLogin = gql`mutation Login($input: LoginInput) { login(input: $input) }`;
 
-export const gqlLoginWithSocial = gql`
-    mutation LoginWithSocial($input: LoginWithSocialInput) { loginWithSocial(input: $input) }`;
+export const gqlLoginWithSocial = gql`mutation LoginWithSocial($input: LoginWithSocialInput) { loginWithSocial(input: $input) }`;
 
 export const gqlCreateUser = gql`
     mutation CreateUser($input: UserInput) {

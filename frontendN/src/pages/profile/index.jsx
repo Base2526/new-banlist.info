@@ -14,20 +14,15 @@ import TextField from "@mui/material/TextField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import Box from "@mui/material/Box";
-
-
 import _ from "lodash";
 import deepdash from "deepdash";
 deepdash(_);
 
-
 import { useTranslation } from "react-i18next";
 
 import { logout } from "../../redux/actions/auth"
-
-import { gqlUser ,gqlUpdateUser } from "../../gqlQuery"
-
-// import {wsLink} from "../../Apollo"
+import { gqlProfile ,gqlUpdateUser } from "../../gqlQuery"
+import { getHeaders } from "../../util"
 
 let initValues = { displayName: "",  files: null }
 
@@ -53,6 +48,7 @@ const index = (props) => {
 
   const [onUpdateUser, resultUpdateUser] = useMutation(gqlUpdateUser, 
     {
+      context: { headers: getHeaders() },
       update: (cache, {data: {updateUser}}) => {
         // let {state} = history.location
 
@@ -72,11 +68,6 @@ const index = (props) => {
           variables: {id}
         });
         */
-      },
-      context: {
-        headers: {
-          'apollo-require-preflight': true,
-        },
       },
       onCompleted({ data }) {}
     }
@@ -125,8 +116,10 @@ const index = (props) => {
   };
 
 
-  let useUser = useQuery(gqlUser, { variables: {id: user._id}, notifyOnNetworkStatusChange: true });
-  if(useUser.loading || useUser.data.user == null){
+  let useUser = useQuery(gqlProfile, { context: { headers: getHeaders() }, notifyOnNetworkStatusChange: true });
+  
+  console.log("useUser :", useUser)
+  if(useUser.loading || useUser.data.profile == null){
     return <div><CircularProgress /></div> 
   }
 
@@ -138,11 +131,13 @@ const index = (props) => {
 
   //  if(useUser.data.user.data == null){
 
-  let currentUser = useUser.data.user.data;
+  let currentUser = useUser.data.profile.data;
 
   console.log("currentUser :", currentUser)
 
   let imageSrc =  _.isEmpty(currentUser.image) ? "" : currentUser.image[0].url
+
+  console.log("imageSrc :", imageSrc)
 
   const onChangeFile = (event) =>{
     event.stopPropagation();

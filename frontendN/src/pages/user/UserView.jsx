@@ -1,12 +1,9 @@
 import React, { useState, useEffect, withStyles } from "react";
 import Button from "@mui/material/Button";
-// import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useParams, Link } from "react-router-dom";
-
 import { Avatar } from "@chatscope/chat-ui-kit-react";
-
 import _ from "lodash";
 import deepdash from "deepdash";
 deepdash(_);
@@ -30,10 +27,7 @@ import { login } from "../../redux/actions/auth"
 import DialogFollower from "../../DialogFollower"
 import ItemFollower from "./ItemFollower"
 import ItemFollowing from "./ItemFollowing"
-
 import ReportDialog from "../../components/report"
-
-// import {wsLink} from "../../Apollo"
 
 const UserView = (props) => {
   let history = useHistory();

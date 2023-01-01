@@ -13,6 +13,7 @@ import deepdash from "deepdash";
 deepdash(_);
 
 import {gqlUser, gqlComment, gqlCreateAndUpdateComment, subComment} from "../../gqlQuery"
+import { getHeaders } from "../../util"
 
 const styles = {
   largeIcon: {
@@ -64,35 +65,35 @@ const PanelComment = (props) => {
   //   i.replies && i.replies.map((i) => (count += 1));
   // });
 
-  const [onCreateAndUpdateComment, resultCreateAndUpdateComment] = useMutation(gqlCreateAndUpdateComment, 
-    {
-        update: (cache, {data: {createAndUpdateComment}}) => {
-            const data1 = cache.readQuery({
-                query: gqlComment,
-                variables: {postId: commentId}
-            });
+  const [onCreateAndUpdateComment, resultCreateAndUpdateComment] = useMutation(gqlCreateAndUpdateComment, {
+    context: { headers: getHeaders() }, 
+    update: (cache, {data: {createAndUpdateComment}}) => {
+        const data1 = cache.readQuery({
+            query: gqlComment,
+            variables: {postId: commentId}
+        });
 
-            let newData = {...data1.comment}
-            newData = {...newData, data: createAndUpdateComment.data}
-                
-            cache.writeQuery({
-                query: gqlComment,
-                data: {
-                    comment: newData
-                },
-                variables: {
-                    postId: commentId
-                }
-            });
-        },
-        onCompleted({ data }) {
-            console.log("onCompleted")
-        }
+        let newData = {...data1.comment}
+        newData = {...newData, data: createAndUpdateComment.data}
+            
+        cache.writeQuery({
+            query: gqlComment,
+            data: {
+                comment: newData
+            },
+            variables: {
+                postId: commentId
+            }
+        });
+    },
+    onCompleted({ data }) {
+        console.log("onCompleted")
     }
-  );
+  });
   console.log("resultCreateAndUpdateComment :", resultCreateAndUpdateComment)
 
   let commentValues = useQuery(gqlComment, {
+    context: { headers: getHeaders() }, 
     variables: {postId: commentId},
     notifyOnNetworkStatusChange: true,
   });

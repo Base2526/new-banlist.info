@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import IconButton from "@mui/material/IconButton";
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import _ from "lodash"
 import { connect } from "react-redux";
 
 import { gqlIsBookmark, subBookmark } from "../../gqlQuery"
+import { getHeaders } from "../../util"
 
 let unsubscribe =null
 const ItemBookmark = (props) => {
@@ -13,6 +14,7 @@ const ItemBookmark = (props) => {
 
   
   let bmValus = useQuery(gqlIsBookmark, {
+    context: { headers: getHeaders() }, 
     variables: { postId: ""},
     notifyOnNetworkStatusChange: true,
   });

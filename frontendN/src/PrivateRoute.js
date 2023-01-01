@@ -24,12 +24,8 @@ const PrivateRoute = ({ user,  children, ...rest }) => {
     );
 }
 
-// export default PrivateRoute;
 const mapStateToProps = (state, ownProps) => {
-    // console.log("mapStateToProps >>  :", state)
-    return {
-      user: state.auth.user,
-    }
+    return { user: state.auth.user }
 };
   
 export default connect( mapStateToProps, null )(PrivateRoute);

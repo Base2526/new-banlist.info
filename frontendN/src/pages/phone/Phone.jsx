@@ -15,6 +15,8 @@ import Editor from "../../components/editor/Editor";
 
 import { gqlCreatePhone, gqlUpdatePhone, gqlPhones, gqlPhone } from "../../gqlQuery"
 
+import { getHeaders } from "../../util"
+
 let editValues = undefined;
 let initValues = { phones: [''] , description: "", ownerId:""}
 
@@ -23,12 +25,11 @@ const Phone = (props) => {
     const { t } = useTranslation();
 
     let { user } = props
-
     let { id, mode } = useParams();
-
-    const [input, setInput]       = useState(initValues);
+    let [input, setInput]       = useState(initValues);
 
     const [onCreatePhone, resultCreatePhone] = useMutation(gqlCreatePhone, {
+        context: { headers: getHeaders() },
         update: (cache, {data: {createPhone}}) => {
             const data1 = cache.readQuery({ query: gqlPhones, variables: { page: 0, perPage: 30 } });
             if(data1 != null){
@@ -46,10 +47,14 @@ const Phone = (props) => {
         onCompleted({ data }) {
             history.push("/phones")
         },
+        onError({error}){
+          console.log("onError :")
+        }
     });
     console.log("createPhone :", resultCreatePhone)
 
     const [onUpdatePhone, resultUpdatePhone] = useMutation(gqlUpdatePhone, {
+        context: { headers: getHeaders() },
         update: (cache, {data: {updatePhone}}) => {
             const data1 = cache.readQuery({ query: gqlPhone, variables: {id} });
     
@@ -87,6 +92,10 @@ const Phone = (props) => {
         onCompleted({ data }) {
             history.push("/phones")
         },
+        onError({error}){
+          console.log("onError :")
+        }
+        
     });
     console.log("updatePhone :", resultUpdatePhone)
 

@@ -4,11 +4,15 @@ import { useQuery } from "@apollo/client";
 import _ from "lodash"
 
 import { gqlBanks } from "../../gqlQuery"
+import { getHeaders } from "../../util"
 
 const ItemBank = (props) => {
     let {item} = props 
 
-    let valueBanks = useQuery(gqlBanks, { notifyOnNetworkStatusChange: true });
+    let valueBanks = useQuery(gqlBanks, { 
+                                context: { headers: getHeaders() }, 
+                                notifyOnNetworkStatusChange: true 
+                            });
     
     if(valueBanks.loading){
         return <div />

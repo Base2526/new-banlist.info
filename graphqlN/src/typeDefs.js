@@ -74,6 +74,7 @@ export default gql`
   input LoginWithSocialInput{
     authType: AuthType!     # 
     data: JSON!            # for github
+    deviceAgent: JSON
   }
 
   type RoomPayLoad {
@@ -436,6 +437,8 @@ export default gql`
   type Query {
     ping: JSON
 
+    profile: JSON
+
     homes( page: Long, perPage: Long, keywordSearch: String, category: String ): JSON
 
     user(_id: ID): JSON
@@ -501,7 +504,7 @@ export default gql`
 
     fetchMessage(conversationId: ID): JSON
 
-    phones(userId: ID, page: Int, perPage: Int): JSON
+    phones( page: Int, perPage: Int ): JSON
     phone(_id: ID!): JSON
   }  
   
@@ -539,7 +542,6 @@ export default gql`
   }
 
   input PhoneInput {
-    ownerId: ID!
     phones: [String!]
     description: String
   }

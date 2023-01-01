@@ -1,18 +1,6 @@
-import {
-  NewUserContainer,
-  NewUserForm,
-  FormItem,
-  GenderContainer,
-  NewUserButton,
-  ButtonWrapper
-} from "./NewPost.styled";
-
-import "./Post.css";
-
 import React, { useEffect, useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -26,33 +14,51 @@ import { DeleteOutline } from "@material-ui/icons";
 import Typography from "@mui/material/Typography";
 import { connect } from "react-redux";
 import { useTranslation } from "react-i18next";
-
-import BankInputField from "./BankInputField";
-import AttackFileField from "./AttackFileField";
-import RadioGroupField from "./RadioGroupField";
-import TelInputField from "./TelInputField";
-import PopupSnackbar from "../home/PopupSnackbar";
-// import Footer from "../footer";
-import Editor from "../../components/editor/Editor";
+import styled from "styled-components";
 
 import { useQuery, useMutation } from "@apollo/client";
-import {  gqlPost, gqlCreatePost, gqlUpdatePost, 
-          gqlUser, gqlShareByPostId, gqlBookmarksByPostId,
-          gqlPosts } from "../../gqlQuery"
 import _ from "lodash";
 import deepdash from "deepdash";
 deepdash(_);
 
+import {  gqlPost, gqlCreatePost, gqlUpdatePost, 
+          gqlUser, gqlShareByPostId, gqlBookmarksByPostId,
+          gqlPosts } from "../../gqlQuery"
+
 import "../../translations/i18n";
-
-import {convertFileToBase64} from "../../util"
-
+import { getHeaders } from "../../util"
 import Tabs from "../../components/tab/Tabs";
 import Panel from "../../components/tab/Panel";
+import BankInputField from "./BankInputField";
+import AttackFileField from "./AttackFileField";
+import TelInputField from "./TelInputField";
+import PopupSnackbar from "../home/PopupSnackbar";
+import Editor from "../../components/editor/Editor";
 
 let editValues = undefined;
 let bookmarksByPostIdValues = undefined;
 let shareValues = undefined;
+
+const ButtonWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  .editBtn {
+    border: none;
+    border-radius: 10px;
+    padding: 3px 10px;
+    background-color: #dbffee;
+    color: #078f4e;
+    cursor: pointer;
+  }
+
+  .deleteBtn {
+    color: red;
+    cursor: pointer;
+  }
+`;
 
 let initValues = {
   title: "", 
@@ -73,7 +79,8 @@ const bmColumns = [
     width: 150,
     renderCell: (params) => {
       let value = useQuery(gqlUser, {
-        variables: {id: params.row.userId},
+        context: { headers: getHeaders() },
+        variables: { id: params.row.userId },
         notifyOnNetworkStatusChange: true,
       });
 
@@ -93,6 +100,7 @@ const bmColumns = [
     width: 400, 
     renderCell: (params) => {
       let postValue = useQuery(gqlPost, {
+        context: { headers: getHeaders() },
         variables: {id: params.row.postId},
         notifyOnNetworkStatusChange: true,
       });
@@ -131,6 +139,7 @@ const shcolumns = [
     width: 150,
     renderCell: (params) => {
       let value = useQuery(gqlUser, {
+        context: { headers: getHeaders() },
         variables: {id: params.row.userId},
         notifyOnNetworkStatusChange: true,
       });
@@ -149,6 +158,7 @@ const shcolumns = [
     width: 400, 
     renderCell: (params) => {
       let postValue = useQuery(gqlPost, {
+        context: { headers: getHeaders() },
         variables: {id: params.row.postId},
         notifyOnNetworkStatusChange: true,
       });
@@ -215,6 +225,7 @@ const Post = (props) => {
   const [bmPerPage, setBmPerPage] = useState(bmPageOptions[0])
 
   const [onCreatePost, resultCreatePost] = useMutation(gqlCreatePost, {
+    context: { headers: getHeaders() },
     update: (cache, {data: {createPost}}) => {
 
       // let {state} = history.location
@@ -254,49 +265,41 @@ const Post = (props) => {
       //   }
       // }
     },
-    context: {
-      headers: {
-        'apollo-require-preflight': true,
-      },
-    },
     onCompleted({ data }) {
-      // console.log("bookmark :::: onCompleted")
-
       history.push("/posts")
     },
+    onError({error}){
+      console.log("onError :")
+    }
   });
   console.log("resultCreatePost :", resultCreatePost)
 
-  const [onUpdatePost, resultUpdatePost] = useMutation(gqlUpdatePost, 
-    {
-      update: (cache, {data: {updatePost}}) => {
-        // let {state} = history.location
-        const data1 = cache.readQuery({
-          query: gqlPost,
-          variables: {id}
-        });
+  const [onUpdatePost, resultUpdatePost] = useMutation(gqlUpdatePost, {
+    context: { headers: getHeaders() },
+    update: (cache, {data: {updatePost}}) => {
+      // let {state} = history.location
+      const data1 = cache.readQuery({
+        query: gqlPost,
+        variables: {id}
+      });
 
-        let newPost = {...data1.post}
-        newPost = {...newPost, data: updatePost}
+      let newPost = {...data1.post}
+      newPost = {...newPost, data: updatePost}
 
-        cache.writeQuery({
-          query: gqlPost,
-          data: { post: newPost },
-          variables: {id}
-        });
-      },
-      context: {
-        headers: {
-          'apollo-require-preflight': true,
-        },
-      },
-      onCompleted({ data }) {
-        history.push("/posts");
-      }
+      cache.writeQuery({
+        query: gqlPost,
+        data: { post: newPost },
+        variables: {id}
+      });
+    },
+    onCompleted({ data }) {
+      history.push("/posts");
+    },
+    onError({error}){
+      console.log("onError :")
     }
-  );
+  });
   console.log("resultUpdatePost :", resultUpdatePost)
-
 
   switch(mode){
     case "new":{
@@ -306,18 +309,21 @@ const Post = (props) => {
    
     case "edit":{
       bookmarksByPostIdValues = useQuery(gqlBookmarksByPostId, {
+        context: { headers: getHeaders() },
         variables: { postId: id },
         notifyOnNetworkStatusChange: true,
       });
       console.log("bookmarksByPostIdValues : ", bookmarksByPostIdValues)
     
       shareValues = useQuery(gqlShareByPostId, {
+        context: { headers: getHeaders() },
         variables: {postId: id},
         notifyOnNetworkStatusChange: true,
       });
       // console.log("shareValues : ", shareValues)
     
       editValues = useQuery(gqlPost, {
+        context: { headers: getHeaders() },
         variables: {id},
         notifyOnNetworkStatusChange: true,
       });
@@ -450,7 +456,7 @@ const Post = (props) => {
                       ownerId: user._id
                     }
 
-        console.log("newInput : ", editValues.data.post.data._id, _.omitDeep(newInput, ['__typename']), input.attackFiles)
+        console.log("newInput : ", editValues.data.post.data._id, _.omitDeep(newInput, ['__typename']), input.attackFiles, newInput)
 
         onUpdatePost({ variables: { 
           id: editValues.data.post.data._id,

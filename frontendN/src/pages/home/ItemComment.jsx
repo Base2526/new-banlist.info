@@ -5,6 +5,7 @@ import CommentIcon from "@mui/icons-material/Comment";
 import _ from "lodash"
 
 import { gqlComment, subComment } from "../../gqlQuery"
+import { getHeaders } from "../../util"
 
 let unsubscribe  = null
 const ItemComment = (props) => {
@@ -18,6 +19,7 @@ const ItemComment = (props) => {
 
     const iconComment = () =>{
         let commentValues = useQuery(gqlComment, {
+          context: { headers: getHeaders() }, 
           variables: {postId: item._id},
           notifyOnNetworkStatusChange: true,
         });

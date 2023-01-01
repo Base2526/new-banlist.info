@@ -59,3 +59,11 @@ export const numberCurrency = (number) =>{
 }
 
 export const getCurrentLanguage = () => i18n.language || localStorage.getItem("i18n")
+
+export const getHeaders = () =>{
+    return  {
+                "apollo-require-preflight": true,
+                "Content-Type": "application/json",
+                authorization: localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : ''
+            }
+}
