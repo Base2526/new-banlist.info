@@ -11,13 +11,15 @@ import IconButton from "@mui/material/IconButton";
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { useQuery } from "@apollo/client";
 import LinearProgress from '@mui/material/LinearProgress';
-
+import { useTranslation } from "react-i18next";
 import _ from "lodash"
 
 import {gqlBanks} from "../../gqlQuery"
 
 const BankInputField = ({ label, values, onChange }) => {
   const [inputList, setInputList] = useState(values);
+
+  const { t } = useTranslation();
 
   let valueBanks = useQuery(gqlBanks, { notifyOnNetworkStatusChange: true, });
 
@@ -64,7 +66,7 @@ const BankInputField = ({ label, values, onChange }) => {
               options={valueBanks.data.banks.data}
               getOptionLabel={(option) => option.name}
               defaultValue={ value }
-              renderInput={(params) => <TextField {...params} label="Bank" required={_.isEmpty(item.bankId) ? true : false} />}
+              renderInput={(params) => <TextField {...params} label={t("bank_account_name")} required={_.isEmpty(item.bankId) ? true : false} />}
               onChange={(event, values) => onBankIdChange(event, values, i)}
             />
   }
@@ -90,13 +92,14 @@ const BankInputField = ({ label, values, onChange }) => {
       
             {inputList.map((x, i) => {
       
+      // 
               // console.log("inputList >>", x)
               return (
                 <div className="box" key={i}>
                   <TextField
                     id="input-bank-account-name"
                     name="bankAccountName"
-                    label="Bank account name"
+                    label={t("bank_account_number")}
                     variant="filled"
                     value={x.bankAccountName}
                     required

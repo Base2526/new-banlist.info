@@ -384,7 +384,7 @@ const Detail = (props) => {
                                 <Typography variant="subtitle2" color="textSecondary">
                                     {t("date_tranfer")} : {moment(post.dateTranfer).format('MMMM Do YYYY')}
                                 </Typography>
-                                <Typography variant="subtitle2" color="textSecondary">{t("detail")} : {post.description}</Typography>
+                                <Typography variant="subtitle2" color="textSecondary" dangerouslySetInnerHTML={{ __html:  t("detail") + ": " + post.description}} />
                             </div>
                             <div className="col4">
                                 <ItemComment 
