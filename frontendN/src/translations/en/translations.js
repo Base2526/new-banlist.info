@@ -73,4 +73,6 @@ export const TRANSLATIONS_EN = {
 
     login_or_sign_up_to_leave_a_comment : "Log in or sign up to leave a comment",
 
+    bank_account_number: "Bank account number",
+    bank_account_name: "Bank account name",
 };

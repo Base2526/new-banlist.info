@@ -20,6 +20,7 @@ i18n
     // debug: true,
     //_.isEmpty(localStorage.getItem('i18n')) ? "en" : localStorage.getItem('i18n'),
     fallbackLng: "en",
+    lng: 'th', // default language
     interpolation: {
       escapeValue: false // not needed for react as it escapes by default
     },
