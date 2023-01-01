@@ -105,7 +105,7 @@ const MyAppBar = (props) =>{
                 color="inherit"
                 className={classes.grow}
                 onClick={(e)=>history.push("/")}>
-                BANLIST.INFO (alpha)
+                BANLIST.INFO
               </Typography>
 
               
