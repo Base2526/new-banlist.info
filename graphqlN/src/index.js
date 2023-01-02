@@ -7,10 +7,8 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 import { WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
 import jwt from 'jsonwebtoken';
-import * as fs from "fs";
 
 import {User, Session} from './model'
-// import connection from './mongo' 
 import typeDefs from "./typeDefs";
 import resolvers from "./resolvers";
 import pubsub from './pubsub'

@@ -1102,10 +1102,12 @@ export default {
 
     // Login & Logout
     async login(parent, args, context, info) {
+      let start = Date.now()
       try{
         let {input} = args
 
-        let start = Date.now()
+        console.log("login : ", input)
+
         let user = emailValidate().test(input.username) ?  await User.findOne({email: input.username}) : await User.findOne({username: input.username})
 
         if(user === null){
@@ -1156,8 +1158,6 @@ export default {
         
         return {
           status: true,
-          // messages: "", 
-          // token,
           data: user,
           sessionId,
           executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
@@ -1165,9 +1165,11 @@ export default {
 
       } catch(err) {
         logger.error(err.toString());
-
-        console.log("login : ", err.toString())
-        return;
+        return {
+          status: false,
+          messages: err.toString(), 
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
       }
     },
 
@@ -1478,6 +1480,27 @@ export default {
                 socialObject: JSON.stringify(data)
               }
               user = await User.create(newInput);
+
+              console.log("FACEBOOK : new")
+            }else{
+              let newInput = {
+                username: data.email,
+                email: data.email,
+                displayName: data.name,
+                image :[{
+                  url: _.isEmpty(data.picture.data) ? "" : data.picture.data.url,
+                  filename: data.id +".jpeg",
+                  mimetype: 'image/jpeg',
+                  encoding: '7bit',
+                }],
+                lastAccess : Date.now(),
+                socialType: 'facebook',
+                socialObject: JSON.stringify(data)
+              }
+
+              await User.findOneAndUpdate({ _id : user._id.toString()}, newInput, { new: true })
+
+              console.log("FACEBOOK : update")
             }
 
             console.log("FACEBOOK :", user)
