@@ -959,7 +959,7 @@ export default {
 
         if( status && code == 1 ){
           let data=  await Conversation.find({
-            "members.userId": { $all: [ current_user?._id ] }
+            "members.userId": { $all: [ current_user?._id.toString() ] }
           });
 
           console.log("conversations #1 : ", data)
