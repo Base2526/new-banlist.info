@@ -955,6 +955,8 @@ export default {
         let authorization = await checkAuthorization(req);
         let { status, code, current_user } =  authorization
 
+        console.log("conversations #0 : ", authorization)
+
         if( status && code == 1 ){
           let data=  await Conversation.find({
             "members.userId": { $all: [ current_user?._id ] }

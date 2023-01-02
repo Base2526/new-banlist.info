@@ -154,7 +154,7 @@ const App = (props) => {
 
   i18n.changeLanguage( _.isEmpty(localStorage.getItem('i18n')) ? "en" : localStorage.getItem('i18n') );
 
-  if(  is_connnecting && !conversationValues.loading && conversationValues.data.conversations){
+  if( !conversationValues.loading && conversationValues.data.conversations){
     let { status, data } = conversationValues.data.conversations  
     addedConversations(data)
   
