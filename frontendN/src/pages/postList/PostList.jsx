@@ -367,8 +367,11 @@ const PostList = (props) => {
           <SpeedDial
             ariaLabel="SpeedDial basic example"
             sx={{ position: 'absolute', bottom: 16, right: 16 }}
-            icon={<SpeedDialIcon />}>
-            {
+            icon={<SpeedDialIcon />}
+            onClick={(e)=>{
+              history.push({ pathname: "/post/new", state: {from: "/"} });
+            }}>
+            {/* {
               _.map([
                       { icon: <PostAddIcon />, name: 'Post', id: 1 },
                       // { icon: <AddIcCallIcon />, name: 'Phone', id: 2 },
@@ -393,7 +396,7 @@ const PostList = (props) => {
                         }}
                       />
                     ))
-            }
+            } */}
           </SpeedDial>
           
           {/* <Footer /> */}

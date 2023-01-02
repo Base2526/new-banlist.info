@@ -231,8 +231,11 @@ const PhoneList = (props) => {
               <SpeedDial
                 ariaLabel="SpeedDial basic example"
                 sx={{ position: 'absolute', bottom: 16, right: 16 }}
-                icon={<SpeedDialIcon />}>
-                {
+                icon={<SpeedDialIcon />}
+                onClick={(e)=>{
+                  history.push({ pathname: "/phone/new", state: {from: "/"} });
+                }}>
+                {/* {
                   _.map([
                           { icon: <AddIcCallIcon />, name: 'Phone', id: 2 },
                         ], (action) => (
@@ -256,7 +259,8 @@ const PhoneList = (props) => {
                             }}
                           />
                         ))
-                }
+                } */}
+                
               </SpeedDial>
             </Box>
           </div>);
