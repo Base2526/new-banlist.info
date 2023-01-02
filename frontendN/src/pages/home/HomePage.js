@@ -99,7 +99,7 @@ const HomePage = (props) => {
     variables: { page, perPage: rowsPerPage, keywordSearch: keywordSearch, category: category.join()},
     notifyOnNetworkStatusChange: true,
   });
-  // console.log("homesValues :", homesValues )
+  console.log("homesValues :", homesValues )
 
   if( !homesValues.loading){
 
@@ -263,7 +263,7 @@ const HomePage = (props) => {
                 ? <MenuItem onClick={(e)=>{
                     handleAnchorElSettingClose()
                     history.push("/post/"+item._id+ "/edit");
-                  }}> {t('edit')} </MenuItem>
+                  }}> {t('edit')} - {user._id} > { item.ownerId } </MenuItem>
                 : <div /> 
               }
               

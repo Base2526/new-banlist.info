@@ -42,6 +42,8 @@ import ItemBookmark from "./ItemBookmark"
 
 import ReportDialog from "../../components/report"
 
+import {convertDate, numberCurrency} from "../../util"
+
 // import {wsLink} from "../../Apollo"
 
 let unsubscribe =null
@@ -263,7 +265,7 @@ const Detail = (props) => {
                     : setReport({open: true, postId:item._id})
                     
                   }}>
-                    Report
+                    {t('report')}
                   </MenuItem>
                 </Menu>
 
@@ -365,7 +367,7 @@ const Detail = (props) => {
                                 </Typography>
                         
                                 <Typography variant="subtitle2" color="textSecondary">
-                                    {t("amount")} : {post.amount}
+                                    {t("amount")} : {numberCurrency(post.amount)}
                                 </Typography>
 
                                 <Typography variant="subtitle2" color="textSecondary">{t("search_by_tel")} : 
@@ -382,7 +384,7 @@ const Detail = (props) => {
                                     <ul>{_.map(post.banks, (v)=><ItemBank item={v}/>)}</ul>
                                 </Typography>
                                 <Typography variant="subtitle2" color="textSecondary">
-                                    {t("date_tranfer")} : {moment(post.dateTranfer).format('MMMM Do YYYY')}
+                                    {t("date_tranfer")} : {convertDate(moment(post.dateTranfer).format('D MMM YYYY'))}
                                 </Typography>
                                 <Typography variant="subtitle2" color="textSecondary" dangerouslySetInnerHTML={{ __html:  t("detail") + ": " + post.description}} />
                             </div>
