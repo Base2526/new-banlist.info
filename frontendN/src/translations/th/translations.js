@@ -76,4 +76,6 @@ export const TRANSLATIONS_TH = {
 
     bank_account_number: "เลขบัญชีธนาคาร",
     bank_account_name: "ชื่อบัญชีธนาคาร",
+
+    report: "รายงาน"
 };

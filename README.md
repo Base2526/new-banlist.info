@@ -31,3 +31,9 @@ https://phoenixnap.com/kb/docker-nginx-reverse-proxy
 
 
 https://developer.twitter.com/en/apps
+
+
+
+facebook  REACT_APP_FACEBOOK_APPID 
+dev   : 448400870781752
+prodd : 1227094848056324

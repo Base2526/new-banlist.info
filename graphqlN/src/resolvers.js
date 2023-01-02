@@ -274,8 +274,7 @@ export default {
     },
     async posts(parent, args, context, info) {
       try{
-        console.log("posts, args :", args)
-
+        
         let start = Date.now()
         // let { status, code, currentUser } = context 
 
@@ -283,6 +282,8 @@ export default {
 
         let authorization = await checkAuthorization(req);
         let { status, code, current_user } =  authorization
+
+        console.log("posts, args :", args, " > ", current_user?._id)
 
         if(!_.isEmpty(current_user?._id)){
           let { page, perPage } = args
