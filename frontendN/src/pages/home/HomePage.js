@@ -99,7 +99,7 @@ const HomePage = (props) => {
     variables: { page, perPage: rowsPerPage, keywordSearch: keywordSearch, category: category.join()},
     notifyOnNetworkStatusChange: true,
   });
-  // console.log("homesValues :", homesValues )
+  console.log("homesValues :", homesValues )
 
   if( !homesValues.loading){
 

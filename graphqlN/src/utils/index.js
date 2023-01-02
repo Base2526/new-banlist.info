@@ -18,10 +18,10 @@ export const fileRenamer = (filename) => {
     return `${arrTemp[0].slice(0, arrTemp[0].length - 1).join("_")}${queHoraEs}.${arrTemp[0].pop()}`;
 };
 
-export const getSessionId = async(uid, input) => {
-    let newInput = {...input, token: jwt.sign(uid, process.env.JWT_SECRET)}
+export const getSessionId = async(userId, input) => {
+    let newInput = {...input, userId, token: jwt.sign(uid, process.env.JWT_SECRET)}
   
-    let session = await Session.findOne({deviceAgent: newInput.deviceAgent})
+    let session = await Session.findOne({userId, deviceAgent: newInput.deviceAgent})
     if(_.isEmpty(session)){
       session = await Session.create(newInput);
     }
@@ -52,7 +52,7 @@ export const checkAuthorization = async(req) => {
                 let userId  = jwt.verify(session.token, process.env.JWT_SECRET);
 
 
-                // console.log("createPhone > userId : ", userId, await User.findById(userId))
+                console.log("checkAuthorization : ", session.token, userId )
                 // return {...req, currentUser: await User.findById(userId)} 
 
                 return {
