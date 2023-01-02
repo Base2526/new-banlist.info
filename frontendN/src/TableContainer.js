@@ -138,33 +138,33 @@ const Table = ({ columns, data, fetchData, rowsPerPage, updateMyData, skipReset,
                   usePagination,
                   useRowSelect,
                   // Here we will use a plugin to add our selection column
-                  hooks => {
-                    hooks.visibleColumns.push(columns => {
-                      return [
-                        {
-                          id: 'selection',
-                          // Make this column a groupByBoundary. This ensures that groupBy columns
-                          // are placed after it
-                          groupByBoundary: true,
-                          // The header can use the table's getToggleAllRowsSelectedProps method
-                          // to render a checkbox
-                          Header: ({ getToggleAllRowsSelectedProps }) => (
-                            <div>
-                              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
-                            </div>
-                          ),
-                          // The cell can use the individual row's getToggleRowSelectedProps method
-                          // to the render a checkbox
-                          Cell: ({ row }) => (
-                            <div>
-                              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-                            </div>
-                          ),
-                        },
-                        ...columns,
-                      ]
-                    })
-                  }
+                  // hooks => {
+                  //   hooks.visibleColumns.push(columns => {
+                  //     return [
+                  //       {
+                  //         id: 'selection',
+                  //         // Make this column a groupByBoundary. This ensures that groupBy columns
+                  //         // are placed after it
+                  //         groupByBoundary: true,
+                  //         // The header can use the table's getToggleAllRowsSelectedProps method
+                  //         // to render a checkbox
+                  //         Header: ({ getToggleAllRowsSelectedProps }) => (
+                  //           <div>
+                  //             <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
+                  //           </div>
+                  //         ),
+                  //         // The cell can use the individual row's getToggleRowSelectedProps method
+                  //         // to the render a checkbox
+                  //         Cell: ({ row }) => (
+                  //           <div>
+                  //             <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+                  //           </div>
+                  //         ),
+                  //       },
+                  //       ...columns,
+                  //     ]
+                  //   })
+                  // }
                 )
 
     useEffect(() => {

@@ -71,7 +71,6 @@ export default {
         return;
       }
     },
-
     // profile 
     async profile(parent, args, context, info) {
       let start = Date.now()
@@ -98,34 +97,44 @@ export default {
         } seconds`
       }
     },
-
     // user
     async user(parent, args, context, info) {
       let start = Date.now()
 
-      if(!context.status){
-        // foce logout
-      }
+      try{
+        if(!context.status){
+          // foce logout
+        }
 
-      let {_id} = args
+        let {_id} = args
 
-      if(_.isEmpty(_id)){
-        return;
-      }
+        if(_.isEmpty(_id)){
+          return;
+        }
 
-      let data = await User.findById(_id);
-      return {
-        status:true,
-        messages: "", 
-        data,
-        executionTime: `Time to execute = ${
-          (Date.now() - start) / 1000
-        } seconds`
+        let data = await User.findById(_id);
+        return {
+          status:true,
+          messages: "", 
+          data,
+          executionTime: `Time to execute = ${
+            (Date.now() - start) / 1000
+          } seconds`
+        }
+      } catch(err) {
+        logger.error(err.toString());
+        
+        return {
+          status: false,
+          message: err.toString(),
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
       }
     },
     async users(parent, args, context, info) {
+      let start = Date.now()
       try{
-        let start = Date.now()
+        
         let {page, perPage} = args
         let data = await  User.find({}).limit(perPage).skip(page); 
         let total = (await User.find({})).length;
@@ -139,7 +148,12 @@ export default {
 
       } catch(err) {
         logger.error(err.toString());
-        return;
+
+        return {
+          status: false,
+          message: err.toString(),
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
       }
     },
     async getManyUsers(root, {
@@ -165,8 +179,8 @@ export default {
 
     // homes
     async homes(parent, args, context, info) {
+      let start = Date.now()
       try{
-
         let { req } = context
 
         ///////////////////////////
@@ -176,7 +190,7 @@ export default {
 
 
         let { page, perPage, keywordSearch, category } = args
-        let start = Date.now()
+        
 
         /*
         0 : ชื่อเรื่อง | title
@@ -249,7 +263,12 @@ export default {
       } catch(err) {
         logger.error(err.toString());
         console.log("homes err :", args, err.toString())
-        return;
+
+        return {
+          status: false,
+          message: err.toString(),
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 }`,
+        }
       }
     },
     // homes
@@ -273,11 +292,8 @@ export default {
       }
     },
     async posts(parent, args, context, info) {
+      let start = Date.now()
       try{
-        
-        let start = Date.now()
-        // let { status, code, currentUser } = context 
-
         let { req } = context
 
         let authorization = await checkAuthorization(req);
@@ -285,9 +301,10 @@ export default {
 
         console.log("posts, args :", args, " > ", current_user?._id)
 
+        let data = [];
         if(!_.isEmpty(current_user?._id)){
           let { page, perPage } = args
-          let data = await  Post.find({ownerId: current_user?._id}).limit(perPage).skip(page); 
+          data = await  Post.find({ownerId: current_user?._id}).limit(perPage).skip(page); 
           let total = (await Post.find({ownerId: current_user?._id}).lean().exec()).length;
           return {
             status:true,
@@ -299,14 +316,19 @@ export default {
 
         return {
           status:true,
-          data:[],
+          data,
           total: 0,
           executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
         }
       } catch(err) {
         logger.error(err.toString());
         console.log("posts err :", args, err.toString())
-        return;
+        
+        return {
+          status:false,
+          message: err.toString(),
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
       }
     },
     async postsByUser(root, {
@@ -1003,14 +1025,13 @@ export default {
           (Date.now() - start) / 1000
         } seconds`
       }
-      
     },
 
     async phones(parent, args, context, info) {
+      let start = Date.now() 
       try{
-        let start = Date.now()        
+               
         let { page, perPage } = args
-
         let { req } = context
 
         ///////////////////////////
@@ -1042,13 +1063,16 @@ export default {
         }
       } catch(err) {
         logger.error(err.toString());
-        return;
+
+        return {
+          status:false,
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
       }
     },
     async phone(parent, args, context, info) {
+      let start = Date.now()
       try{
-        let start = Date.now()
-
         let {_id} = args
 
         let data = await Phone.findById(_id);
@@ -1059,7 +1083,10 @@ export default {
         }
       } catch(err) {
         logger.error(err.toString());
-        return;
+        return {
+          status:false,
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
       }
     },
   },
