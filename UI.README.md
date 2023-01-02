@@ -25,3 +25,9 @@
 การ run
 
 2. docker-compose -f docker-compose.ui.yml up
+
+
+
+server production
+docker-compose -f docker-compose.prod.yml down && docker-compose -f docker-compose.prod.yml build && docker-compose -f docker-compose.prod.yml up -d && docker-compose -f docker-compose.prod.yml up -d
+

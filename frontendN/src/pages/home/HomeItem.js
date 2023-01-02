@@ -61,8 +61,6 @@ const HomeItem =(props) => {
 
   const renderMedia = (m) =>{
     if( !_.isEmpty(m.files) ){
-
-        // console.log("renderMedia : ", m.files)
         return <CardActionArea
           style={{ position: "relative", paddingBottom: "10px" }}
         >
@@ -73,10 +71,7 @@ const HomeItem =(props) => {
             alt={ m.files[0].fileName }
             onClick={() => {
               onLightbox({ isOpen: true, photoIndex: 0, images:m.files })
-            }}
-          />
-          
-          {/*  */}
+            }}/>
             {m.files.length > 1 ?
               <div
                   style={{
@@ -169,20 +164,16 @@ const HomeItem =(props) => {
           </div>
           <Divider light />
           <div>
-
             <ItemBookmark {...props} />
             <ItemShare {...props} />
             <ItemComment {...props}/>
-
             <IconButton onClick={(e) => {
               history.push("/detail/" + item._id);
             }}>
               <OpenInNewIcon /> 
             </IconButton>
-            <IconButton onClick={(e) => {
-              setExpand(!expand)
-            }}>
-              { expand ? <ExpandLessIcon /> : <ExpandMoreIcon /> }
+            <IconButton onClick={(e) => { setExpand(!expand) }}>
+            { expand ? <ExpandLessIcon /> : <ExpandMoreIcon /> }
             </IconButton>
           </div>
         </CardContent>

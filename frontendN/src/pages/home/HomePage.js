@@ -263,9 +263,7 @@ const HomePage = (props) => {
                 ? <MenuItem onClick={(e)=>{
                     handleAnchorElSettingClose()
                     history.push("/post/"+item._id+ "/edit");
-                  }}>
-                    Edit
-                  </MenuItem>
+                  }}> {t('edit')} </MenuItem>
                 : <div /> 
               }
               
@@ -276,9 +274,7 @@ const HomePage = (props) => {
                 }else{
                   setReport({open: true, postId:item.id})
                 }
-              }}>
-                Report
-              </MenuItem>
+              }}>{t('report')}</MenuItem>
             </Menu>
   }
 
