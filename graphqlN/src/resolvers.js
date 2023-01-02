@@ -170,7 +170,7 @@ export default {
         let { req } = context
 
         ///////////////////////////
-        let authorization = await checkAuthorization(req);
+        // let authorization = await checkAuthorization(req);
         // console.log("homes : authorization :", authorization)
         //////////////////////////
 
