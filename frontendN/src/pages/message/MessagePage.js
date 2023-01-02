@@ -35,11 +35,13 @@ import _ from "lodash"
 import { useQuery, useMutation, useSubscription } from "@apollo/client";
 import moment from "moment";
 
-import { gqlUser, gqlFetchMessage, gqlAddMessage, subMessage, gqlUpdateMessageRead} from "../../gqlQuery"
+import { gqlFetchMessage, gqlAddMessage, subMessage, gqlUpdateMessageRead} from "../../gqlQuery"
 
 import { addedConversation } from "../../redux/actions/auth"
 
 import MessageItem from "./MessageItem"
+
+import { getHeaders } from "../../util"
 
 let unsubscribeSubMessage = null
 
@@ -79,10 +81,11 @@ const MessagePage =(props)=> {
 
   const [messageInputValue, setMessageInputValue] = useState("");
 
-  const fetchMessageValues =useQuery(gqlFetchMessage, { variables: {conversationId: ""}, notifyOnNetworkStatusChange: true });  
+  const fetchMessageValues =useQuery(gqlFetchMessage, { context: { headers: getHeaders() }, variables: {conversationId: ""}, notifyOnNetworkStatusChange: true });  
 
   const [onAddMessage, resultAddMessageValues] = useMutation(gqlAddMessage
     , {
+        context: { headers: getHeaders() },
         update: (cache, {data: {addMessage}}) => {
           const data1 = cache.readQuery({
               query: gqlFetchMessage,
@@ -102,11 +105,6 @@ const MessagePage =(props)=> {
             });
           }
         },
-        context: {
-          headers: {
-            'apollo-require-preflight': true,
-          },
-        },
         onCompleted({ data }) {
           console.log(data)
         }
@@ -117,6 +115,7 @@ const MessagePage =(props)=> {
   // 
   const [onUpdateMessageRead, resultUpdateMessageRead] = useMutation(gqlUpdateMessageRead
     , {
+        context: { headers: getHeaders() },
         update: (cache, {data: {updateMessageRead}}) => {
 
           console.log("update : updateMessageRead :", updateMessageRead)
@@ -184,6 +183,7 @@ const MessagePage =(props)=> {
   }, [conversations])
 
   useEffect(()=>{
+    console.log("currentConversation :", currentConversation)
     if(!_.isEmpty(currentConversation)){
       fetchMessageValues.refetch({conversationId: currentConversation._id});
 
@@ -294,6 +294,9 @@ const MessagePage =(props)=> {
 
   const onMessageList = () =>{
     if(!fetchMessageValues.loading){
+      
+      console.log("fetchMessageValues :", fetchMessageValues)
+
       let {executionTime, status, data}= fetchMessageValues.data.fetchMessage
       let {subscribeToMore} = fetchMessageValues
 

@@ -948,27 +948,40 @@ export default {
 
     // 
     async conversations(parent, args, context, info) {
-
       let start = Date.now()
-      let { status, code, currentUser } = context 
+      try{
+        let { req } = context
 
-      if(!_.isEmpty(currentUser) ){
-        let data=  await Conversation.find({
-          "members.userId": { $all: [ currentUser?._id ] }
-        });
-      
+        let authorization = await checkAuthorization(req);
+        let { status, code, current_user } =  authorization
+
+        if( status && code == 1 ){
+          let data=  await Conversation.find({
+            "members.userId": { $all: [ current_user?._id ] }
+          });
+
+          console.log("conversations #1 : ", data)
+          return {
+            status:true,
+            data,
+            executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+          }
+        }
+        console.log("conversations #2")
         return {
-          status:true,
-          data,
+          status:false,
+          data: [],
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
+      } catch(err) {
+        logger.error(err.toString());
+        
+        return {
+          status:false,
+          message: err.toString(),
           executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
         }
       }
-      return {
-        status:true,
-        data: [],
-        executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
-      }
-      
     },
 
     async notifications(parent, args, context, info) {
@@ -1270,7 +1283,6 @@ export default {
             return {
               status:true,
               data: user,
-              // token: jwt.sign(user._id.toString(), process.env.JWT_SECRET),
               sessionId,
               executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
             }
@@ -1280,7 +1292,7 @@ export default {
     
             return {
               status: false,
-              data: err.toString(),
+              message: err.toString(),
               executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
             }
           }
@@ -1415,7 +1427,6 @@ export default {
             return {
               status:true,
               data: user,
-              // token: jwt.sign(user._id.toString(), process.env.JWT_SECRET),
               sessionId,
               executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
             }
@@ -1424,7 +1435,7 @@ export default {
     
             return {
               status: false,
-              data: err.toString(),
+              message: err.toString(),
               executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
             }
           }
@@ -1509,7 +1520,6 @@ export default {
             return {
               status:true,
               data: user,
-              // token: jwt.sign(user._id.toString(), process.env.JWT_SECRET),
               sessionId,
               executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
             }
@@ -1517,7 +1527,7 @@ export default {
             logger.error(err.toString());
             return {
               status: false,
-              data: err.toString(),
+              message: err.toString(),
               executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
             }
           }
@@ -1526,7 +1536,7 @@ export default {
         default:{
           return {
             status: false,
-            data: "other case",
+            message: "other case",
             executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
           }
         }
