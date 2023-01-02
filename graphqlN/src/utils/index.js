@@ -39,34 +39,37 @@ export const checkAuthorization = async(req) => {
         if (bearer == "Bearer") {
             // let decode = jwt.verify(token, process.env.JWT_SECRET);
             let session = await Session.findById(sessionId)   
-            
-            var expiredDays = parseInt((session.expired - new Date())/ (1000 * 60 * 60 * 24));
 
-            // console.log("session expired :", session.expired, expiredDays, req)
+            console.log("session > ", session)
+            if(!_.isEmpty(session)){
+                var expiredDays = parseInt((session.expired - new Date())/ (1000 * 60 * 60 * 24));
 
-            // code
-            // -1 : force logout
-            //  0 : anonymums
-            //  1 : OK
-            if(expiredDays >= 0){
-                let userId  = jwt.verify(session.token, process.env.JWT_SECRET);
-
-
-                console.log("checkAuthorization : ", session.token, userId )
-                // return {...req, currentUser: await User.findById(userId)} 
-
-                return {
-                    status: true,
-                    code: 1,
-                    current_user: await User.findById(userId),
+                // console.log("session expired :", session.expired, expiredDays, req)
+    
+                // code
+                // -1 : force logout
+                //  0 : anonymums
+                //  1 : OK
+                if(expiredDays >= 0){
+                    let userId  = jwt.verify(session.token, process.env.JWT_SECRET);
+    
+    
+                    console.log("checkAuthorization : ", session.token, userId )
+                    // return {...req, currentUser: await User.findById(userId)} 
+    
+                    return {
+                        status: true,
+                        code: 1,
+                        current_user: await User.findById(userId),
+                    }
                 }
-            }
-
-            // force logout
-            return {
-                status: false,
-                code: -1,
-                message: "session expired days"
+    
+                // force logout
+                return {
+                    status: false,
+                    code: -1,
+                    message: "session expired days"
+                }
             }
         }
     }
