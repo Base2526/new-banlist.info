@@ -263,7 +263,7 @@ const HomePage = (props) => {
                 ? <MenuItem onClick={(e)=>{
                     handleAnchorElSettingClose()
                     history.push("/post/"+item._id+ "/edit");
-                  }}> {t('edit')} - {user._id} > { item.ownerId } </MenuItem>
+                  }}> {t('edit')} </MenuItem>
                 : <div /> 
               }
               
