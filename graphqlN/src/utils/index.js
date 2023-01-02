@@ -19,7 +19,7 @@ export const fileRenamer = (filename) => {
 };
 
 export const getSessionId = async(userId, input) => {
-    let newInput = {...input, userId, token: jwt.sign(uid, process.env.JWT_SECRET)}
+    let newInput = {...input, userId, token: jwt.sign(userId, process.env.JWT_SECRET)}
   
     let session = await Session.findOne({userId, deviceAgent: newInput.deviceAgent})
     if(_.isEmpty(session)){
