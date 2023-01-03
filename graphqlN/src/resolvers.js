@@ -2473,6 +2473,12 @@ export default {
       let { userId, conversationId, input } = args
 
 
+      let { req } = context
+
+      let authorization = await checkAuthorization(req);
+      let { status, code, current_user } =  authorization
+
+
       ///////////////////////
       if(input.type === "image"){
         let {payload, files} = input
@@ -2512,13 +2518,13 @@ export default {
 
       let result = await Message.findById(input._id);
 
-      let currentUser = await User.findById(userId);
+      // let currentUser = await User.findById(userId);
       
       if(_.isEmpty(result)){
         input = { ...input, 
                   conversationId, 
-                  senderId: currentUser._id.toString(), 
-                  senderName: currentUser.displayName, 
+                  senderId: current_user?._id.toString(), 
+                  senderName: current_user?.displayName, 
                   sentTime: Date.now(), 
                   status: "sent",
                   reads: []}
@@ -2531,13 +2537,13 @@ export default {
           if(!_.isEmpty(conversation)){
             conversation = _.omit({...conversation._doc}, ["_id", "__v"])
   
-            let newMember = _.find(conversation.members, member => member.userId != currentUser._id.toString());
+            let newMember = _.find(conversation.members, member => member.userId != current_user?._id.toString());
   
   
             // หาจำนวน unread total = (await Post.find().lean().exec()).length; 
             // https://www.educative.io/answers/what-is-the-ne-operator-in-mongodb
             let unreadCnt = (await Message.find({ conversationId, 
-                                                  senderId: {$all : currentUser._id.toString()}, 
+                                                  senderId: {$all : current_user?._id.toString()}, 
                                                   status: 'sent',
                                                   reads: { $nin: [ newMember.userId ] }}).lean().exec()).length; 
             // หาจำนวน unread
@@ -2546,7 +2552,7 @@ export default {
             
             let newMembers = _.map(conversation.members, (member)=>member.userId == newMember.userId ? newMember : member)
   
-            conversation = {...conversation, lastSenderName:currentUser.displayName, info:input.message, sentTime: Date.now(), members: newMembers }
+            conversation = {...conversation, lastSenderName:current_user?.displayName, info:input.message, sentTime: Date.now(), members: newMembers }
   
             let conversat = await Conversation.findOneAndUpdate({ _id : conversationId }, conversation, { new: true })
   
@@ -2573,7 +2579,7 @@ export default {
     },
 
     async updateMessageRead(parent, args, context, info) {
-      let { userId, conversationId } = args
+      let { conversationId } = args
 
       // console.log("updateMessageRead :", userId, conversationId)
 
@@ -2583,21 +2589,27 @@ export default {
 
       if(!_.isEmpty(conversation)){
 
+        let { req } = context
+
+        let authorization = await checkAuthorization(req);
+        let { status, code, current_user } =  authorization
+
+
         // update all message to read
         await Message.updateMany({
             conversationId, 
-            senderId: { $nin: [ userId ] },
+            senderId: { $nin: [ current_user?._id.toString() ] },
             status: 'sent',
-            reads: { $nin: [ userId ] }
+            reads: { $nin: [ current_user?._id.toString() ] }
           }, 
           // {$set: {reads: [ userId ] }}
-          { $push: {reads: userId } }
+          { $push: {reads: current_user?._id.toString() } }
         )
 
         // update conversation  unreadCnt = 0
         conversation = _.omit({...conversation._doc}, ["_id", "__v"])
     
-        conversation = {...conversation, members: _.map(conversation.members, (member)=>member.userId == userId ? {...member, unreadCnt:0} : member) }
+        conversation = {...conversation, members: _.map(conversation.members, (member)=>member.userId == current_user?._id.toString() ? {...member, unreadCnt:0} : member) }
 
         let newConversation = await Conversation.findOneAndUpdate({ _id : conversationId }, conversation, { new: true })
 

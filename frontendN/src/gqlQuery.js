@@ -422,8 +422,8 @@ export const gqlCreatePhone = gql`mutation CreatePhone($input: PhoneInput) { cre
 export const gqlUpdatePhone = gql`mutation updatePhone($id: ID!, $input: PhoneInput) { updatePhone(_id: $id, input: $input) }`;
    
 export const gqlAddMessage = gql`
-    mutation AddMessage( $userId: ID!, $conversationId: ID! , $input: MessageInput ) {
-        addMessage( userId: $userId, conversationId: $conversationId, input: $input )
+    mutation AddMessage( $conversationId: ID! , $input: MessageInput ) {
+        addMessage( conversationId: $conversationId, input: $input )
     }`;
 
 export const gqlUpdateUser = gql`mutation UpdateUser($id: ID!, $input: JSON) { updateUser(_id: $id, input: $input) }`;
@@ -454,8 +454,8 @@ export const gqlCurrentNumber = gql`
       }`;
 
 export const gqlUpdateMessageRead = gql`
-        mutation UpdateMessageRead($userId: ID!, $conversationId: ID!) {
-            updateMessageRead(userId: $userId, conversationId: $conversationId)
+        mutation UpdateMessageRead($conversationId: ID!) {
+            updateMessageRead( conversationId: $conversationId)
         }`;
   
 export const gqlFileUpload = gql`
