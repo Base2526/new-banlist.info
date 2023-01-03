@@ -29,6 +29,7 @@ import PrivatePage from "./PrivatePage"
 import UserView from "./pages/user/UserView";
 import DialogLogin from "./DialogLogin";
 import Help from "./pages/help"
+import Pdpa from "./pages/basicContent/Pdpa"
 import DeveloperPage from "./pages/basicContent/Developer"
 import PrivacyAndTermsPage from "./pages/basicContent/PrivacyAndTerms"
 import LoginPage from "./pages/auth/Login"
@@ -345,6 +346,14 @@ const App = (props) => {
                       <DeveloperPage />
                     </div>
                   </Route>
+
+                  {/*  */}
+                  <Route path="/pdpa">
+                    <div className="page-dev pl-2 pr-2">
+                      <Pdpa />
+                    </div>
+                  </Route>
+                  
                   <PrivateRoute path="/">
                     <PrivatePage />
                   </PrivateRoute>   

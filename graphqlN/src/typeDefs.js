@@ -712,8 +712,8 @@ export default gql`
     createConversation(input: ConversationInput!): JSON
     updateConversation(_id: ID!, input: UpdateConversationInput): JSON
     
-    addMessage( userId: ID!, conversationId: ID!, input: MessageInput ): JSON
-    updateMessageRead( userId: ID!, conversationId: ID! ): JSON
+    addMessage( conversationId: ID!, input: MessageInput ): JSON
+    updateMessageRead( conversationId: ID! ): JSON
 
     createBasicContent(input: BasicContentInput): BasicContent
     updateBasicContent(_id: ID!, input: BasicContentInput): JSON

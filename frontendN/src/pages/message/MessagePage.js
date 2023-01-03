@@ -187,7 +187,7 @@ const MessagePage =(props)=> {
     if(!_.isEmpty(currentConversation)){
       fetchMessageValues.refetch({conversationId: currentConversation._id});
 
-      onUpdateMessageRead({ variables: {userId: user._id, conversationId: currentConversation._id} });
+      onUpdateMessageRead({ variables: {conversationId: currentConversation._id} });
     }else{
       fetchMessageValues.refetch({conversationId: ""});
     }

@@ -67,6 +67,7 @@ const Breadcs = ({ title }) => {
   const topicsMatches = useRouteMatch("/topics");
 
   const loginMatche = useRouteMatch("/user/login");
+  const pdpaMatche = useRouteMatch("/pdpa");
 
   const handleClick = () => {};
   return (
@@ -351,6 +352,13 @@ const Breadcs = ({ title }) => {
           {privacyAndtermsMatche && (
             <MuiLink component={Link} to="/privacy+terms">
               {t("privacy_and_terms")}
+            </MuiLink>
+          )}
+
+          {/*  */}
+          {pdpaMatche && (
+            <MuiLink component={Link} to="/pdpa">
+              {t("pdpa")}
             </MuiLink>
           )}
         </Breadcrumbs>
