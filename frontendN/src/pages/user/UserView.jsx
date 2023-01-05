@@ -182,8 +182,9 @@ const UserView = (props) => {
                 {t("name")} : {userValue.displayName}
               </Typography>
               <Typography variant="overline" display="block" gutterBottom>
-                {t("email")} : {userValue.email}
+                {t("email")} : { userValue.email.replace(/(\w{2})[\w.-]+@([\w.]+\w)/, "$1***@$2") }
               </Typography>
+              {/* const partialEmail = email.replace(/(\w{2})[\w.-]+@([\w.]+\w)/, "$1***@$2") */}
 
                 <div className="d-flex-fx flex-column flex-md-row row-pf">
                   <div className="btn-bxv w-100 flex-grow-1">
