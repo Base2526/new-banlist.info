@@ -5,7 +5,8 @@ import classNames from "classnames";
 import Button from "@mui/material/Button";
 import { NotificationsNone, AccountCircle, Comment as CommentIcon } from "@material-ui/icons";
 import { Link, useHistory } from "react-router-dom";
-import { AppBar, Toolbar, IconButton, Typography, MenuItem, Menu} from "@material-ui/core";
+import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem} from "@material-ui/core";
+
 import { connect } from "react-redux";
 import _ from "lodash"
 import { useTranslation } from "react-i18next";
@@ -162,11 +163,6 @@ const MyAppBar = (props) =>{
                             history.push("/me")
                             handleClose()
                           }}>{t("profile")}</MenuItem>
-                          {/* <MenuItem onClick={()=>{
-                            logout()
-                            history.push("/")
-                            handleClose()
-                          }}>Logout</MenuItem> */}
                       </Menu>
                     </IconContainer>
                    

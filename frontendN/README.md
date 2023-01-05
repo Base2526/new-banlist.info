@@ -59,3 +59,8 @@ https://stackoverflow.com/questions/49745508/react-native-create-dynamic-string-
 
 Dialog 
 https://codesandbox.io/s/zealous-carson-tj3p2w?file=/demo.tsx:1226-1230
+
+
+popup notification
+https://codesandbox.io/s/elastic-babycat-qdzwbq?file=/demo.js:75-139
+https://codesandbox.io/s/still-paper-pg0evh?file=/demo.tsx
