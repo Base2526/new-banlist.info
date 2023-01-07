@@ -3,25 +3,35 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { CKEditor } from "ckeditor4-react";
 import { useTranslation } from "react-i18next";
+import { slateToHtml, htmlToSlate } from 'slate-serializers'
+import { useSlate, useSlateStatic } from "slate-react";
+import { Transforms } from "slate";
 
 import { ActionContext } from "./ActionContext";
+import Editor from "../editable/SlateEditor/Editor";
+import _ from "lodash";
 
 let cke = null;
 
 const InputField = (props) => {
   let { cancellor, parentId, child, value, edit, main } = props
-  
+
   const { t } = useTranslation();
 
   const [text, setText] = useState(value);
 
+  useEffect(()=>{
+    console.log("InputField  text :", text)
+  }, [text])
+
   const handleChange = (e) => {
-    setText(e.editor.getData())
+    // setText(e.editor.getData())
+    setText(slateToHtml(e))
   };
 
-  const CKEDITORClearData = () =>{
-    if(cke) cke.instances.editor1.setData("")
-  }
+  // const CKEDITORClearData = () =>{
+  //   if(cke) cke.instances.editor1.setData("")
+  // }
 
   const actions = useContext(ActionContext);
 
@@ -43,7 +53,7 @@ const InputField = (props) => {
         />
       </div> 
       */}
-      <div>
+      {/* <div> */}
         {/* 
         <TextField
           id="outlined-textarea"
@@ -55,7 +65,7 @@ const InputField = (props) => {
         /> 
         */}
 
-        <CKEditor
+        {/* <CKEditor
           onBeforeLoad={(CKEDITOR) =>
             {
               cke = CKEDITOR;
@@ -88,8 +98,29 @@ const InputField = (props) => {
           }}
           onChange={handleChange}
           initData={text}
-        />
+        /> */}
+      <div className="Editor">
+        <Editor 
+          edit={edit}
+          cancellor={cancellor}
+          text={_.isEmpty(text)  ? htmlToSlate("<p></p>") : htmlToSlate(text)}
+          parentId={parentId}
+          setText={setText}
+          onChange={handleChange}
+          onPost={()=>{
+            edit 
+            ? actions.submit(cancellor, text, parentId, true, setText)
+            : actions.submit(cancellor, text, parentId, false, setText);
+          }}
+          onCancel={()=>{
+            edit
+            ? actions.handleCancel(cancellor, edit)
+            : actions.handleCancel(cancellor)
+          }}/>
       </div>
+
+      {/* </div> */}
+      {/* 
       <div className={"inputActions"}>
         <Button
           className={"postBtn"}
@@ -126,7 +157,8 @@ const InputField = (props) => {
             {t("cancel")}
           </Button>
         )}
-      </div>
+      </div> 
+      */}
     </form>
   );
 };

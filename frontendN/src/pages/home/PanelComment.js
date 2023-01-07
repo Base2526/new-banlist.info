@@ -5,6 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import CancelRoundedIcon from "@material-ui/icons/CancelRounded";
+import CloseIcon from '@mui/icons-material/Close';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useQuery, useMutation } from "@apollo/client";
 
@@ -60,11 +61,6 @@ const PanelComment = (props) => {
   const signupUrl = "/signup";
   let count = 0;
 
-  // comment.map((i) => {
-  //   count += 1;
-  //   i.replies && i.replies.map((i) => (count += 1));
-  // });
-
   const [onCreateAndUpdateComment, resultCreateAndUpdateComment] = useMutation(gqlCreateAndUpdateComment, {
     context: { headers: getHeaders() }, 
     update: (cache, {data: {createAndUpdateComment}}) => {
@@ -106,7 +102,7 @@ const PanelComment = (props) => {
 			updateQuery: (prev, {subscriptionData}) => {
         if (!subscriptionData.data) return prev;
 
-				console.log("updateQuery >> ", prev, subscriptionData);
+				// console.log("updateQuery >> ", prev, subscriptionData);
 
         let { mutation, data } = subscriptionData.data.subComment;
 
@@ -116,7 +112,7 @@ const PanelComment = (props) => {
 			}
 		});
 
-    console.log("unsubscribe :", unsubscribe)
+    // console.log("unsubscribe :", unsubscribe)
   }
 
   // if(!commentValues.loading){
@@ -140,13 +136,13 @@ const PanelComment = (props) => {
         // onKeyDown={onRequestClose}
       >
         <IconButton
+          className="panel-comment-button-close"
           aria-label="toggle password visibility"
           onClick={onRequestClose}
         >
-          <CancelRoundedIcon />
+          <CloseIcon />
         </IconButton>
         <div className="commentSection">
-      
           {
             commentValues.loading 
             ? <div><CircularProgress /></div> 
@@ -159,9 +155,11 @@ const PanelComment = (props) => {
                   setComment={(data) => {
 
                     let input = { postId: commentId, data: _.omitDeep(data, ['__typename']) }
-                    console.log("onComment input :", input);
+                    console.log("onCreateAndUpdateComment input :", input, data);
 
+                    /*
                     onCreateAndUpdateComment({ variables: { input: input }});
+                    */
                   }}
                   signinUrl={signinUrl}
                   signupUrl={signupUrl}
@@ -171,7 +169,7 @@ const PanelComment = (props) => {
                 />
               </div>  
           }
-          </div>
+        </div>
       </Box>
     </SwipeableDrawer>
   );
