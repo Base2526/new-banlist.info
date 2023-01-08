@@ -624,19 +624,36 @@ export default {
     async comment(parent, args, context, info) {
       let start = Date.now()
 
-      let { postId } = args
-      // console.log("Comment: ", postId)
+      try{
+        let { req } = context
 
-      let data = await Comment.findOne({postId: postId});
+        let authorization = await checkAuthorization(req);
+        let { status, code, current_user } =  authorization
 
-      // console.log("Comment > data : ", data)
-      
-      return {
-        status:true,
-        data: _.isEmpty(data) ? [] : data.data,
-        executionTime: `Time to execute = ${
-          (Date.now() - start) / 1000
-        } seconds`
+
+        let { postId } = args
+        // console.log("Comment: ", postId)
+
+        let data = await Comment.findOne({postId: postId});
+
+        // console.log("Comment > data : ", data)
+        
+        return {
+          status:true,
+          data: _.isEmpty(data) ? [] : data.data,
+          executionTime: `Time to execute = ${
+            (Date.now() - start) / 1000
+          } seconds`
+        }
+      } catch(err) {
+        logger.error(err.toString());
+        return {
+          status:false,
+          message: err.toString(),
+          executionTime: `Time to execute = ${
+            (Date.now() - start) / 1000
+          } seconds`
+        }
       }
     },
 
@@ -2033,112 +2050,124 @@ export default {
 
     // comment
     async createAndUpdateComment(parent, args, context, info) {
-
-      let {input} = args
-
       let start = Date.now()
 
-      // console.log("createAndUpdateComment #1 :", input )
-      // console.log("createAndUpdateComment #2 :", _.omitDeep(input, ['notify']) )
+      try{
 
-      let {postId, data} = input
+        let { req } = context
 
-     
+        let authorization = await checkAuthorization(req);
+        let { status, code, current_user } =  authorization
 
-      let resultComment = await Comment.findOneAndUpdate({
-        postId: input.postId
-      }, input, {
-        new: true
-      })
-      
-      if(resultComment === null){
-        resultComment = await Comment.create(input);
+        console.log("createAndUpdateComment :", args, current_user)
 
-        pubsub.publish("COMMENT", {
-          comment: {
-            mutation: "CREATED",
-            commentID: input.postId,
-            data: resultComment.data,
-          },
-        });
-      }else{
-        pubsub.publish("COMMENT", {
-          comment: {
-            mutation: "UPDATED",
-            commentID: input.postId,
-            data: resultComment.data,
-          },
-        });
-      }
+        let { input } = args
 
-      ////////////////// send notification //////////////////
+        let {postId, data} = input
 
-      input = {...input, commentID: resultComment._id.toString()}
+        let resultComment = await Comment.findOneAndUpdate({
+          postId: input.postId
+        }, input, {
+          new: true
+        })
+        
+        if(resultComment === null){
+          resultComment = await Comment.create(input);
 
-      _.map(input.data, async(item)=>{
-        // replies  notify
-        if(item.notify){
-          // item.userId
-
-          // หาเจ้าของ โพส แล้วส่ง notify ไปหา เจ้าของโพส
-          let post = await Post.findById(postId);
-          if(post){
-            let {ownerId} = post
-
-            if(ownerId !== item.userId){
-
-              let resultNoti = await Notification.create({
-                                                        user_to_notify: ownerId,
-                                                        user_who_fired_event: item.userId,
-                                                        type: "comment",
-                                                        text: item.text,
-                                                        status: "send",
-                                                        input
-                                                      });
-
-              pubsub.publish("NOTIFICATION", {
-                notification: {
-                  mutation: "CREATED",
-                  data: resultNoti,
-                },
-              });
-            }
-          }
+          pubsub.publish("COMMENT", {
+            comment: {
+              mutation: "CREATED",
+              commentID: input.postId,
+              data: resultComment.data,
+            },
+          });
+        }else{
+          pubsub.publish("COMMENT", {
+            comment: {
+              mutation: "UPDATED",
+              commentID: input.postId,
+              data: resultComment.data,
+            },
+          });
         }
 
-        _.map(item.replies, async(replie)=>{
-          if(replie.notify){
+        ////////////////// send notification //////////////////
 
-            console.log("#2 :", item.userId, replie.userId)
+        input = {...input, commentID: resultComment._id.toString()}
 
-            if(item.userId !== replie.userId){
+        _.map(input.data, async(item)=>{
+          // replies  notify
+          if(item.notify){
+            // item.userId
 
-              let resultNoti =  await Notification.create({
-                                          user_to_notify: item.userId,
-                                          user_who_fired_event: replie.userId,
-                                          type: "comment",
-                                          text: replie.text,
-                                          status: "send",
-                                          input
-                                        });
+            // หาเจ้าของ โพส แล้วส่ง notify ไปหา เจ้าของโพส
+            let post = await Post.findById(postId);
+            if(post){
+              let {ownerId} = post
 
-              pubsub.publish("NOTIFICATION", {
-                notification: {
-                  mutation: "CREATED",
-                  data: resultNoti,
-                },
-              });
+              if(ownerId !== item.userId){
+
+                let resultNoti = await Notification.create({
+                                                          user_to_notify: ownerId,
+                                                          user_who_fired_event: item.userId,
+                                                          type: "comment",
+                                                          text: item.text,
+                                                          status: "send",
+                                                          input
+                                                        });
+
+                pubsub.publish("NOTIFICATION", {
+                  notification: {
+                    mutation: "CREATED",
+                    data: resultNoti,
+                  },
+                });
+              }
             }
           }
-        })
-      })
 
-      ////////////////// send notification //////////////////
-                
-      return {
-        status:true,
-        data: resultComment.data,
-        executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+          _.map(item.replies, async(replie)=>{
+            if(replie.notify){
+
+              console.log("#2 :", item.userId, replie.userId)
+
+              if(item.userId !== replie.userId){
+
+                let resultNoti =  await Notification.create({
+                                            user_to_notify: item.userId,
+                                            user_who_fired_event: replie.userId,
+                                            type: "comment",
+                                            text: replie.text,
+                                            status: "send",
+                                            input
+                                          });
+
+                pubsub.publish("NOTIFICATION", {
+                  notification: {
+                    mutation: "CREATED",
+                    data: resultNoti,
+                  },
+                });
+              }
+            }
+          })
+        })
+
+        ////////////////// send notification //////////////////
+                  
+        return {
+          status:true,
+          data: resultComment.data,
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
+      } catch(err) {
+        logger.error(err.toString());
+
+        return {
+          status:false,
+          message: err.toString(),
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
       }
     },
 

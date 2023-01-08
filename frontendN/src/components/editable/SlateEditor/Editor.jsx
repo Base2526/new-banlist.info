@@ -3,17 +3,10 @@ import React, { useEffect, useCallback, useMemo, useState, useRef } from "react"
 import { createEditor, Transforms } from "slate";
 import { withHistory } from "slate-history";
 import { Slate, Editable, withReact } from "slate-react";
-import { slateToHtml, htmlToSlate } from 'slate-serializers'
+import { useTranslation } from "react-i18next";
 
 import Toolbar from "./Toolbar/Toolbar";
 import { sizeMap, fontFamilyMap } from "./utils/SlateUtilityFunctions.js";
-// import withLinks from "./plugins/withLinks.js";
-// import withTables from "./plugins/withTable.js";
-// import withEmbeds from "./plugins/withEmbeds.js";
-
-// import Link from "./Elements/Link/Link";
-// import Image from "./Elements/Image/Image";
-// import Video from "./Elements/Video/Video";
 
 const Element = (props) => {
   const { attributes, children, element } = props;
@@ -131,34 +124,10 @@ const Leaf = ({ attributes, children, leaf }) => {
   return <span {...attributes}>{children}</span>;
 };
 
-const initialState = [
-  {
-    type: 'p',
-    children: [{ text: '' }]
-  }]
-
 const SlateEditor = (props) => {
+  const { t } = useTranslation();
 
   let { onPost, onCancel, onChange, text, edit, parentId } = props;
-
-  useEffect(()=>{
-    console.log("SlateEditor useEffect : #1", text, editor, editor.children)
-
-   
-
-    console.log("SlateEditor useEffect : #2", text, editor, editor.children)
-
-    
-    
-  }, [text])
-
-  // let editor = useMemo(
-  //   () =>
-  //     // withHistory(withEmbeds(withLinks(withReact(createEditor())))),
-  //     withHistory(withReact(createEditor())),
-  //   []
-  // );
-  // const [editor] = useState(() => withHistory(withReact(createEditor())), [])
 
   const editorRef = useRef()
   if (!editorRef.current) editorRef.current = withHistory(withReact(createEditor()))
@@ -169,17 +138,6 @@ const SlateEditor = (props) => {
   const renderLeaf = useCallback((props) => {
     return <Leaf {...props} />;
   }, []);
-
-  // const onPost = (evt) => {
-    
-  //   const serializedToHtml = slateToHtml(value)
-  //   console.log("slateToHtml >", serializedToHtml);
-  //   console.log("htmlToSlate >", htmlToSlate(serializedToHtml));
-  // };
-
-  // const onCancel = (evt) => {
-  //   console.log("onCancel >");
-  // };
 
   const reset = () => {
     editor.children.map(item => {
@@ -200,10 +158,6 @@ const SlateEditor = (props) => {
       value={value}
       setValue={setValue}
       onChange={(newValue) => {
-
-        console.log("SlateEditor useEffect  newValue : ", newValue)
-        // setValue(newValue)
-
         onChange(newValue)
       }}
     >
@@ -212,7 +166,7 @@ const SlateEditor = (props) => {
         style={{ border: "1px solid #f3f3f3", padding: "0 10px" }}
       >
         <Editable
-          placeholder="What are your thoughts?"
+          placeholder={t("editable_placeholder")}
           renderElement={renderElement}
           renderLeaf={renderLeaf}
         />

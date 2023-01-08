@@ -4,7 +4,6 @@ import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import CancelRoundedIcon from "@material-ui/icons/CancelRounded";
 import CloseIcon from '@mui/icons-material/Close';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useQuery, useMutation } from "@apollo/client";
@@ -13,7 +12,7 @@ import _ from "lodash";
 import deepdash from "deepdash";
 deepdash(_);
 
-import {gqlUser, gqlComment, gqlCreateAndUpdateComment, subComment} from "../../gqlQuery"
+import { gqlComment, gqlCreateAndUpdateComment, subComment} from "../../gqlQuery"
 import { getHeaders } from "../../util"
 
 const styles = {
@@ -153,13 +152,8 @@ const PanelComment = (props) => {
                   }
                   commentsArray={commentValues.data.comment.data}
                   setComment={(data) => {
-
                     let input = { postId: commentId, data: _.omitDeep(data, ['__typename']) }
-                    console.log("onCreateAndUpdateComment input :", input, data);
-
-                    /*
-                    onCreateAndUpdateComment({ variables: { input: input }});
-                    */
+                    onCreateAndUpdateComment({ variables: { input }});
                   }}
                   signinUrl={signinUrl}
                   signupUrl={signupUrl}

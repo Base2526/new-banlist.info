@@ -19,7 +19,7 @@ const DisplayComments = ({ comments }) => {
                 edit: true
               })
             ) : (
-              <InputField cancellor={i.comId} value={i.text} edit />
+              <div className='inputfield-level-1'><InputField cancellor={i.comId} value={i.text} edit /></div>
             )
           ) : (
             <CommentStructure i={i} handleEdit={() => actions.handleAction} />
@@ -34,7 +34,7 @@ const DisplayComments = ({ comments }) => {
                 edit: false
               })
             ) : (
-              <InputField cancellor={i.comId} parentId={i.comId} />
+              <div className='inputfield-level-2'><InputField cancellor={i.comId} parentId={i.comId} /></div>
             ))}
           <div className={"replySection"}>
             {i.replies &&
@@ -52,12 +52,7 @@ const DisplayComments = ({ comments }) => {
                         submit: actions.submit
                       })
                     ) : (
-                      <InputField
-                        cancellor={a.comId}
-                        value={a.text}
-                        edit
-                        parentId={i.comId}
-                      />
+                      <div className='inputfield-level-3'><InputField cancellor={a.comId} value={a.text} edit parentId={i.comId} /></div>
                     )
                   ) : (
                     <CommentStructure
@@ -79,11 +74,7 @@ const DisplayComments = ({ comments }) => {
                         edit: false
                       })
                     ) : (
-                      <InputField
-                        cancellor={a.comId}
-                        parentId={i.comId}
-                        child
-                      />
+                      <div className='inputfield-level-4'><InputField cancellor={a.comId} parentId={i.comId} child /></div>
                     ))}
                 </div>
               ))}

@@ -7,22 +7,10 @@ import { slateToHtml } from 'slate-serializers'
 
 import Button from "../common/Button";
 import Icon from "../common/Icon";
-import {
-  toggleBlock,
-  toggleMark,
-  isMarkActive,
-  addMarkData,
-  isBlockActive,
-  activeMark
-} from "../utils/SlateUtilityFunctions.js";
-// import useTable from "../utils/useTable.js";
+import { toggleMark, isMarkActive } from "../utils/SlateUtilityFunctions.js";
 import defaultToolbarGroups from "./toolbarGroups.js";
+import _ from "lodash";
 
-// import ColorPicker from "../Elements/Color Picker/ColorPicker";
-// import LinkButton from "../Elements/Link/LinkButton";
-// import Embed from "../Elements/Embed/Embed";
-// import Table from "../Elements/Table/Table";
-// import InTable from "../Elements/Table/InTable";
 const Toolbar = (props) => {
   const { t } = useTranslation();
 
@@ -32,9 +20,6 @@ const Toolbar = (props) => {
 
   let { onPost, onCancel, edit, parentId, text} = props;
 
-  useEffect(() => {
-    console.log("!_.isEmpty(slateToHtml(text))", _.isEmpty(slateToHtml(text).replace(/(<([^>]+)>)/ig, '')), text, slateToHtml(text).replace(/(<([^>]+)>)/ig, '') )
-  }, [text])
 
   // useEffect(() => {
   //   let filteredGroups = [...defaultToolbarGroups];
@@ -47,6 +32,7 @@ const Toolbar = (props) => {
   //   setToolbarGroups(filteredGroups);
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [isTable]);
+
   // const BlockButton = ({ format }) => {
   //   return (
   //     <Button
@@ -75,6 +61,7 @@ const Toolbar = (props) => {
       </Button>
     );
   };
+
   // const Dropdown = ({ format, options }) => {
   //   return (
   //     <select
@@ -89,11 +76,16 @@ const Toolbar = (props) => {
   //     </select>
   //   );
   // };
+
   // const changeMarkData = (event, format) => {
   //   event.preventDefault();
   //   const value = event.target.value;
   //   addMarkData(editor, { format, value });
   // };
+
+  const pureText = () =>{
+    return slateToHtml(text).replace(/(<([^>]+)>)/ig, '')
+  }
 
   return (
     <div className="toolbar">
@@ -145,7 +137,7 @@ const Toolbar = (props) => {
         </span>
       ))}
       <div className="toolbar-button">
-      {( !_.isEmpty(slateToHtml(text).replace(/(<([^>]+)>)/ig, '')) || parentId) && 
+      {( !_.isEmpty( pureText() ) || parentId) && 
         <button
           onClick={(evt) => {
             evt.preventDefault();
@@ -156,18 +148,10 @@ const Toolbar = (props) => {
         </button>
       }
         <button
+          disabled={ _.isEmpty(pureText()) ? true : false }
           onClick={(evt) => {
             evt.preventDefault();
-            // 
-
-            console.log("editor :", editor)
-
-
-            onPost();
-
-            // Transforms.deleteFragment()
-            // Transforms.delete(editor, { at: editor.children.length })
-            
+            onPost();            
           }}
         >
           {t("posts")}

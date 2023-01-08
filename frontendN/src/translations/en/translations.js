@@ -77,4 +77,6 @@ export const TRANSLATIONS_EN = {
     bank_account_name: "Bank account name",
 
     report: "Report",
+
+    editable_placeholder: "What are your thoughts?",
 };
