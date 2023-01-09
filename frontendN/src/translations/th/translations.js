@@ -72,10 +72,12 @@ export const TRANSLATIONS_TH = {
     confirm_delete: "ยืนยันการลบ",
     close: "ปิด",
 
-    login_or_sign_up_to_leave_a_comment : "เข้าสู่ระบบก่อน สามารถคอมเม้นต์ได้",
+    login_or_sign_up_to_leave_a_comment : "เข้าสู่ระบบก่อน จึงจะสามารถคอมเม้นต์ได้",
 
     bank_account_number: "เลขบัญชีธนาคาร",
     bank_account_name: "ชื่อบัญชีธนาคาร",
 
-    report: "รายงาน"
+    report: "รายงาน",
+
+    editable_placeholder: "กรอกรายละเอียด คอมเม้นต์?",
 };

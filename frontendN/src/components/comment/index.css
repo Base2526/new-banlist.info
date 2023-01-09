@@ -1,7 +1,7 @@
 /* add css module styles here (optional) */
-.commentSection {
+/* .commentSection {
   margin: 5px;
-}
+} */
 
 .header {
   margin-left: 5px;
@@ -62,7 +62,7 @@
 .form {
   display: flex;
   background-color: #f3f3f3;
-  padding: 8px;
+  /* padding: 8px; */
   /* padding-bottom: 15px; */
   /* border-radius: 8px; */
 

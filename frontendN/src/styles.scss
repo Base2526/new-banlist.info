@@ -136,6 +136,20 @@ main{
 //    }
 // }
 
+///////////// somkid and new ///////////////////
+.editor {
+  border-style: solid;
+  border-width: 0.5px;
+  border-color: #8080802b;
+}
+
+.panel-comment-button-close{
+  padding: 0px !important;
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+}
+///////////// somkid and new ///////////////////
+
 @include createfonts($font-head);
 
 @import 'sass-components/header';
