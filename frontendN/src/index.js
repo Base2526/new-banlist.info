@@ -8,6 +8,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import { ApolloProvider } from "@apollo/client";
 import { setContext } from '@apollo/client/link/context';
 
+import { BrowserRouter as Router } from "react-router-dom";
+
 import { store, persistor } from "./Redux"
 import { client } from "./Apollo"
 import App from "./App";
@@ -31,7 +33,9 @@ ReactDOM.render(
     <PersistGate loading={null} persistor={persistor}>
       <StrictMode>
         <ApolloProvider client={client}>
-          <App />
+          <Router>
+            <App />
+          </Router>
         </ApolloProvider>
       </StrictMode>
     </PersistGate>

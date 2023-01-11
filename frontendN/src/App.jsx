@@ -17,6 +17,7 @@ import {
 import _ from "lodash";
 import { useQuery, useApolloClient } from "@apollo/client";
 import ReactGA4 from "react-ga4";
+import Button from "@mui/material/Button";
 
 import Store from "./Store";
 import Detail from "./pages/detail/Detail"
@@ -140,6 +141,8 @@ const App = (props) => {
 
   const [dialogTermsAndConditions, setDialogTermsAndConditions] = useState(false);
 
+  let [pdpa, setPdpa] = useState(localStorage.getItem('pdpa'))
+
   /////////////////////// ping ///////////////////////////////////
   const pingValues =useQuery(gqlPing, { context: { headers: getHeaders() }, notifyOnNetworkStatusChange: true});
 
@@ -223,6 +226,7 @@ const App = (props) => {
 
     // setOnlineIndicator(setInterval(() => worker(user), 20000, user));
 
+
     return () => {
       // Clean up
       clearInterval(onlineIndicator);
@@ -232,6 +236,10 @@ const App = (props) => {
       unsubscribeNotification && unsubscribeNotification()
     };
   }, [])
+
+  useEffect(()=>{
+    console.log("pdpa :", pdpa, _.isEmpty(pdpa) )
+  }, [pdpa])
 
   useEffect(()=>{
     conversationValues.refetch()
@@ -271,7 +279,7 @@ const App = (props) => {
   }
 
   return (
-    <Router>
+    
       <Store>
         <div className={props.classes.root}>
           <CssBaseline />
@@ -364,9 +372,25 @@ const App = (props) => {
                </div>
             </div>
             <div className="footer"><Footer /></div>
+
+           
           </main>
         </div>
 
+          {
+            pdpa == null 
+            ? <div className="pdpa">
+                เว็บไซต์นี้มีการใช้คุกกี้ การใช้เว็บไซต์นี้ต่อไปถือว่าคุณยินยอมให้มีการใช้งานคุกกี้ และ PDPA <Button onClick={()=>{
+                  history.push("/pdpa")
+                }}>อ่านเพิ่มเติม</Button>
+                <Button onClick={()=>{
+                  setPdpa(true)
+                  localStorage.setItem('pdpa', true)
+                }}>ยอมรับ และใช้งานเว็บไซต์</Button>
+              </div>
+            : <div />
+          }
+        
         {
           dialogLoginOpen &&  
           <DialogLogin
@@ -397,7 +421,7 @@ const App = (props) => {
             }}/>
         }
       </Store>
-    </Router>
+
   );
 }
 

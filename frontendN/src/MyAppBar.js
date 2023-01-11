@@ -11,8 +11,21 @@ import { connect } from "react-redux";
 import _ from "lodash"
 import { useTranslation } from "react-i18next";
 
+import Popper from "@material-ui/core/Popper";
+import Paper from "@material-ui/core/Paper";
+
+// import Paper from "@mui/material/Paper";
+// import Popper from "@mui/material/Popper";
+import List from '@mui/material/List';
+import ListItemText from '@mui/material/ListItemText';
+import ListSubheader from "@mui/material/ListSubheader";
+import ListItemButton from '@mui/material/ListItemButton';
+
+import Switch from "@material-ui/core/Switch";
+
 import i18n from './translations/i18n';
 import {getCurrentLanguage} from "./util"
+import PopperNotifications from "./PopperNotifications";
 
 export const TopRight = styled.div`
   display: flex;
@@ -42,17 +55,22 @@ export const TopIconBadge = styled.span`
 `;
 
 const MyAppBar = (props) =>{
-
-  const { t } = useTranslation();
-
-  const [language, setLanguage] = useState('en');
-
+  let { t } = useTranslation();
+  let [language, setLanguage] = useState('en');
   let {conversations, classes, onDrawerOpen, onDialogLogin, user, notifications, open} = props
-
   let history = useHistory();
-  const [anchorEl, setAnchorEl] = useState(null)
+  let [anchorEl, setAnchorEl] = useState(null)
   let [conversationsBadge, setConversationsBadge] = useState(0)
+  let [popperAnchorEl, setPopperAnchorEl] = useState(null);
 
+  const handleClickPopperAnchorEl = (event) => {
+    setPopperAnchorEl(event.currentTarget);
+  };
+
+  useEffect(()=>{
+    console.log("popperAnchorEl")
+  }, [popperAnchorEl])
+  
   useEffect(()=>{
     let countBadge = 0;
     _.map(conversations, conversation=>{
@@ -74,12 +92,17 @@ const MyAppBar = (props) =>{
     localStorage.setItem('i18n', e.target.value);
   }
 
+  const handleClosePopperAnchorEl =(e)=>{
+    setPopperAnchorEl(null)
+  }
+
   return  <AppBar
             position="fixed"
             className={classes.appBar}
             fooJon={classNames(classes.appBar, {
               [classes.appBarShift]: Boolean(anchorEl)
             })}>
+            
             <Toolbar disableGutters={true}>
               <IconButton
                 color="inherit"
@@ -118,13 +141,20 @@ const MyAppBar = (props) =>{
               {
                 !_.isEmpty(user)
                 ? <TopRight>
-                    <Link to="/notification">
+                    {/* <Link to="/notification"> */}
+                    <div onClick={handleClickPopperAnchorEl}>
                       <IconContainer >
                         <NotificationsNone />
                         {_.isEmpty(notifications) ? "" : <TopIconBadge>{notifications.length}</TopIconBadge>}
                       </IconContainer>
-                    </Link>
-
+                      {
+                        Boolean(popperAnchorEl) &&  <PopperNotifications 
+                                                      {...props}
+                                                      popperAnchorEl={popperAnchorEl}
+                                                      setPopperAnchorEl={handleClosePopperAnchorEl} 
+                                                      />
+                      }
+                    </div>
                     {
                       !_.isEmpty(conversations)  && <Link to="/message">
                                                       <IconContainer>
@@ -190,6 +220,7 @@ const MyAppBar = (props) =>{
                     </Button>
               }
             </Toolbar>
+            
           </AppBar>
 }
 
