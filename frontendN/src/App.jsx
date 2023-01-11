@@ -238,10 +238,6 @@ const App = (props) => {
   }, [])
 
   useEffect(()=>{
-    console.log("pdpa :", pdpa, _.isEmpty(pdpa) )
-  }, [pdpa])
-
-  useEffect(()=>{
     conversationValues.refetch()
 
     notificationValues.refetch()

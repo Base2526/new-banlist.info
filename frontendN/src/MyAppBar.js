@@ -11,18 +11,6 @@ import { connect } from "react-redux";
 import _ from "lodash"
 import { useTranslation } from "react-i18next";
 
-import Popper from "@material-ui/core/Popper";
-import Paper from "@material-ui/core/Paper";
-
-// import Paper from "@mui/material/Paper";
-// import Popper from "@mui/material/Popper";
-import List from '@mui/material/List';
-import ListItemText from '@mui/material/ListItemText';
-import ListSubheader from "@mui/material/ListSubheader";
-import ListItemButton from '@mui/material/ListItemButton';
-
-import Switch from "@material-ui/core/Switch";
-
 import i18n from './translations/i18n';
 import {getCurrentLanguage} from "./util"
 import PopperNotifications from "./PopperNotifications";
