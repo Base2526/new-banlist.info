@@ -282,7 +282,7 @@ const Detail = (props) => {
         return  <div className="col-container">
                     <div className="col1">
                         {
-                            _.isEmpty(post.files) 
+                            _.isEmpty(post?.files) 
                             ?   <div />
                             :   <CardActionArea style={{ position: "relative", paddingBottom: "10px" }}>
                                     <CardMedia
@@ -357,17 +357,17 @@ const Detail = (props) => {
                                     </div>
                                 </div>
                                 <Typography variant="subtitle2" color="textSecondary">
-                                    {t("search_by_title")} : {post.title}
+                                    {t("search_by_title")} : {post?.title}
                                 </Typography>
                                 <Typography
                                     style={{ cursor: "pointer" }}
                                     variant="subtitle2"
                                     color="textSecondary">
-                                    {t("search_by_name_surname")} : {post.nameSubname}
+                                    {t("search_by_name_surname")} : {post?.nameSubname}
                                 </Typography>
                         
                                 <Typography variant="subtitle2" color="textSecondary">
-                                    {t("amount")} : {numberCurrency(post.amount)}
+                                    {t("amount")} : {numberCurrency(post?.amount)}
                                 </Typography>
 
                                 <Typography variant="subtitle2" color="textSecondary">{t("search_by_tel")} : 

@@ -148,6 +148,19 @@ main{
   margin-top: 10px !important;
   margin-bottom: 10px !important;
 }
+
+.notification-list-subheader{
+  display: flex;
+}
+
+.pdpa{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 10000;
+  text-align: center;
+  background-color: aliceblue;
+}
 ///////////// somkid and new ///////////////////
 
 @include createfonts($font-head);
