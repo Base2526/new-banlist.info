@@ -2205,28 +2205,10 @@ export default {
     
     async createAndUpdateBookmark(parent, args, context, info) {
       try{
-
-        console.log("createAndUpdateBookmark :", args)
-
-        // if(_.isEmpty(context)){
-        //   // logger.error(JSON.stringify(args));
-        //   return;
-        // }
-
-        // let { status, code, currentUser } = context 
-
         let { req } = context
 
-        ///////////////////////////
         let authorization = await checkAuthorization(req);
         let { status, code, current_user } =  authorization
-        //////////////////////////
-
-        // if(status && code == 1){
-        //   console.log("ping ok : ", current_user?._id)
-        // }else{
-        //   console.log("ping other")
-        // }
 
         let {input} = args
 
@@ -2237,25 +2219,6 @@ export default {
           // logger.error("Post id empty :", input.postId)
           return;
         } 
-
-        // if(_.isEmpty(await User.findById(input.userId))){
-        //   // logger.error("User id empty :", input.userId)
-        //   return;
-        // } 
-        /**
-         * validate data
-        */
-
-        //  try{
-        //   let { status, code, currentUser } = context 
-        //   console.log("ping :", currentUser?._id)
-
-        //   return { status:true }
-        // } catch(err) {
-        //   logger.error(err.toString());
-        //   console.log("homes err :", args, err.toString())
-        //   return;
-        // }
 
         input = {...input, userId: current_user?._id}
 
@@ -2288,8 +2251,12 @@ export default {
 
       } catch(err) {
         logger.error(err.toString());
-        console.log("createAndUpdateBookmark err :", args, err.toString())
-        return;
+        
+        return {
+          status:false,
+          message: err.toString(),
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
       }
     },
     async createAndUpdateFollow(parent, args, context, info) {
