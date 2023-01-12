@@ -473,7 +473,7 @@ export default gql`
     getManyReferenceComment(postId: String, page: Int, perPage: Int, sortField: String, sortOrder: String, filter: PostFilter): CommentsPayLoad
   
 
-    Bookmarks(page: Int, perPage: Int): BookmarksPayLoad
+    bookmarks(page: Int, perPage: Int): JSON
     bookmarksByPostId( postId: ID! ): BookmarksPayLoad
     isBookmark(postId: ID!): BookmarkPayLoad
     bookmarksByUserId( userId: ID! ): BookmarksPayLoad

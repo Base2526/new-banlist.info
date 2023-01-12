@@ -696,18 +696,34 @@ export default {
     },
     // Comment
 
-    async Bookmarks(root, {
-      page,
-      perPage
-    }) {
+    async bookmarks(parent, args, context, info) {
       let start = Date.now()
-      let data = await Bookmark.find();
-      return {
-        status:true,
-        data,
-        executionTime: `Time to execute = ${
-          (Date.now() - start) / 1000
-        } seconds`
+      try{
+
+        // console.log("bookmarks : ", args)
+
+        let { page, perPage } = args
+        let { req } = context
+
+        let authorization = await checkAuthorization(req);
+        let { status, code, current_user } =  authorization
+
+        let data = await Bookmark.find({userId: current_user?._id.toString(), status: true});
+        return {
+          status:true,
+          data,
+          executionTime: `Time to execute = ${
+            (Date.now() - start) / 1000
+          } seconds`
+        }
+
+      } catch(err) {
+        logger.error(err.toString());
+        return {
+          status:false,
+          message: err.toString(),
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
       }
     },
 

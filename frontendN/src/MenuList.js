@@ -182,6 +182,12 @@ const MenuAuthenticated = [
     Icon: <LocalPhoneIcon className="icon" />,
     Path: "/phones"
   },
+  {
+    Id: 4,
+    Name: "bookmarks",
+    Icon: <BookmarksIcon className="icon" />,
+    Path: "/bookmarks"
+  },
   // {
   //   Id: 4,
   //   Name: "Terms",
@@ -195,7 +201,7 @@ const MenuAuthenticated = [
   //   Path: "/privacy"
   // },
   {
-    Id: 4,
+    Id: 5,
     Name:  "privacy_and_terms",
     Icon: <SecurityIcon className="icon" />,
     Path: "/privacy+terms"

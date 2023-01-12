@@ -23,8 +23,8 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import { useTranslation } from "react-i18next";
 
-import {gqlBookmarks, gqlPost, gqlUser} from "../../gqlQuery"
-
+import { getHeaders } from "../../util"
+import { gqlBookmarks, gqlPost, gqlUser } from "../../gqlQuery"
 import Table from "../../TableContainer"
   
 const BookmarkList = (props) => {
@@ -36,6 +36,7 @@ const BookmarkList = (props) => {
   const [pageSize, setPageSize] = useState(pageOptions[0])
 
   const bookmarkValues = useQuery(gqlBookmarks, {
+    context: { headers: getHeaders() },
     variables: {page: pageIndex, perPage: pageSize},
     notifyOnNetworkStatusChange: true,
   });
@@ -199,7 +200,7 @@ const BookmarkList = (props) => {
             ?   <div><CircularProgress /></div> 
             :   <Table
                   columns={columns}
-                  data={bookmarkValues.data.Bookmarks.data}
+                  data={bookmarkValues.data.bookmarks.data}
                   fetchData={fetchData}
                   rowsPerPage={pageOptions}
                   updateMyData={updateMyData}

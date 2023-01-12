@@ -143,22 +143,7 @@ export const gqlReports = gql`
         }
     }`;
 
-export const gqlBookmarks = gql`
-    query Bookmarks($page: Int, $perPage: Int){
-        Bookmarks(
-            page: $page
-            perPage: $perPage
-        ){
-            status
-            executionTime
-            data{
-                id: _id
-                userId
-                postId
-                status
-            }
-        }
-    }`;
+export const gqlBookmarks = gql`query Bookmarks($page: Int, $perPage: Int){ bookmarks( page: $page perPage: $perPage ) }`;
 
 export const gqlBookmarksByPostId = gql`
     query BookmarksByPostId($postId: ID!){

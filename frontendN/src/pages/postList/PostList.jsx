@@ -168,35 +168,35 @@ const PostList = (props) => {
                     </Box>
             }
           },
-          {
-            Header: 'Comments',
-            Cell: props =>{
-              let commentValues = useQuery(gqlComment, {
-                context: { headers: getHeaders() },
-                variables: {postId: props.row.original._id},
-                notifyOnNetworkStatusChange: true,
-              });
-              if(!commentValues.loading){
-                if( commentValues.data === undefined || commentValues.data.comment.data.length == 0){
-                  return <div />
-                }
+          // {
+          //   Header: 'Comments',
+          //   Cell: props =>{
+          //     let commentValues = useQuery(gqlComment, {
+          //       context: { headers: getHeaders() },
+          //       variables: {postId: props.row.original._id},
+          //       notifyOnNetworkStatusChange: true,
+          //     });
+          //     if(!commentValues.loading){
+          //       if( commentValues.data === undefined || commentValues.data.comment.data.length == 0){
+          //         return <div />
+          //       }
           
-                let count = 0;
-                _.map(commentValues.data.comment.data, (v) => {
-                  if (v.replies) {
-                    count += v.replies.length;
-                  }
-                });
+          //       let count = 0;
+          //       _.map(commentValues.data.comment.data, (v) => {
+          //         if (v.replies) {
+          //           count += v.replies.length;
+          //         }
+          //       });
           
-                return  <ButtonWrapper>
-                          <Link to={`/comments`}>
-                            <button className="editBtn">{commentValues.data.comment.data.length + count}</button>
-                          </Link>
-                        </ButtonWrapper>
-              }
-              return <div />
-            } 
-          },
+          //       return  <ButtonWrapper>
+          //                 <Link to={`/comments`}>
+          //                   <button className="editBtn">{commentValues.data.comment.data.length + count}</button>
+          //                 </Link>
+          //               </ButtonWrapper>
+          //     }
+          //     return <div />
+          //   } 
+          // },
           {
             Header: 'Bookmark',
             Cell: props =>{

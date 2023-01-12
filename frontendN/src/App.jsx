@@ -351,7 +351,6 @@ const App = (props) => {
                     </div>
                   </Route>
 
-                  {/*  */}
                   <Route path="/pdpa">
                     <div className="page-dev pl-2 pr-2">
                       <Pdpa />
