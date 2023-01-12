@@ -2205,12 +2205,10 @@ export default {
     
     async createAndUpdateBookmark(parent, args, context, info) {
       try{
-        // if(_.isEmpty(context)){
-        //   // logger.error(JSON.stringify(args));
-        //   return;
-        // }
+        let { req } = context
 
-        let { status, code, currentUser } = context 
+        let authorization = await checkAuthorization(req);
+        let { status, code, current_user } =  authorization
 
         let {input} = args
 
@@ -2222,26 +2220,7 @@ export default {
           return;
         } 
 
-        // if(_.isEmpty(await User.findById(input.userId))){
-        //   // logger.error("User id empty :", input.userId)
-        //   return;
-        // } 
-        /**
-         * validate data
-        */
-
-        //  try{
-        //   let { status, code, currentUser } = context 
-        //   console.log("ping :", currentUser?._id)
-
-        //   return { status:true }
-        // } catch(err) {
-        //   logger.error(err.toString());
-        //   console.log("homes err :", args, err.toString())
-        //   return;
-        // }
-
-        input = {...input, userId: currentUser?._id}
+        input = {...input, userId: current_user?._id}
 
         let result = await Bookmark.findOneAndUpdate({
           postId: input.postId
@@ -2272,8 +2251,12 @@ export default {
 
       } catch(err) {
         logger.error(err.toString());
-        console.log("createAndUpdateBookmark err :", args, err.toString())
-        return;
+        
+        return {
+          status:false,
+          message: err.toString(),
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
       }
     },
     async createAndUpdateFollow(parent, args, context, info) {

@@ -354,15 +354,7 @@ export const gqlCreateUser = gql`
 
 export const gqlCreatePost = gql`mutation CreatePost($input: JSON) { createPost(input: $input) }`;
 
-export const gqlCreateAndUpdateBookmark = gql`
-    mutation CreateAndUpdateBookmark($input: BookmarkInput) {
-        createAndUpdateBookmark(input: $input) {
-            id: _id
-            userId
-            postId
-            status
-        }
-    }`;
+export const gqlCreateAndUpdateBookmark = gql`mutation CreateAndUpdateBookmark($input: BookmarkInput) { createAndUpdateBookmark(input: $input) }`;
 
 export const gqlCreateRole = gql`
     mutation CreateRole($input: RoleInput) {

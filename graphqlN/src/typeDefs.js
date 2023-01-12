@@ -698,7 +698,7 @@ export default gql`
     deleteComment(_id: ID!): Comment
     deleteComments(_ids: [ID!]!): deleteType
 
-    createAndUpdateBookmark(input: BookmarkInput): Bookmark
+    createAndUpdateBookmark(input: BookmarkInput): JSON
 
     createReport(input: ReportInput): Report
 
