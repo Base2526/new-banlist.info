@@ -2205,12 +2205,28 @@ export default {
     
     async createAndUpdateBookmark(parent, args, context, info) {
       try{
+
+        console.log("createAndUpdateBookmark :", args)
+
         // if(_.isEmpty(context)){
         //   // logger.error(JSON.stringify(args));
         //   return;
         // }
 
-        let { status, code, currentUser } = context 
+        // let { status, code, currentUser } = context 
+
+        let { req } = context
+
+        ///////////////////////////
+        let authorization = await checkAuthorization(req);
+        let { status, code, current_user } =  authorization
+        //////////////////////////
+
+        // if(status && code == 1){
+        //   console.log("ping ok : ", current_user?._id)
+        // }else{
+        //   console.log("ping other")
+        // }
 
         let {input} = args
 
@@ -2241,7 +2257,7 @@ export default {
         //   return;
         // }
 
-        input = {...input, userId: currentUser?._id}
+        input = {...input, userId: current_user?._id}
 
         let result = await Bookmark.findOneAndUpdate({
           postId: input.postId

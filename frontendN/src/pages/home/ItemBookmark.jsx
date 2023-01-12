@@ -47,7 +47,7 @@ const ItemBookmark = (props) => {
       
       if(bmValus.data.isBookmark == null || bmValus.data.isBookmark.data ==null ){
         return  <IconButton onClick={(e) =>{
-                  _.isEmpty(user) ?  onDialogLogin(true) :  onBookmark( item._id, user._id, true )
+                  _.isEmpty(user) ?  onDialogLogin(true) :  onBookmark( item._id, true )
                 }}>
                   <BookmarkIcon style={{ color:"" }} /> 
                 </IconButton>
@@ -57,14 +57,14 @@ const ItemBookmark = (props) => {
       let color = isBookmark.status == null ? "" : isBookmark.status ? "blue" : ""
   
       return  <IconButton onClick={(e) =>{
-                _.isEmpty(user) ?  onDialogLogin(true) : onBookmark( item._id, user._id, !isBookmark.status)
+                _.isEmpty(user) ?  onDialogLogin(true) : onBookmark( item._id, !isBookmark.status)
               }}>
                 <BookmarkIcon style={{ color }} /> 
               </IconButton>
     }       
   }
   return  <IconButton onClick={(e) =>{
-              _.isEmpty(user) ?  onDialogLogin(true) : onBookmark( item._id, user._id, true)
+              _.isEmpty(user) ?  onDialogLogin(true) : onBookmark( item._id, true)
             }}> 
             <BookmarkIcon style={{ color:"" }} />
           </IconButton>
