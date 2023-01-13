@@ -1609,8 +1609,15 @@ export default {
     },
     async updateUser(parent, args, context, info) {
 
+      let start = Date.now()
+
       try{
-        let { _id,  input} = args
+        let { req } = context
+        
+        let authorization = await checkAuthorization(req);
+        let { status, code, current_user } =  authorization
+
+        let { input} = args
         
         if(!_.isEmpty(input.files)){
           let newFiles = [];
@@ -1644,12 +1651,17 @@ export default {
 
         delete input.files;
 
-        return await User.findOneAndUpdate({ _id }, input, { new: true })
+        return await User.findOneAndUpdate({ _id : current_user?._id.toString() }, input, { new: true })
       } catch(err) {
         logger.error(err.toString());
 
         console.log("UpdateUser err :", err.toString())
-        return;
+        
+        return {
+          status: false,
+          message: err.toString(),
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
       }
     },
     async deleteUser(parent, args, context, info){
