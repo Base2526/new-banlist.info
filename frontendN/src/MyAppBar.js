@@ -117,7 +117,7 @@ const MyAppBar = (props) =>{
                 color="inherit"
                 className={classes.grow}
                 onClick={(e)=>history.push("/")}>
-                BANLIST.INFO
+                BANLIST.INFO เช็ค-แจ้ง-ตรวงสอบ คนโกง, มิจฉาชีพ
               </Typography>
 
               
