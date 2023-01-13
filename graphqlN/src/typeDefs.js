@@ -670,7 +670,7 @@ export default gql`
     search(type: String!, q: String!): JSON
 
     createUser(input: UserInput): User
-    updateUser(_id: ID!, input: JSON): JSON
+    updateUser( input: JSON ): JSON
     deleteUser(_id: ID!): JSON
 
     createPost(input: JSON): JSON

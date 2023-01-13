@@ -403,7 +403,7 @@ export const gqlAddMessage = gql`
         addMessage( conversationId: $conversationId, input: $input )
     }`;
 
-export const gqlUpdateUser = gql`mutation UpdateUser($id: ID!, $input: JSON) { updateUser(_id: $id, input: $input) }`;
+export const gqlUpdateUser = gql`mutation UpdateUser($id: ID!, $input: JSON) { updateUser(input: $input) }`;
 
 export const gqlUpdatePost = gql`mutation UpdatePost($id: ID!, $input: JSON) { updatePost(_id: $id, input: $input) }`;
  
