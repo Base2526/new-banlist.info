@@ -8,3 +8,11 @@ footer{
 .footer{
     margin-top: 1.5rem;
 }
+
+.cookie-text{
+    padding: 0.5rem;
+    @media (min-width:$md){
+        padding: 0rem;
+    }
+   
+}

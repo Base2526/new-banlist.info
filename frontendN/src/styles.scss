@@ -151,6 +151,13 @@ main{
 
 .notification-list-subheader{
   display: flex;
+  flex-direction: column;
+  .MuiButton-root{
+    max-width: 80px;
+    align-self: flex-end;
+    margin-right: 1em;
+    
+  }
 }
 
 .pdpa{
@@ -160,6 +167,9 @@ main{
   z-index: 10000;
   text-align: center;
   background-color: aliceblue;
+  .MuiButton-root{
+    padding: 8px 8px;
+  }
 }
 ///////////// somkid and new ///////////////////
 
