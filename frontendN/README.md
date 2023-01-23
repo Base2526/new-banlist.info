@@ -64,3 +64,7 @@ https://codesandbox.io/s/zealous-carson-tj3p2w?file=/demo.tsx:1226-1230
 popup notification
 https://codesandbox.io/s/elastic-babycat-qdzwbq?file=/demo.js:75-139
 https://codesandbox.io/s/still-paper-pg0evh?file=/demo.tsx
+
+
+production, how to hide all code it?
+https://stackoverflow.com/questions/51415780/create-react-app-is-showing-all-my-code-in-production-how-to-hide-it

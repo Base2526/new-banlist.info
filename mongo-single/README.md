@@ -20,9 +20,9 @@ mongoimport --db dbName --collection collectionName --file fileName.json
         });
 
          <!-- db.createUser({
-            user: "banlistinfo",
+            user: "berthong",
             pwd: "6c09093474284f6bfc3749a5bd24cbb6",
-            roles: [ { role: 'readWrite', db: 'bl' } ]
+            roles: [ { role: 'readWrite', db: 'berthong' } ]
         }); -->
 
 4. exit แล้วเรา mongosh -u xxxx -p yyyy เพือ login auth
