@@ -76,8 +76,8 @@ const PopperNotifications = (props) => {
                     }}
                     subheader={
                         <div className="notification-list-subheader">
-                            <div>Notifications</div>
-                            <Button id={'see-all'} onClick={()=>{
+                            <div className="noti-text pl-2 pt-1">Notifications</div>
+                            <Button id={'see-all'} className="bg-none" onClick={()=>{
                                
                                 setPopperAnchorEl(null);
                             }}>See all</Button>
@@ -92,7 +92,7 @@ const PopperNotifications = (props) => {
                             {
                                 _.map(v1.items, (item)=>{
                                     console.log(">>>", item)
-                                    return  <div>
+                                    return  <div className="resault-display pl-2 pr-2">
                                                 <div id={`itempopper-${item._id}`} >{item.text.replace(/<[^>]+>/g, '')}</div>
                                             </div>
                                 })
