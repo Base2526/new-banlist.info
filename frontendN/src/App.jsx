@@ -351,7 +351,6 @@ const App = (props) => {
                     </div>
                   </Route>
 
-                  {/*  */}
                   <Route path="/pdpa">
                     <div className="page-dev pl-2 pr-2">
                       <Pdpa />
@@ -376,9 +375,10 @@ const App = (props) => {
           {
             pdpa == null 
             ? <div className="pdpa">
+               <div className="cookie-text">
                 เว็บไซต์นี้มีการใช้คุกกี้ การใช้เว็บไซต์นี้ต่อไปถือว่าคุณยินยอมให้มีการใช้งานคุกกี้ และ PDPA <Button onClick={()=>{
                   history.push("/pdpa")
-                }}>อ่านเพิ่มเติม</Button>
+                }}>อ่านเพิ่มเติม</Button></div>
                 <Button onClick={()=>{
                   setPdpa(true)
                   localStorage.setItem('pdpa', true)

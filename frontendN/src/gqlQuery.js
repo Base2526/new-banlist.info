@@ -143,22 +143,7 @@ export const gqlReports = gql`
         }
     }`;
 
-export const gqlBookmarks = gql`
-    query Bookmarks($page: Int, $perPage: Int){
-        Bookmarks(
-            page: $page
-            perPage: $perPage
-        ){
-            status
-            executionTime
-            data{
-                id: _id
-                userId
-                postId
-                status
-            }
-        }
-    }`;
+export const gqlBookmarks = gql`query Bookmarks($page: Int, $perPage: Int){ bookmarks( page: $page perPage: $perPage ) }`;
 
 export const gqlBookmarksByPostId = gql`
     query BookmarksByPostId($postId: ID!){
@@ -354,15 +339,7 @@ export const gqlCreateUser = gql`
 
 export const gqlCreatePost = gql`mutation CreatePost($input: JSON) { createPost(input: $input) }`;
 
-export const gqlCreateAndUpdateBookmark = gql`
-    mutation CreateAndUpdateBookmark($input: BookmarkInput) {
-        createAndUpdateBookmark(input: $input) {
-            id: _id
-            userId
-            postId
-            status
-        }
-    }`;
+export const gqlCreateAndUpdateBookmark = gql`mutation CreateAndUpdateBookmark($input: BookmarkInput) { createAndUpdateBookmark(input: $input) }`;
 
 export const gqlCreateRole = gql`
     mutation CreateRole($input: RoleInput) {
@@ -426,7 +403,7 @@ export const gqlAddMessage = gql`
         addMessage( conversationId: $conversationId, input: $input )
     }`;
 
-export const gqlUpdateUser = gql`mutation UpdateUser($id: ID!, $input: JSON) { updateUser(_id: $id, input: $input) }`;
+export const gqlUpdateUser = gql`mutation UpdateUser($id: ID!, $input: JSON) { updateUser(input: $input) }`;
 
 export const gqlUpdatePost = gql`mutation UpdatePost($id: ID!, $input: JSON) { updatePost(_id: $id, input: $input) }`;
  

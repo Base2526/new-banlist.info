@@ -74,6 +74,7 @@ const HomePage = (props) => {
   const [onCreateAndUpdateBookmark, resultCreateAndUpdateBookmarkValues] = useMutation(gqlCreateAndUpdateBookmark,{
     context: { headers: getHeaders() },
     update: (cache, {data: {createAndUpdateBookmark}}) => {
+      
       let { postId } = createAndUpdateBookmark
       const data1 = cache.readQuery({
           query: gqlIsBookmark,
@@ -91,7 +92,12 @@ const HomePage = (props) => {
           variables: { postId }
       });     
     },
-    onCompleted({ data }) { },
+    onCompleted({ data }) {
+      console.log("onCompleted")
+    },
+    onError: (err) => {
+      console.log("onError :", err)
+    }
   });
   
   const homesValues =useQuery(gqlHomes, {
@@ -316,8 +322,6 @@ const HomePage = (props) => {
                                 setDialogLoginOpen(status)
                               }}
                               onBookmark={(postId, status)=>{
-
-                                console.log("onCreateAndUpdateBookmark :", postId, status)
                                 onCreateAndUpdateBookmark({ variables: { input: {
                                       postId,
                                       status

@@ -696,18 +696,34 @@ export default {
     },
     // Comment
 
-    async Bookmarks(root, {
-      page,
-      perPage
-    }) {
+    async bookmarks(parent, args, context, info) {
       let start = Date.now()
-      let data = await Bookmark.find();
-      return {
-        status:true,
-        data,
-        executionTime: `Time to execute = ${
-          (Date.now() - start) / 1000
-        } seconds`
+      try{
+
+        // console.log("bookmarks : ", args)
+
+        let { page, perPage } = args
+        let { req } = context
+
+        let authorization = await checkAuthorization(req);
+        let { status, code, current_user } =  authorization
+
+        let data = await Bookmark.find({userId: current_user?._id.toString(), status: true});
+        return {
+          status:true,
+          data,
+          executionTime: `Time to execute = ${
+            (Date.now() - start) / 1000
+          } seconds`
+        }
+
+      } catch(err) {
+        logger.error(err.toString());
+        return {
+          status:false,
+          message: err.toString(),
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
       }
     },
 
@@ -1593,8 +1609,15 @@ export default {
     },
     async updateUser(parent, args, context, info) {
 
+      let start = Date.now()
+
       try{
-        let { _id,  input} = args
+        let { req } = context
+        
+        let authorization = await checkAuthorization(req);
+        let { status, code, current_user } =  authorization
+
+        let { input} = args
         
         if(!_.isEmpty(input.files)){
           let newFiles = [];
@@ -1628,12 +1651,17 @@ export default {
 
         delete input.files;
 
-        return await User.findOneAndUpdate({ _id }, input, { new: true })
+        return await User.findOneAndUpdate({ _id : current_user?._id.toString() }, input, { new: true })
       } catch(err) {
         logger.error(err.toString());
 
         console.log("UpdateUser err :", err.toString())
-        return;
+        
+        return {
+          status: false,
+          message: err.toString(),
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
       }
     },
     async deleteUser(parent, args, context, info){
@@ -2205,12 +2233,10 @@ export default {
     
     async createAndUpdateBookmark(parent, args, context, info) {
       try{
-        // if(_.isEmpty(context)){
-        //   // logger.error(JSON.stringify(args));
-        //   return;
-        // }
+        let { req } = context
 
-        let { status, code, currentUser } = context 
+        let authorization = await checkAuthorization(req);
+        let { status, code, current_user } =  authorization
 
         let {input} = args
 
@@ -2222,26 +2248,7 @@ export default {
           return;
         } 
 
-        // if(_.isEmpty(await User.findById(input.userId))){
-        //   // logger.error("User id empty :", input.userId)
-        //   return;
-        // } 
-        /**
-         * validate data
-        */
-
-        //  try{
-        //   let { status, code, currentUser } = context 
-        //   console.log("ping :", currentUser?._id)
-
-        //   return { status:true }
-        // } catch(err) {
-        //   logger.error(err.toString());
-        //   console.log("homes err :", args, err.toString())
-        //   return;
-        // }
-
-        input = {...input, userId: currentUser?._id}
+        input = {...input, userId: current_user?._id}
 
         let result = await Bookmark.findOneAndUpdate({
           postId: input.postId
@@ -2272,8 +2279,12 @@ export default {
 
       } catch(err) {
         logger.error(err.toString());
-        console.log("createAndUpdateBookmark err :", args, err.toString())
-        return;
+        
+        return {
+          status:false,
+          message: err.toString(),
+          executionTime: `Time to execute = ${ (Date.now() - start) / 1000 } seconds`
+        }
       }
     },
     async createAndUpdateFollow(parent, args, context, info) {

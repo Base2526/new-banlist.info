@@ -473,7 +473,7 @@ export default gql`
     getManyReferenceComment(postId: String, page: Int, perPage: Int, sortField: String, sortOrder: String, filter: PostFilter): CommentsPayLoad
   
 
-    Bookmarks(page: Int, perPage: Int): BookmarksPayLoad
+    bookmarks(page: Int, perPage: Int): JSON
     bookmarksByPostId( postId: ID! ): BookmarksPayLoad
     isBookmark(postId: ID!): BookmarkPayLoad
     bookmarksByUserId( userId: ID! ): BookmarksPayLoad
@@ -670,7 +670,7 @@ export default gql`
     search(type: String!, q: String!): JSON
 
     createUser(input: UserInput): User
-    updateUser(_id: ID!, input: JSON): JSON
+    updateUser( input: JSON ): JSON
     deleteUser(_id: ID!): JSON
 
     createPost(input: JSON): JSON
@@ -698,7 +698,7 @@ export default gql`
     deleteComment(_id: ID!): Comment
     deleteComments(_ids: [ID!]!): deleteType
 
-    createAndUpdateBookmark(input: BookmarkInput): Bookmark
+    createAndUpdateBookmark(input: BookmarkInput): JSON
 
     createReport(input: ReportInput): Report
 
