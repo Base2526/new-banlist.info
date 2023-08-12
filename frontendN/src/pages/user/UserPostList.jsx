@@ -23,12 +23,15 @@ import { FacebookShareButton, TwitterShareButton } from "react-share";
 import { FacebookIcon, TwitterIcon } from "react-share";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 import { gqlPostsByUser, gqlCreateShare } from "../../gqlQuery"
 import ItemComment from "../home/ItemComment"
 import ItemBookmark from "../home/ItemBookmark"
 import ItemShare from "../home/ItemShare"
 import PanelComment from "../home/PanelComment";
+
+import {convertDate} from "../../util"
 
 const UserPostList = (props) => {
     let history = useHistory();
@@ -52,7 +55,7 @@ const UserPostList = (props) => {
           // history.push("/");
         }
     });
-    console.log("resultCreateShare :", resultCreateShare)
+    // console.log("resultCreateShare :", resultCreateShare)
 
     const postsByUser = useQuery(gqlPostsByUser, {
         variables: { userId: id },
@@ -98,24 +101,14 @@ const UserPostList = (props) => {
                       role: "listbox"
                   }}
                   >
-                  <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
-                      {/* <FacebookShareButton
-                        url={window.location.href + "detail/" + item.id}
-                        quote={item.title}
-                        hashtag={"#hashtag"}
-                        description={item.title}
-                        className="Demo__some-network__share-button"
-                      >
-                      <FacebookIcon size={32} round /> Facebook
-                      </FacebookShareButton> */}
-
+                  {/* <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
                     <div onClick={(e)=>{
                         if(_.isEmpty(user)){
                             setDialogLoginOpen(true)
                         }else{
                             onCreateShare({ variables: { input: {
-                                    postId: item.id,
-                                    userId: user.id,
+                                    postId: item._id,
+                                    userId: user._id,
                                     destination: "facebook"
                                 }
                                 }
@@ -127,22 +120,13 @@ const UserPostList = (props) => {
                     </div>
                   </MenuItem>{" "}
                   <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
-                      {/* <TwitterShareButton
-                        title={item.title}
-                        url={window.location.href + "detail/" + item.id}
-                        hashtags={["hashtag1", "hashtag2"]}
-                      >
-                      <TwitterIcon size={32} round />
-                      Twitter
-                      </TwitterShareButton> */}
-
                         <div onClick={(e)=>{
                             if(_.isEmpty(user)){
                                 setDialogLoginOpen(true)
                             }else{
                                 onCreateShare({ variables: { input: {
-                                        postId: item.id,
-                                        userId: user.id,
+                                        postId: item._id,
+                                        userId: user._id,
                                         destination: "twitter"
                                     }
                                     }
@@ -152,7 +136,42 @@ const UserPostList = (props) => {
                         }}>
                         <TwitterIcon size={32} round />Twitter
                         </div>
-                  </MenuItem>
+                  </MenuItem> */}
+
+                    <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
+                    <FacebookShareButton
+                        url={ window.location.origin + "/detail/" + item._id}
+                        quote={item?.title}
+                        // hashtag={"#hashtag"}
+                        description={item?.description}
+                        className="Demo__some-network__share-button"
+                        onClick={(e)=>{handleAnchorElShareClose() }} >
+                        <FacebookIcon size={32} round /> Facebook
+                    </FacebookShareButton>
+                    </MenuItem>{" "}
+                    <MenuItem onClose={(e)=>handleAnchorElShareClose()}>
+                        <TwitterShareButton
+                        title={item?.title}
+                        url={ window.location.origin + "/detail/" + item._id }
+                        // hashtags={["hashtag1", "hashtag2"]}
+                        onClick={(e)=>{ handleAnchorElShareClose() }} >
+                        <TwitterIcon size={32} round />
+                        Twitter
+                        </TwitterShareButton>
+                    </MenuItem>
+                    <MenuItem 
+                        onClick={async(e)=>{
+                        let text = window.location.origin + "/detail/" + item._id
+                        if ('clipboard' in navigator) {
+                            await navigator.clipboard.writeText(text);
+                        } else {
+                            document.execCommand('copy', true, text);
+                        }
+
+                        handleAnchorElShareClose()
+                        }}>
+                        <ContentCopyIcon size={32} round /> Copy link
+                    </MenuItem>
                 </Menu>
     }
     
@@ -176,16 +195,7 @@ const UserPostList = (props) => {
                     role: "listbox"
                   }}
                 >
-                  {/* {
-                    !_.isEmpty(user) && user.id == item.ownerId
-                    ? <MenuItem onClick={(e)=>{
-                        handleAnchorElSettingClose()
-                        history.push("/post/"+item.id+ "/edit");
-                      }}>
-                        Edit
-                      </MenuItem>
-                    : <div /> 
-                  } */}
+                 
                   
                   <MenuItem onClick={(e)=>{
                     handleAnchorElSettingClose()
@@ -194,7 +204,7 @@ const UserPostList = (props) => {
                     // }else{
                     //   setReport({open: true, postId:item.id})
                     // }
-                    onReport(item.id)
+                    onReport(item._id)
                   }}>
                     Report
                   </MenuItem>
@@ -211,7 +221,9 @@ const UserPostList = (props) => {
                         <List sx={{ width: "100%", bgcolor: "background.paper" }}>
                             {
                                 _.map(postsByUser.data.postsByUser.data, (item, index)=>{
-                                    return  <div key={item.id}>
+
+                                    console.log("item >>> ", item)
+                                    return  <div key={item._id}>
                                                 <CardHeader
                                                     action={
                                                     <IconButton aria-label="settings" onClick={(e)=>{
@@ -221,7 +233,7 @@ const UserPostList = (props) => {
                                                         <MoreVertIcon />
                                                     </IconButton>
                                                     }
-                                                    subheader={moment(item.createdAt).format('MMMM Do YYYY')}/>
+                                                    subheader={convertDate(moment(item.createdAt).format('D MMM YYYY'))}/>
                                                 <CardContent>
                                                     <div style={{ position: "relative", paddingBottom: "10px" }}>
                                                         <IconButton
@@ -233,7 +245,7 @@ const UserPostList = (props) => {
                                                                 sx={{ width: 100, height: 100 }}
                                                                 variant="rounded"
                                                                 alt="Remy Sharp"
-                                                                src={item.files.length < 1 ? "" : item.files[0].base64}
+                                                                src={item.files.length < 1 ? "" : item.files[0].url}
                                                             
                                                             />
                                                         </IconButton>
@@ -272,7 +284,7 @@ const UserPostList = (props) => {
                                                     ยอดเงิน : {item.amount}
                                                     </Typography>
                                                     </>
-                                                    <React.Fragment>
+                                                    {/* <React.Fragment>
                                                         <Typography
                                                         sx={{ display: "inline" }}
                                                             component="span"
@@ -282,6 +294,15 @@ const UserPostList = (props) => {
                                                             รายละเอียด :
                                                         </Typography>
                                                         { item.description }
+                                                    </React.Fragment> */}
+
+                                                    <React.Fragment>
+                                                        รายละเอียด :
+                                                        <Typography
+                                                            component="span"
+                                                            variant="body2"
+                                                            color="text.primary"
+                                                            dangerouslySetInnerHTML={{ __html: item.description }} />  
                                                     </React.Fragment>
                                                 </CardContent>
 
@@ -303,7 +324,7 @@ const UserPostList = (props) => {
                                                             setPanelComment(data)
                                                         }}/>
                                                     <IconButton onClick={(e) => {
-                                                        history.push("/detail/" + item.id);
+                                                        history.push("/detail/" + item._id);
                                                     }}>
                                                         <OpenInNewIcon /> 
                                                     </IconButton>
@@ -335,10 +356,10 @@ const UserPostList = (props) => {
 
             {lightbox.isOpen && (
                 <Lightbox
-                mainSrc={lightbox.images[lightbox.photoIndex].base64}
-                nextSrc={lightbox.images[(lightbox.photoIndex + 1) % lightbox.images.length].base64}
+                mainSrc={lightbox.images[lightbox.photoIndex].url}
+                nextSrc={lightbox.images[(lightbox.photoIndex + 1) % lightbox.images.length].url}
                 prevSrc={
-                    lightbox.images[(lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length].base64
+                    lightbox.images[(lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length].url
                 }
                 onCloseRequest={() => {
                     setLightbox({ ...lightbox, isOpen: false });

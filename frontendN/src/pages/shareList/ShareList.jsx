@@ -23,7 +23,7 @@ import { useQuery } from "@apollo/client";
 import Box from "@mui/material/Box";
 
 import {gqlShares, gqlPost, gqlUser} from "../../gqlQuery"
-import Footer from "../footer";
+// import Footer from "../footer";
 import Table from "../../TableContainer"
 
 const ShareList = (props) => {
@@ -38,7 +38,7 @@ const ShareList = (props) => {
     notifyOnNetworkStatusChange: true,
   });
 
-  console.log("shareValues :", shareValues)
+  // console.log("shareValues :", shareValues)
 
   const [openDialogDelete, setOpenDialogDelete] = useState({
     isOpen: false,
@@ -57,7 +57,7 @@ const ShareList = (props) => {
   ///////////////
 
   const handleDelete = (id) => {
-    setUserData(userData.filter((user) => user.id !== id));
+    setUserData(userData.filter((user) => user._id !== id));
   };
 
   const handleClose = () => {
@@ -68,67 +68,62 @@ const ShareList = (props) => {
   ///////////////////////
   const columns = useMemo(
     () => [
-      {
-        Header: 'Name',
-        columns: [
-          {
-            Header: 'Username',
-            Cell: props => {
-              let value = useQuery(gqlUser, {
-                variables: {id: props.row.original.userId},
-                notifyOnNetworkStatusChange: true,
-              });
-      
-              return  value.loading 
-                      ? <LinearProgress sx={{width:"100px"}} />
-                      : <Typography variant="overline" display="block" gutterBottom>
-                          {value.data.user.data.displayName}
-                        </Typography>
-            }
-          },
-          {
-            Header: 'Post name',
-            accessor: 'postId',
-            Cell: props => {
-              let postValue = useQuery(gqlPost, {
-                variables: {id: props.value},
-                notifyOnNetworkStatusChange: true,
-              });
-      
-              return  postValue.loading 
-                      ? <LinearProgress sx={{width:"100px"}} />
-                      : <Typography variant="overline" display="block" gutterBottom>
-                          {postValue.data.post.data.title}
-                        </Typography>
-              
-            }
-          },
-          {
-            Header: 'Description',
-            accessor: 'description',
-            Cell: props => {  
-              return  <Typography>
-                        {props.value}
+        {
+          Header: 'Username',
+          Cell: props => {
+            let value = useQuery(gqlUser, {
+              variables: {id: props.row.original.userId},
+              notifyOnNetworkStatusChange: true,
+            });
+    
+            return  value.loading 
+                    ? <LinearProgress sx={{width:"100px"}} />
+                    : <Typography variant="overline" display="block" gutterBottom>
+                        {value.data.user.data.displayName}
                       </Typography>
-            }
-          },
-          {
-            Header: 'Action',
-            Cell: props => {
-              return (
-                <ButtonWrapper>
-                  <DeleteOutline
-                    className="deleteBtn"
-                    onClick={() => {
-                      setOpenDialogDelete({ isOpen: true, id: props.row.original.id });
-                    }}
-                  />
-                </ButtonWrapper>
-              );
-            }
           }
-        ],
-      }
+        },
+        {
+          Header: 'Post name',
+          accessor: 'postId',
+          Cell: props => {
+            let postValue = useQuery(gqlPost, {
+              variables: {id: props.value},
+              notifyOnNetworkStatusChange: true,
+            });
+    
+            return  postValue.loading 
+                    ? <LinearProgress sx={{width:"100px"}} />
+                    : <Typography variant="overline" display="block" gutterBottom>
+                        {_.isEmpty(postValue.data.post.data) ? "" : postValue.data.post.data.title}
+                      </Typography>
+            
+          }
+        },
+        {
+          Header: 'Description',
+          accessor: 'description',
+          Cell: props => {  
+            return  <Typography>
+                      {props.value}
+                    </Typography>
+          }
+        },
+        {
+          Header: 'Action',
+          Cell: props => {
+            return (
+              <ButtonWrapper>
+                <DeleteOutline
+                  className="deleteBtn"
+                  onClick={() => {
+                    setOpenDialogDelete({ isOpen: true, id: props.row.original.id });
+                  }}
+                />
+              </ButtonWrapper>
+            );
+          }
+        }
     ],
     []
   )
@@ -180,7 +175,7 @@ const ShareList = (props) => {
         ? <div><CircularProgress /></div> 
         : <Table
             columns={columns}
-            data={ shareValues.data.Shares.data }
+            data={ shareValues.data.shares.data }
             fetchData={fetchData}
             rowsPerPage={pageOptions}
             updateMyData={updateMyData}
@@ -219,7 +214,7 @@ const ShareList = (props) => {
           </DialogActions>
         </Dialog>
       )}
-      <Footer />
+      {/* <Footer /> */}
     </Box>
   );
 };

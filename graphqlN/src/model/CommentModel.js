@@ -7,15 +7,19 @@ const commentSchema = new Schema({
     data: [{
             userId: { type: String },
             comId: { type: String },
-            fullName: { type: String },
-            avatarUrl: { type: String },
+            // fullName: { type: String },
+            // avatarUrl: { type: String },
+            created: { type: String },
+            updated: { type: String },
             text: { type: String },
             replies: [{
                         userId: { type: String },
                         comId: { type: String },
-                        fullName: { type: String },
-                        avatarUrl: { type: String },
-                        text: { type: String }
+                        // fullName: { type: String },
+                        // avatarUrl: { type: String },
+                        text: { type: String },
+                        created: { type: String },
+                        updated: { type: String },
                     }]
             }]
 },

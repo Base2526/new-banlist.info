@@ -1,0 +1,203 @@
+@import 'config-sass.scss';
+@import 'sass-mixin/fucntion';
+//$serifthai: 'Noto Serif Thai', serif !default;
+
+// $font-stack: Helvetica, sans-serif;
+$primary-color: rgb(218, 10, 10);
+
+:root{
+  font-size: 16px;
+}
+
+a[href]{
+  color: $gray-6;
+  &:hover,
+  &:active{
+    color: $black;
+  }
+  &:visited{
+    color: $black;
+  }
+}
+
+
+@mixin fontsnotPara() {
+  font-family: $noto-san-serifthai !important;
+}
+
+@mixin createfonts($getfm) {
+
+  @if $getfm{
+    @each $fontval in $getfm {
+      #{$fontval} {
+        font-family: $font-family !important;
+      }
+    }
+  }
+  
+}
+
+
+body {
+  * {
+    font-family: $font-family !important;
+  }
+  color: $primary-color;
+  background-color: $grayf3 !important;
+   
+}
+
+// body{
+//   .MuiContainer-root{
+//     .MuiPaper-root *{
+//       @include fontsnotPara()  
+//     }
+//   }
+// }
+
+body{
+  .MuiContainer-root{
+    .MuiPaper-root {
+      .read-more-master *{
+         //@include fontsnotPara()
+         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+      }   
+    }
+    button.MuiButtonBase-root{
+      &:first-child{
+        svg{
+          // color: $green !important;
+        }
+      }
+     
+     
+    }
+  }
+}
+
+.row{
+  margin-left: -1rem;
+  margin-right: -1rem;
+  width: 100%;
+  flex-grow: 1;
+}
+.container{
+  padding-left: 1rem;
+  padding-right:1rem;
+  position: relative;
+  width: 100%;
+  @include container();
+}
+main{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-bottom: 0 !important;
+  width: 100%;
+  // @media (min-width:$md){
+  //   padding-left: 1.5rem !important;
+  // }
+  .container{
+    height: auto;
+    min-height:calc(100vh - 50px);
+  }
+}
+
+.position-relative{
+  position: relative;
+}
+
+.MuiInputBase-root {
+    &:hover{
+      &::before{
+       border-bottom: 1px solid $primary !important;
+      }
+  }
+  
+}
+
+.MuiListItemButton-gutters{
+  width: 220px;
+}
+
+.MuiSpeedDialAction-staticTooltipLabel:lang(en){
+  width: 120px;
+}
+
+// .css-wb57ya-MuiFormControl-root-MuiTextField-root{
+//   background-color: $white;
+//   // box-shadow: 0 1px 3px rgba($black, 30%);
+//   border-radius: .5rem;
+//    > .css-1gywuxd-MuiInputBase-root-MuiOutlinedInput-root{
+//     border-radius: .5rem;
+//     -webkit-border-radius: .5rem;
+//     // .css-1d3z3hw-MuiOutlinedInput-notchedOutline{
+//     //   border-color: $white;
+//     // }
+//    }
+// }
+
+///////////// somkid and new ///////////////////
+.editor {
+  border-style: solid;
+  border-width: 0.5px;
+  border-color: #8080802b;
+}
+
+.panel-comment-button-close{
+  padding: 0px !important;
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+}
+
+.notification-list-subheader{
+  display: flex;
+  flex-direction: column;
+  .MuiButton-root{
+    max-width: 80px;
+    align-self: flex-end;
+    margin-right: 1em;
+    
+  }
+}
+
+.pdpa{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 10000;
+  text-align: center;
+  background-color: aliceblue;
+  .MuiButton-root{
+    padding: 8px 8px;
+  }
+}
+///////////// somkid and new ///////////////////
+
+@include createfonts($font-head);
+
+@import 'sass-components/header';
+@import 'sass-components/breadcrumb';
+@import 'sass-components/utilities';
+@import 'sass-components/grid';
+@import 'sass-components/modal-login';
+@import 'sass-components/paging';
+@import 'sass-components/home';
+@import 'sass-pages/detail';
+@import 'sass-pages/post';
+@import 'sass-pages/posts';
+@import 'sass-pages/phone';
+@import 'sass-pages/message';
+@import 'sass-pages/profile';
+@import 'sass-pages/user-edit';
+@import 'sass-pages/userlogin';
+@import 'sass-pages/profile-view';
+@import 'sass-components/listtable';
+@import 'sass-components/footer';
+
+
+
+
+
+  
+  
+

@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react'
 import uuid from 'react-uuid'
+import moment from "moment";
 
 export const ActionContext = createContext()
 export const ActionProvider = ({
@@ -29,12 +30,12 @@ export const ActionProvider = ({
   
   const handleCancel = (id, edit) => {
     if (edit) {
-      const list = [...editArr]
-      const newList = list.filter((i) => i !== id)
+      let list = [...editArr]
+      let newList = list.filter((i) => i !== id)
       setEdit(newList)
     } else if (!edit) {
-      const list = [...replies]
-      const newList = list.filter((i) => i !== id)
+      let list = [...replies]
+      let newList = list.filter((i) => i !== id)
       setReplies(newList)
     }
   }
@@ -47,36 +48,42 @@ export const ActionProvider = ({
           {
             userId: currentUser.userId,
             comId: uuid(),
-            avatarUrl: currentUser.avatarUrl,
-            fullName: currentUser.name,
+            // avatarUrl: currentUser.avatarUrl,
+            // fullName: currentUser.name,
+            created: moment().valueOf(), 
+            updated: moment().valueOf(),
             text: text,
             notify: true
           }
         ])
       } else if (parentId && child) {
-        const newList = [...comments]
-        const index = newList.findIndex((x) => x.comId === parentId)
+        let newList = [...comments]
+        let index = newList.findIndex((x) => x.comId === parentId)
         newList[index].replies.push({
           userId: currentUser.userId,
           comId: uuid(),
-          avatarUrl: currentUser.avatarUrl,
-          fullName: currentUser.name,
+          // avatarUrl: currentUser.avatarUrl,
+          // fullName: currentUser.name,
+          created: moment().valueOf(), 
+          updated: moment().valueOf(),
           text: text,
           notify: true
         })
         setComment(newList)
       } else if (parentId && !child) {
-        const newList = [...comments]
-        const index = newList.findIndex((x) => x.comId === parentId)
-        const newReplies =
+        let newList = [...comments]
+        let index = newList.findIndex((x) => x.comId === parentId)
+        let newReplies =
           newList[index].replies === undefined
             ? []
             : [...newList[index].replies]
         newReplies.push({
           userId: currentUser.userId,
           comId: uuid(),
-          avatarUrl: currentUser.avatarUrl,
-          fullName: currentUser.name,
+          // avatarUrl: currentUser.avatarUrl,
+          // fullName: currentUser.name,
+          created: moment().valueOf(), 
+          updated: moment().valueOf(),
           text: text,
           notify: true
         })
@@ -91,32 +98,51 @@ export const ActionProvider = ({
 
   const editText = (id, text, parentId) => {
     if (parentId === undefined) {
-      const newList = [...comments]
-      const index = newList.findIndex((x) => x.comId === id)
+      let newList = [...comments]
+      let index = newList.findIndex((x) => x.comId === id)
       // newList[index].text = text
       // setComment(newList)
 
-      newList[index] = {...newList[index], text: text, notify: true}
+      newList[index] = {...newList[index], text: text, notify: true, updated: moment().valueOf()}
       setComment(newList)
     } else if (parentId !== undefined) {
-      const newList = [...comments]
-      const index = newList.findIndex((x) => x.comId === parentId)
-      const replyIndex = newList[index].replies.findIndex((i) => i.comId === id)
+      let newList = [...comments]
+      let index = newList.findIndex((x) => x.comId === parentId)
+      let replyIndex = newList[index].replies.findIndex((i) => i.comId === id)
+
+      console.log("newList :", newList)
+
       newList[index].replies[replyIndex].text = text
       newList[index].replies[replyIndex].notify = true
+      newList[index].replies[replyIndex].updated = moment().valueOf()
+
+      /*
+      console.log("newList : ", newList)
+
+      let newReplies = [...newList[index].replies]
+
+      let newObject = {...newReplies[replyIndex]}
+
+      newObject.text = text
+      newObject.notify = true
+      newObject.updated = moment().valueOf()
+
+      newReplies = [...newReplies, ]
+      console.log("newObject : ", newObject)
+      */
       setComment(newList)
     }
   }
 
   const deleteText = (id, parentId) => {
     if (parentId === undefined) {
-      const newList = [...comments]
-      const filter = newList.filter((x) => x.comId !== id)
+      let newList = [...comments]
+      let filter = newList.filter((x) => x.comId !== id)
       setComment(filter)
     } else if (parentId !== undefined) {
-      const newList = [...comments]
-      const index = newList.findIndex((x) => x.comId === parentId)
-      const filter = newList[index].replies.filter((x) => x.comId !== id)
+      let newList = [...comments]
+      let index = newList.findIndex((x) => x.comId === parentId)
+      let filter = newList[index].replies.filter((x) => x.comId !== id)
       // newList[index].replies = filter
       // setComment(newList)
 
@@ -141,7 +167,7 @@ export const ActionProvider = ({
     <ActionContext.Provider
       value={{
         onSubmit: onSubmit,
-        userImg: currentUser && currentUser.avatarUrl,
+        // userImg: currentUser && currentUser.avatarUrl,
         userId: currentUser && currentUser.userId,
         handleAction: handleAction,
         handleCancel: handleCancel,

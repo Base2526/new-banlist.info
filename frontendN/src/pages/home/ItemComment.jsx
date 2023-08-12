@@ -5,6 +5,7 @@ import CommentIcon from "@mui/icons-material/Comment";
 import _ from "lodash"
 
 import { gqlComment, subComment } from "../../gqlQuery"
+import { getHeaders } from "../../util"
 
 let unsubscribe  = null
 const ItemComment = (props) => {
@@ -18,7 +19,8 @@ const ItemComment = (props) => {
 
     const iconComment = () =>{
         let commentValues = useQuery(gqlComment, {
-          variables: {postId: item.id},
+          context: { headers: getHeaders() }, 
+          variables: {postId: item._id},
           notifyOnNetworkStatusChange: true,
         });
     
@@ -27,7 +29,7 @@ const ItemComment = (props) => {
           let {subscribeToMore} = commentValues
           unsubscribe =  subscribeToMore({
             document: subComment,
-            variables: { commentID: item.id },
+            variables: { commentID: item._id },
             updateQuery: (prev, {subscriptionData}) => {
               console.log("ItemComment updateQuery #1 >> ", prev, subscriptionData);
               if (!subscriptionData.data) return prev;
@@ -53,16 +55,14 @@ const ItemComment = (props) => {
             }
           });
     
-          return  <div>
+          return  <div className="Mui-containNoti-css">
                     <CommentIcon />
-                    <div style={{
+                    <div className="Mui-iconnoti-cSS" style={{
                       position: "absolute",
                       right: "5px",
-                      borderRadius: "5px",
                       borderStyle: "solid",
                       borderColor: "red",
-                      borderWidth: "1px",
-                      fontSize: "10px"
+                      
                     }}>{commentValues.data.comment.data.length + count}</div>
                   </div>
         }
@@ -72,7 +72,7 @@ const ItemComment = (props) => {
 
     return (
         <IconButton onClick={(e) => {
-            onPanelComment({ isOpen: true, commentId: item.id })
+            onPanelComment({ isOpen: true, commentId: item._id })
         }}>
             {iconComment()}
         </IconButton>

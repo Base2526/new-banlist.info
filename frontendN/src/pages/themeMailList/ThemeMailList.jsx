@@ -61,65 +61,60 @@ const ThemeMailList = (props) => {
   };
 
   const handleDelete = (id) => {
-    setUserData(userData.filter((user) => user.id !== id));
+    setUserData(userData.filter((user) => user._id !== id));
   };
 
   
   ///////////////////////
   const columns = useMemo(
     () => [
-      {
-        Header: 'Name',
-        columns: [
-          {
-            Header: 'Username',
-            accessor: 'name',
-          },
-          {
-            Header: 'Description',
-            accessor: 'description',
-            Cell: props => {  
-              return (
-                <Box
-                  sx={{
-                    maxHeight: "inherit",
-                    width: "100%",
-                    whiteSpace: "initial",
-                    lineHeight: "16px"
+        {
+          Header: 'Username',
+          accessor: 'name',
+        },
+        {
+          Header: 'Description',
+          accessor: 'description',
+          Cell: props => {  
+            return (
+              <Box
+                sx={{
+                  maxHeight: "inherit",
+                  width: "100%",
+                  whiteSpace: "initial",
+                  lineHeight: "16px"
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  gutterBottom
+                  dangerouslySetInnerHTML={{
+                    __html: props.value
                   }}
                 >
-                  <Typography
-                    variant="body1"
-                    gutterBottom
-                    dangerouslySetInnerHTML={{
-                      __html: props.value
-                    }}
-                  >
-                  </Typography>
-                </Box>
-              );
-            }
-          },
-          {
-            Header: 'Action',
-            Cell: props => {
-              return (
-                <ButtonWrapper>
-                  <Link to={`/theme-mail/${props.row.original.id}/edit`}>
-                    <button className="editBtn">Edit</button>
-                  </Link>
-                  <DeleteOutline
-                    className="deleteBtn"
-                    onClick={() => {
-                      setOpenDialogDelete({ isOpen: true, id: props.row.original.id });
-                    }}
-                  />
-                </ButtonWrapper>
-              );
-            }
+                </Typography>
+              </Box>
+            );
           }
-        ],
-      }
+        },
+        {
+          Header: 'Action',
+          Cell: props => {
+            return (
+              <ButtonWrapper>
+                <Link to={`/theme-mail/${props.row.original.id}/edit`}>
+                  <button className="editBtn">Edit</button>
+                </Link>
+                <DeleteOutline
+                  className="deleteBtn"
+                  onClick={() => {
+                    setOpenDialogDelete({ isOpen: true, id: props.row.original.id });
+                  }}
+                />
+              </ButtonWrapper>
+            );
+          }
+        }
     ],
     []
   )
@@ -219,7 +214,7 @@ const ThemeMailList = (props) => {
         }}
       />
 
-      <Footer />
+      {/* <Footer /> */}
     </UserListContainer>
   );
 };

@@ -26,21 +26,19 @@ import _ from "lodash"
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import { useQuery } from "@apollo/client";
-import { gqlRoles } from "../../gqlQuery"
-import Footer from "../footer";
+import { useTranslation } from "react-i18next";
 
+import { gqlRoles } from "../../gqlQuery"
 import Table from "../../TableContainer"
 
 const RoleList = (props) => {
   let history = useHistory();
+  const { t } = useTranslation();
+
   const [pageOptions, setPageOptions] = useState([30, 50, 100]);  
   const [pageIndex, setPageIndex] = useState(0);  
   const [pageSize, setPageSize] = useState(pageOptions[0])
-
-  const [openDialogDelete, setOpenDialogDelete] = useState({
-    isOpen: false,
-    id: ""
-  });
+  const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "" });
 
   const rolesValues = useQuery(gqlRoles, { notifyOnNetworkStatusChange: true });
 
@@ -78,50 +76,45 @@ const RoleList = (props) => {
     () => [
       {
         Header: 'Name',
-        columns: [
-          {
-            Header: 'Name',
-            accessor: 'name',
-          },
-          {
-            Header: 'Description',
-            accessor: 'description',
-            Cell: props => {
+        accessor: 'name',
+      },
+      {
+        Header: 'Description',
+        accessor: 'description',
+        Cell: props => {
 
-              return (
-                <Box
-                  sx={{
-                    maxHeight: "inherit",
-                    width: "100%",
-                    whiteSpace: "initial",
-                    lineHeight: "16px"
-                  }}
-                >
-                  <Typography
-                    variant="body1"
-                    gutterBottom
-                    dangerouslySetInnerHTML={{
-                      __html: props.row.original.description
-                    }}
-                  />
-                </Box>
-              );
-            }
-          },
-          {
-            Header: 'Action',
-            Cell: props => {
-              console.log("Cell :", props)
-              return  <div>
-                        <Link to={`/role/${props.row.original.id}/edit`}>
-                          <button>Edit</button>
-                        </Link>
-                        <button>Delete</button>
-                      </div>
-            }
-          },
-        ],
-      }
+          return (
+            <Box
+              sx={{
+                maxHeight: "inherit",
+                width: "100%",
+                whiteSpace: "initial",
+                lineHeight: "16px"
+              }}
+            >
+              <Typography
+                variant="body1"
+                gutterBottom
+                dangerouslySetInnerHTML={{
+                  __html: props.row.original.description
+                }}
+              />
+            </Box>
+          );
+        }
+      },
+      {
+        Header: 'Action',
+        Cell: props => {
+          console.log("Cell :", props)
+          return  <div>
+                    <Link to={`/role/${props.row.original.id}/edit`}>
+                      <button>Edit</button>
+                    </Link>
+                    <button>Delete</button>
+                  </div>
+        }
+      },
     ],
     []
   )
@@ -173,7 +166,7 @@ const RoleList = (props) => {
          ?  <div><CircularProgress /></div> 
          :  <Table
               columns={columns}
-              data={rolesValues.data.Roles.data}
+              data={rolesValues.data.roles.data}
               fetchData={fetchData}
               rowsPerPage={pageOptions}
               updateMyData={updateMyData}
@@ -189,11 +182,9 @@ const RoleList = (props) => {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
+          <DialogTitle id="alert-dialog-title">{t("confirm_delete")}</DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Delete
-            </DialogContentText>
+          <DialogContentText id="alert-dialog-description">{openDialogDelete.description}</DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button
@@ -203,12 +194,8 @@ const RoleList = (props) => {
 
                 setOpenDialogDelete({ isOpen: false, id: "" });
               }}
-            >
-              Delete
-            </Button>
-            <Button variant="contained" onClick={handleClose} autoFocus>
-              Close
-            </Button>
+            >{t("delete")}</Button>
+            <Button variant="contained" onClick={handleClose} autoFocus>{t("close")}</Button>
           </DialogActions>
         </Dialog>
       )}
@@ -223,7 +210,7 @@ const RoleList = (props) => {
         }}
       />
 
-      <Footer />
+      {/* <Footer /> */}
     </Box>
   );
 };

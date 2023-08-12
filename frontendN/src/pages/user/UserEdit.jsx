@@ -33,11 +33,12 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { useHistory, useLocation } from "react-router-dom";
 
 import { useQuery, useMutation } from "@apollo/client";
+import { useTranslation } from "react-i18next";
+
 import {  gqlUser, 
           gqlRoles, 
           gqlUpdateUser, 
           gqlPostsByUser, 
-          gqlConversations, 
           gqlBookmarksByUserId,
           gqlFollower,
           gqlFollowingByUserId,
@@ -69,6 +70,8 @@ let initValues =  {
 
 const UserEdit = (props) => {
   let history = useHistory();
+  const { t } = useTranslation();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showCofirmPassword, setShowCofirmPassword] = useState(false);
   const [input, setInput] = useState(initValues);
@@ -76,6 +79,8 @@ const UserEdit = (props) => {
   const [page, setPage] = useState(0);  
   const [perPage, setPerPage] = useState(pageOptions[0])
   const { pathname } = useLocation();
+
+  const [fileProfile, setFileProfile] = useState(null);
 
   let userId= "62a2f65dcf7946010d3c7547";
 
@@ -98,12 +103,11 @@ const UserEdit = (props) => {
     notifyOnNetworkStatusChange: true,
   });
 
+  console.log("rolesValue :", rolesValue)
+
   let { id } = useParams();
 
-  editValues = useQuery(gqlUser, {
-    variables: {id},
-    notifyOnNetworkStatusChange: true,
-  });
+  editValues = useQuery(gqlUser, { variables: {id}, notifyOnNetworkStatusChange: true });
 
   console.log("editValues : ", editValues, input)
 
@@ -114,7 +118,7 @@ const UserEdit = (props) => {
       if(!loading){
         let {status, data} = editValues.data.user
 
-        console.log("edit editValues : ", data)
+        console.log("edit editValues : ", editValues.data.user)
         if(status){
           setInput({
             username: data.username,
@@ -130,6 +134,23 @@ const UserEdit = (props) => {
  
   const [onUpdateUser, resultUpdateUser] = useMutation(gqlUpdateUser, 
     {
+      update: (cache, {data: {updateUser}}) => {
+        const data1 = cache.readQuery({ query: gqlUser, variables: {id} });
+
+        let newUser = {...data1.user}
+        newUser = {...newUser, data: updateUser}
+
+        cache.writeQuery({
+          query: gqlUser,
+          data: { user: newUser },
+          variables: {id}
+        });
+      },
+      context: {
+        headers: {
+          'apollo-require-preflight': true,
+        },
+      },
       onCompleted({ data }) {
         history.push("/users");
       }
@@ -195,28 +216,28 @@ const UserEdit = (props) => {
           break;
         }
 
-        case "password": {
-          if (!value) {
-            stateObj[name] = "Please enter Password.";
-          } else if (input.confirmPassword && value !== input.confirmPassword) {
-            stateObj["confirmPassword"] =
-              "Password and Confirm Password does not match.";
-          } else {
-            stateObj["confirmPassword"] = input.confirmPassword
-              ? ""
-              : error.confirmPassword;
-          }
-          break;
-        }
+        // case "password": {
+        //   if (!value) {
+        //     stateObj[name] = "Please enter Password.";
+        //   } else if (input.confirmPassword && value !== input.confirmPassword) {
+        //     stateObj["confirmPassword"] =
+        //       "Password and Confirm Password does not match.";
+        //   } else {
+        //     stateObj["confirmPassword"] = input.confirmPassword
+        //       ? ""
+        //       : error.confirmPassword;
+        //   }
+        //   break;
+        // }
 
-        case "confirmPassword": {
-          if (!value) {
-            stateObj[name] = "Please enter Confirm Password.";
-          } else if (input.password && value !== input.password) {
-            stateObj[name] = "Password and Confirm Password does not match.";
-          }
-          break;
-        }
+        // case "confirmPassword": {
+        //   if (!value) {
+        //     stateObj[name] = "Please enter Confirm Password.";
+        //   } else if (input.password && value !== input.password) {
+        //     stateObj[name] = "Password and Confirm Password does not match.";
+        //   }
+        //   break;
+        // }
 
         default:
           break;
@@ -227,13 +248,14 @@ const UserEdit = (props) => {
   };
 
   const rolesView = () =>{
-    let value = _.filter(rolesValue.data.Roles.data, v => input.roles.includes(v.id))
+
+    let value = _.filter(rolesValue.data.roles.data, v => input.roles.includes(v.id))
     
     return  <Autocomplete
               multiple
               id="user-roles"
               name="userRoles"
-              options={ rolesValue.data.Roles.data }
+              options={ rolesValue.data.roles.data }
               getOptionLabel={(option) => option.name}
               value={ value }
               renderInput={(params) => (
@@ -288,16 +310,16 @@ const UserEdit = (props) => {
   const submitForm = async(event) => {
     event.preventDefault();
 
-    console.log("submitForm : onSubmitForm ", input);
+    console.log("submitForm : onSubmitForm ", editValues.data.user.data);
 
-    let image = []
-    if(input.profile !== undefined){
-      if( input.profile.base64 ){
-        image = [_.omitDeep(input.profile, ['__typename', 'id'])]
-      }else{
-        image = [await convertFileToBase64(input.profile)]
-      }
-    }
+    // let image = []
+    // if(input.profile !== undefined){
+    //   if( input.profile.base64 ){
+    //     image = [_.omitDeep(input.profile, ['__typename', 'id'])]
+    //   }else{
+    //     image = [await convertFileToBase64(input.profile)]
+    //   }
+    // }
 
     let newInput = {
       username: input.username,
@@ -305,11 +327,15 @@ const UserEdit = (props) => {
       password: input.password,
       roles: input.roles,
       isActive: input.isActive,
-      image
+      // image
+    }
+
+    if(fileProfile !== null){
+      newInput = {...newInput, files: fileProfile}
     }
 
     onUpdateUser({ variables: { 
-      id: editValues.data.user.data.id,
+      id: editValues.data.user.data._id,
       input: newInput
     }});
   };
@@ -324,11 +350,11 @@ const UserEdit = (props) => {
                     }}
                     onSubmit={submitForm}
                   >
-                    <div>
+                    <div className="Mui-dblockavatar">
                       <Typography variant="overline" display="block" gutterBottom>
                         Profile
                       </Typography>
-                      <Stack direction="row" spacing={2}>
+                      <Stack direction="row" spacing={2} className="Mui-wrapsrcimg">
                         <Avatar
                           className={"user-profile"}
                           sx={{
@@ -337,28 +363,32 @@ const UserEdit = (props) => {
                           }}
                           variant="rounded"
                           alt="Example Alt"
-                          src={input.profile == undefined ? "" : input.profile.base64 ? input.profile.base64: URL.createObjectURL(input.profile)}
+                          // src={input.profile == undefined ? "" : input.profile.url ? input.profile.url: URL.createObjectURL(input.profile)}
+                        
+                          src={ fileProfile != null ? URL.createObjectURL(fileProfile) :  input.profile?.url ? input.profile.url : "" }
                         />
+
+                        <label htmlFor="profile">
+                          <Input
+                            accept="image/*"
+                            id="profile"
+                            name="file"
+                            // multiple
+                            type="file"
+                            onChange={(event) => {
+                              setFileProfile(event.target.files[0])
+                            }}
+                          />
+                          <IconButton
+                            color="primary"
+                            aria-label="upload picture"
+                            component="span"
+                          >
+                            <PhotoCamera />
+                          </IconButton>
+                        </label>
                       </Stack>
-                      <label htmlFor="profile">
-                        <Input
-                          accept="image/*"
-                          id="profile"
-                          name="file"
-                          // multiple
-                          type="file"
-                          onChange={(e) => {
-                            setInput({...input, profile:e.target.files[0]})
-                          }}
-                        />
-                        <IconButton
-                          color="primary"
-                          aria-label="upload picture"
-                          component="span"
-                        >
-                          <PhotoCamera />
-                        </IconButton>
-                      </label>
+                      
                     </div>
                     <TextField
                       id="user-username"
@@ -395,7 +425,7 @@ const UserEdit = (props) => {
                       label="Password"
                       variant="filled"
                       type={showPassword ? "text" : "password"} // <-- This is where the magic happens
-                      required
+                      // required
                       value={input.password}
                       onChange={(e)=>{
                         setInput({...input, password:e.target.value})
@@ -424,7 +454,7 @@ const UserEdit = (props) => {
                       label="Confirm password"
                       variant="filled"
                       type={showCofirmPassword ? "text" : "password"}
-                      required
+                      // required
                       value={input.confirmPassword}
                       onChange={(e)=>{
                         setInput({...input, confirmPassword:e.target.value})
@@ -511,12 +541,14 @@ const UserEdit = (props) => {
   }
 
   return (
-    <div>
+    <div className="page-useredit pl-2 pr-2 mb-4">
+      <div className="MuiBox-root-bcss">
       {
         editValues != null && editValues.loading
         ? <div><CircularProgress /></div> 
         : mainView()
       }
+      </div>
     </div>
   );
 };

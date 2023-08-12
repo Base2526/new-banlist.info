@@ -41,3 +41,30 @@ https://cloudnweb.dev/2021/06/react-table-pagination/
 search bar Autocomplete
 https://codesandbox.io/s/recursing-monad-06g3xh?file=/src/100movies.js
 https://codesandbox.io/s/445h05?file=/demo.tsx:790-802
+
+
+// CKEditor
+https://codesandbox.io/s/charming-christian-wo3z0p?file=/src/App.js:1446-1455
+https://stackoverflow.com/questions/23538462/how-to-remove-buttons-from-ckeditor-4
+
+
+
+// login with github
+https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app
+https://levelup.gitconnected.com/how-to-implement-login-with-github-in-a-react-app-bd3d704c64fc
+
+// react js : i18next
+https://lokalise.com/blog/how-to-internationalize-react-application-using-i18next/
+https://stackoverflow.com/questions/49745508/react-native-create-dynamic-string-related-to-i18n
+
+Dialog 
+https://codesandbox.io/s/zealous-carson-tj3p2w?file=/demo.tsx:1226-1230
+
+
+popup notification
+https://codesandbox.io/s/elastic-babycat-qdzwbq?file=/demo.js:75-139
+https://codesandbox.io/s/still-paper-pg0evh?file=/demo.tsx
+
+
+production, how to hide all code it?
+https://stackoverflow.com/questions/51415780/create-react-app-is-showing-all-my-code-in-production-how-to-hide-it

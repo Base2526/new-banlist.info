@@ -20,28 +20,29 @@ import { Avatar } from "@chatscope/chat-ui-kit-react";
 
 import { gqlUser } from "../../gqlQuery"
 
+import { convertDate, getHeaders } from "../../util"
+
 const ItemHeader = (props) => {
     let history = useHistory();
 
     let { index, item, onAnchorElSettingOpen} = props 
     
     let userValue = useQuery(gqlUser, {
+        context: { headers: getHeaders() }, 
         variables: {id: item.ownerId},
         notifyOnNetworkStatusChange: true,
     });
 
-    if( ! userValue.loading){
-        if(userValue.data.user.data == null){
+    if(!userValue.loading){
+        if(userValue.data.user == null || userValue.data.user.data ==null ){
             return <div />
         }
-
         let user = userValue.data.user.data
-
         return  <CardHeader
                     avatar={<Avatar 
                             className={"card-header-title"} 
-                            src={user.image[0].base64}
-                            onClick={(e)=> history.push("/user/" + user.id +"/view") }
+                            src={user.image[0]?.url}
+                            onClick={(e)=> history.push("/user/" + user._id +"/view") }
                             // status="available" 
                             />}
                     action={
@@ -52,10 +53,10 @@ const ItemHeader = (props) => {
                         </IconButton>
                     }
                     title={ <Typography className={"card-header-title"} onClick={(e)=>{
-                        history.push("/user/" + user.id +"/view");
+                        history.push("/user/" + user._id +"/view");
                     }} 
                     variant="subtitle2" gutterBottom component="div">{user.displayName}</Typography> }
-                    subheader={moment(item.createdAt).format('MMMM Do YYYY')}
+                    subheader={convertDate(moment(item.createdAt).format('D MMM YYYY'))}
                 />
     }
 

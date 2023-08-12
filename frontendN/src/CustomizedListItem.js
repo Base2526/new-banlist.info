@@ -9,7 +9,12 @@ import Collapse from "@material-ui/core/Collapse";
 import Divider from '@mui/material/Divider';
 import { useLocation, useHistory } from "react-router-dom";
 
+import { useTranslation } from "react-i18next";
+
 const CustomizedListItem = (props) => {
+
+  const { t } = useTranslation();
+
   let location = useLocation();
   let history = useHistory();
   let [state, setState] = useState(false);
@@ -34,7 +39,7 @@ const CustomizedListItem = (props) => {
         <ListItemIcon>
           {item.Icon}
         </ListItemIcon>
-        <ListItemText primary={item.Name} />
+        <ListItemText primary={t(item.Name)} primaryTypographyProps={{ style: { whiteSpace: "normal" } }} />
         {item.Sheets && (state ? <ExpandLess /> : <ExpandMore />)}
       </ListItemButton>
       {item.Sheets && (
@@ -52,7 +57,7 @@ const CustomizedListItem = (props) => {
                   <ListItemIcon>
                     {sheet.Icon}
                   </ListItemIcon>
-                  <ListItemText key={sheet.Id} primary={sheet.Title} />
+                  <ListItemText key={sheet.Id} primary={t(sheet.Title)} primaryTypographyProps={{ style: { whiteSpace: "normal" } }}/>
                 </ListItemButton>
               );
             })}

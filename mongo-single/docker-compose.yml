@@ -1,0 +1,31 @@
+version: '3.3'
+
+services:
+  mongo:
+    image: mongo
+    expose:
+      - 27017
+    volumes:
+      - ./data:/data/db
+    networks:
+      - bot
+  mongoexpress:
+    image: mongo-express
+    ports:
+      - "8089:8081"
+    links:
+      - mongo
+    environment: 
+      - ME_CONFIG_MONGODB_URL=mongodb://mongo:27017
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_BASICAUTH_USERNAME=dev
+      - ME_CONFIG_BASICAUTH_PASSWORD=dev
+    depends_on:
+      - mongo
+    networks:
+      - bot
+
+networks:
+  bot:
+    external:
+      name: banlist-network

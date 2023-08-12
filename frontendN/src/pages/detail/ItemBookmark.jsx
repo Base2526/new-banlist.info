@@ -11,7 +11,7 @@ import CommentIcon from "@mui/icons-material/Comment";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import _ from "lodash"
 
-import { gqlIsBookmark, gqlCreateAndUpdateBookmark } from "../../gqlQuery"
+import { gqlIsBookmark } from "../../gqlQuery"
 
 const ItemBookmark = (props) => {
     let {user, postId, onBookmark, onDialogLogin} = props 
@@ -20,7 +20,7 @@ const ItemBookmark = (props) => {
       if( _.isEmpty(user) ){
         onDialogLogin(true)
       }else{
-        onBookmark({ postId: postId, userId: user.id, status })
+        onBookmark({ postId: postId, status })
       }
     }
 
@@ -30,12 +30,13 @@ const ItemBookmark = (props) => {
                 </IconButton>
     }
     const bmValus = useQuery(gqlIsBookmark, {
-        variables: {userId: user.id, postId: postId},
+        variables: {postId: postId},
         notifyOnNetworkStatusChange: true,
     });
     
     if(!bmValus.loading){
-        if(bmValus.data.isBookmark.data === null){
+        // if(bmValus.data.isBookmark.data === null){
+        if(bmValus.data.isBookmark == null || bmValus.data.isBookmark.data ==null ){
             return  <IconButton onClick={(e) => {
                         handleCreateBookmark(true)
                     }}>

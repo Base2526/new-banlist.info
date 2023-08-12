@@ -18,3 +18,22 @@ https://iuxnw.sse.codesandbox.io/
 
 apollow upload file
 https://medium.com/geekculture/multiple-file-upload-with-apollo-server-3-react-graphql-da87880bc01d
+
+
+docker-compose 
+docker-compose -f docker-compose.dev.yml build
+docker-compose -f docker-compose.prod.yml build
+
+
+// SSL Websocket proxy with Nginx for Graphql Subscriptions
+https://sandny.com/2022/05/12/ssl-websocket-proxy-with-nginx-for-graphql-subscriptions/
+https://phoenixnap.com/kb/docker-nginx-reverse-proxy
+
+
+https://developer.twitter.com/en/apps
+
+
+
+facebook  REACT_APP_FACEBOOK_APPID 
+dev   : 448400870781752
+prodd : 1227094848056324

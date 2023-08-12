@@ -20,28 +20,48 @@ import Avatar from "@mui/material/Avatar";
 import _ from "lodash"
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
+import { useTranslation } from "react-i18next";
 
-import {gqlBanks} from "../../gqlQuery"
-import Footer from "../footer";
-
+import {gqlBanks, gqlDeleteBank} from "../../gqlQuery"
 import Table from "../../TableContainer"
 
 const BankList = (props) => {
   let history = useHistory();
+  const { t } = useTranslation();
 
   const [pageOptions, setPageOptions] = useState([30, 50, 100]);  
   const [pageIndex, setPageIndex] = useState(0);  
   const [pageSize, setPageSize] = useState(pageOptions[0])
 
-  const [openDialogDelete, setOpenDialogDelete] = useState({
-    isOpen: false,
-    id: ""
-  });
+  const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "", description: "" });
 
   const bankValues = useQuery(gqlBanks, { notifyOnNetworkStatusChange: true });
 
   console.log("bankValues :", bankValues)
+
+  const [onDeleteBank, resultDeleteBank] = useMutation(gqlDeleteBank, 
+    {
+      update: (cache, {data: {deleteBank}}) => {
+        const data1 = cache.readQuery({
+          query: gqlBanks,
+        });
+
+        let newBanks = {...data1.banks}
+        let newData   = _.filter(data1.banks.data, bank => bank._id !== deleteBank._id)
+        newBanks = {...newBanks, total: newData.length, data:newData }
+
+        cache.writeQuery({
+          query: gqlBanks,
+          data: { banks: newBanks },
+        });
+      },
+      onCompleted({ data }) {
+        history.push("/banks");
+      }
+    }
+  );
+  console.log("resultDeleteBank :", resultDeleteBank)
 
   ///////////////
   const fetchData = useCallback(
@@ -53,71 +73,61 @@ const BankList = (props) => {
   })
   ///////////////
 
-  const handleClickOpen = () => {
-    // setOpen(true);
-
-    setOpenDialogDelete({ ...openDialogDelete, isOpen: true });
-  };
-
   const handleClose = () => {
     // setOpen(false);
     setOpenDialogDelete({ ...openDialogDelete, isOpen: false });
   };
 
   const handleDelete = (id) => {
-    setUserData(userData.filter((user) => user.id !== id));
+    onDeleteBank({ variables: { id } });
   };
 
-  
   ///////////////////////
   const columns = useMemo(
     () => [
-      {
-        Header: 'Name',
-        columns: [
-          {
-            Header: 'Name',
-            accessor: 'name',
-          },
-          {
-            Header: 'Description',
-            accessor: 'description',
-            Cell: props => {
+        {
+          Header: 'Name',
+          accessor: 'name',
+        },
+        {
+          Header: 'Description',
+          accessor: 'description',
+          Cell: props => {
 
-              return (
-                <Box
-                  sx={{
-                    maxHeight: "inherit",
-                    width: "100%",
-                    whiteSpace: "initial",
-                    lineHeight: "16px"
+            return (
+              <Box
+                sx={{
+                  maxHeight: "inherit",
+                  width: "100%",
+                  whiteSpace: "initial",
+                  lineHeight: "16px"
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  gutterBottom
+                  dangerouslySetInnerHTML={{
+                    __html: props.row.original.description
                   }}
-                >
-                  <Typography
-                    variant="body1"
-                    gutterBottom
-                    dangerouslySetInnerHTML={{
-                      __html: props.row.original.description
-                    }}
-                  />
-                </Box>
-              );
-            }
-          },
-          {
-            Header: 'Action',
-            Cell: props => {
-              console.log("Cell :", props)
-              return  <div>
-                        <Link to={`/bank/${props.row.original.id}/edit`}>
-                          <button>Edit</button>
-                        </Link>
-                        <button>Delete</button>
-                      </div>
-            }
-          },
-        ],
-      }
+                />
+              </Box>
+            );
+          }
+        },
+        {
+          Header: 'Action',
+          Cell: props => {
+            console.log("Cell :", props)
+
+            let {_id, name} = props.row.original
+            return  <div>
+                      <Link to={`/bank/${_id}/edit`}><button>{t("edit")}</button></Link>
+                      <button onClick={(e)=>{
+                        setOpenDialogDelete({ isOpen: true, id: _id, description: name })
+                      }}>{t("delete")}</button>
+                    </div>
+          }
+        },
     ],
     []
   )
@@ -148,16 +158,6 @@ const BankList = (props) => {
     //   })
     // )
   }
-
-  // After data changes, we turn the flag back off
-  // so that if data actually changes when we're not
-  // editing it, the page is reset
-  // useEffect(() => {
-  //   skipResetRef.current = false
-
-  //   console.log("data :", data)
-  // }, [data])
-
   //////////////////////
 
   return (
@@ -184,11 +184,9 @@ const BankList = (props) => {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
+          <DialogTitle id="alert-dialog-title">{t("confirm_delete")}</DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Delete
-            </DialogContentText>
+            <DialogContentText id="alert-dialog-description">{openDialogDelete.description}</DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button
@@ -196,14 +194,10 @@ const BankList = (props) => {
               onClick={() => {
                 handleDelete(openDialogDelete.id);
 
-                setOpenDialogDelete({ isOpen: false, id: "" });
+                setOpenDialogDelete({ isOpen: false, id: "", description: "" });
               }}
-            >
-              Delete
-            </Button>
-            <Button variant="contained" onClick={handleClose} autoFocus>
-              Close
-            </Button>
+            >{t("delete")}</Button>
+            <Button variant="contained" onClick={handleClose} autoFocus>{t("close")}</Button>
           </DialogActions>
         </Dialog>
       )}
@@ -216,8 +210,6 @@ const BankList = (props) => {
           history.push("/bank/new");
         }}
       />
-
-      <Footer />
     </UserListContainer>
   );
 };

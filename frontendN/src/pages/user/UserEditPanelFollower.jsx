@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo, useRef } from "react";
+import React, { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import {
   NewUserContainer,
   NewUserForm,
@@ -17,10 +17,15 @@ deepdash(_);
 
 import ReadMoreMaster from "../../utils/ReadMoreMaster"
 import Table from "../../TableContainer"
-import { gqlCreateAndUpdateBookmark, gqlUser} from "../../gqlQuery"
+import { gqlUser} from "../../gqlQuery"
 
 const UserEditPanelFollower = ({followers}) => {
 
+    const [pageOptions, setPageOptions] = useState([30, 50, 100]);  
+    const [pageIndex, setPageIndex] = useState(0);  
+    const [pageSize, setPageSize] = useState(pageOptions[0])
+
+    /*
     const [onCreateBookmark, resultCreateBookmarkValues] = useMutation(gqlCreateAndUpdateBookmark
         , {
             update: (cache, {data: {createBookmark}}) => {
@@ -55,6 +60,7 @@ const UserEditPanelFollower = ({followers}) => {
     );
 
     console.log("resultCreateBookmarkValues :", resultCreateBookmarkValues)
+    */
 
     ///////////////////////
     const columns = useMemo(
@@ -68,21 +74,23 @@ const UserEditPanelFollower = ({followers}) => {
                 Cell: props =>{
 
                     let userValue = useQuery(gqlUser, {
-                        variables: {id: props.row.original.userId},
+                        variables: {id: props.row.original._id},
                         notifyOnNetworkStatusChange: true,
                     });
 
+                    console.log("userValue :", userValue, props.row.original)
+
                     return  userValue.loading 
-                    ?   <LinearProgress sx={{width:"100px"}} />
-                    :   <Avatar
-                            sx={{
-                                height: 100,
-                                width: 100
-                            }}
-                            variant="rounded"
-                            alt="Example Alt"
-                            src={userValue.data.user.data.image[0].base64}
-                            />
+                            ?   <LinearProgress sx={{width:"100px"}} />
+                            :   <Avatar
+                                    sx={{
+                                        height: 100,
+                                        width: 100
+                                    }}
+                                    variant="rounded"
+                                    alt="Example Alt"
+                                    src={userValue.data.user.data.image[0].url}
+                                    />
 
                     // if(props.row.original.image.length < 1){
                     //     return <Avatar
@@ -112,7 +120,7 @@ const UserEditPanelFollower = ({followers}) => {
                 Cell: props =>{
 
                     let userValue = useQuery(gqlUser, {
-                        variables: {id: props.value},
+                        variables: {id: props.row.original._id},
                         notifyOnNetworkStatusChange: true,
                     });
 
@@ -165,11 +173,22 @@ const UserEditPanelFollower = ({followers}) => {
     //   console.log("data :", data)
     // }, [data])
     //////////////////////
+
+    ///////////////
+    const fetchData = useCallback(({ pageSize, pageIndex }) => {
+        console.log("fetchData is being called #1")
+
+        setPageSize(pageSize)
+        setPageIndex(pageIndex)
+    })
+    ///////////////
     
     return (  <div style={{ height: 700, width: "1000px" }}>
                     <Table
                         columns={columns}
                         data={followers}
+                        fetchData={fetchData}
+                        rowsPerPage={pageOptions}
                         updateMyData={updateMyData}
                         skipReset={skipResetRef.current}
                         isDebug={false}

@@ -24,7 +24,7 @@ import { useContext } from "react";
 function Socket() {
   const [userData, setUserData] = useContext(UserContext);
   const { id } = useParams();
-  const [user] = userData.filter((user) => user.id === parseInt(id));
+  const [user] = userData.filter((user) => user._id === parseInt(id));
 
   return (
     <UserContainer>
@@ -53,7 +53,7 @@ function Socket() {
               <CalendarToday className="userDisplayIcon" />
               <span className="userInfoTitle">{user.date}</span>
             </div>
-            <span className="detailTitle">Contact Details</span>
+            <span className="detailTitle">Report Details</span>
             <div className="userInfo">
               <PhoneAndroid className="userDisplayIcon" />
               <span className="userInfoTitle">{user.phone}</span>

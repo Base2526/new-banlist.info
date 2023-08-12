@@ -1,0 +1,74 @@
+
+.Mui-usercontainerss{
+    max-width: 600px;
+    width: 100%;
+    margin: auto;
+    padding: 1rem;
+    background-color: $white;
+    border-radius: .25rem;
+    border: 1px solid $gray-d;
+
+    .form-input{
+        flex-direction: column;
+        margin-bottom: 1.5rem;
+        color: rgba($black, .6);
+        label{
+            flex-grow: 1;
+        }
+        .input-bl-form{
+           width: 100%;
+           display: block;
+           height: calc(1.5em + 1rem + 2px);
+           padding: .375rem .75rem .375rem 2rem;
+           font-size: 1rem;
+           font-weight: 400;
+           line-height: 1.2;
+           background-color: $white;
+           background-image: none;
+           background-clip: padding-box;
+           border: 1px solid $gray-d;
+           border-radius: .25rem;
+           color: $bl-dark-4x !important;
+          
+        }
+    }
+    .wrapper-form{
+        width: 100%;
+        flex-grow: 1;
+        .MuiSvgIcon-root{
+            position: absolute;
+            top: 20%;
+            left: .5rem;
+            z-index: 5;
+        }
+    }
+
+    button[type=submit],
+    button.login-github{
+        width: 100%;
+        height: calc(1.5em + 1rem + 2px);
+        padding: .375rem .75rem .375rem ;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.2;
+        border: 1px solid $gray-d;
+        border-radius: .25rem;
+        margin-bottom: 1.5rem;
+        cursor: pointer;
+        &:hover{
+            background-color: darken($grayf3, 3%)  !important;
+            box-shadow: 1px 1px 5px rgba($black, .25);
+            border: transparent;
+        }
+    }
+
+    button.login-github{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .left{
+            margin-right: .5rem;
+        }
+    }
+
+}

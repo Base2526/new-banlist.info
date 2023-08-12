@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from "react";
-
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import Typography from "@material-ui/core/Typography";
+import { Menu as MenuIcon, MenuOpen as MenuOpenIcon } from '@mui/icons-material';
 import styled from "styled-components";
 import classNames from "classnames";
 import Button from "@mui/material/Button";
-import { NotificationsNone, Language, Settings, Comment as CommentIcon } from "@material-ui/icons";
+import { NotificationsNone, AccountCircle, Comment as CommentIcon } from "@material-ui/icons";
 import { Link, useHistory } from "react-router-dom";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
+import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem} from "@material-ui/core";
+
 import { connect } from "react-redux";
 import _ from "lodash"
+import { useTranslation } from "react-i18next";
 
-// import { isAuth, logout} from "./AuthProvider"
+import i18n from './translations/i18n';
+import {getCurrentLanguage} from "./util"
+import PopperNotifications from "./PopperNotifications";
 
 export const TopRight = styled.div`
   display: flex;
@@ -46,19 +43,26 @@ export const TopIconBadge = styled.span`
 `;
 
 const MyAppBar = (props) =>{
-
-  let {conversations, classes, onDrawerOpen, onDialogLogin, user, notifications} = props
-
+  let { t } = useTranslation();
+  let [language, setLanguage] = useState('en');
+  let {conversations, classes, onDrawerOpen, onDialogLogin, user, notifications, open} = props
   let history = useHistory();
-  const [anchorEl, setAnchorEl] = useState(null)
+  let [anchorEl, setAnchorEl] = useState(null)
   let [conversationsBadge, setConversationsBadge] = useState(0)
+  let [popperAnchorEl, setPopperAnchorEl] = useState(null);
+
+  const handleClickPopperAnchorEl = (event) => {
+    setPopperAnchorEl(event.currentTarget);
+  };
 
   useEffect(()=>{
-    // console.log("conversations :", conversations)
-
+    console.log("popperAnchorEl")
+  }, [popperAnchorEl])
+  
+  useEffect(()=>{
     let countBadge = 0;
     _.map(conversations, conversation=>{
-      let member = _.find( conversation.members, member => member.userId === user.id );
+      let member = _.find( conversation.members, member => member.userId === user._id );
       if(!_.isEmpty(member)) countBadge += member.unreadCnt
     })
     setConversationsBadge(countBadge)
@@ -68,12 +72,25 @@ const MyAppBar = (props) =>{
     setAnchorEl(null)
   }
 
+  const handleChangeLanguage=(e)=>{
+    e.preventDefault();
+    setLanguage(e.target.value);
+    i18n.changeLanguage(e.target.value);
+
+    localStorage.setItem('i18n', e.target.value);
+  }
+
+  const handleClosePopperAnchorEl =(e)=>{
+    setPopperAnchorEl(null)
+  }
+
   return  <AppBar
             position="fixed"
             className={classes.appBar}
             fooJon={classNames(classes.appBar, {
               [classes.appBarShift]: Boolean(anchorEl)
             })}>
+            
             <Toolbar disableGutters={true}>
               <IconButton
                 color="inherit"
@@ -81,31 +98,51 @@ const MyAppBar = (props) =>{
                 onClick={onDrawerOpen}
                 className={classes.menuButton}
               >
-                <MenuIcon
+                {/* <MenuIcon
                   classes={{
                     root: Boolean(anchorEl)
                       ? classes.menuButtonIconOpen
                       : classes.menuButtonIconClosed
                   }}
-                />
+                /> */}
+
+                {
+                  open
+                  ? <MenuOpenIcon classes={{ root: classes.menuButtonIconOpen }} />
+                  : <MenuIcon classes={{ root: classes.menuButtonIconClosed }} />
+                }
               </IconButton>
               <Typography
                 variant="h6"
                 color="inherit"
                 className={classes.grow}
                 onClick={(e)=>history.push("/")}>
-                BANLIST.INFO
+                BANLIST.INFO เช็ค-แจ้ง-ตรวงสอบ คนโกง, มิจฉาชีพ
               </Typography>
+
+              
+              <div style={{"marginRight": "10px"}} className="lang-contain">
+                <button value='en' onClick={handleChangeLanguage} className={(getCurrentLanguage() == "en" ? "lang-en active" : "lang-en")}> EN </button>
+                <button value='th' onClick={handleChangeLanguage} className={(getCurrentLanguage() == "th" ? "lang-en active" : "lang-en")}> TH </button>
+              </div>
+              
               {
                 !_.isEmpty(user)
                 ? <TopRight>
-                    <Link to="/notification">
+                    {/* <Link to="/notification"> */}
+                    <div onClick={handleClickPopperAnchorEl}>
                       <IconContainer >
                         <NotificationsNone />
                         {_.isEmpty(notifications) ? "" : <TopIconBadge>{notifications.length}</TopIconBadge>}
                       </IconContainer>
-                    </Link>
-
+                      {
+                        Boolean(popperAnchorEl) &&  <PopperNotifications 
+                                                      {...props}
+                                                      popperAnchorEl={popperAnchorEl}
+                                                      setPopperAnchorEl={handleClosePopperAnchorEl} 
+                                                      />
+                      }
+                    </div>
                     {
                       !_.isEmpty(conversations)  && <Link to="/message">
                                                       <IconContainer>
@@ -143,12 +180,7 @@ const MyAppBar = (props) =>{
                           <MenuItem onClick={()=>{
                             history.push("/me")
                             handleClose()
-                          }}>Profiles</MenuItem>
-                          {/* <MenuItem onClick={()=>{
-                            logout()
-                            history.push("/")
-                            handleClose()
-                          }}>Logout</MenuItem> */}
+                          }}>{t("profile")}</MenuItem>
                       </Menu>
                     </IconContainer>
                    
@@ -170,16 +202,17 @@ const MyAppBar = (props) =>{
                       //   console.log("B")
                       //   localStorage.setItem('token', "data.login.token")
                       // }
-                    }}>Login</Button>
+                    }}>
+                      <AccountCircle  />
+                      {t("login")} 
+                    </Button>
               }
             </Toolbar>
+            
           </AppBar>
 }
 
-// export default MyAppBar;
-
 const mapStateToProps = (state, ownProps) => {
-  // console.log("mapStateToProps  :", state)
   return {
     user: state.auth.user,
     conversations: state.auth.conversations,

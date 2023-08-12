@@ -5,6 +5,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import _ from "lodash"
 
 import { gqlShareByPostId, subShare } from "../../gqlQuery"
+import { getHeaders } from "../../util"
 
 let unsubscribe =  null
 const ItemShare = (props) => {
@@ -23,7 +24,8 @@ const ItemShare = (props) => {
   }
 
   let shareValues = useQuery(gqlShareByPostId, {
-    variables: {postId: item.id},
+    context: { headers: getHeaders() }, 
+    variables: {postId: item._id},
     notifyOnNetworkStatusChange: true,
   });
 
@@ -34,7 +36,7 @@ const ItemShare = (props) => {
     let {subscribeToMore} = shareValues
     unsubscribe =  subscribeToMore({
       document: subShare,
-      variables: { postId: item.id },
+      variables: { postId: item._id },
       updateQuery: (prev, {subscriptionData}) => {
         if (!subscriptionData.data) return prev;
 

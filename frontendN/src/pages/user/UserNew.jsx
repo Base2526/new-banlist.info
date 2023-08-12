@@ -42,6 +42,8 @@ import CommentIcon from "@mui/icons-material/Comment";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CardHeader from "@material-ui/core/CardHeader";
 import { useQuery, useMutation } from "@apollo/client";
+import { useTranslation } from "react-i18next";
+
 import { gqlUsers, gqlRoles, gqlCreateUser } from "../../gqlQuery"
 import {convertFileToBase64} from "../../util"
 
@@ -61,6 +63,8 @@ let initValues =  {
 
 const UserNew = (props) => {
   let history = useHistory();
+  const { t } = useTranslation();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showCofirmPassword, setShowCofirmPassword] = useState(false);
   const [input, setInput] = useState(initValues);
@@ -376,7 +380,7 @@ const UserNew = (props) => {
           isActiveView()
         }
         <Button type="submit" variant="contained" color="primary">
-          Create
+          {t("create")}
         </Button>
       </Box>
     </div>

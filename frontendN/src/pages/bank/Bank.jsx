@@ -18,7 +18,8 @@ import LinearProgress from '@mui/material/LinearProgress';
 
 import Editor from "../../components/editor/Editor";
 
-import { gqlBank, gqlCreateBank, gqlUpdateBank } from "../../gqlQuery"
+import { gqlBank, gqlBanks, gqlCreateBank, gqlUpdateBank } from "../../gqlQuery"
+import _ from "lodash";
 
 let editValues = undefined;
 let initValues =  { name : "",  description: "" }
@@ -30,6 +31,19 @@ const Bank = (props) => {
 
   const [onCreateBank, resultBankValues] = useMutation(gqlCreateBank
     , {
+        update: (cache, {data: {createBank}}) => {
+          const data1 = cache.readQuery({ query: gqlBanks });
+
+          let newBanks = {...data1.banks}
+          let newData = [...newBanks.data, createBank]
+
+          newBanks = {...newBanks, data: newData}
+
+          cache.writeQuery({
+            query: gqlBanks,
+            data: { banks: newBanks },
+          });
+        },
         onCompleted({ data }) {
           history.push("/banks");
         }
@@ -40,6 +54,18 @@ const Bank = (props) => {
 
   const [onUpdateBank, resultUpdateBank] = useMutation(gqlUpdateBank, 
     {
+      update: (cache, {data: {updateBank}}) => {
+        const data1 = cache.readQuery({ query: gqlBanks });
+
+        let newBanks = {...data1.banks}
+        let newData  = _.map(newBanks.data, bank=>bank._id == updateBank._id ? updateBank : bank)
+
+        newBanks = {...newBanks, data: newData}
+        cache.writeQuery({
+          query: gqlBanks,
+          data: { banks: newBanks },
+        });
+      },
       onCompleted({ data }) {
         history.push("/banks");
       }
@@ -57,7 +83,6 @@ const Bank = (props) => {
     }
 
     case "edit":{
-
       editValues = useQuery(gqlBank, {
         variables: {id},
         notifyOnNetworkStatusChange: true,
@@ -103,21 +128,13 @@ const Bank = (props) => {
       }
 
       case "edit":{
-        let newInput =  {
-                          name: input.name,
-                          description: input.description
-                        }
+        let newInput =  { name: input.name, description: input.description }
 
-        console.log("newInput :", newInput, editValues.data.bank.data.id)
-        onUpdateBank({ variables: { 
-          id: editValues.data.bank.data.id,
-          input: newInput
-        }});
-
+        console.log("newInput :", newInput, editValues.data.bank.data._id)
+        onUpdateBank({ variables: { id: editValues.data.bank.data._id, input: newInput }});
         break;
       }
     }
-
   };
 
   return (
@@ -155,7 +172,7 @@ const Bank = (props) => {
               }}/>
 
             <Button type="submit" variant="contained" color="primary">
-              CREATE
+              {mode === 'new' ? "CREATE" : "UPDATE"}
             </Button>
           </Box>
       }

@@ -1,0 +1,30 @@
+$font-family:  'Noto Sans Thai', sans-serif !default;
+$noto-san-serifthai: 'Noto Serif Thai', serif;
+
+$primary: #27ade4;
+$green:#00d85f;
+$grayf3:#f3f2ef;
+$bl-dark-4x: #484848;
+$gray-6: #666666;
+$gray-light: #d1dbe3;
+$black: #000;
+$white: #ffffff;
+$gray-d: #dddddd;
+$gray-f: #f8f9fa;
+$bl-red:   #f00;
+
+$font-head: 'h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6';
+
+// break-point
+$xs: 0;
+$sm: 576px;
+$md: 768px;
+$lg: 992px;
+$xl: 1200px;
+$xxl: 1400px;
+
+// @mixin media-down($bp) {
+//     @media (min-width:$bp){
+
+//     }
+// }

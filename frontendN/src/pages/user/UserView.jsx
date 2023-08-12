@@ -1,12 +1,9 @@
 import React, { useState, useEffect, withStyles } from "react";
 import Button from "@mui/material/Button";
-// import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useParams, Link } from "react-router-dom";
-
 import { Avatar } from "@chatscope/chat-ui-kit-react";
-
 import _ from "lodash";
 import deepdash from "deepdash";
 deepdash(_);
@@ -15,6 +12,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useHistory, useLocation } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { connect } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 import {  gqlUser, 
           gqlConversations, 
@@ -29,11 +27,11 @@ import { login } from "../../redux/actions/auth"
 import DialogFollower from "../../DialogFollower"
 import ItemFollower from "./ItemFollower"
 import ItemFollowing from "./ItemFollowing"
-
 import ReportDialog from "../../components/report"
 
 const UserView = (props) => {
   let history = useHistory();
+  const { t } = useTranslation();
   let { pathname } = useLocation();
   let { id } = useParams();
   let { user } = props
@@ -47,10 +45,7 @@ const UserView = (props) => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  let userValues = useQuery(gqlUser, {
-    variables: {id},
-    notifyOnNetworkStatusChange: true,
-  });
+  let userValues = useQuery(gqlUser, { variables: {id}, notifyOnNetworkStatusChange: true });
   
   const [onCreateConversation, resultCreateConversation] = useMutation(gqlCreateConversation
     , {
@@ -58,12 +53,7 @@ const UserView = (props) => {
           // Update the cache as an approximation of server-side mutation effects
           // console.log("update > createConversation", createConversation)
 
-          const data = cache.readQuery({
-            query: gqlConversations,
-            variables: {
-              userId: user.id
-            }
-          });
+          const data = cache.readQuery({ query: gqlConversations });
 
           if(data != null){
             if(_.find(data.conversations.data, (v)=>v._id === createConversation._id) == null){
@@ -74,12 +64,7 @@ const UserView = (props) => {
   
               cache.writeQuery({
                 query: gqlConversations,
-                data: {
-                  conversations: new_conversations
-                },
-                variables: {
-                  userId: user.id
-                }
+                data: { conversations: new_conversations }
               });
             }
 
@@ -99,7 +84,7 @@ const UserView = (props) => {
           const data = cache.readQuery({
             query: gqlIsFollow,
             variables: {
-              userId: user.id, friendId: id
+              userId: user._id, friendId: id
             }
           });
 
@@ -112,7 +97,7 @@ const UserView = (props) => {
               isFollow: newData
             },
             variables: {
-              userId: user.id, friendId: id
+              userId: user._id, friendId: id
             }
           });
 
@@ -126,7 +111,7 @@ const UserView = (props) => {
           });
 
           let newFollowerData  = followerValues.follower.data
-          newFollowerData = _.filter(newFollowerData, (f)=>f._id != user.id)
+          newFollowerData = _.filter(newFollowerData, (f)=>f._id != user._id)
           if(createAndUpdateFollow.status){
             newFollowerData = [...newFollowerData, user]
           }
@@ -152,14 +137,14 @@ const UserView = (props) => {
 
   const onButtonChat = () =>{
 
-    if(!(!_.isEmpty(user) && user.id === id)){
+    if(!(!_.isEmpty(user) && user._id === id)){
       return  <Button 
                 variant="contained" 
                 color="primary"
                 onClick={(e)=>{
                   !_.isEmpty(props.user)
                   ? onCreateConversation({ variables: { input: {
-                          userId: user.id,
+                          userId: user._id,
                           friendId: id
                         }
                       }
@@ -173,14 +158,13 @@ const UserView = (props) => {
   
   const mainView = () =>{
     let userValue = userValues.data.user.data
-    let imageSrc =  _.isEmpty(userValue.image) ? "" : userValue.image[0].base64
+    let imageSrc =  _.isEmpty(userValue.image) ? "" : userValue.image[0].url
 
     console.log("userValue :", userValue, user)
 
-    return  <div>
-              <Typography variant="overline" display="block" gutterBottom>
-                Profile
-              </Typography>
+    return  <div className="pl-2 pr-2">
+              <div className="profile-bxv bg-white rounded border">
+              <Typography variant="overline" display="block" gutterBottom>{t("profile")}</Typography>
               <Stack direction="row" spacing={2}>
                 <Avatar
                   className={"user-profile"}
@@ -195,37 +179,49 @@ const UserView = (props) => {
                 />
               </Stack>
               <Typography variant="overline" display="block" gutterBottom>
-                Name : {userValue.displayName}
+                {t("name")} : {userValue.displayName}
               </Typography>
               <Typography variant="overline" display="block" gutterBottom>
-                Email : {userValue.email}
+                {t("email")} : { userValue.email.replace(/(\w{2})[\w.-]+@([\w.]+\w)/, "$1***@$2") }
               </Typography>
+              {/* const partialEmail = email.replace(/(\w{2})[\w.-]+@([\w.]+\w)/, "$1***@$2") */}
 
-              <ItemFollower id={id} onFollower={(e)=>setDialogFollower(true)} />
-          
-              <div>
-                <ItemFollowing 
+                <div className="d-flex-fx flex-column flex-md-row row-pf">
+                  <div className="btn-bxv w-100 flex-grow-1">
+                    <ItemFollower id={id} onFollower={(e)=>setDialogFollower(true)}  />
+                  </div>
+              
+                  <div className="btn-bxv w-100 flex-grow-1">
+                    <ItemFollowing 
+                      {...props} 
+                      id={id}
+                      onFollowing={(input)=>{
+                        onCreateAndUpdateFollow({ variables: { input } })
+                      }}
+                      onDialogLogin={(status)=>{
+                        setDialogLoginOpen(true)
+                      }}
+                      
+                      />
+                  </div>
+                  <div className="btn-bxv w-100 flex-grow-1"> { onButtonChat() } </div>
+                </div>
+              </div>
+              
+              <div className="lists-views">
+                <UserPostList 
                   {...props} 
                   id={id}
-                  onFollowing={(input)=>{
-                    onCreateAndUpdateFollow({ variables: { input } })
-                  }}
                   onDialogLogin={(status)=>{
                     setDialogLoginOpen(true)
+                  }}
+                  onReport={(id)=>{
+                    _.isEmpty(user)
+                      ? setDialogLoginOpen(true)    
+                      : setReport({open: true, postId:id})
                   }}/>
-              </div>
-              <div> { onButtonChat() } </div>
-              <UserPostList 
-                {...props} 
-                id={id}
-                onDialogLogin={(status)=>{
-                  setDialogLoginOpen(true)
-                }}
-                onReport={(id)=>{
-                  _.isEmpty(user)
-                    ? setDialogLoginOpen(true)    
-                    : setReport({open: true, postId:id})
-                }}/>
+                </div>
+             
             </div>
   }
 
@@ -241,11 +237,16 @@ const UserView = (props) => {
         <DialogLogin
           {...props}
           open={dialogLoginOpen}
-          onComplete={(data)=>{
+          onComplete={async(data)=>{
             console.log("onComplete :", data)
 
             // props.login(data)
+            // setDialogLoginOpen(false);
+
             setDialogLoginOpen(false);
+            props.login(data)
+            await client.cache.reset();
+            await client.resetStore();
           }}
           onClose={() => {
             setDialogLoginOpen(false);
@@ -261,7 +262,7 @@ const UserView = (props) => {
           onFollow={()=>{
             !_.isEmpty(user)
             ? onCreateConversation({ variables: { input: {
-                    userId: user.id,
+                    userId: user._id,
                     friendId: id
                   }
                 }
@@ -279,8 +280,8 @@ const UserView = (props) => {
           open={report.open} 
           postId={report.postId} 
           onReport={(e)=>{
-          onCreateContactUs({ variables: { input: {
-                  userId: user.id,
+          onCreateReport({ variables: { input: {
+                  userId: user._id,
                   postId: e.postId,     
                   categoryId: e.categoryId,
                   description: e.description
@@ -291,7 +292,6 @@ const UserView = (props) => {
           setReport({open: false, postId:""})
           }}
 
-          // onCreateTContactUs
           onClose={()=>setReport({open: false, postId:""})}/>
       }
     </div>

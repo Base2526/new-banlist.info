@@ -1,0 +1,91 @@
+.MuiBox-root{
+    &.table-responsive{
+        padding: 1rem;
+        border: 1px solid $gray-d;
+        background-color: $white;
+        border-radius: .5rem;
+        -webkit-border-radius: .5rem;
+        > div:first-child{
+            @media (max-width:$lg){
+                width: 100%;
+                overflow-x: auto;
+                table{
+                    width: 1200px;
+                }
+            }
+
+            
+        }
+        
+        .MuiSpeedDial-root{
+            position: fixed;
+            @media (max-width:$md){
+                bottom: 30%;
+                right: 20px;
+            }
+            bottom: 16%;
+        }
+    }
+   
+    table{
+        padding: 0 .5rem;
+        input{
+            border: 1px solid $gray-d;
+            padding: .25rem;
+        }
+        tbody{
+            tr{
+                color: $gray-6;
+            }
+        }
+    }
+}
+
+
+
+.Btn--posts{
+    a[href]{
+        button{
+            color: $gray-6;
+        }
+    }
+    button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        @media (min-width:$lg){
+            display: flex;
+            align-items: center;
+        }
+       width: 100%;
+       margin-bottom: 6px;
+       border: 0;
+       padding: .25rem;
+       box-shadow:0 1px 3px rgba($black, .3);
+       cursor: pointer;
+       
+       color: $bl-red;
+       
+    }
+}
+
+.table-responsive{
+    .pagination{
+        margin: 1rem 0;
+        button,span,
+        select{
+            display: inline-block;
+            border: 1px solid $gray-d;
+            padding: .625rem 1.25rem;
+        }
+        span + span{
+            padding-top: 7px;
+            padding-bottom: 7px;
+        }
+        select{
+            padding-top: 9px;
+            padding-bottom: 9px;
+        }
+     
+    }
+}

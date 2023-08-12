@@ -5,7 +5,12 @@ import Container from "@mui/material/Container";
 /* parses check box data from props.list element
  * @params {{title: string, list:{name: string, id: number}[]}} props
  */
+import { useTranslation } from "react-i18next";
+
+import "../../translations/i18n";
 const checkboxs = (props) => {
+  const { t } = useTranslation();
+
   const checkbox = props.list.map((m) => (
     <FormControlLabel
       id={m.key}
@@ -26,7 +31,7 @@ const checkboxs = (props) => {
             control={
               <Checkbox id={m.key} checked={m.checked} onClick={props.handleChange} />
             }
-            label={m.name}
+            label={t(m.name)}
           />
         ))} 
     </Container>

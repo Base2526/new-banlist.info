@@ -23,15 +23,15 @@ import Avatar from "@mui/material/Avatar";
 import _ from "lodash"
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
+import { useTranslation } from "react-i18next";
 
-
-import {gqlBasicContents} from "../../gqlQuery"
-import Footer from "../footer";
+import {gqlBasicContents, gqlDeleteBasicContent} from "../../gqlQuery"
 import Table from "../../TableContainer"
 
 const BasicContentList = (props) => {
   let history = useHistory();
+  const { t } = useTranslation();
 
   const [pageOptions, setPageOptions] = useState([30, 50, 100]);  
   const [pageIndex, setPageIndex] = useState(0);  
@@ -39,10 +39,7 @@ const BasicContentList = (props) => {
 
   //////////////////////
 
-  const [openDialogDelete, setOpenDialogDelete] = useState({
-    isOpen: false,
-    id: ""
-  });
+  const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "", description: "" });
 
   const basicContentsValues = useQuery(gqlBasicContents, {
     variables: {page: pageIndex, perPage: pageSize},
@@ -50,6 +47,31 @@ const BasicContentList = (props) => {
   });
 
   console.log("basicContentsValues :", basicContentsValues)
+
+  const [onDeleteBasicContent, resultDeleteBasicContent] = useMutation(gqlDeleteBasicContent, 
+    {
+      update: (cache, {data: {deleteBasicContent}}) => {
+        const data1 = cache.readQuery({
+          query: gqlBasicContents,
+          variables: {page: pageIndex, perPage: pageSize},
+        });
+
+        let newBasicContents = {...data1.basicContents}
+        let newData   = _.filter(data1.basicContents.data, basicContent => basicContent._id !== deleteBasicContent._id)
+        newBasicContents = {...newBasicContents, total: newData.length, data:newData }
+
+        cache.writeQuery({
+          query: gqlBasicContents,
+          data: { basicContents: newBasicContents },
+          variables: {page: pageIndex, perPage: pageSize},
+        });
+      },
+      onCompleted({ data }) {
+        history.push("/basic-contents");
+      }
+    }
+  );
+  console.log("resultDeleteBasicContent :", resultDeleteBasicContent)
 
   ///////////////
   const fetchData = useCallback(
@@ -66,55 +88,52 @@ const BasicContentList = (props) => {
 
   const columns = useMemo(
     () => [
-      {
-        Header: 'Name',
-        columns: [
-          {
-            Header: 'Name',
-            accessor: 'name',
-            // Use a two-stage aggregator here to first
-            // count the total rows being aggregated,
-            // then sum any of those counts if they are
-            // aggregated further
-            // aggregate: 'count',
-            // Aggregated: ({ value }) => `${value} Names`,
-          },
-          {
-            Header: 'Description',
-            accessor: 'description',
-            // Use our custom `fuzzyText` filter on this column
-            // filter: 'fuzzyText',
-            // // Use another two-stage aggregator here to
-            // // first count the UNIQUE values from the rows
-            // // being aggregated, then sum those counts if
-            // // they are aggregated further
-            // aggregate: 'uniqueCount',
-            // Aggregated: ({ value }) => `${value} Unique Names`,
-            Cell: props => <Typography dangerouslySetInnerHTML={{ __html: props.value }} />
-          },
-          {
-            Header: 'Action',
-            accessor: 'id',
-            // Use our custom `fuzzyText` filter on this column
-            // filter: 'fuzzyText',
-            // // Use another two-stage aggregator here to
-            // // first count the UNIQUE values from the rows
-            // // being aggregated, then sum those counts if
-            // // they are aggregated further
-            // aggregate: 'uniqueCount',
-            // Aggregated: ({ value }) => `${value} Unique Names`,
-            Cell: props => {
-              console.log("Cell :", props)
-              return  <div>
-                        <Link to={`/basic-content/${props.value}/edit`}>
-                          <button>Edit</button>
-                        </Link>
-                        <button>Delete</button>
-                      </div>
-            }
-          },
-        ],
-      }
+        {
+          Header: 'Name',
+          accessor: 'name',
+          // Use a two-stage aggregator here to first
+          // count the total rows being aggregated,
+          // then sum any of those counts if they are
+          // aggregated further
+          // aggregate: 'count',
+          // Aggregated: ({ value }) => `${value} Names`,
+        },
+        {
+          Header: 'Description',
+          accessor: 'description',
+          // Use our custom `fuzzyText` filter on this column
+          // filter: 'fuzzyText',
+          // // Use another two-stage aggregator here to
+          // // first count the UNIQUE values from the rows
+          // // being aggregated, then sum those counts if
+          // // they are aggregated further
+          // aggregate: 'uniqueCount',
+          // Aggregated: ({ value }) => `${value} Unique Names`,
+          Cell: props => <Typography dangerouslySetInnerHTML={{ __html: props.value }} />
+        },
+        {
+          Header: 'Action',
+          // accessor: '_id',
+          // Use our custom `fuzzyText` filter on this column
+          // filter: 'fuzzyText',
+          // // Use another two-stage aggregator here to
+          // // first count the UNIQUE values from the rows
+          // // being aggregated, then sum those counts if
+          // // they are aggregated further
+          // aggregate: 'uniqueCount',
+          // Aggregated: ({ value }) => `${value} Unique Names`,
+          Cell: props => {
+            let {_id, name} = props.row.original
+            return  <div>
+                      <Link to={`/basic-content/${_id}/edit`}>
+                        <button>{t("edit")}</button>
+                      </Link>
+                      <button onClick={(e)=>{
+                        setOpenDialogDelete({ isOpen: true, id: _id, description: name })
+                      }}>{t("delete")}</button>
+                    </div>
+          }
+        },
     ],
     []
   )
@@ -158,16 +177,18 @@ const BasicContentList = (props) => {
   const handleClickOpen = () => {
     // setOpen(true);
 
-    setOpenDialogDelete({ ...openDialogDelete, isOpen: true });
+    setOpenDialogDelete({ ...openDialogDelete, isOpen: true, description: "" });
   };
 
   const handleClose = () => {
     // setOpen(false);
-    setOpenDialogDelete({ ...openDialogDelete, isOpen: false });
+
+    // 
+    setOpenDialogDelete({ ...openDialogDelete, isOpen: false, description: "" });
   };
 
   const handleDelete = (id) => {
-    setUserData(userData.filter((user) => user.id !== id));
+    onDeleteBasicContent({ variables: { id } });
   };
 
   // const columns = [
@@ -284,10 +305,10 @@ const BasicContentList = (props) => {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
+          <DialogTitle id="alert-dialog-title">{t("confirm_delete")}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Delete
+              {openDialogDelete.description}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -296,14 +317,10 @@ const BasicContentList = (props) => {
               onClick={() => {
                 handleDelete(openDialogDelete.id);
 
-                setOpenDialogDelete({ isOpen: false, id: "" });
+                setOpenDialogDelete({ isOpen: false, id: "", description: "" });
               }}
-            >
-              Delete
-            </Button>
-            <Button variant="contained" onClick={handleClose} autoFocus>
-              Close
-            </Button>
+            >{t("delete")}</Button>
+            <Button variant="contained" onClick={handleClose} autoFocus>{t("close")}</Button>
           </DialogActions>
         </Dialog>
       )}
@@ -316,7 +333,6 @@ const BasicContentList = (props) => {
           history.push("/basic-content/new");
         }}
       />
-      <Footer />
     </UserListContainer>
   );
 };

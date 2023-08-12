@@ -1,18 +1,6 @@
-import {
-  NewUserContainer,
-  NewUserForm,
-  FormItem,
-  GenderContainer,
-  NewUserButton,
-  ButtonWrapper
-} from "./NewPost.styled";
-
-import "./Post.css";
-
 import React, { useEffect, useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -25,31 +13,52 @@ import { DataGrid } from "@mui/x-data-grid";
 import { DeleteOutline } from "@material-ui/icons";
 import Typography from "@mui/material/Typography";
 import { connect } from "react-redux";
-
-import BankInputField from "./BankInputField";
-import AttackFileField from "./AttackFileField";
-import RadioGroupField from "./RadioGroupField";
-import TelInputField from "./TelInputField";
-import PopupSnackbar from "../home/PopupSnackbar";
-import Footer from "../footer";
-import Editor from "../../components/editor/Editor";
+import { useTranslation } from "react-i18next";
+import styled from "styled-components";
 
 import { useQuery, useMutation } from "@apollo/client";
-import {  gqlPost, gqlCreatePost, gqlUpdatePost, 
-          gqlUser, gqlShareByPostId, gqlBookmarksByPostId,
-          gqlPosts } from "../../gqlQuery"
 import _ from "lodash";
 import deepdash from "deepdash";
 deepdash(_);
 
-import {convertFileToBase64} from "../../util"
+import {  gqlPost, gqlCreatePost, gqlUpdatePost, 
+          gqlUser, gqlShareByPostId, gqlBookmarksByPostId,
+          gqlPosts } from "../../gqlQuery"
 
+import "../../translations/i18n";
+import { getHeaders } from "../../util"
 import Tabs from "../../components/tab/Tabs";
 import Panel from "../../components/tab/Panel";
+import BankInputField from "./BankInputField";
+import AttackFileField from "./AttackFileField";
+import TelInputField from "./TelInputField";
+import PopupSnackbar from "../home/PopupSnackbar";
+import Editor from "../../components/editor/Editor";
 
 let editValues = undefined;
 let bookmarksByPostIdValues = undefined;
 let shareValues = undefined;
+
+const ButtonWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  .editBtn {
+    border: none;
+    border-radius: 10px;
+    padding: 3px 10px;
+    background-color: #dbffee;
+    color: #078f4e;
+    cursor: pointer;
+  }
+
+  .deleteBtn {
+    color: red;
+    cursor: pointer;
+  }
+`;
 
 let initValues = {
   title: "", 
@@ -66,11 +75,12 @@ let initValues = {
 const bmColumns = [
   { 
     field: "userId", 
-    headerName: "Username", 
+    headerName: "Username ccc", 
     width: 150,
     renderCell: (params) => {
       let value = useQuery(gqlUser, {
-        variables: {id: params.row.userId},
+        context: { headers: getHeaders() },
+        variables: { id: params.row.userId },
         notifyOnNetworkStatusChange: true,
       });
 
@@ -90,6 +100,7 @@ const bmColumns = [
     width: 400, 
     renderCell: (params) => {
       let postValue = useQuery(gqlPost, {
+        context: { headers: getHeaders() },
         variables: {id: params.row.postId},
         notifyOnNetworkStatusChange: true,
       });
@@ -112,7 +123,7 @@ const bmColumns = [
           <DeleteOutline
             className="deleteBtn"
             onClick={() => {
-              setOpenDialogDelete({ isOpen: true, id: params.row.id });
+              setOpenDialogDelete({ isOpen: true, id: params.row._id });
             }}
           />
         </ButtonWrapper>
@@ -128,6 +139,7 @@ const shcolumns = [
     width: 150,
     renderCell: (params) => {
       let value = useQuery(gqlUser, {
+        context: { headers: getHeaders() },
         variables: {id: params.row.userId},
         notifyOnNetworkStatusChange: true,
       });
@@ -146,6 +158,7 @@ const shcolumns = [
     width: 400, 
     renderCell: (params) => {
       let postValue = useQuery(gqlPost, {
+        context: { headers: getHeaders() },
         variables: {id: params.row.postId},
         notifyOnNetworkStatusChange: true,
       });
@@ -178,7 +191,7 @@ const shcolumns = [
           <DeleteOutline
             className="deleteBtn"
             onClick={() => {
-              setOpenDialogDelete({ isOpen: true, id: params.row.id });
+              setOpenDialogDelete({ isOpen: true, id: params.row._id });
             }}
           />
         </ButtonWrapper>
@@ -189,6 +202,8 @@ const shcolumns = [
 
 const Post = (props) => {
   let history = useHistory();
+
+  const { t } = useTranslation();
 
   // props.location.state
   console.log("props.location.state :", history)
@@ -210,6 +225,7 @@ const Post = (props) => {
   const [bmPerPage, setBmPerPage] = useState(bmPageOptions[0])
 
   const [onCreatePost, resultCreatePost] = useMutation(gqlCreatePost, {
+    context: { headers: getHeaders() },
     update: (cache, {data: {createPost}}) => {
 
       // let {state} = history.location
@@ -218,7 +234,7 @@ const Post = (props) => {
           const data1 = cache.readQuery({
             query: gqlPosts,
             variables: {
-              userId: _.isEmpty(user) ? "" : user.id,
+              userId: _.isEmpty(user) ? "" : user._id,
               page: 0, 
               perPage: 30
             }
@@ -234,7 +250,7 @@ const Post = (props) => {
               query: gqlPosts,
               data: { posts: {...newPosts, data: newData} },
               variables: {
-                userId: _.isEmpty(user) ? "" : user.id,
+                userId: _.isEmpty(user) ? "" : user._id,
                 page: 0, 
                 perPage: 30
               }
@@ -249,49 +265,41 @@ const Post = (props) => {
       //   }
       // }
     },
-    context: {
-      headers: {
-        'apollo-require-preflight': true,
-      },
-    },
     onCompleted({ data }) {
-      // console.log("bookmark :::: onCompleted")
-
       history.push("/posts")
     },
+    onError({error}){
+      console.log("onError :")
+    }
   });
   console.log("resultCreatePost :", resultCreatePost)
 
-  const [onUpdatePost, resultUpdatePost] = useMutation(gqlUpdatePost, 
-    {
-      update: (cache, {data: {updatePost}}) => {
-        let {state} = history.location
-        const data1 = cache.readQuery({
-          query: gqlPost,
-          variables: {id}
-        });
+  const [onUpdatePost, resultUpdatePost] = useMutation(gqlUpdatePost, {
+    context: { headers: getHeaders() },
+    update: (cache, {data: {updatePost}}) => {
+      // let {state} = history.location
+      const data1 = cache.readQuery({
+        query: gqlPost,
+        variables: {id}
+      });
 
-        console.log("onUpdatePost :", updatePost, data1, state)
+      let newPost = {...data1.post}
+      newPost = {...newPost, data: updatePost}
 
-        let newPost = {...data1.post}
-        let newData = {...newPost.data, updatePost}
-        newPost = {...newPost, data: newData}
-
-        cache.writeQuery({
-          query: gqlPost,
-          data: {
-            post: newPost
-          },
-          variables: {id}
-        });
-      },
-      onCompleted({ data }) {
-        history.push("/posts");
-      }
+      cache.writeQuery({
+        query: gqlPost,
+        data: { post: newPost },
+        variables: {id}
+      });
+    },
+    onCompleted({ data }) {
+      history.push("/posts");
+    },
+    onError({error}){
+      console.log("onError :")
     }
-  );
+  });
   console.log("resultUpdatePost :", resultUpdatePost)
-
 
   switch(mode){
     case "new":{
@@ -301,18 +309,21 @@ const Post = (props) => {
    
     case "edit":{
       bookmarksByPostIdValues = useQuery(gqlBookmarksByPostId, {
+        context: { headers: getHeaders() },
         variables: { postId: id },
         notifyOnNetworkStatusChange: true,
       });
       console.log("bookmarksByPostIdValues : ", bookmarksByPostIdValues)
     
       shareValues = useQuery(gqlShareByPostId, {
+        context: { headers: getHeaders() },
         variables: {postId: id},
         notifyOnNetworkStatusChange: true,
       });
-      console.log("shareValues : ", shareValues)
+      // console.log("shareValues : ", shareValues)
     
       editValues = useQuery(gqlPost, {
+        context: { headers: getHeaders() },
         variables: {id},
         notifyOnNetworkStatusChange: true,
       });
@@ -324,27 +335,27 @@ const Post = (props) => {
           let {loading}  = editValues
           
           if(!loading){
-            // let {status, data} = editValues.data.post
+            let {status, data} = editValues.data.post
 
             console.log("edit editValues : ", editValues.data)
-            // if(status){
+            if(status){
 
             //   if( data.ownerId != user.id){
             //     history.push("/")
             //   }
 
-            //   setInput({
-            //     title: data.title, 
-            //     nameSubname: data.nameSubname, 
-            //     idCard: data.idCard, 
-            //     amount: data.amount,
-            //     tels: data.tels,
-            //     banks: data.banks,
-            //     description: data.description,
-            //     dateTranfer: data.dateTranfer,
-            //     attackFiles: data.files
-            //   })
-            // }
+              setInput({
+                title: data.title, 
+                nameSubname: data.nameSubname, 
+                idCard: data.idCard, 
+                amount: data.amount,
+                tels: data.tels,
+                banks: data.banks,
+                description: data.description,
+                dateTranfer: data.dateTranfer,
+                attackFiles: data.files
+              })
+            }
           }
         }
       }
@@ -381,12 +392,12 @@ const Post = (props) => {
           break;
         }
 
-        case "idCard": {
-          if (!value) {
-            stateObj[name] = "Please enter id card.";
-          } 
-          break;
-        }
+        // case "idCard": {
+        //   if (!value) {
+        //     stateObj[name] = "Please enter id card.";
+        //   } 
+        //   break;
+        // }
 
         case "amount": {
           if (!value) {
@@ -407,26 +418,27 @@ const Post = (props) => {
   const submitForm = async(event) => {
     event.preventDefault();
 
-    let oldAttackFiles = _.filter( input.attackFiles,  p => p.base64 )
-    let newAttackFiles = _.filter( input.attackFiles,  p => !p.base64 )
+    // let oldAttackFiles = _.filter( input.attackFiles,  p => p.base64 )
+    // let newAttackFiles = _.filter( input.attackFiles,  p => !p.base64 )
 
-    let newAttackFilesBase64 =  await Promise.all(newAttackFiles.map(convertFileToBase64)).then(base64Pictures =>{return base64Pictures});
+    // let newAttackFilesBase64 =  await Promise.all(newAttackFiles.map(convertFileToBase64)).then(base64Pictures =>{return base64Pictures});
 
     switch(mode){
       case "new":{
-        onCreatePost({ variables: { input: {
-            title: input.title,
-            nameSubname: input.nameSubname,
-            idCard: input.idCard,
-            amount: input.amount,
-            tels: input.tels,
-            banks: input.banks, // _.omitDeep(input.banks, ['__typename']),
-            description: input.description,
-            dateTranfer: input.dateTranfer,
-            files: input.attackFiles,//[...newAttackFilesBase64, ...oldAttackFiles],
-            ownerId: user.id
-          }
-        }});
+        let newInput =  {
+                          title: input.title,
+                          nameSubname: input.nameSubname,
+                          idCard: input.idCard,
+                          amount: input.amount,
+                          tels: input.tels,
+                          banks: input.banks, // _.omitDeep(input.banks, ['__typename']),
+                          description: input.description,
+                          dateTranfer: input.dateTranfer,
+                          files: input.attackFiles,//[...newAttackFilesBase64, ...oldAttackFiles],
+                          ownerId: user._id
+                      }
+
+        onCreatePost({ variables: { input: newInput } });
         break;
       }
       case "edit":{
@@ -440,15 +452,15 @@ const Post = (props) => {
                       banks: input.banks, //_.omitDeep(input.banks, ['__typename']),
                       description: input.description,
                       dateTranfer: input.dateTranfer,
-                      files:  _.omitDeep(_.filter([...newAttackFilesBase64, ...oldAttackFiles], (v, key) => !v.delete), ['__typename', 'id']),
-                      ownerId: user.id
+                      files:  input.attackFiles, //_.omitDeep(_.filter([...newAttackFilesBase64, ...oldAttackFiles], (v, key) => !v.delete), ['__typename', 'id']),
+                      ownerId: user._id
                     }
 
-        console.log("newInput : ", editValues.data.post.data.id, _.omitDeep(newInput, ['__typename']))
+        console.log("newInput : ", editValues.data.post.data._id, _.omitDeep(newInput, ['__typename']), input.attackFiles, newInput)
 
         onUpdatePost({ variables: { 
-          id: editValues.data.post.data.id,
-          input: _.omitDeep(newInput, ['__typename'])
+          id: editValues.data.post.data._id,
+          input: newInput//_.omitDeep(newInput, ['__typename'])
         }});
       }
     }
@@ -458,18 +470,18 @@ const Post = (props) => {
     console.log("mainView : ", mode)
     switch(mode){
       case "new":{
-        return  <LocalizationProvider dateAdapter={AdapterDateFns}>
+        return  <LocalizationProvider dateAdapter={AdapterDateFns} >
                   <Box
                     component="form"
                     sx={{
                       "& .MuiTextField-root": { m: 1, width: "50ch" }
                     }}
                     onSubmit={submitForm}>
-                    <div>
+                    <div >
                       <TextField
                         id="post-title"
                         name="title"
-                        label="Title"
+                        label={t("search_by_title")}
                         variant="filled"
                         required
                         value={input.title}
@@ -478,11 +490,10 @@ const Post = (props) => {
                         helperText={error.title}
                         error={_.isEmpty(error.title) ? false : true}
                       />
-
                       <TextField
                         id="post-name-subname"
                         name="nameSubname"
-                        label="Name Subname"
+                        label={t("search_by_name_surname")}
                         variant="filled"
                         required
                         value={input.nameSubname}
@@ -491,24 +502,22 @@ const Post = (props) => {
                         helperText={error.nameSubname}
                         error={_.isEmpty(error.nameSubname) ? false : true}
                       />
-
                       <TextField
                         id="post-idcard"
                         name="idCard"
-                        label="ID Card"
+                        label={t("search_by_card_id")}
                         variant="filled"
-                        required
+                        // required
                         value={input.idCard}
                         onChange={onInputChange}
                         onBlur={validateInput}
                         helperText={error.idCard}
-                        error={_.isEmpty(error.idCard) ? false : true}
+                        // error={_.isEmpty(error.idCard) ? false : true}
                       />
-
                       <TextField
                         id="post-amount"
                         name="amount"
-                        label="Amount"
+                        label={t("amount")}
                         variant="filled"
                         type="number"
                         required
@@ -518,9 +527,8 @@ const Post = (props) => {
                         helperText={error.amount}
                         error={_.isEmpty(error.amount) ? false : true}
                       />
-
                       <DesktopDatePicker
-                        label="Date"
+                        label={t("date_tranfer")}
                         inputFormat="dd/MM/yyyy"
                         value={ input.dateTranfer }
                         onChange={(newDate) => {
@@ -528,8 +536,8 @@ const Post = (props) => {
                         }}
                         renderInput={(params) => <TextField {...params} required={input.dateTranfer === null ? true: false} />}
                       />
-
                       <TelInputField
+                        label={t("search_by_tel")}
                         values={input.tels}
                         onChange={(values) => {
                           console.log("Tel onChange >> :", values);
@@ -537,23 +545,23 @@ const Post = (props) => {
                           setInput({...input, tels: values})
                         }}
                       />
-
                       <BankInputField
+                        label={t("search_by_id_bank")}
                         values={input.banks}
                         onChange={(values) => {
                           console.log("BankInputField : ", values)
                           setInput({...input, banks: values})
                         }}
                       />
-
                       <Editor 
-                        label={"Description"} 
+                        label={t("detail")} 
                         initData={ input.description }
                         onEditorChange={(newDescription)=>{
                           setInput({...input, description: newDescription})
                         }} />
 
                       <AttackFileField
+                        label={t("attack_file")}
                         values={input.attackFiles}
                         onChange={(values) => {
                           console.log("AttackFileField :", values)
@@ -566,7 +574,7 @@ const Post = (props) => {
 
                     </div>
                     <Button type="submit" variant="contained" color="primary">
-                      Create
+                      {t("create")}
                     </Button>
                   </Box>
                 </LocalizationProvider>
@@ -616,12 +624,12 @@ const Post = (props) => {
                               name="idCard"
                               label="ID Card"
                               variant="filled"
-                              required
+                              // required
                               value={input.idCard}
                               onChange={onInputChange}
                               onBlur={validateInput}
                               helperText={error.idCard}
-                              error={_.isEmpty(error.idCard) ? false : true}
+                              // error={_.isEmpty(error.idCard) ? false : true}
                             />
 
                             <TextField
@@ -675,7 +683,7 @@ const Post = (props) => {
                             <AttackFileField
                               values={input.attackFiles}
                               onChange={(values) => {
-                                console.log("attackFiles :", attackFiles)
+                                // console.log("attackFiles :", attackFiles)
                                 setInput({...input, attackFiles: values})
                               }}
                               onSnackbar={(data) => {
@@ -685,7 +693,7 @@ const Post = (props) => {
 
                           </div>
                           <Button type="submit" variant="contained" color="primary">
-                            Create
+                            {t("update")}
                           </Button>
                         </Box>
                       </LocalizationProvider>
@@ -719,7 +727,7 @@ const Post = (props) => {
                         ? <div><CircularProgress /></div> 
                         : <div style={{ height: 700, width: "1000px" }}>
                             <DataGrid 
-                              rows={shareValues.data.ShareByPostId.data} 
+                              rows={shareValues.data.shareByPostId.data} 
                               columns={shcolumns} 
                               rowHeight={80}
 
@@ -743,11 +751,9 @@ const Post = (props) => {
   }
 
   return (
-    <div>
-      {
-        mainView()
-      }
-     
+    <div className="page-post pl-2 pr-2 mb-4">
+      <div className="MuiBox-root-postinss">
+      { mainView() }
       {snackbar.open && (
         <PopupSnackbar
           isOpen={snackbar.open}
@@ -757,8 +763,7 @@ const Post = (props) => {
           }}
         />
       )}
-
-      <Footer />
+      </div>
     </div>
   );
 };

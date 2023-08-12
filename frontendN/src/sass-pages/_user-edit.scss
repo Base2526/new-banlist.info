@@ -1,0 +1,46 @@
+.page-useredit{
+    .MuiBox-root-bcss{
+        @include card-ui();
+        padding: 0 .5rem 1rem .5rem;
+        @media (min-width:$sm){
+            padding: 1rem .5rem;
+        }
+
+        .MuiTypography-root{
+            font-size: 1rem;
+        }
+
+        .MuiTextField-root{
+            width: 100%;
+            max-width: 400px;
+            margin: .5rem 0;
+            @media (min-width:$sm){
+                margin: .5rem .5rem;
+            }
+        }
+    }
+
+    .Mui-dblockavatar{
+        padding: .5rem;
+        width: auto;
+
+        .Mui-wrapsrcimg{
+            position: relative;
+            display: inline-block;
+        }
+        label{
+            position: absolute;
+            right: 8%;
+            bottom: 2%;
+            z-index: 3;
+        }
+    }
+
+    button[type=submit] {
+        &.MuiButtonBase-root{
+            @media (min-width:$sm){
+                margin: 1rem .5rem;
+            }
+        }
+    }
+}

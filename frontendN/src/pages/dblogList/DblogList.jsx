@@ -25,13 +25,14 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import _ from "lodash"
 import { useQuery } from "@apollo/client";
-import { gqlDblog } from "../../gqlQuery"
-import Footer from "../footer";
+import { useTranslation } from "react-i18next";
 
+import { gqlDblog } from "../../gqlQuery"
 import Table from "../../TableContainer"
 
 const DblogList = (props) => {
   let history = useHistory();
+  const { t } = useTranslation();
 
   const [pageOptions, setPageOptions] = useState([100, 500, 1000]);  
   const [pageIndex, setPageIndex] = useState(0);  
@@ -75,17 +76,12 @@ const DblogList = (props) => {
     () => [
       {
         Header: 'Name',
-        columns: [
-          {
-            Header: 'Name',
-            accessor: 'level',
-          },
-          {
-            Header: 'Description',
-            accessor: 'message',
-            Cell: props => <Typography dangerouslySetInnerHTML={{ __html: props.value }} />
-          }
-        ],
+        accessor: 'level',
+      },
+      {
+        Header: 'Description',
+        accessor: 'message',
+        Cell: props => <Typography dangerouslySetInnerHTML={{ __html: props.value }} />
       }
     ],
     []
@@ -131,55 +127,50 @@ const DblogList = (props) => {
   //////////////////////
 
   return (
-    <Box style={{
-      flex: 4
-    }}>
-      {
-         dblogValues.loading
-         ?  <div><CircularProgress /></div> 
-         :  <Table
-              columns={columns}
-              data={dblogValues.data.Dblog.data}
-              fetchData={fetchData}
-              rowsPerPage={pageOptions}
-              updateMyData={updateMyData}
-              skipReset={skipResetRef.current}
-              isDebug={false}
-            />
-      }
+    <div className="pl-2 pr-2">
+      <Box style={{
+        flex: 4
+      }} className="table-responsive">
+        {
+          dblogValues.loading
+          ?  <div><CircularProgress /></div> 
+          :  <Table
+                columns={columns}
+                data={dblogValues.data.Dblog.data}
+                fetchData={fetchData}
+                rowsPerPage={pageOptions}
+                updateMyData={updateMyData}
+                skipReset={skipResetRef.current}
+                isDebug={false}
+              />
+        }
 
-      {openDialogDelete.isOpen && (
-        <Dialog
-          open={openDialogDelete.isOpen}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Delete
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                handleDelete(openDialogDelete.id);
+        {openDialogDelete.isOpen && (
+          <Dialog
+            open={openDialogDelete.isOpen}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">{t("confirm_delete")}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">{openDialogDelete.description}</DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  handleDelete(openDialogDelete.id);
 
-                setOpenDialogDelete({ isOpen: false, id: "" });
-              }}
-            >
-              Delete
-            </Button>
-            <Button variant="contained" onClick={handleClose} autoFocus>
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
-      <Footer />
-    </Box>
+                  setOpenDialogDelete({ isOpen: false, id: "" });
+                }}
+              >{t("delete")}</Button>
+              <Button variant="contained" onClick={handleClose} autoFocus>{t("close")}</Button>
+            </DialogActions>
+          </Dialog>
+        )}
+      </Box>
+    </div>
   );
 };
 

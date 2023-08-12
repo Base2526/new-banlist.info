@@ -2,7 +2,7 @@ import { ButtonWrapper } from "./PostList.styled";
 import { Link } from "react-router-dom";
 import { useState, useCallback, useEffect, useMemo, useRef  } from "react";
 import Box from "@mui/material/Box";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation} from "@apollo/client";
 import { useHistory } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -24,14 +24,18 @@ import SpeedDialAction from '@mui/material/SpeedDialAction';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import { connect } from "react-redux";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
+import { useTranslation } from "react-i18next";
 
-import Footer from "../footer";
-import {gqlPosts, gqlBookmarksByPostId, gqlShareByPostId, gqlComment, gqlUser} from "../../gqlQuery"
+import { getHeaders } from "../../util"
+import { gqlPosts, gqlBookmarksByPostId, gqlShareByPostId, gqlComment, gqlDeletePost } from "../../gqlQuery"
 import ReadMoreMaster from "../../utils/ReadMoreMaster"
 import Table from "../../TableContainer"
 
 const PostList = (props) => {
   let history = useHistory();
+  const { t } = useTranslation();
 
   let { user } = props
 
@@ -39,14 +43,39 @@ const PostList = (props) => {
   const [pageIndex, setPageIndex] = useState(0);  
   const [pageSize, setPageSize] = useState(pageOptions[0])
   const [lightbox, setLightbox] = useState({ isOpen: false, photoIndex: 0, images: [] });
-  const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "" });
+  const [openDialogDelete, setOpenDialogDelete] = useState({ isOpen: false, id: "", description: "" });
 
   const postsValue = useQuery(gqlPosts, {
-    variables: {userId: _.isEmpty(user) ? "" : user.id, page: pageIndex, perPage: pageSize},
+    context: { headers: getHeaders() },
+    variables: { page: pageIndex, perPage: pageSize },
     notifyOnNetworkStatusChange: true,
   });
-
   console.log("postsValue :", postsValue)
+
+  const [onDeletePost, resultDeletePost] = useMutation(gqlDeletePost, {
+    context: { headers: getHeaders() },
+    update: (cache, {data: {deletePost}}) => {
+
+      const data1 = cache.readQuery({
+        query: gqlPosts,
+        variables:  {userId: _.isEmpty(user) ? "" : user._id, page: pageIndex, perPage: pageSize},
+      });
+
+      let newPosts = {...data1.posts}
+      let newData   = _.filter(data1.posts.data, post => post._id !== deletePost._id)
+      newPosts = {...newPosts, total: newData.length, data:newData }
+
+      cache.writeQuery({
+        query: gqlPosts,
+        data: { posts: newPosts },
+        variables:  {userId: _.isEmpty(user) ? "" : user._id, page: pageIndex, perPage: pageSize},
+      });
+    },
+    onCompleted({ data }) {
+      history.push("/posts");
+    }
+  });
+  console.log("resultDeletePost :", resultDeletePost)
 
   ///////////////
   const fetchData = useCallback(
@@ -58,28 +87,20 @@ const PostList = (props) => {
   })
   ///////////////
 
+  const handleClose = (event, reason) => {
+    if (reason && reason == "backdropClick") 
+        return;
 
-  const handleClickOpen = () => {
-    setOpenDialogDelete({ ...openDialogDelete, isOpen: true });
-  };
-
-  const handleClose = () => {
-    // setOpen(false);
     setOpenDialogDelete({ ...openDialogDelete, isOpen: false });
   };
 
   const handleDelete = (id) => {
-    // setUserData(userData.filter((user) => user.id !== id));
+    onDeletePost({ variables: { id } });
   };
 
   ///////////////////////
   const columns = useMemo(
     () => [
-      // 
-      {
-        Header: 'Username',
-        accessor: 'id',
-        columns: [
           {
             Header: 'Profile',
             accessor: 'files',
@@ -89,6 +110,7 @@ const PostList = (props) => {
               }
 
               console.log("files :", props.value)
+              
               return (
                 <div style={{ position: "relative" }}>
                   <CardActionArea style={{ position: "relative", paddingBottom: "10px" }}>
@@ -115,7 +137,7 @@ const PostList = (props) => {
                           backgroundColor: "#e1dede",
                           color: "#919191"
                       }}
-                      >{props.value.length}</div>
+                      >{(_.filter(props.value, (v)=>v.url)).length}</div>
                 </div>
               );
             }
@@ -124,7 +146,7 @@ const PostList = (props) => {
             Header: 'Title',
             accessor: 'title',
             Cell: props =>{
-              return <Link to={`/detail/${props.row.original.id}`}>{props.value}</Link>
+              return <Link to={`/detail/${props.row.original._id}`}>{props.value}</Link>
             }
           }, 
           {
@@ -147,52 +169,40 @@ const PostList = (props) => {
             }
           },
           // {
-          //   Header: 'Owner',
-          //   accessor: 'ownerId',
+          //   Header: 'Comments',
           //   Cell: props =>{
-          //     let userValue = useQuery(gqlUser, {
-          //       variables: {id: props.value},
+          //     let commentValues = useQuery(gqlComment, {
+          //       context: { headers: getHeaders() },
+          //       variables: {postId: props.row.original._id},
           //       notifyOnNetworkStatusChange: true,
           //     });
-      
-          //     return userValue.loading 
-          //           ? <LinearProgress sx={{width:"100px"}} />
-          //           : userValue.data.user.data != null ? <Link to={`/user/${userValue.data.user.data.id}/view`}>{userValue.data.user.data.displayName}</Link> : <div />
+          //     if(!commentValues.loading){
+          //       if( commentValues.data === undefined || commentValues.data.comment.data.length == 0){
+          //         return <div />
+          //       }
+          
+          //       let count = 0;
+          //       _.map(commentValues.data.comment.data, (v) => {
+          //         if (v.replies) {
+          //           count += v.replies.length;
+          //         }
+          //       });
+          
+          //       return  <ButtonWrapper>
+          //                 <Link to={`/comments`}>
+          //                   <button className="editBtn">{commentValues.data.comment.data.length + count}</button>
+          //                 </Link>
+          //               </ButtonWrapper>
+          //     }
+          //     return <div />
           //   } 
           // },
-          {
-            Header: 'Comments',
-            Cell: props =>{
-              let commentValues = useQuery(gqlComment, {
-                variables: {postId: props.row.original.id},
-                notifyOnNetworkStatusChange: true,
-              });
-              if(!commentValues.loading){
-                if( commentValues.data === undefined || commentValues.data.comment.data.length == 0){
-                  return <div />
-                }
-          
-                let count = 0;
-                _.map(commentValues.data.comment.data, (v) => {
-                  if (v.replies) {
-                    count += v.replies.length;
-                  }
-                });
-          
-                return  <ButtonWrapper>
-                          <Link to={`/comments`}>
-                            <button className="editBtn">{commentValues.data.comment.data.length + count}</button>
-                          </Link>
-                        </ButtonWrapper>
-              }
-              return <div />
-            } 
-          },
           {
             Header: 'Bookmark',
             Cell: props =>{
               const bmValus = useQuery(gqlBookmarksByPostId, {
-                variables: { postId: props.row.original.id},
+                context: { headers: getHeaders() },
+                variables: { postId: props.row.original._id},
                 notifyOnNetworkStatusChange: true, 
               });
       
@@ -213,7 +223,8 @@ const PostList = (props) => {
             Header: 'Share',
             Cell: props =>{
               const shareValus = useQuery(gqlShareByPostId, {
-                variables: {postId: props.row.original.id},
+                context: { headers: getHeaders() },
+                variables: {postId: props.row.original._id},
                 notifyOnNetworkStatusChange: true,
               });
 
@@ -233,19 +244,18 @@ const PostList = (props) => {
           {
             Header: 'Action',
             Cell: props => {
-
-              console.log("action :", props.row.original)
-              return  <div>
-                        <Link to={`/post/${props.row.original._id}/edit`}>
-                          <button>Edit</button>
+              let {_id, title}  = props.row.original
+              return  <div className="Btn--posts">
+                        <Link to={`/post/${_id}/edit`}>
+                          <button><EditIcon/>{t("edit")}</button>
                         </Link>
-                        <button>Delete</button>
+                        <button onClick={(e)=>{
+                          setOpenDialogDelete({ isOpen: true, id: _id, description: title });
+                        }}><DeleteForeverIcon/>{t("delete")}</button>
                       </div>
             }
           },
-        ],
-      }
-    ],
+      ],
     []
   )
 
@@ -276,123 +286,123 @@ const PostList = (props) => {
     // )
   }
 
-  // After data changes, we turn the flag back off
-  // so that if data actually changes when we're not
-  // editing it, the page is reset
-  // useEffect(() => {
-  //   skipResetRef.current = false
-
-  //   console.log("data :", data)
-  // }, [data])
   //////////////////////
 
   return (
-    <Box style={{ flex: 4 }}>
-      {
-        postsValue.loading
-        ? <div><CircularProgress /></div> 
-        : <Table
-            columns={columns}
-            data={postsValue.data.posts.data}
-            fetchData={fetchData}
-            rowsPerPage={pageOptions}
-            updateMyData={updateMyData}
-            skipReset={skipResetRef.current}
-            isDebug={false}
-          />
-      }
-
-      {openDialogDelete.isOpen && (
-        <Dialog
-          open={openDialogDelete.isOpen}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">Delete</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Delete
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                handleDelete(openDialogDelete.id);
-
-                setOpenDialogDelete({ isOpen: false, id: "" });
-              }}
-            >
-              Delete
-            </Button>
-            <Button variant="contained" onClick={handleClose} autoFocus>
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
-
-      {lightbox.isOpen && (
-        <Lightbox
-          mainSrc={lightbox.images[lightbox.photoIndex].base64}
-          nextSrc={lightbox.images[(lightbox.photoIndex + 1) % lightbox.images.length].base64}
-          prevSrc={
-            lightbox.images[(lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length].base64
+    <div className="page-posts">
+      <div className="pl-2 pr-2">
+        <Box style={{ flex: 4 }} className="table-responsive">
+          {
+            postsValue.loading
+            ? <div><CircularProgress /></div> 
+            : <Table
+                columns={columns}
+                data={postsValue.data.posts.data}
+                fetchData={fetchData}
+                rowsPerPage={pageOptions}
+                updateMyData={updateMyData}
+                skipReset={skipResetRef.current}
+                isDebug={false}
+              />
           }
-          onCloseRequest={() => {
-            setLightbox({ ...lightbox, isOpen: false });
-          }}
-          onMovePrevRequest={() => {
-            setLightbox({
-              ...lightbox,
-              photoIndex:
-                (lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length
-            });
-          }}
-          onMoveNextRequest={() => {
-            setLightbox({
-              ...lightbox,
-              photoIndex: (lightbox.photoIndex + 1) % lightbox.images.length
-            });
-          }}
-        />
-      )}
 
-      <SpeedDial
-        ariaLabel="SpeedDial basic example"
-        sx={{ position: 'absolute', bottom: 16, right: 16 }}
-        icon={<SpeedDialIcon />}>
-        {
-          _.map([
-                  { icon: <PostAddIcon />, name: 'Post', id: 1 },
-                  // { icon: <AddIcCallIcon />, name: 'Phone', id: 2 },
-                ], (action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    icon={action.icon}
-                    tooltipTitle={action.name}
-                    tooltipOpen
-                    onClick={(e)=>{
-                      switch(action.id){
-                        case 1:{
-                          history.push({ pathname: "/post/new", state: {from: "/"} });
-                          break;
-                        }
+          {openDialogDelete.isOpen && (
+            <Dialog
+              open={openDialogDelete.isOpen}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              
+            >
+              <DialogTitle id="alert-dialog-title" className="text-center" >{t("confirm_delete")}</DialogTitle>
+              <DialogContent >
+                <DialogContentText id="alert-dialog-description" >
+                  {openDialogDelete.description}
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions >
+                <Button
+                  variant="outlined"
+                  onClick={() => {
+                    handleDelete(openDialogDelete.id);
 
-                        // case 2:{
-                        //   history.push({ pathname: "/phone/new", state: {from: "/"} });
-                        //   break;
-                        // }
-                      }
-                    }}
-                  />
-                ))
-        }
-      </SpeedDial>
-      
-      <Footer />
-    </Box>
+                    setOpenDialogDelete({ isOpen: false, id: "" });
+                  }}
+                >
+                {t("delete")}
+                </Button>
+                <Button variant="contained" onClick={handleClose} autoFocus>
+                {t("close")}
+                </Button>
+              </DialogActions>
+            </Dialog>
+          )}
+
+          {lightbox.isOpen && (
+            <Lightbox
+              mainSrc={lightbox.images[lightbox.photoIndex].url}
+              nextSrc={lightbox.images[(lightbox.photoIndex + 1) % lightbox.images.length].url}
+              prevSrc={
+                lightbox.images[(lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length].url
+              }
+              onCloseRequest={() => {
+                setLightbox({ ...lightbox, isOpen: false });
+              }}
+              onMovePrevRequest={() => {
+                setLightbox({
+                  ...lightbox,
+                  photoIndex:
+                    (lightbox.photoIndex + lightbox.images.length - 1) % lightbox.images.length
+                });
+              }}
+              onMoveNextRequest={() => {
+                setLightbox({
+                  ...lightbox,
+                  photoIndex: (lightbox.photoIndex + 1) % lightbox.images.length
+                });
+              }}
+            />
+          )}
+
+          <SpeedDial
+            ariaLabel="SpeedDial basic example"
+            sx={{ position: 'absolute', bottom: 16, right: 16 }}
+            icon={<SpeedDialIcon />}
+            onClick={(e)=>{
+              history.push({ pathname: "/post/new", state: {from: "/"} });
+            }}>
+            {/* {
+              _.map([
+                      { icon: <PostAddIcon />, name: 'Post', id: 1 },
+                      // { icon: <AddIcCallIcon />, name: 'Phone', id: 2 },
+                    ], (action) => (
+                      <SpeedDialAction
+                        key={action.name}
+                        icon={action.icon}
+                        tooltipTitle={action.name}
+                        tooltipOpen
+                        onClick={(e)=>{
+                          switch(action.id){
+                            case 1:{
+                              history.push({ pathname: "/post/new", state: {from: "/"} });
+                              break;
+                            }
+
+                            // case 2:{
+                            //   history.push({ pathname: "/phone/new", state: {from: "/"} });
+                            //   break;
+                            // }
+                          }
+                        }}
+                      />
+                    ))
+            } */}
+          </SpeedDial>
+          
+          {/* <Footer /> */}
+        </Box>
+      </div>
+    </div>
   );
 };
 

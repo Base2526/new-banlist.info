@@ -14,6 +14,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -24,6 +25,7 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import deepdash from "deepdash";
 deepdash(_);
+import { useTranslation } from "react-i18next";
 
 import { gqlPost, gqlCreateAndUpdateBookmark, 
         gqlIsBookmark, gqlCreateAndUpdateComment, 
@@ -40,9 +42,14 @@ import ItemBookmark from "./ItemBookmark"
 
 import ReportDialog from "../../components/report"
 
+import {convertDate, numberCurrency} from "../../util"
+
+// import {wsLink} from "../../Apollo"
+
 let unsubscribe =null
 const Detail = (props) => {
     let history = useHistory();
+    const { t } = useTranslation();
 
     let { pathname } = useLocation();
     let { id } = useParams();
@@ -80,7 +87,6 @@ const Detail = (props) => {
               const data1 = cache.readQuery({
                 query: gqlIsBookmark,
                 variables: {
-                  userId: user.id,
                   postId: id
                 }
               });
@@ -94,7 +100,6 @@ const Detail = (props) => {
                   isBookmark: newData
                 },
                 variables: {
-                  userId: user.id,
                   postId: id
                 }
               });
@@ -138,7 +143,7 @@ const Detail = (props) => {
           // history.push("/");
         }
       });
-      console.log("resultCreateShare :", resultCreateShare)
+    //   console.log("resultCreateShare :", resultCreateShare)
     
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -154,7 +159,7 @@ const Detail = (props) => {
         variables: {postId: id},
         notifyOnNetworkStatusChange: true,
     });
-    console.log("shareValues :", shareValues)
+    // console.log("shareValues :", shareValues)
 
     if(!shareValues.loading){
         let {subscribeToMore} = shareValues
@@ -170,10 +175,6 @@ const Detail = (props) => {
             }
         });
     }
-
-    /*
-    shareValues.data.shareByPostId.data
-    */
 
     const menuShare = (item) =>{
         return  <Menu
@@ -197,66 +198,40 @@ const Detail = (props) => {
                       role: "listbox"
                   }}
                   >
-                  <MenuItem onClose={(e)=>{
-                    setAnchorElShare(null);
-                  }}>
-                      {/* <FacebookShareButton
-                      url={"https://peing.net/ja/"}
-                      quote={"quotequotequotequote"}
-                      hashtag={"#hashtag"}
-                      description={"aiueo"}
-                      className="Demo__some-network__share-button"
-                      >
-                      <FacebookIcon size={32} round /> Facebook
-                      </FacebookShareButton> */}
-
-                    <div onClick={(e)=>{
-                        if(_.isEmpty(user)){
-                            setDialogLoginOpen(true)
-                        }else{
-                            onCreateShare({ variables: { input: {
-                                    postId: item.id,
-                                    userId: user.id,
-                                    destination: "facebook"
-                                }
-                                }
-                            });  
-                        }
-                        setAnchorElShare(null);
-                    }}>
+                    <MenuItem onClose={(e)=>setAnchorElShare(null)}>
+                    <FacebookShareButton
+                        url={ window.location.origin + "/detail/" + item._id}
+                        quote={item?.title}
+                        // hashtag={"#hashtag"}
+                        description={item?.description}
+                        className="Demo__some-network__share-button"
+                        onClick={(e)=>{setAnchorElShare(null); }} >
                         <FacebookIcon size={32} round /> Facebook
-                    </div>
-                  </MenuItem>{" "}
-                  <MenuItem onClose={(e)=>{
-                    setAnchorElShare(null);
-                  }}>
-                      {/* <TwitterShareButton
-                      title={"test"}
-                      url={"https://peing.net/ja/"}
-                      hashtags={["hashtag1", "hashtag2"]}
-                      >
-                      <TwitterIcon size={32} round />
-                      Twitter
-                      </TwitterShareButton> */}
-
-                    <div onClick={(e)=>{
-
-                        if(_.isEmpty(user)){
-                            setDialogLoginOpen(true)
-                        }else{
-                            onCreateShare({ variables: { input: {
-                                    postId: item.id,
-                                    userId: user.id,
-                                    destination: "twitter"
-                                }
-                                }
-                            });  
+                    </FacebookShareButton>
+                    </MenuItem>{" "}
+                    <MenuItem onClose={(e)=>setAnchorElShare(null)}>
+                        <TwitterShareButton
+                        title={item?.title}
+                        url={ window.location.origin + "/detail/" + item._id }
+                        // hashtags={["hashtag1", "hashtag2"]}
+                        onClick={(e)=>{ setAnchorElShare(null); }} >
+                        <TwitterIcon size={32} round />
+                        Twitter
+                        </TwitterShareButton>
+                    </MenuItem>
+                    <MenuItem 
+                        onClick={async(e)=>{
+                        let text = window.location.origin + "/detail/" + item._id
+                        if ('clipboard' in navigator) {
+                            await navigator.clipboard.writeText(text);
+                        } else {
+                            document.execCommand('copy', true, text);
                         }
+
                         setAnchorElShare(null);
-                    }}>
-                        <TwitterIcon size={32} round />Twitter
-                    </div>
-                  </MenuItem>
+                        }}>
+                        <ContentCopyIcon size={32} round /> Copy link
+                    </MenuItem>
                 </Menu>
     }
 
@@ -280,22 +255,17 @@ const Detail = (props) => {
                     role: "listbox"
                   }}
                 >
-                  {/* <MenuItem onClick={(e)=>{
-                    handleAnchorElSettingClose()
-                    history.push("/post/"+item.id+ "/edit");
-                  }}>
-                    Edit
-                  </MenuItem> */}
+
                   <MenuItem onClick={(e)=>{
                     handleAnchorElSettingClose()
     
 
                     _.isEmpty(user)
                     ? setDialogLoginOpen(true)    
-                    : setReport({open: true, postId:item.id})
+                    : setReport({open: true, postId:item._id})
                     
                   }}>
-                    Report
+                    {t('report')}
                   </MenuItem>
                 </Menu>
 
@@ -312,7 +282,7 @@ const Detail = (props) => {
         return  <div className="col-container">
                     <div className="col1">
                         {
-                            _.isEmpty(post.files) 
+                            _.isEmpty(post?.files) 
                             ?   <div />
                             :   <CardActionArea style={{ position: "relative", paddingBottom: "10px" }}>
                                     <CardMedia
@@ -344,95 +314,91 @@ const Detail = (props) => {
                         
                     </div>
                     <div className="col2">
-                        <div className="col3">
-                            <div>
+                        <div className="bg-white rounded border">
+                            <div className="col3">
                                 <div>
-                                    <ItemBookmark 
-                                        {...props} 
-                                        postId={id}
-                                        onBookmark={(input)=>{
-                                            onCreateAndUpdateBookmark({ variables: { input } }); 
-                                        }}
-                                        onDialogLogin={(e)=>{
-                                            setDialogLoginOpen(true)
-                                        }}/>
-                                    <IconButton onClick={(e) => { 
-                                        _.isEmpty(user)
-                                        ? setDialogLoginOpen(true)    
-                                        : setAnchorElShare(e.currentTarget) 
-                                    }}>
-                                        <ShareIcon />
-                                        {  
-                                            shareValues.loading 
-                                            ? <div /> 
-                                            : <div style={{
-                                                position: "absolute",
-                                                right: "5px",
-                                                borderRadius: "5px",
-                                                borderStyle: "solid",
-                                                borderColor: "red",
-                                                borderWidth: "1px",
-                                                fontSize: "10px"
-                                                }}>{shareValues.data.shareByPostId.data.length}</div> 
-                                        }
-                                    </IconButton>
-                                    <IconButton  onClick={(e) => { 
-                                        _.isEmpty(user)
-                                        ? setDialogLoginOpen(true)    
-                                        : setAnchorElSetting(e.currentTarget) 
-                                    }}>
-                                        <MoreVertIcon />
-                                    </IconButton>
+                                    <div>
+                                        <ItemBookmark 
+                                            {...props} 
+                                            postId={id}
+                                            onBookmark={(input)=>{
+                                                onCreateAndUpdateBookmark({ variables: { input } }); 
+                                            }}
+                                            onDialogLogin={(e)=>{
+                                                setDialogLoginOpen(true)
+                                            }}/>
+                                        <IconButton onClick={(e) => { 
+                                            _.isEmpty(user)
+                                            ? setDialogLoginOpen(true)    
+                                            : setAnchorElShare(e.currentTarget) 
+                                        }}>
+                                            <ShareIcon />
+                                            {  
+                                                shareValues.loading 
+                                                ? <div /> 
+                                                : shareValues.data.shareByPostId.data.length == 0 ? <></> : <div style={{
+                                                    position: "absolute",
+                                                    right: "5px",
+                                                    borderRadius: "5px",
+                                                    borderStyle: "solid",
+                                                    borderColor: "red",
+                                                    borderWidth: "1px",
+                                                    fontSize: "10px"
+                                                    }}>{shareValues.data.shareByPostId.data.length}</div> 
+                                            }
+                                        </IconButton>
+                                        <IconButton  onClick={(e) => { 
+                                            _.isEmpty(user)
+                                            ? setDialogLoginOpen(true)    
+                                            : setAnchorElSetting(e.currentTarget) 
+                                        }}>
+                                            <MoreVertIcon />
+                                        </IconButton>
+                                    </div>
                                 </div>
+                                <Typography variant="subtitle2" color="textSecondary">
+                                    {t("search_by_title")} : {post?.title}
+                                </Typography>
+                                <Typography
+                                    style={{ cursor: "pointer" }}
+                                    variant="subtitle2"
+                                    color="textSecondary">
+                                    {t("search_by_name_surname")} : {post?.nameSubname}
+                                </Typography>
+                        
+                                <Typography variant="subtitle2" color="textSecondary">
+                                    {t("amount")} : {numberCurrency(post?.amount)}
+                                </Typography>
+
+                                <Typography variant="subtitle2" color="textSecondary">{t("search_by_tel")} : 
+                                    <ul>
+                                        {
+                                            _.map(post.tels, (v)=>{
+                                                return <li><Typography variant="subtitle2" color="textSecondary">{v}</Typography></li>
+                                            })
+                                        }
+                                    </ul>
+                                </Typography>
+
+                                <Typography variant="subtitle2" color="textSecondary">{t("search_by_id_bank")} : 
+                                    <ul>{_.map(post.banks, (v)=><ItemBank item={v}/>)}</ul>
+                                </Typography>
+                                <Typography variant="subtitle2" color="textSecondary">
+                                    {t("date_tranfer")} : {convertDate(moment(post.dateTranfer).format('D MMM YYYY'))}
+                                </Typography>
+                                <Typography variant="subtitle2" color="textSecondary" dangerouslySetInnerHTML={{ __html:  t("detail") + ": " + post.description}} />
                             </div>
-                            <Typography variant="subtitle2" color="textSecondary">
-                                หัวข้อร้องเรียน : {post.title}
-                            </Typography>
-                            <Typography
-                                style={{ cursor: "pointer" }}
-                                variant="subtitle2"
-                                color="textSecondary">
-                                ชื่อ-นามสกุล : {post.nameSubname}
-                            </Typography>
-                    
-                            <Typography variant="subtitle2" color="textSecondary">
-                                ยอดเงิน : {post.amount}
-                            </Typography>
-
-                            <Typography variant="subtitle2" color="textSecondary">เบอร์โทร : 
-                                <ul>
-                                    {
-                                        _.map(post.tels, (v)=>{
-                                            return <li><Typography variant="subtitle2" color="textSecondary">{v}</Typography></li>
-                                        })
-                                    }
-                                </ul>
-                            </Typography>
-
-                            <Typography variant="subtitle2" color="textSecondary">ธนาคาร : 
-                                <ul>
-                                    {
-                                        _.map(post.banks, (v)=><ItemBank item={v}/>)
-                                    }
-                                </ul>
-                            </Typography>
-
-                            {/* TEL. */}
-                            <Typography variant="subtitle2" color="textSecondary">
-                                วันที่โอน : {moment(post.dateTranfer).format('MMMM Do YYYY')}
-                            </Typography>
-                            <Typography variant="subtitle2" color="textSecondary">{"รายละเอียด :" + post.description}</Typography>
-                        </div>
-                        <div className="col4">
-                            <ItemComment 
-                                {...props}
-                                id={id}
-                                onComment={(input)=>{
-                                    onCreateComment({ variables: { input: input }});
-                                }}
-                                onDialogLogin={()=>{
-                                    setDialogLoginOpen(true)
-                                }}/>
+                            <div className="col4">
+                                <ItemComment 
+                                    {...props}
+                                    id={id}
+                                    onComment={(input)=>{
+                                        onCreateComment({ variables: { input: input }});
+                                    }}
+                                    onDialogLogin={()=>{
+                                        setDialogLoginOpen(true)
+                                    }}/>
+                            </div>
                         </div>
                     </div>
 
@@ -479,16 +445,15 @@ const Detail = (props) => {
                 <DialogLogin
                 {...props}
                 open={dialogLoginOpen}
-                onComplete={(data)=>{
-                    console.log("onComplete :", data)
-      
-                    login(data)
+                onComplete={async(data)=>{
                     setDialogLoginOpen(false);
+                    login(data)
+                    
+                    await client.cache.reset();
+                    await client.resetStore();
                 }}
                 onClose={() => {
                     setDialogLoginOpen(false);
-
-                    // history.push("/")
                 }}
                 />
             )}
@@ -497,19 +462,10 @@ const Detail = (props) => {
                                     open={report.open} 
                                     postId={report.postId} 
                                     onReport={(e)=>{
-                                        // onCreateContactUs({ variables: { input: {
-                                        //         userId: user.id,
-                                        //         postId: e.postId,     
-                                        //         categoryId: e.categoryId,
-                                        //         description: e.description
-                                        //         } 
-                                        //     } 
-                                        // });
-
                                         setReport({open: false, postId:""})
                                     }}
 
-                                    // onCreateTContactUs
+                  
                                     onClose={()=>setReport({open: false, postId:""})}/>
             }
            
@@ -517,9 +473,7 @@ const Detail = (props) => {
     );
 };
 
-// export default Detail;
 const mapStateToProps = (state, ownProps) => {
-    console.log("mapStateToProps  :", state)
     return {
       user: state.auth.user,
     }

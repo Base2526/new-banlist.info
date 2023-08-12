@@ -4,15 +4,18 @@ import { useEffect, useState } from "react";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEllipsisV,
-  faCheckSquare,
-  faUserPlus,
-  faCommentAlt,
-  faComment,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import {
+//   faEllipsisV,
+//   faCheckSquare,
+//   faUserPlus,
+//   faCommentAlt,
+//   faComment,
+//   faUser,
+// } from "@fortawesome/free-solid-svg-icons";
+
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { IconButton, Typography, makeStyles } from "@material-ui/core";
 
 import "./conversation.css";
 
@@ -72,11 +75,14 @@ export default function Conversation(props) {
         />
       </div>
       <div>
-        <FontAwesomeIcon
+        {/* <FontAwesomeIcon
           icon={faEllipsisV}
           onClick={(e) => handleClick(e)}
           className="m-1"
-        />
+        /> */}
+        <IconButton onClick={(e) => handleClick(e)}> 
+          <MoreVertIcon style={{ color:"" }} />
+        </IconButton>
       </div>
       <div
         onClick={(e) => {

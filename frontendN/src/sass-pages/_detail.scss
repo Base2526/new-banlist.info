@@ -1,0 +1,73 @@
+.col-container {
+    @media (max-width:$sm){
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        .col1,
+        .col2{
+            flex-grow: 1;
+            width: 100%;
+        }
+    }
+    @media (min-width:$sm){
+        .col1{
+            padding-top: 0;
+        }
+    }
+
+    .col2{
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .col4{
+        padding: 0 1rem;
+    }
+   
+}
+
+.section{
+    .inputBox{
+        margin-bottom: 1rem;
+    }
+}
+
+.page-detail{
+    .displayComments{
+        max-height: 350px;
+        min-height: 100px;
+        overflow-y: auto;
+        .commentsTwo{
+            >div{
+                flex-basis: 100%;
+                display: flex;
+                align-items: center;
+            }
+            .css-1oxen2w-MuiTypography-root{
+                margin: 0 0 0 .25rem;
+            }
+        }
+        .halfDiv {
+            .userInfo {
+                flex-grow: 1;
+            }
+        }
+    }
+
+    // .css-o69gx8-MuiCardMedia-root{
+    //     border-radius: .5rem;
+    //     -webkit-border-radius:.5rem;
+    //     -moz-border-radius: .5rem;
+    // }
+
+    .col1{
+        .MuiButtonBase-root{
+            img{
+                border-radius: .5rem;
+                -webkit-border-radius:.5rem;
+                -moz-border-radius: .5rem;
+            }
+        }
+    }
+   
+}
+

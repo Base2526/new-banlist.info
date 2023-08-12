@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo, useRef } from "react";
+import React, { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import {
   NewUserContainer,
   NewUserForm,
@@ -17,10 +17,15 @@ deepdash(_);
 
 import ReadMoreMaster from "../../utils/ReadMoreMaster"
 import Table from "../../TableContainer"
-import { gqlPost, gqlCreateAndUpdateBookmark, gqlUser} from "../../gqlQuery"
+import { gqlPost, gqlUser} from "../../gqlQuery"
 
 const UserEditPanelFollowing = ({followings}) => {
 
+    const [pageOptions, setPageOptions] = useState([30, 50, 100]);  
+    const [pageIndex, setPageIndex] = useState(0);  
+    const [pageSize, setPageSize] = useState(pageOptions[0])
+
+    /*
     const [onCreateBookmark, resultCreateBookmarkValues] = useMutation(gqlCreateAndUpdateBookmark
         , {
             update: (cache, {data: {createAndUpdateBookmark}}) => {
@@ -55,6 +60,7 @@ const UserEditPanelFollowing = ({followings}) => {
     );
 
     console.log("resultCreateBookmarkValues :", resultCreateBookmarkValues)
+    */
 
     ///////////////////////
     const columns = useMemo(
@@ -144,11 +150,22 @@ const UserEditPanelFollowing = ({followings}) => {
     //   console.log("data :", data)
     // }, [data])
     //////////////////////
+
+    ///////////////
+    const fetchData = useCallback(({ pageSize, pageIndex }) => {
+        console.log("fetchData is being called #1")
+
+        setPageSize(pageSize)
+        setPageIndex(pageIndex)
+    })
+    ///////////////
     
     return (  <div style={{ height: 700, width: "1000px" }}>
                     <Table
                         columns={columns}
                         data={followings}
+                        fetchData={fetchData}
+                        rowsPerPage={pageOptions}
                         updateMyData={updateMyData}
                         skipReset={skipResetRef.current}
                         isDebug={false}

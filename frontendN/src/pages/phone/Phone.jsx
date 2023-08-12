@@ -8,25 +8,28 @@ import { useHistory, useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import CircularProgress from '@mui/material/CircularProgress';
 import _ from "lodash";
+import { useTranslation } from "react-i18next";
 
 import TelInputField from "../post/TelInputField";
 import Editor from "../../components/editor/Editor";
 
 import { gqlCreatePhone, gqlUpdatePhone, gqlPhones, gqlPhone } from "../../gqlQuery"
 
+import { getHeaders } from "../../util"
+
 let editValues = undefined;
-let initValues = { phones: [''] , description: ""}
+let initValues = { phones: [''] , description: "", ownerId:""}
 
 const Phone = (props) => {
-    let history = useHistory();
+    const history = useHistory();
+    const { t } = useTranslation();
 
     let { user } = props
-
     let { id, mode } = useParams();
-
-    const [input, setInput]       = useState(initValues);
+    let [input, setInput]       = useState(initValues);
 
     const [onCreatePhone, resultCreatePhone] = useMutation(gqlCreatePhone, {
+        context: { headers: getHeaders() },
         update: (cache, {data: {createPhone}}) => {
             const data1 = cache.readQuery({ query: gqlPhones, variables: { page: 0, perPage: 30 } });
             if(data1 != null){
@@ -37,17 +40,21 @@ const Phone = (props) => {
                 cache.writeQuery({
                     query: gqlPhones,
                     data: { phones: newPhones },
-                    variables: { userId: _.isEmpty(user) ? "" : user.id, page: 0, perPage: 30 }
+                    variables: { userId: _.isEmpty(user) ? "" : user._id, page: 0, perPage: 30 }
                 });
             }
         },
         onCompleted({ data }) {
             history.push("/phones")
         },
+        onError({error}){
+          console.log("onError :")
+        }
     });
     console.log("createPhone :", resultCreatePhone)
 
     const [onUpdatePhone, resultUpdatePhone] = useMutation(gqlUpdatePhone, {
+        context: { headers: getHeaders() },
         update: (cache, {data: {updatePhone}}) => {
             const data1 = cache.readQuery({ query: gqlPhone, variables: {id} });
     
@@ -78,18 +85,20 @@ const Phone = (props) => {
                 cache.writeQuery({
                     query: gqlPhones,
                     data: { phones: newPhones },
-                    variables: { userId: _.isEmpty(user) ? "" : user.id, page: 0, perPage: 30 }
+                    variables: { userId: _.isEmpty(user) ? "" : user._id, page: 0, perPage: 30 }
                 });
             }
         },
         onCompleted({ data }) {
             history.push("/phones")
         },
+        onError({error}){
+          console.log("onError :")
+        }
+        
     });
     console.log("updatePhone :", resultUpdatePhone)
 
-    
-    
     switch(mode){
         case "new":{
             editValues = undefined
@@ -125,6 +134,8 @@ const Phone = (props) => {
     const submitForm = async(event) => {
         event.preventDefault();
 
+        input = {...input, ownerId: user._id}
+
         switch(mode){
             case "new":{
                 onCreatePhone({ variables: { input: {
@@ -151,30 +162,35 @@ const Phone = (props) => {
     }
 
     return  <div>
-                {
-                    editValues != null && editValues.loading
-                    ? <div><CircularProgress /></div> 
-                    :<LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <Box component="form"
-                            sx={{ "& .MuiTextField-root": { m: 1, width: "50ch" } }}
-                            onSubmit={submitForm}>
-                            <TelInputField
-                                values={ input.phones }
-                                onChange={(values) => {
-                                    setInput({...input, phones: values})
-                                }}/>
-                            <Editor 
-                                label={"Description"} 
-                                initData={ input.description }
-                                onEditorChange={(newDescription)=>{
-                                    setInput({...input, description: newDescription})
-                                }}/>
-                            <Button type="submit" variant="contained" color="primary">
-                                Create
-                            </Button>
-                        </Box>
-                    </LocalizationProvider>
-                }
+                <div className="page-phone pl-2 pr-2 mb-4">
+                    <div className="MuiBox-root-phoneinss">
+                        {
+                            editValues != null && editValues.loading
+                            ? <div><CircularProgress /></div> 
+                            :<LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <Box component="form"
+                                    sx={{ "& .MuiTextField-root": { m: 1, width: "50ch" } }}
+                                    onSubmit={submitForm}>
+                                    <TelInputField
+                                        label={t("search_by_tel")} 
+                                        values={ input.phones }
+                                        onChange={(values) => {
+                                            setInput({...input, phones: values})
+                                        }}/>
+                                    <Editor 
+                                        label={t("detail")} 
+                                        initData={ input.description }
+                                        onEditorChange={(newDescription)=>{
+                                            setInput({...input, description: newDescription})
+                                        }}/>
+                                    <Button type="submit" variant="contained" color="primary">
+                                    {mode === 'new' ? t("create") : t("update")}  
+                                    </Button>
+                                </Box>
+                            </LocalizationProvider>
+                        }
+                    </div>
+                </div>
             </div>
 }
 

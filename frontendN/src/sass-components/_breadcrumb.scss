@@ -1,0 +1,26 @@
+.MuiBreadcrumbs-li{
+    svg[data-testid=HomeIcon]{
+        vertical-align: middle;
+        width: .9em;
+        height: .9em;
+        color: rgba($black, .8)
+       
+    }
+    .MuiTypography-colorPrimary{
+       color: $gray-6;
+    }
+}
+
+.container-breadcrumb{
+    position: relative;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    @include container();
+    
+    nav.MuiTypography-root{
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin-bottom: 1rem;
+    }
+}
+

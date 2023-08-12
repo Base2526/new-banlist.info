@@ -1,0 +1,99 @@
+.page-message{
+    .Mui-submess-root{
+        min-height: 600px;
+        height: 100%;
+        overflow: auto;
+    }
+
+    .cs-main-container{
+        position: absolute;
+        align-items: stretch;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border:1px solid $gray-d ;
+    }
+
+    // .cs-conversation-header{
+    //     background-color: lighten($primary, 45%);
+    // }
+}
+.cs-main-container>{
+    .cs-sidebar.cs-sidebar--left{
+        border-right: 0 !important;
+    }
+    .cs-chat-container{
+        border-left: 1px solid $gray-light;
+        .scrollbar-container{
+            padding-top: .5em;
+        }
+    }
+}
+
+
+
+.scrollbar-container{
+    padding: 0 .5em;
+    ul {
+        li{
+            width: 100%;
+        }
+    }
+    .cs-conversation{
+        border-radius: .7em;
+        -webkit-border-radius: .7em;
+        cursor: pointer;
+        &:hover{
+            background-color: darken($gray-f, 5%);
+        }
+    }
+}
+
+@mixin bgmessage($bg, $color) {
+    background-color:$bg  !important;
+    color:$color  !important;
+}
+.cs-message--outgoing{
+    .cs-message__content{
+        @include bgmessage($primary, $white);
+    }
+}
+
+// .cs-message-input__content-editor-wrapper {
+//     @include bgmessage($primary, $white);
+    
+//     * {
+//         @include bgmessage($primary, $white) ;
+//     } 
+    
+//     .cs-message-input__content-editor[data-placeholder]:empty{
+//         &::before{
+//             color: $white;
+//         }
+//     }
+    
+// }
+
+.cs-message--incoming{
+    .cs-message__content{
+        background-color: darken($gray-f, 5%) !important;
+    }
+}
+
+input.cs-search__input{
+   &::placeholder{
+    color: rgba($black, .38);
+   }
+}
+
+.cs-conversation-header__content{
+    .cs-conversation-header__user-name,
+    .cs-conversation-header__info{
+        background: none !important;
+    }
+} 
+
+.cs-conversation-header{
+    background: none !important;
+}

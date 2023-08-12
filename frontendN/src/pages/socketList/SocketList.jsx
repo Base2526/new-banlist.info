@@ -62,7 +62,7 @@ const SocketList = (props) => {
   };
 
   const handleDelete = (id) => {
-    setUserData(userData.filter((user) => user.id !== id));
+    setUserData(userData.filter((user) => user._id !== id));
   };
 
   ///////////////////////
@@ -192,7 +192,7 @@ const SocketList = (props) => {
           </DialogActions>
         </Dialog>
       )}
-      <Footer />
+      {/* <Footer /> */}
     </Box>
   );
 };

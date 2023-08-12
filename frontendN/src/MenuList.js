@@ -23,104 +23,141 @@ import MailIcon from "@material-ui/icons/Mail";
 import AdbIcon from '@mui/icons-material/Adb';
 import HelpIcon from '@mui/icons-material/Help';
 
+import SecurityIcon from '@mui/icons-material/Security';
+import GavelIcon from '@mui/icons-material/Gavel';
+
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import BugReportIcon from '@mui/icons-material/BugReport';
 
+import DeveloperModeIcon from '@mui/icons-material/DeveloperMode';
+import { useTranslation } from "react-i18next";
+
 const MenuAdministrator = [
   {
     Id: 1,
-    Name: "Home",
+    Name: "home",
     Icon: <HomeIcon className="icon" />,
     Path: "/"
   },
   {
     Id: 2,
-    Name: "Posts",
+    Name: "posts",
     Icon: <Timeline className="icon" />,
     Path: "/posts"
   },
   {
     Id: 3,
-    Name: "Bookmarks",
+    Name: "phones",
+    Icon: <LocalPhoneIcon className="icon" />,
+    Path: "/phones"
+  },
+  {
+    Id: 4,
+    Name: "bookmarks",
     Icon: <BookmarksIcon className="icon" />,
     Path: "/bookmarks"
   },
   {
-    Id: 4,
-    Name: "Users",
+    Id: 5,
+    Name: "users",
     Icon: <Group className="icon" />,
     Path: "/users"
   },
-
   {
-    Id: 7,
-    Name: "Taxonomy",
+    Id: 6,
+    Name: "taxonomy",
     Icon: <AssistantPhotoIcon className="icon" />,
     // Path: "/devel",
     Sheets: [
       {
-        Id: 1,
+        Id: 12,
         Title: "Devel",
         // Icon: <WebhookIcon className="icon" />,
         Path: "/devel"
       },
       {
-        Id: 2,
+        Id: 13,
         Title: "Roles",
         // Icon: <RuleIcon className="icon" />,
         Path: "/roles"
       },
       {
-        Id: 3,
+        Id: 14,
         Title: "Banks",
         // Icon: <AccountBalanceWalletIcon className="icon" />,
         Path: "/banks"
       },
       {
-        Id: 4,
-        Title: "Socket",
-        // Icon: <PowerIcon className="icon" />,
-        Path: "/sockets"
-      },
-      {
-        Id: 5,
+        Id: 15,
         Title: "Theme mail",
         // Icon: <MailIcon className="icon" />,
         Path: "/theme-mails"
       },
-
       {
-        Id: 62,
-        Title: "ContactUs",
+        Id: 16,
+        Title: "Report",
         // Icon: <MailIcon className="icon" />,
-        Path: "/tcontactus-list"
+        Path: "/treport-list"
       },
       {
-        Id: 63,
+        Id: 17,
         Title: "Shares",
         // Icon: <MailIcon className="icon" />,
         Path: "/shares"
+      },
+      {
+        Id: 18,
+        Title: "Basic contents",
+        Path : "/basic-contents"
+      },
+      {
+        Id: 19,
+        Title: "Contact us",
+        Path: "/contact-us-list"
       }
     ]
   },
   {
-    // ReportList
-    Id: 8,
-    Name: "Contact Us",
+    Id: 7,
+    Name: "reports",
     Icon: <BugReportIcon className="icon" />,
-    Path: "/contact-us"
+    Path: "/report"
   },
   {
-    Id: 20,
-    Name: "Recent log messages",
+    Id: 8,
+    Name: "Log messages",
     Icon: <AdbIcon className="icon" />,
     Path: "/dblog"
   },
+  // {
+  //   Id: 9,
+  //   Name: "Terms",
+  //   Icon: <GavelIcon className="icon" />,
+  //   Path: "/terms"
+  // },
+  // {
+  //   Id: 10,
+  //   Name: "Privacy",
+  //   Icon: <SecurityIcon className="icon" />,
+  //   Path: "/privacy"
+  // },
   {
-    Id: 21,
-    Name: "Help",
+    Id: 9,
+    Name:  "privacy_and_terms",
+    Icon: <SecurityIcon className="icon" />,
+    Path: "/privacy+terms"
+  },
+  {
+    Id: 11,
+    Name: "developer",
+    Icon: <DeveloperModeIcon className="icon" />,
+    Path: "/developer"
+  },
+  {
+    Id: 12,
+    Name: "help",
     Icon: <HelpIcon className="icon" />,
     Path: "/help"
   }
@@ -129,103 +166,55 @@ const MenuAdministrator = [
 const MenuAuthenticated = [
   {
     Id: 1,
-    Name: "Home",
+    Name: "home",
     Icon: <HomeIcon className="icon" />,
     Path: "/"
   },
   {
     Id: 2,
-    Name: "Posts",
+    Name: "posts",
     Icon: <Timeline className="icon" />,
     Path: "/posts"
   },
   {
     Id: 3,
-    Name: "Phones",
+    Name: "phones",
     Icon: <LocalPhoneIcon className="icon" />,
     Path: "/phones"
   },
+  {
+    Id: 4,
+    Name: "bookmarks",
+    Icon: <BookmarksIcon className="icon" />,
+    Path: "/bookmarks"
+  },
   // {
   //   Id: 4,
-  //   Name: "Users",
-  //   Icon: <Group className="icon" />,
-  //   Path: "/users"
-  // },
-
-  // {
-  //   Id: 7,
-  //   Name: "Taxonomy",
-  //   Icon: <AssistantPhotoIcon className="icon" />,
-  //   // Path: "/devel",
-  //   Sheets: [
-  //     {
-  //       Id: 1,
-  //       Title: "Devel",
-  //       // Icon: <WebhookIcon className="icon" />,
-  //       Path: "/devel"
-  //     },
-  //     {
-  //       Id: 2,
-  //       Title: "Roles",
-  //       // Icon: <RuleIcon className="icon" />,
-  //       Path: "/roles"
-  //     },
-  //     {
-  //       Id: 3,
-  //       Title: "Banks",
-  //       // Icon: <AccountBalanceWalletIcon className="icon" />,
-  //       Path: "/banks"
-  //     },
-  //     {
-  //       Id: 4,
-  //       Title: "Socket",
-  //       // Icon: <PowerIcon className="icon" />,
-  //       Path: "/sockets"
-  //     },
-  //     {
-  //       Id: 5,
-  //       Title: "Theme mail",
-  //       // Icon: <MailIcon className="icon" />,
-  //       Path: "/theme-mails"
-  //     },
-
-  //     {
-  //       Id: 62,
-  //       Title: "ContactUs",
-  //       // Icon: <MailIcon className="icon" />,
-  //       Path: "/tcontactus-list"
-  //     },
-  //     {
-  //       Id: 63,
-  //       Title: "Shares",
-  //       // Icon: <MailIcon className="icon" />,
-  //       Path: "/shares"
-  //     },
-  //     ,
-  //     {
-  //       Id: 64,
-  //       Title: "Basic content",
-  //       // Icon: <MailIcon className="icon" />,
-  //       Path: "/basic-contents"
-  //     }
-  //   ]
+  //   Name: "Terms",
+  //   Icon: <GavelIcon className="icon" />,
+  //   Path: "/terms"
   // },
   // {
-  //   // ReportList
-  //   Id: 8,
-  //   Name: "Contact Us",
-  //   Icon: <BugReportIcon className="icon" />,
-  //   Path: "/contact-us"
-  // },
-  // {
-  //   Id: 20,
-  //   Name: "Recent log messages",
-  //   Icon: <AdbIcon className="icon" />,
-  //   Path: "/dblog"
+  //   Id: 5,
+  //   Name: "Privacy",
+  //   Icon: <SecurityIcon className="icon" />,
+  //   Path: "/privacy"
   // },
   {
-    Id: 21,
-    Name: "Help",
+    Id: 5,
+    Name:  "privacy_and_terms",
+    Icon: <SecurityIcon className="icon" />,
+    Path: "/privacy+terms"
+  },
+  {
+    Id: 11,
+    Name: "Developer",
+    Icon: <DeveloperModeIcon className="icon" />,
+    Path: "/developer"
+  },
+  {
+    Id: 6,
+    Name: "help",
     Icon: <HelpIcon className="icon" />,
     Path: "/help"
   }
@@ -234,16 +223,23 @@ const MenuAuthenticated = [
 const MenuAnonymous = [
   {
     Id: 1,
-    Name: "Home",
+    Name: "home",
     Icon: <HomeIcon className="icon" />,
     Path: "/"
   },
   {
     Id: 2,
-    Name: "Help",
+    Name: "privacy_and_terms",
+    Icon: <SecurityIcon className="icon" />,
+    Path: "/privacy+terms"
+  },
+  {
+    Id: 3,
+    Name: "help",
     Icon: <HelpIcon className="icon" />,
     Path: "/help"
-  }
+  },
+  
 ];
 
 export {

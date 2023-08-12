@@ -16,19 +16,24 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import ClearIcon from '@mui/icons-material/Clear';
+import { useTranslation } from "react-i18next";
 
 import Checkboxs from "./checkboxs";
 
+import "../../translations/i18n";
+
 const SearchBar = (props) => {
-  let { onSearch } = props
+  let { onSearch, label } = props
   let [keyword, setKeyword] = useState("")
 
+  const { t } = useTranslation();
+
   const [choiceTopic, setChoiceTopic] = useState([
-    { key: 0, name: "ชื่อเรื่องร้องเรียน", checked: true },
-    { key: 1, name: "ชื่อ-นามสกุล", checked: true },
-    { key: 2, name: "เลขบัตรประชาชน", checked: false },
-    { key: 3, name: "บัญชีธนาคาร", checked: false },
-    { key: 4, name: "เบอร์โทรศัพท์", checked: false }
+    { key: 0, name: "search_by_title", checked: true },
+    { key: 1, name: "search_by_name_surname", checked: true },
+    { key: 2, name: "search_by_card_id", checked: false },
+    { key: 3, name: "search_by_id_bank", checked: false },
+    { key: 4, name: "search_by_tel", checked: false }
   ]);
 
   return (
@@ -65,7 +70,7 @@ const SearchBar = (props) => {
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Input keyword"
+            label={label}
             variant="outlined"
             onChange={ev=>{
               setKeyword(ev.target.value)

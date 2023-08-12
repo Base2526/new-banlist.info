@@ -18,7 +18,7 @@ const Input = styled("input")({
   display: "none"
 });
 
-const AttackFileField = ({ values, onChange, onSnackbar }) => {
+const AttackFileField = ({ label, values, onChange, onSnackbar }) => {
   const [inputList, setInputList] = useState(values);
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const AttackFileField = ({ values, onChange, onSnackbar }) => {
     <Box sx={{ p: 1 }} component="footer">
       <div>
         <Typography variant="overline" display="block" gutterBottom>
-          Attack file
+          {label}
         </Typography>
         <label htmlFor="contained-button-file">
           <Input
@@ -71,46 +71,52 @@ const AttackFileField = ({ values, onChange, onSnackbar }) => {
         {_.map(
           _.filter(inputList, (v, key) => !v.delete),
           (file, index) => {
-            // console.log("Stack :", file);
+            console.log("Stack :", !file.url, file.url);
 
             if (!file.url) {
               // new file
-              return (
-                <div style={{ position: "relative" }} key={index}>
-                  <Avatar
-                    sx={{
-                      height: 80,
-                      width: 80,
-                      border: "1px solid #cccccc",
-                      padding: "5px"
-                    }}
-                    variant="rounded"
-                    alt="Example Alt"
-                    src={URL.createObjectURL(file)}
-                  />
-                   <IconButton
-                    style={{
-                      position: "absolute",
-                      right: 0,
-                      top:0
-                    }}
-                    color="primary"
-                    aria-label="upload picture"
-                    component="span"
-                    onClick={() => {
-                      let newInputList = [
-                        ...inputList.slice(0, index),
-                        ...inputList.slice(index + 1, inputList.length)
-                      ];
-
-                      setInputList(newInputList);
-                      onSnackbar({open:true, message:"Delete image"});
-                    }}
-                  >
-                    <RemoveCircleIcon />
-                  </IconButton>
-                </div>
-              );
+              try {
+                return (
+                  <div style={{ position: "relative" }} key={index}>
+                    <Avatar
+                      sx={{
+                        height: 80,
+                        width: 80,
+                        border: "1px solid #cccccc",
+                        padding: "5px"
+                      }}
+                      variant="rounded"
+                      alt="Example Alt"
+                      src={URL.createObjectURL(file)}
+                    />
+                     <IconButton
+                      style={{
+                        position: "absolute",
+                        right: 0,
+                        top:0
+                      }}
+                      color="primary"
+                      aria-label="upload picture"
+                      component="span"
+                      onClick={() => {
+                        let newInputList = [
+                          ...inputList.slice(0, index),
+                          ...inputList.slice(index + 1, inputList.length)
+                        ];
+  
+                        setInputList(newInputList);
+                        onSnackbar({open:true, message:"Delete image"});
+                      }}
+                    >
+                      <RemoveCircleIcon />
+                    </IconButton>
+                  </div>
+                );
+              } catch (e) {
+                console.log('Error :', e)
+                return ""
+              }
+              
             } else {
               // old file
               return (
@@ -138,9 +144,9 @@ const AttackFileField = ({ values, onChange, onSnackbar }) => {
                     onClick={() => {
                       let newInputList = [...inputList];
                       
-                      // console.log("Delete image : ", inputList, file.id)
+                      console.log("Delete image : ", inputList, file._id)
 
-                      let i = _.findIndex(newInputList, (v)=>v.id == file.id)
+                      let i = _.findIndex(newInputList, (v)=>v._id == file._id)
                       newInputList[i] = {
                         ...newInputList[i],
                         delete: true

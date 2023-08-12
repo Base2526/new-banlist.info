@@ -28,7 +28,7 @@ import {
   action,
   ExpansionPanel
 } from "@chatscope/chat-ui-kit-react";
-
+import LinearProgress from '@mui/material/LinearProgress';
 import { useParams, useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 import _ from "lodash"
@@ -40,6 +40,8 @@ import { gqlFetchMessage, gqlAddMessage, subMessage, gqlUpdateMessageRead} from 
 import { addedConversation } from "../../redux/actions/auth"
 
 import MessageItem from "./MessageItem"
+
+import { getHeaders } from "../../util"
 
 let unsubscribeSubMessage = null
 
@@ -78,16 +80,12 @@ const MessagePage =(props)=> {
   const [counter, setCounter] = useState(0);
 
   const [messageInputValue, setMessageInputValue] = useState("");
-  const avatarIco =
-    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAZlBMVEUOHCyclYufmI0AECZvbGkAACCjm5AIGCoxOUIAEycAFSgLGisNHCwEFykDFyljY2N9enUlLjkACCKWkIc+Q0lmZmWIhH0bJjN/e3YVIjGSjYRAREpbXF0tND54dXGEgHpKTVFTVVcfARIMAAADVklEQVR4nO3ciXaiMABA0ZA4lhBEcV+r/v9PTtA6FUVGLXOyzLtf4DtktVghAAAAAAAAAAAAAAAAAAAAAABAuIwej9XAuP4Y/4xR5XY+6U11pI1GL4ZrmSQyGaXZIHf9cTqXa7Gt+ipSfqZ64PoTdcuoYjj56js3jtJxRM/RqMUwueo7Ny6nqohjPtr1Zbi+6Ts1JqNpFsGak2eLxr5z4zItAp+PRtfn313jaT66/pTvM2p1N//uGvv7YOdjNf/ant/VWJ3qABsv+/szzmtOWHtHrldP950a7XwM6QxglJk9Mz7rjcvpOJCxWs2/v60vzY37qc78b7R9s1fGZ60xWW58PwMYu7+/Oj5vGr0+A9yer99qrM4AheuSZnZ/n8kf9p0a7RnAyzVHly+vnw8bq/no3faYbd5dX5obe749xNy8s0G0NW6166a6bNttYJJMxq6b6lSv68L+L9dNdRRSSKF7FFJIoXsUUkihexRSSKF7FFJIoXsUUkihexRSSKF7FFJIoXsUUkihexRSSKF7FL5Oxl4oR8p1U13XhXJdevb6ZbeFUo5K396E7rJQyvlBfLguutVdoUyWB+PfO9BdFUopZztV+NfXUaHs749KebbCXHTwFrScfKbGs5e7r5iy/7M8uR7ulNe/0Bt//uTHQNXq6evwvMjz+buJMumlYw9Xz1sfi7cS7ePbikB+XJntXk+Uk9FmpT0fnt+K3frFxzeZpdrLze+RbPdKX39+XKmPkPqsLJ0825d82tUlmOH5LZs+k2gf37DMwlhd7mSbJx7f/mBXl8CG5x+5PvzlcCP3UxXi8Pymju17xjys1bOJaj2Ey6O/h+tnGT1s+38taaArzLU8m7Ukpt59P/GGvO0+HEWhMC13qTgKRV48TIykUBgxepAYS6Ew+b45MZpCu2k0XxfjKRRm1ZgYUaEoyqbEmArtjbjhv4FEVdh46Y+rsCkxskKhN7eX/tgKhTrEXmgTZeSFuap/rxFf4e33GjEW1i/9MRbWL/1RFopc9/pxF15/rxFpoR2ol0t/rIX2Rvx16Y+20F4Xz5f+eAvtUzxdFyMuFKaw10Xp2zuHnRqU8/5chf53mVaDxSHqRyiqgRp5IAAAAAAAAAAAAAAAAAAAAAAA/4Hf0gU2cK/EibwAAAAASUVORK5CYII=";
 
-  const fetchMessageValues =useQuery(gqlFetchMessage, {
-    variables: {conversationId: ""},
-    notifyOnNetworkStatusChange: true,
-  });  
+  const fetchMessageValues =useQuery(gqlFetchMessage, { context: { headers: getHeaders() }, variables: {conversationId: ""}, notifyOnNetworkStatusChange: true });  
 
   const [onAddMessage, resultAddMessageValues] = useMutation(gqlAddMessage
     , {
+        context: { headers: getHeaders() },
         update: (cache, {data: {addMessage}}) => {
           const data1 = cache.readQuery({
               query: gqlFetchMessage,
@@ -107,21 +105,17 @@ const MessagePage =(props)=> {
             });
           }
         },
-        context: {
-          headers: {
-            'apollo-require-preflight': true,
-          },
-        },
         onCompleted({ data }) {
           console.log(data)
         }
     },  
   );
-  // console.log("resultAddMessageValues :", resultAddMessageValues)
+  console.log("resultAddMessageValues :", resultAddMessageValues)
 
   // 
   const [onUpdateMessageRead, resultUpdateMessageRead] = useMutation(gqlUpdateMessageRead
     , {
+        context: { headers: getHeaders() },
         update: (cache, {data: {updateMessageRead}}) => {
 
           console.log("update : updateMessageRead :", updateMessageRead)
@@ -168,19 +162,32 @@ const MessagePage =(props)=> {
     }
   }, [state])
 
-  useEffect(()=>{
-    setConversationList(conversations)
+  useEffect(async()=>{
 
+    // let mfriend = _.find(conversation.members, (member)=>member.userId !== user._id)
+
+    // console.log("mfriend :", mfriend)
+
+    // _.map(conversationList, (conversation)=>{
+
+    // })
+
+    
+
+    // console.log("new_data :", new_data)
+
+    setConversationList(conversations)
     setPreConversationList(conversations)
 
     // console.log("conversations :", currentConversation)
   }, [conversations])
 
   useEffect(()=>{
+    console.log("currentConversation :", currentConversation)
     if(!_.isEmpty(currentConversation)){
       fetchMessageValues.refetch({conversationId: currentConversation._id});
 
-      onUpdateMessageRead({ variables: {userId: user.id, conversationId: currentConversation._id} });
+      onUpdateMessageRead({ variables: {conversationId: currentConversation._id} });
     }else{
       fetchMessageValues.refetch({conversationId: ""});
     }
@@ -197,7 +204,7 @@ const MessagePage =(props)=> {
                 onChange={(e)=>{
                   if(!_.isEmpty(e)){
                     let newConversationList = _.filter(conversationList, conversation =>{ 
-                      let mfriend = _.find(conversation.members, (member)=>member.userId !== user.id)
+                      let mfriend = _.find(conversation.members, (member)=>member.userId !== user._id)
                       return conversation.lastSenderName.toLowerCase().includes(e.toLowerCase()) || conversation.info.toLowerCase().includes(e.toLowerCase()) || mfriend.name.toLowerCase().includes(e.toLowerCase())
                     })
                     setConversationList(newConversationList)
@@ -208,10 +215,8 @@ const MessagePage =(props)=> {
               <ConversationList>
                 {
                   _.map(conversationList, (conversation)=>{
-                    let muser = _.find(conversation.members, (member)=>member.userId === user.id)
-                    let mfriend = _.find(conversation.members, (member)=>member.userId !== user.id)
-
-                    // console.log("muser :", muser, mfriend, conversation, user.id)
+                    let muser = _.find(conversation.members, (member)=>member.userId === user._id)
+                    let mfriend = _.find(conversation.members, (member)=>member.userId !== user._id)
 
                     return  <Conversation
                               name={mfriend.name}
@@ -220,7 +225,6 @@ const MessagePage =(props)=> {
                               unreadCnt={muser.unreadCnt}
                               active={ conversation._id === currentConversation._id ? true: false}
                               onClick={(e)=>{
-                               
                                 setCurrentConversation(conversation)
                               }}
                               lastActivityTime={moment(conversation.sentTime).format('M/D/YY, hh:mm A')}>
@@ -237,7 +241,7 @@ const MessagePage =(props)=> {
       return <div />
     }
 
-    let friend = _.find(currentConversation.members, (member)=>member.userId !== user.id)
+    let friend = _.find(currentConversation.members, (member)=>member.userId !== user._id)
     return  <ConversationHeader>
               <ConversationHeader.Back />
               <Avatar src={friend.avatarSrc} name={friend.name} />
@@ -290,13 +294,16 @@ const MessagePage =(props)=> {
 
   const onMessageList = () =>{
     if(!fetchMessageValues.loading){
+      
+      console.log("fetchMessageValues :", fetchMessageValues)
+
       let {executionTime, status, data}= fetchMessageValues.data.fetchMessage
       let {subscribeToMore} = fetchMessageValues
 
-      console.log("unsubscribeSubMessage :",  user.id, currentConversation._id)
+      console.log("unsubscribeSubMessage :",  user._id, currentConversation._id)
       unsubscribeSubMessage =  subscribeToMore({
         document: subMessage,
-        variables: { userId: user.id, conversationId: currentConversation._id },
+        variables: { userId: user._id, conversationId: currentConversation._id },
         updateQuery: (prev, {subscriptionData, variables}) => {
 
           if (!subscriptionData.data) return prev;
@@ -330,109 +337,7 @@ const MessagePage =(props)=> {
                 // loadingMore={loadingMore} 
                 // onYReachStart={onYReachStart()}
                 >
-                {
-                  _.map( data, item=>{
-                    return <MessageItem {...props} item={item} />
-                    /*
-                    let {type, message, sentTime, senderId, senderName, position, payload} = item
-                    let direction = senderId == user.id  ? "outgoing" : "incoming"
-                  
-                    switch(type){
-                      case "text":{
-                        switch(direction){
-                          case "incoming":{
-                              return  <Message
-                                        type={type}
-                                        model={{
-                                          message,
-                                          sentTime,
-                                          sender: senderName,
-                                          direction,
-                                          position
-                                        }}>
-                                        <Avatar src={avatarIco} name="Zoe" size="sm" />
-                                        <Message.Footer sentTime={moment.unix(sentTime/1000).format('MMMM Do YYYY, hh:mm A')} />
-                                      </Message>
-                          }
-
-                          case "outgoing":{
-                            return  <Message
-                                      type={type}
-                                      model={{
-                                        message,
-                                        sentTime,
-                                        sender: senderName,
-                                        direction,
-                                        position
-                                      }}
-                                    >
-                                      <Message.Footer sentTime={moment.unix(sentTime/1000).format('MMMM Do YYYY, hh:mm A')} />
-                                    </Message>
-                          }
-                        }
-
-                        break;
-                      }
-
-                      case "html":{
-                        switch(direction){
-                          case "incoming":{
-                            return <Message model={{
-                                      type,
-                                      direction,
-                                      position
-                                    }}>
-                                        
-                                        <Message.HtmlContent html={message} />
-                                        <Avatar src={avatarIco} name="Akane" size="sm" />
-                                        <Message.Footer sentTime={moment.unix(sentTime/1000).format('MMMM Do YYYY, hh:mm A')} />
-                                    </Message>
-
-                          }
-
-                          case "outgoing":{
-                            return  <Message model={{
-                                      type,
-                                      direction,
-                                      position
-                                    }}>
-                                        <Message.HtmlContent html={message} />
-                                        <Message.Footer sentTime={moment.unix(sentTime/1000).format('MMMM Do YYYY, hh:mm A')} />
-                                    </Message>
-                          }
-                        }
-
-                        break;
-                      }
-
-                      case "image":{
-
-                        let { src } = payload[0]
-
-                        switch(direction){
-                          case "incoming":{
-                            return <Message model={{direction, position}}>
-                                      <Avatar src={avatarIco} name="Akane" />
-                                      <Message.ImageContent src={src} alt={"alt"} width={150} onClick={(event)=>{ console.log("event")}} />
-                                      <Message.Footer sentTime={moment.unix(sentTime/1000).format('hh:mm A')} />   
-                                    </Message>
-                          }
-
-                          case "outgoing":{
-                            return <Message model={{direction, position}}>
-                                    <Message.ImageContent src={src} alt={"alt"} width={150} />
-                                    <Message.Footer sentTime={moment.unix(sentTime/1000).format('hh:mm A')} />  
-                                  </Message>
-                          }
-                        }
-
-                        break;
-                      }
-                    } 
-                    */
-                    
-                  })
-                }  
+                { _.map( data, item=>{ return <MessageItem {...props} item={item} /> }) }  
               </MessageList>  
     }
     return <div />
@@ -478,8 +383,8 @@ const MessagePage =(props)=> {
 
                 input = {...input, _id: makeid(20) , conversationId: currentConversation._id, status: "waiting" }
 
-                console.log("input ", input, user.id)
-                onAddMessage({ variables: {userId: user.id, conversationId: currentConversation._id, input } });
+                console.log("input ", input, user._id)
+                onAddMessage({ variables: {userId: user._id, conversationId: currentConversation._id, input } });
                 setMessageInputValue("")
               }}
             />
@@ -537,40 +442,42 @@ const MessagePage =(props)=> {
 
       files:event.target.files
     }
-
-      
-
     
     input = {...input, _id: makeid(20) , conversationId: currentConversation._id, status: "waiting" }
 
-
-    onAddMessage({ variables: {userId: user.id, conversationId: currentConversation._id, input } });
+    onAddMessage({ variables: {userId: user._id, conversationId: currentConversation._id, input } });
     
-    // image
   }
 
   return (
-    <div style={{ height: "600px", position: "relative", width: "100%" }} >
-      <MainContainer responsive>
-        {onSidebarLeft()}
-        <ChatContainer>
-          {onConversationHeader()}
-          {onMessageList()}
-          {onMessageInput()}
-        </ChatContainer>
-        {/* {onSidebarRight()} */}
+    <div className="pl-2 pr-2">
+      <div className="table-responsive MuiBox-root page-message">
+        <div style={{  position: "relative", width: "100%" }} className="Mui-submess-root" >
+          <MainContainer responsive>
+            {onSidebarLeft()}
+            <ChatContainer>
+              {onConversationHeader()}
+              {onMessageList()}
+              {onMessageInput()}
+            </ChatContainer>
+            {/* {onSidebarRight()} */}
 
-        <input type='file' id='file' ref={inputFile} style={{display: 'none'}}  onChange={onChangeFile} />
-      </MainContainer>
+            <input type='file' id='file' ref={inputFile} style={{display: 'none'}}  onChange={onChangeFile} />
+          </MainContainer>
+        </div>
+      </div>
     </div>
   );
 }
 
 const mapStateToProps = (state, ownProps) => {
+  let user = state.auth.user;
   let conversations = _.orderBy(state.auth.conversations, (dateObj) => new Date(dateObj.sentTime) , 'desc')
   
+  console.log("conversations :", conversations)
+
   return {
-    user: state.auth.user,
+    user,
     conversations
   }
 };
