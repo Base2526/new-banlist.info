@@ -112,7 +112,7 @@ const Home = (props) => {
   });
   console.log("homesValues :", homesValues )
 
-  if( is_connnecting && !homesValues.loading){
+  if( is_connnecting && !homesValues.loading && homesValues.data != undefined){
 
     console.log("homesValues.data.homes.data :", homesValues, page, rowsPerPage)
 

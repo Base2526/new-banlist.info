@@ -111,7 +111,7 @@ let gracefullyRestart = () => {
 };
 
 const wsLink = new GraphQLWsLink(createClient({
-  url: (process.env.REACT_APP_NODE_ENV === "development" ? "ws://" + process.env.REACT_APP_HOST_GRAPHAL +'/graphql' :  "wss://" + process.env.REACT_APP_HOST_GRAPHAL +'/subscription' ) ,
+  url: (process.env.REACT_APP_NODE_ENV === "ui" ? "ws://" + process.env.REACT_APP_HOST_GRAPHAL +'/graphql' :  "wss://" + process.env.REACT_APP_HOST_GRAPHAL +'/subscription' ) ,
   // reconnect: true,
   disablePong: false,
   connectionAckWaitTimeout: 0,
@@ -215,7 +215,7 @@ const splitLink = split(
   wsLink,
   // httpLink,
   // authLink.concat(httpLink),
-  createUploadLink({ uri: (process.env.REACT_APP_NODE_ENV === "development" ? "http://" : "https://") + process.env.REACT_APP_HOST_GRAPHAL +'/graphql', 
+  createUploadLink({ uri: (process.env.REACT_APP_NODE_ENV === "ui" ? "http://" : "https://") + process.env.REACT_APP_HOST_GRAPHAL +'/graphql', 
                     headers:{ authorization: localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : "", } })
 );
 

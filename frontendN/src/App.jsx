@@ -153,7 +153,7 @@ const App = (props) => {
 
   // console.log("conversationValues :", conversationValues )
 
-  if(  is_connnecting && !conversationValues.loading && conversationValues.data.conversations){
+  if(  is_connnecting && !conversationValues.loading && conversationValues?.data?.conversations){
     let { status, data } = conversationValues.data.conversations  
     addedConversations(data)
   
@@ -179,7 +179,7 @@ const App = (props) => {
 
   // console.log("notificationValues :", notificationValues )
 
-  if(  is_connnecting && !notificationValues.loading && notificationValues.data.notifications ){
+  if(  is_connnecting && !notificationValues.loading && notificationValues?.data?.notifications ){
     
     let { status, data } = notificationValues.data.notifications  
     addedNotifications(data)
